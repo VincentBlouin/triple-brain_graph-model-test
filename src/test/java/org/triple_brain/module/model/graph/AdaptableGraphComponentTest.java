@@ -2,12 +2,12 @@ package org.triple_brain.module.model.graph;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.triple_brain.module.model.graph.jena.JenaTestModule;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.triple_brain.module.model.User;
+import org.triple_brain.module.model.graph.neo4j.Neo4JTestModule;
 import org.triple_brain.module.model.graph.scenarios.TestScenarios;
 
 import javax.inject.Inject;
@@ -36,7 +36,7 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
 
     @BeforeClass
     public static void realBeforeClass() {
-        injector = Guice.createInjector(new JenaTestModule());
+        injector = Guice.createInjector(new Neo4JTestModule());
         injector.getInstance(GraphComponentTest.class)
                 .beforeClass();
     }

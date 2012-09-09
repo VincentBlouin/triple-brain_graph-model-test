@@ -48,9 +48,11 @@ public class VertexTest extends AdaptableGraphComponentTest {
     public void can_remove_a_vertex() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
 
-        assertTrue(userGraph.haveElementWithId(vertexB.id()));
+        String vertexBId = vertexB.id();
+
+        assertTrue(userGraph.haveElementWithId(vertexBId));
         vertexB.remove();
-        assertFalse(userGraph.haveElementWithId(vertexB.id()));
+        assertFalse(userGraph.haveElementWithId(vertexBId));
 
         Integer updatedNumberOfEdgesAndVertices = numberOfEdgesAndVertices();
         assertThat(updatedNumberOfEdgesAndVertices, is(numberOfEdgesAndVertices - 3));
