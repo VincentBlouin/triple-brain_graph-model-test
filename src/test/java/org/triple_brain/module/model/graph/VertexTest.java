@@ -59,6 +59,19 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
+    public void can_add_an_additional_type_to_vertex() throws Exception {
+        assertTrue(
+                vertexA.getAdditionalTypes().isEmpty()
+        );
+        vertexA.addType(
+                testScenarios.personType()
+        );
+        assertFalse(
+                vertexA.getAdditionalTypes().isEmpty()
+        );
+    }
+
+    @Test
     public void on_vertex_delete_its_additional_type_label_is_removed_from_the_model() {
         FriendlyResource personType = testScenarios.personType();
         vertexA.addType(
@@ -118,19 +131,6 @@ public class VertexTest extends AdaptableGraphComponentTest {
                 userGraph.haveElementWithId(
                         startDateSuggestion.domainUri().toString()
                 )
-        );
-    }
-
-    @Test
-    public void can_add_an_additional_type_to_vertex() throws Exception {
-        assertTrue(
-                vertexA.getAdditionalTypes().isEmpty()
-        );
-        vertexA.addType(
-                testScenarios.personType()
-        );
-        assertFalse(
-                vertexA.getAdditionalTypes().isEmpty()
         );
     }
 

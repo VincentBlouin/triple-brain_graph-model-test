@@ -29,6 +29,10 @@ public class JenaTestModule extends AbstractModule{
                 .annotatedWith(Names.named("jenaDatabaseTypeName"))
                 .toInstance(jenaFriendlyDataSource.getDatabaseTypeName());
 
+        bind(String.class)
+                .annotatedWith(Names.named("tdb_directory_path"))
+                .toInstance("src/test/resources/tdb");
+
         bind(GraphMaker.class).to(JenaGraphMaker.class);
 
         bind(GraphComponentTest.class).toInstance(

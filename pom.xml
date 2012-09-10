@@ -60,37 +60,37 @@
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-kernel</artifactId>
-            <version>1.8.M07</version>
             <scope>test</scope>
+            <version>${neo4j.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-kernel</artifactId>
-            <version>1.8.M07</version>
             <type>test-jar</type>
             <scope>test</scope>
+            <version>${neo4j.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-cypher</artifactId>
-            <version>1.8.M07</version>
             <scope>test</scope>
+            <version>${neo4j.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-lucene-index</artifactId>
-            <version>1.8.M07</version>
             <scope>test</scope>
+            <version>${neo4j.version}</version>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
             <scope>test</scope>
+            <version>${junit.version}</version>
         </dependency>
     </dependencies>
 
