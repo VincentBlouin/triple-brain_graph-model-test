@@ -90,50 +90,6 @@ public class VertexTest extends AdaptableGraphComponentTest {
         );
     }
 
-
-    @Test
-    public void on_vertex_remove_suggestions_properties_are_also_delete_from_the_model() {
-        Set<Suggestion> suggestions = new HashSet<Suggestion>();
-        Suggestion startDateSuggestion = testScenarios.startDateSuggestion();
-        suggestions.add(
-                startDateSuggestion
-        );
-        vertexA.suggestions(
-                suggestions
-        );
-        assertTrue(
-                graphContainsLabel(
-                        startDateSuggestion.label()
-                )
-        );
-        assertTrue(
-                userGraph.haveElementWithId(
-                        startDateSuggestion.typeUri().toString()
-                )
-        );
-        assertTrue(
-                userGraph.haveElementWithId(
-                        startDateSuggestion.domainUri().toString()
-                )
-        );
-        vertexA.remove();
-        assertFalse(
-                graphContainsLabel(
-                        startDateSuggestion.label()
-                )
-        );
-        assertFalse(
-                userGraph.haveElementWithId(
-                        startDateSuggestion.typeUri().toString()
-                )
-        );
-        assertFalse(
-                userGraph.haveElementWithId(
-                        startDateSuggestion.domainUri().toString()
-                )
-        );
-    }
-
     @Test
     public void can_add_multiple_additional_types_to_a_vertex() throws Exception {
         assertTrue(
@@ -187,5 +143,48 @@ public class VertexTest extends AdaptableGraphComponentTest {
         assertFalse(vertexA.suggestions().isEmpty());
         Suggestion getSuggestion = vertexA.suggestions().iterator().next();
         assertThat(getSuggestion.label(), is("Start date"));
+    }
+
+    @Test
+    public void on_vertex_remove_suggestions_properties_are_also_delete_from_the_model() {
+        Set<Suggestion> suggestions = new HashSet<Suggestion>();
+        Suggestion startDateSuggestion = testScenarios.startDateSuggestion();
+        suggestions.add(
+                startDateSuggestion
+        );
+        vertexA.suggestions(
+                suggestions
+        );
+        assertTrue(
+                graphContainsLabel(
+                        startDateSuggestion.label()
+                )
+        );
+        assertTrue(
+                userGraph.haveElementWithId(
+                        startDateSuggestion.typeUri().toString()
+                )
+        );
+        assertTrue(
+                userGraph.haveElementWithId(
+                        startDateSuggestion.domainUri().toString()
+                )
+        );
+        vertexA.remove();
+        assertFalse(
+                graphContainsLabel(
+                        startDateSuggestion.label()
+                )
+        );
+        assertFalse(
+                userGraph.haveElementWithId(
+                        startDateSuggestion.typeUri().toString()
+                )
+        );
+        assertFalse(
+                userGraph.haveElementWithId(
+                        startDateSuggestion.domainUri().toString()
+                )
+        );
     }
 }
