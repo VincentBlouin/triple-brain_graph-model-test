@@ -8,6 +8,7 @@ import org.triple_brain.module.model.User;
 public interface GraphComponentTest {
     public int numberOfEdgesAndVertices();
     public SubGraph wholeGraph();
+    public void removeWholeGraph();
     public boolean graphContainsLabel(String label);
     public User user();
     public UserGraph userGraph();

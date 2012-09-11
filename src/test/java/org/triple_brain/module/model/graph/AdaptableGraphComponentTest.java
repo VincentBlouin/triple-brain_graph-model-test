@@ -29,6 +29,9 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     @Inject
     private GraphComponentTest graphComponentTest;
 
+    @Inject
+    protected GraphMaker graphMaker;
+
     private static Injector injector;
 
 
@@ -98,6 +101,11 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     @Override
     public SubGraph wholeGraph() {
         return graphComponentTest.wholeGraph();
+    }
+
+    @Override
+    public void removeWholeGraph() {
+        graphComponentTest.removeWholeGraph();
     }
 
     @Override

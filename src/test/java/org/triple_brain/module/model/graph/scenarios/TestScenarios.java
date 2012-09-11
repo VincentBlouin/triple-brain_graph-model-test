@@ -3,10 +3,7 @@ package org.triple_brain.module.model.graph.scenarios;
 import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.Suggestion;
 import org.triple_brain.module.model.User;
-import org.triple_brain.module.model.graph.Edge;
-import org.triple_brain.module.model.graph.GraphMaker;
-import org.triple_brain.module.model.graph.UserGraph;
-import org.triple_brain.module.model.graph.Vertex;
+import org.triple_brain.module.model.graph.*;
 
 import javax.inject.Inject;
 import java.net.URI;
@@ -20,6 +17,9 @@ public class TestScenarios {
 
     @Inject
     protected GraphMaker graphMaker;
+
+    @Inject
+    protected GraphComponentTest graphComponentTest;
 
     public FriendlyResource personType(){
         try{
@@ -78,7 +78,7 @@ public class TestScenarios {
     }
 
     public VerticesCalledABAndC makeGraphHave3VerticesABCWhereAIsDefaultCenterVertexAndAPointsToBAndBPointsToC(UserGraph userGraph){
-        userGraph.remove();
+        graphComponentTest.removeWholeGraph();
         graphMaker.createForUser(userGraph.user());
         Vertex vertexA = userGraph.defaultVertex();
         vertexA.label("vertex A");

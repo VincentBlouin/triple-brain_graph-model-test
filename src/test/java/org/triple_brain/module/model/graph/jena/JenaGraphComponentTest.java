@@ -13,6 +13,8 @@ import org.triple_brain.module.model.graph.scenarios.TestScenarios;
 import org.triple_brain.module.model.graph.scenarios.VerticesCalledABAndC;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.File;
 import java.util.List;
 
 import static org.triple_brain.graphmanipulator.jena.JenaConnection.closeConnection;
@@ -33,6 +35,10 @@ public class JenaGraphComponentTest implements GraphComponentTest {
 
     @Inject
     private GraphMaker graphMaker;
+
+    @Inject
+    @Named("tdb_directory_path")
+    public String TDBDirectoryPath;
 
     protected Vertex vertexA;
     protected Vertex vertexB;
@@ -58,12 +64,23 @@ public class JenaGraphComponentTest implements GraphComponentTest {
 
     @Override
     public void afterClass() {
+        deleteAllInTDBFolder();
         try{
             closeConnection();
         }catch(Exception e){
             throw new RuntimeException(e);
         }
     }
+
+    public void deleteAllInTDBFolder(){
+        File directory = new File(TDBDirectoryPath);
+        File[] files = directory.listFiles();
+        for (File file : files){
+            if (!file.delete())
+                System.out.println("Failed to delete "+file);
+        }
+    }
+
 
     protected void makeGraphHave3VerticesABCWhereAIsDefaultCenterVertexAndAPointsToBAndBPointsToC(){
         VerticesCalledABAndC vertexABAndC = testScenarios.makeGraphHave3VerticesABCWhereAIsDefaultCenterVertexAndAPointsToBAndBPointsToC(
@@ -133,5 +150,10 @@ public class JenaGraphComponentTest implements GraphComponentTest {
         return userGraph.graphWithDefaultVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
+    }
+
+    @Override
+    public void removeWholeGraph() {
+        model().removeAll();
     }
 }

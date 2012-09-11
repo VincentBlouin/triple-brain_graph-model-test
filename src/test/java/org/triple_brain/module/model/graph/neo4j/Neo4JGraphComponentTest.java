@@ -87,6 +87,13 @@ public class Neo4JGraphComponentTest implements GraphComponentTest{
     }
 
     @Override
+    public void removeWholeGraph() {
+        for(Vertex vertex: allVertices()){
+            vertex.remove();
+        }
+    }
+
+    @Override
     public boolean graphContainsLabel(String label) {
         return anyVertexContainsLabel(label) ||
                 anyEdgeContainsLabel(label);
