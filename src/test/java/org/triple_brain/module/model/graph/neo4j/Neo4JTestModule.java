@@ -12,9 +12,7 @@ import org.neo4j.graphdb.index.ReadableIndex;
 import org.neo4j.test.TestGraphDatabaseFactory;
 import org.triple_brain.module.model.graph.GraphComponentTest;
 import org.triple_brain.module.model.graph.GraphMaker;
-import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4JGraphMaker;
-import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4JUserGraph;
-import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4JUserGraphFactory;
+import org.triple_brain.module.neo4j_graph_manipulator.graph.*;
 
 /*
 * Copyright Mozilla Public License 1.1
@@ -35,6 +33,18 @@ public class Neo4JTestModule extends AbstractModule {
         bind(GraphDatabaseService.class).toInstance(
                 graphDb
         );
+        FactoryModuleBuilder test = new FactoryModuleBuilder();
+
+
+        install(new FactoryModuleBuilder()
+                .build(Neo4JEdgeFactory.class));
+
+        install(new FactoryModuleBuilder()
+                .build(Neo4JUserGraphFactory.class));
+
+        install(test
+                .build(Neo4JVertexFactory.class));
+
 
         bind(GraphComponentTest.class).toInstance(
                 new Neo4JGraphComponentTest()
@@ -54,9 +64,8 @@ public class Neo4JTestModule extends AbstractModule {
                         .getAutoIndex()
         );
 
-        install(new FactoryModuleBuilder()
-                .build(Neo4JUserGraphFactory.class));
-
         bind(GraphMaker.class).to(Neo4JGraphMaker.class);
+
+        requireBinding(SuggestionNeo4JConverter.class);
     }
 }

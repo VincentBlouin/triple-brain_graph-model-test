@@ -35,8 +35,10 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
     protected GraphDatabaseService graphDb;
 
     @Inject
-    protected Neo4JUserGraphFactory neo4JUserGraphFactory;
+    protected Neo4JVertexFactory vertexFactory;
 
+    @Inject
+    protected Neo4JUserGraphFactory neo4JUserGraphFactory;
 
     protected UserGraph userGraph;
 
@@ -169,7 +171,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
         );
         while (result.hasNext()) {
             vertices.add(
-                    Neo4JVertex.loadUsingNodeOfOwner(
+                    vertexFactory.loadUsingNodeOfOwner(
                             (Node) result.next().get("n").get(),
                             user
                     )
