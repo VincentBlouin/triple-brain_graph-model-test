@@ -67,5 +67,7 @@ public class Neo4JTestModule extends AbstractModule {
         bind(GraphMaker.class).to(Neo4JGraphMaker.class);
 
         requireBinding(SuggestionNeo4JConverter.class);
+
+        requireBinding(FriendlyResourceNeo4JUtils.class);
     }
 }
