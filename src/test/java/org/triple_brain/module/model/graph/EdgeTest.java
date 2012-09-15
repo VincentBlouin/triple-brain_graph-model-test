@@ -30,9 +30,10 @@ public class EdgeTest extends AdaptableGraphComponentTest {
     public void can_remove_an_edge() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
         Edge edge = vertexA.edgeThatLinksToDestinationVertex(vertexB);
-        assertTrue(userGraph.haveElementWithId(edge.id()));
+        String edgeId = edge.id();
+        assertTrue(userGraph.haveElementWithId(edgeId));
         edge.remove();
-        assertFalse(userGraph.haveElementWithId(edge.id()));
+        assertFalse(userGraph.haveElementWithId(edgeId));
         assertFalse(vertexA.hasDestinationVertex(vertexB));
 
         Integer updatedNumberOfEdgesAndVertices = numberOfEdgesAndVertices();
