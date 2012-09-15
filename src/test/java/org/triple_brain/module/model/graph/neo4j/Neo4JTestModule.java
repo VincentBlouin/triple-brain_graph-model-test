@@ -3,6 +3,7 @@ package org.triple_brain.module.model.graph.neo4j;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
+import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -33,18 +34,23 @@ public class Neo4JTestModule extends AbstractModule {
         bind(GraphDatabaseService.class).toInstance(
                 graphDb
         );
-        FactoryModuleBuilder test = new FactoryModuleBuilder();
+        bind(ExecutionEngine.class).toInstance(
+                new ExecutionEngine(graphDb)
+        );
 
+        FactoryModuleBuilder factoryModuleBuilder = new FactoryModuleBuilder();
 
-        install(new FactoryModuleBuilder()
+        install(factoryModuleBuilder
                 .build(Neo4JEdgeFactory.class));
 
-        install(new FactoryModuleBuilder()
+        install(factoryModuleBuilder
                 .build(Neo4JUserGraphFactory.class));
 
-        install(test
+        install(factoryModuleBuilder
                 .build(Neo4JVertexFactory.class));
 
+        install(factoryModuleBuilder
+                .build(Neo4JSubGraphExtractorFactory.class));
 
         bind(GraphComponentTest.class).toInstance(
                 new Neo4JGraphComponentTest()

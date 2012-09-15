@@ -1,5 +1,6 @@
 package org.triple_brain.module.model.graph;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.Suggestion;
@@ -14,8 +15,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 /*
 * Copyright Mozilla Public License 1.1
@@ -40,7 +39,8 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 vertexB.id());
         assertThat(graph, is(not(nullValue())));
         Vertex centerVertex = graph.vertexWithIdentifier(vertexB.id());
-        assertThat(graph.numberOfEdgesAndVertices(), is(numberOfEdgesAndVertices()));
+        assertThat(graph.numberOfEdges(), is(2));
+        assertThat(graph.numberOfVertices(), is(3));
         assertThat(centerVertex.label(), is("vertex B"));
     }
 
@@ -207,6 +207,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
+    @Ignore("to implement later, not a priority")
     public void can_get_rdf_xml_representation_of_graph() {
         assertThat(userGraph.toRdfXml(), is(not(nullValue())));
     }
