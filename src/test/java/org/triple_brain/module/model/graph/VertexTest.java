@@ -208,4 +208,18 @@ public class VertexTest extends AdaptableGraphComponentTest {
         FriendlyResource sameAs = newVertex.getSameAs().iterator().next();
         assertThat(sameAs.label(), is(testScenarios.timBernersLee().label()));
     }
+
+    @Test
+    public void can_test_if_vertex_has_destination_vertex(){
+        assertFalse(vertexA.hasDestinationVertex(vertexC));
+        vertexA.addRelationToVertex(vertexC);
+        assertTrue(vertexA.hasDestinationVertex(vertexC));
+    }
+
+    @Test
+    public void source_vertex_is_not_a_destination_vertex(){
+        vertexA.addRelationToVertex(vertexC);
+        assertTrue(vertexA.hasDestinationVertex(vertexC));
+        assertFalse(vertexC.hasDestinationVertex(vertexA));
+    }
 }
