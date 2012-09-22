@@ -136,6 +136,11 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
     }
 
     @Override
+    public void user(User user) {
+        this.user = user;
+    }
+
+    @Override
     public UserGraph userGraph() {
         return userGraph;
     }

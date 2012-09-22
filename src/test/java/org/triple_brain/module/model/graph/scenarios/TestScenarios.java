@@ -1,5 +1,7 @@
 package org.triple_brain.module.model.graph.scenarios;
 
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.index.ReadableIndex;
 import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.Suggestion;
 import org.triple_brain.module.model.User;
@@ -16,12 +18,15 @@ import java.util.UUID;
 public class TestScenarios {
 
     @Inject
-    protected GraphMaker graphMaker;
+    protected GraphFactory graphFactory;
 
     @Inject
     protected GraphComponentTest graphComponentTest;
 
-    public FriendlyResource personType(){
+    @Inject
+    private ReadableIndex<Node> nodeIndex;
+
+    public static FriendlyResource personType(){
         try{
             return FriendlyResource.withUriAndLabel(
                     new URI("http://xmlns.com/foaf/0.1/Person"),
@@ -32,7 +37,7 @@ public class TestScenarios {
         }
     }
 
-    public FriendlyResource computerScientistType(){
+    public static FriendlyResource computerScientistType(){
         try{
             return FriendlyResource.withUriAndLabel(
                     new URI("http://rdf.freebase.com/rdf/computer.computer_scientist"),
@@ -43,7 +48,7 @@ public class TestScenarios {
         }
     }
 
-    public FriendlyResource timBernersLee(){
+    public static FriendlyResource timBernersLee(){
         try{
             return FriendlyResource.withUriAndLabel(
                     new URI("http://www.w3.org/People/Berners-Lee/card#i"),
@@ -54,7 +59,7 @@ public class TestScenarios {
         }
     }
 
-    public FriendlyResource timBernersLeeInFreebase(){
+    public static FriendlyResource timBernersLeeInFreebase(){
         try{
             return FriendlyResource.withUriAndLabel(
                     new URI("http://rdf.freebase.com/rdf/en.tim_berners-lee"),
@@ -65,7 +70,7 @@ public class TestScenarios {
         }
     }
 
-    public Suggestion startDateSuggestion(){
+    public static Suggestion startDateSuggestion(){
         try{
             return Suggestion.withTypeDomainAndLabel(
                     new URI("http://rdf.freebase.com/rdf/time/event/start_date"),
@@ -79,7 +84,7 @@ public class TestScenarios {
 
     public VerticesCalledABAndC makeGraphHave3VerticesABCWhereAIsDefaultCenterVertexAndAPointsToBAndBPointsToC(UserGraph userGraph){
         graphComponentTest.removeWholeGraph();
-        graphMaker.createForUser(userGraph.user());
+        graphFactory.createForUser(userGraph.user());
         Vertex vertexA = userGraph.defaultVertex();
         vertexA.label("vertex A");
         Vertex vertexB = vertexA.addVertexAndRelation().destinationVertex();
@@ -112,7 +117,7 @@ public class TestScenarios {
         return pineApple;
     }
 
-    public User randomUser(){
+    public static User randomUser(){
         return User.withUsernameAndEmail(
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString() + "@example.org"

@@ -11,9 +11,12 @@ import org.neo4j.graphdb.factory.GraphDatabaseSetting;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.graphdb.index.ReadableIndex;
 import org.neo4j.test.TestGraphDatabaseFactory;
+import org.triple_brain.module.model.BeforeAfterEachRestCall;
 import org.triple_brain.module.model.graph.GraphComponentTest;
-import org.triple_brain.module.model.graph.GraphMaker;
+import org.triple_brain.module.model.graph.GraphFactory;
 import org.triple_brain.module.neo4j_graph_manipulator.graph.*;
+
+import javax.inject.Singleton;
 
 /*
 * Copyright Mozilla Public License 1.1
@@ -22,6 +25,9 @@ public class Neo4JTestModule extends AbstractModule {
 
     @Override
     protected void configure() {
+
+        bind(BeforeAfterEachRestCall.class).to(Neo4JBeforeAfterEachRestCall.class)
+                .in(Singleton.class);
 
         GraphDatabaseService graphDb = new TestGraphDatabaseFactory()
                 .newImpermanentDatabaseBuilder()
@@ -70,10 +76,12 @@ public class Neo4JTestModule extends AbstractModule {
                         .getAutoIndex()
         );
 
-        bind(GraphMaker.class).to(Neo4JGraphMaker.class);
+        bind(GraphFactory.class).to(Neo4JGraphFactory.class);
 
         requireBinding(SuggestionNeo4JConverter.class);
 
         requireBinding(FriendlyResourceNeo4JUtils.class);
+
+        requireBinding(Neo4JUtils.class);
     }
 }

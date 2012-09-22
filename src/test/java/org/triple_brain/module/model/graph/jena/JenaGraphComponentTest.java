@@ -34,7 +34,7 @@ public class JenaGraphComponentTest implements GraphComponentTest {
     protected JenaUserGraph userGraph;
 
     @Inject
-    private GraphMaker graphMaker;
+    private GraphFactory graphMaker;
 
     @Inject
     @Named("tdb_directory_path")
@@ -105,6 +105,11 @@ public class JenaGraphComponentTest implements GraphComponentTest {
     @Override
     public User user() {
         return user;
+    }
+
+    @Override
+    public void user(User user) {
+        this.user = user;
     }
 
     @Override

@@ -3,9 +3,9 @@ package org.triple_brain.module.model.graph.jena;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import org.triple_brain.graphmanipulator.jena.JenaConnection;
-import org.triple_brain.graphmanipulator.jena.graph.JenaGraphMaker;
+import org.triple_brain.graphmanipulator.jena.graph.JenaGraphFactory;
 import org.triple_brain.module.model.graph.GraphComponentTest;
-import org.triple_brain.module.model.graph.GraphMaker;
+import org.triple_brain.module.model.graph.GraphFactory;
 import org.triple_brain.module.repository_sql.JenaFriendlyDataSource;
 import org.triple_brain.module.repository_sql.JenaH2DataSource;
 
@@ -33,7 +33,7 @@ public class JenaTestModule extends AbstractModule{
                 .annotatedWith(Names.named("tdb_directory_path"))
                 .toInstance("src/test/resources/tdb");
 
-        bind(GraphMaker.class).to(JenaGraphMaker.class);
+        bind(GraphFactory.class).to(JenaGraphFactory.class);
 
         bind(GraphComponentTest.class).toInstance(
                 new JenaGraphComponentTest()

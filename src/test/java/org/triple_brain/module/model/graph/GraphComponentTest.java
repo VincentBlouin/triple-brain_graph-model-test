@@ -11,6 +11,7 @@ public interface GraphComponentTest {
     public void removeWholeGraph();
     public boolean graphContainsLabel(String label);
     public User user();
+    public void user(User user);
     public UserGraph userGraph();
     public Vertex vertexA();
     public Vertex vertexB();

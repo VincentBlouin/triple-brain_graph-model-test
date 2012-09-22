@@ -187,4 +187,25 @@ public class VertexTest extends AdaptableGraphComponentTest {
                 )
         );
     }
+
+    @Test
+    public void can_add_same_as(){
+        Edge newEdge = vertexA.addVertexAndRelation();
+        Vertex newVertex = newEdge.destinationVertex();
+        newVertex.label("Tim Berners Lee");
+        assertTrue(newVertex.getSameAs().isEmpty());
+        newVertex.addSameAs(testScenarios.timBernersLee());
+        assertFalse(newVertex.getSameAs().isEmpty());
+    }
+
+    @Test
+    public void can_get_same_as(){
+        Edge newEdge = vertexA.addVertexAndRelation();
+        Vertex newVertex = newEdge.destinationVertex();
+        newVertex.label("Tim Berners Lee");
+        assertTrue(newVertex.getSameAs().isEmpty());
+        newVertex.addSameAs(testScenarios.timBernersLee());
+        FriendlyResource sameAs = newVertex.getSameAs().iterator().next();
+        assertThat(sameAs.label(), is(testScenarios.timBernersLee().label()));
+    }
 }

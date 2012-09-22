@@ -30,16 +30,18 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     private GraphComponentTest graphComponentTest;
 
     @Inject
-    protected GraphMaker graphMaker;
+    protected GraphFactory graphMaker;
 
-    private static Injector injector;
+    protected static Injector injector;
 
 
     public void beforeClass(){}
 
     @BeforeClass
     public static void realBeforeClass() {
-        injector = Guice.createInjector(new Neo4JTestModule());
+        injector = Guice.createInjector(
+                new Neo4JTestModule()
+        );
         injector.getInstance(GraphComponentTest.class)
                 .beforeClass();
     }
@@ -76,6 +78,11 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     @Override
     public User user() {
         return graphComponentTest.user();
+    }
+
+    @Override
+    public void user(User user) {
+        graphComponentTest.user(user);
     }
 
     @Override
