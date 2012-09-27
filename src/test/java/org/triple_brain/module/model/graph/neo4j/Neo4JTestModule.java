@@ -76,6 +76,8 @@ public class Neo4JTestModule extends AbstractModule {
 
         requireBinding(FriendlyResourceNeo4JUtils.class);
 
+        requireBinding(Neo4JExternalResourceUtils.class);
+
         requireBinding(Neo4JUtils.class);
     }
 }
