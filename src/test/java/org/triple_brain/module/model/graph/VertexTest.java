@@ -1,11 +1,10 @@
 package org.triple_brain.module.model.graph;
 
 import org.junit.Test;
-import org.triple_brain.module.model.FriendlyResource;
-import org.triple_brain.module.model.Suggestion;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.triple_brain.module.model.ExternalFriendlyResource;
+import org.triple_brain.module.model.suggestion.PersistedSuggestion;
+import org.triple_brain.module.model.suggestion.Suggestion;
+import org.triple_brain.module.model.graph.scenarios.TestScenarios;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
@@ -72,8 +71,8 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void on_vertex_delete_its_additional_type_label_is_removed_from_the_model() {
-        FriendlyResource personType = testScenarios.personType();
+    public void on_vertex_delete_its_additional_type_are_removed_from_the_model() {
+        ExternalFriendlyResource personType = testScenarios.personType();
         vertexA.addType(
                 personType
         );
@@ -112,7 +111,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
         vertexA.addType(
                 testScenarios.personType()
         );
-        FriendlyResource computerScientistType = testScenarios.computerScientistType();
+        ExternalFriendlyResource computerScientistType = testScenarios.computerScientistType();
         vertexA.addType(
                 computerScientistType
         );
@@ -125,7 +124,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
                 vertexA.getAdditionalTypes().size(),
                 is(1)
         );
-        FriendlyResource remainingType = vertexA.getAdditionalTypes().iterator().next();
+        ExternalFriendlyResource remainingType = vertexA.getAdditionalTypes().iterator().next();
         assertThat(
                 remainingType.label(),
                 is(computerScientistType.label())
@@ -133,27 +132,51 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_set_suggestions_of_vertex() throws Exception {
+    public void when_removing_an_external_resource_the_suggestions_that_depend_on_it_are_removed(){
+        vertexA.addType(
+                TestScenarios.person()
+        );
+        vertexA.addType(
+                TestScenarios.event()
+        );
+        vertexA.addSuggestions(
+                TestScenarios.nameSuggestion(),
+                TestScenarios.startDateSuggestion()
+        );
+        assertTrue(
+                TestScenarios.nameSuggestion().origins().iterator().next()
+                        .isTheIdentificationWithUri(
+                                TestScenarios.person().uri()
+                        )
+        );
+        assertThat(vertexA.suggestions().size(), is(2));
+        vertexA.removeFriendlyResource(
+                TestScenarios.person()
+        );
+        assertThat(vertexA.suggestions().size(), is(1));
+        PersistedSuggestion remainingSuggestion = vertexA.suggestions().iterator().next();
+        assertSame(
+                remainingSuggestion.get().sameAsUri().toString(),
+                TestScenarios.startDateSuggestion().sameAsUri().toString()
+        );
+    }
+
+    @Test
+    public void can_add_suggestions_to_a_vertex() throws Exception {
         assertTrue(vertexA.suggestions().isEmpty());
-        Set<Suggestion> suggestions = new HashSet<Suggestion>();
-        suggestions.add(
+        vertexA.addSuggestions(
                 testScenarios.startDateSuggestion()
         );
-        vertexA.suggestions(suggestions);
         assertFalse(vertexA.suggestions().isEmpty());
-        Suggestion getSuggestion = vertexA.suggestions().iterator().next();
-        assertThat(getSuggestion.label(), is("Start date"));
+        PersistedSuggestion getSuggestion = vertexA.suggestions().iterator().next();
+        assertThat(getSuggestion.get().label(), is("Start date"));
     }
 
     @Test
     public void on_vertex_remove_suggestions_properties_are_also_delete_from_the_model() {
-        Set<Suggestion> suggestions = new HashSet<Suggestion>();
         Suggestion startDateSuggestion = testScenarios.startDateSuggestion();
-        suggestions.add(
+        vertexA.addSuggestions(
                 startDateSuggestion
-        );
-        vertexA.suggestions(
-                suggestions
         );
         assertTrue(
                 graphContainsLabel(
@@ -162,7 +185,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
         );
         assertTrue(
                 userGraph.haveElementWithId(
-                        startDateSuggestion.typeUri().toString()
+                        startDateSuggestion.sameAsUri().toString()
                 )
         );
         assertTrue(
@@ -178,7 +201,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
         );
         assertFalse(
                 userGraph.haveElementWithId(
-                        startDateSuggestion.typeUri().toString()
+                        startDateSuggestion.sameAsUri().toString()
                 )
         );
         assertFalse(
@@ -205,7 +228,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
         newVertex.label("Tim Berners Lee");
         assertTrue(newVertex.getSameAs().isEmpty());
         newVertex.addSameAs(testScenarios.timBernersLee());
-        FriendlyResource sameAs = newVertex.getSameAs().iterator().next();
+        ExternalFriendlyResource sameAs = newVertex.getSameAs().iterator().next();
         assertThat(sameAs.label(), is(testScenarios.timBernersLee().label()));
     }
 
@@ -222,4 +245,5 @@ public class VertexTest extends AdaptableGraphComponentTest {
         assertTrue(vertexA.hasDestinationVertex(vertexC));
         assertFalse(vertexC.hasDestinationVertex(vertexA));
     }
+
 }

@@ -2,14 +2,12 @@ package org.triple_brain.module.model.graph;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.triple_brain.module.model.FriendlyResource;
-import org.triple_brain.module.model.Suggestion;
+import org.triple_brain.module.model.ExternalFriendlyResource;
 import org.triple_brain.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
 import org.triple_brain.module.model.graph.exceptions.NonExistingResourceException;
+import org.triple_brain.module.model.suggestion.PersistedSuggestion;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
@@ -222,22 +220,18 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         );
         SubGraph subGraph = wholeGraph();
         vertexA = subGraph.vertexWithIdentifier(vertexA.id());
-        FriendlyResource additionalType = vertexA.getAdditionalTypes().iterator().next();
+        ExternalFriendlyResource additionalType = vertexA.getAdditionalTypes().iterator().next();
         assertThat(additionalType.label(), is("Person"));
     }
 
     @Test
     public void vertex_suggestions_have_their_properties_sub_graph(){
-        Set<Suggestion> suggestions = new HashSet<>();
-        suggestions.add(
+        vertexA.addSuggestions(
                 testScenarios.startDateSuggestion()
-        );
-        vertexA.suggestions(
-                suggestions
         );
         SubGraph subGraph = wholeGraph();
         vertexA = subGraph.vertexWithIdentifier(vertexA.id());
-        Suggestion suggestion = vertexA.suggestions().iterator().next();
-        assertThat(suggestion.label(), is("Start date"));
+        PersistedSuggestion suggestion = vertexA.suggestions().iterator().next();
+        assertThat(suggestion.get().label(), is("Start date"));
     }
 }
