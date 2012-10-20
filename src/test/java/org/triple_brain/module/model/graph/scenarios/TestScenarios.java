@@ -50,7 +50,7 @@ public class TestScenarios {
 
     public static ExternalFriendlyResource timBernersLeeInFreebase() {
         return ExternalFriendlyResource.withUriAndLabel(
-                Uris.get("http://rdf.freebase.com/rdf/en.tim_berners-lee"),
+                Uris.get("http://rdf.freebase.com/rdf/en/tim_berners-lee"),
                 "Tim Berners-Lee"
         );
     }
