@@ -222,6 +222,43 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
+    public void deleting_a_vertex_does_not_delete_its_identifications_in_the_graph(){
+        ExternalFriendlyResource timBernersLee = testScenarios.timBernersLee();
+        assertFalse(
+                userGraph.haveElementWithId(
+                        timBernersLee.uri().toString()
+                )
+        );
+        vertexA.addSameAs(
+                timBernersLee
+        );
+        assertTrue(
+                userGraph.haveElementWithId(
+                        timBernersLee.uri().toString()
+                )
+        );
+        vertexA.remove();
+        assertTrue(
+                userGraph.haveElementWithId(
+                        timBernersLee.uri().toString()
+                )
+        );
+    }
+
+    @Test
+    public void can_assign_the_same_identification_to_2_vertices(){
+        ExternalFriendlyResource timBernersLee = testScenarios.timBernersLee();
+        vertexA.addSameAs(
+                timBernersLee
+        );
+        vertexB.addSameAs(
+                timBernersLee
+        );
+        assertTrue(vertexA.getSameAs().iterator().next().equals(timBernersLee));
+        assertTrue(vertexB.getSameAs().iterator().next().equals(timBernersLee));
+    }
+
+    @Test
     public void can_get_same_as(){
         Edge newEdge = vertexA.addVertexAndRelation();
         Vertex newVertex = newEdge.destinationVertex();

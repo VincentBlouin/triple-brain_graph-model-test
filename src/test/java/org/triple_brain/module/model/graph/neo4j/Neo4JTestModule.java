@@ -11,6 +11,7 @@ import org.neo4j.graphdb.factory.GraphDatabaseSetting;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.graphdb.index.ReadableIndex;
 import org.neo4j.test.TestGraphDatabaseFactory;
+import org.triple_brain.module.model.ExternalFriendlyResourcePersistenceUtils;
 import org.triple_brain.module.model.graph.GraphComponentTest;
 import org.triple_brain.module.model.graph.GraphFactory;
 import org.triple_brain.module.neo4j_graph_manipulator.graph.*;
@@ -74,7 +75,11 @@ public class Neo4JTestModule extends AbstractModule {
 
         requireBinding(SuggestionNeo4JConverter.class);
 
-        requireBinding(FriendlyResourceNeo4JUtils.class);
+        bind(ExternalFriendlyResourcePersistenceUtils.class).to(
+                Neo4JExternalFriendlyResourcePersistenceUtils.class
+        );
+
+        requireBinding(Neo4JExternalFriendlyResourcePersistenceUtils.class);
 
         requireBinding(Neo4JExternalResourceUtils.class);
 
