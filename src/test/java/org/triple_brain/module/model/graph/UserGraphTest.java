@@ -3,6 +3,7 @@ package org.triple_brain.module.model.graph;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.triple_brain.module.model.ExternalFriendlyResource;
+import org.triple_brain.module.model.ModelTestScenarios;
 import org.triple_brain.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
 import org.triple_brain.module.model.graph.exceptions.NonExistingResourceException;
 import org.triple_brain.module.model.suggestion.PersistedSuggestion;
@@ -216,7 +217,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 vertexA.getAdditionalTypes().isEmpty()
         );
         vertexA.addType(
-                testScenarios.personType()
+                ModelTestScenarios.personType()
         );
         SubGraph subGraph = wholeGraph();
         vertexA = subGraph.vertexWithIdentifier(vertexA.id());
@@ -227,7 +228,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     @Test
     public void vertex_suggestions_have_their_properties_sub_graph(){
         vertexA.addSuggestions(
-                testScenarios.startDateSuggestion()
+                ModelTestScenarios.startDateSuggestion()
         );
         SubGraph subGraph = wholeGraph();
         vertexA = subGraph.vertexWithIdentifier(vertexA.id());
