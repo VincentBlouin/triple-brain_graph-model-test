@@ -16,7 +16,7 @@ public interface GraphComponentTest {
     public Vertex vertexA();
     public Vertex vertexB();
     public Vertex vertexC();
-
+    public VertexInSubGraph vertexInWholeGraph(Vertex vertex);
     public void beforeClass();
     public void before();
     public void after();

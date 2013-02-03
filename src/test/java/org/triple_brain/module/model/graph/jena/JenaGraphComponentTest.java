@@ -132,6 +132,11 @@ public class JenaGraphComponentTest implements GraphComponentTest {
         return vertexC;
     }
 
+    @Override
+    public VertexInSubGraph vertexInWholeGraph(Vertex vertex) {
+        return wholeGraph().vertexWithIdentifier(vertex.id());
+    }
+
     protected Model model(){
         return userGraph.model();
     }

@@ -119,4 +119,9 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     public boolean graphContainsLabel(String label) {
         return graphComponentTest.graphContainsLabel(label);
     }
+
+    @Override
+    public VertexInSubGraph vertexInWholeGraph(Vertex vertex) {
+        return graphComponentTest.vertexInWholeGraph(vertex);
+    }
 }

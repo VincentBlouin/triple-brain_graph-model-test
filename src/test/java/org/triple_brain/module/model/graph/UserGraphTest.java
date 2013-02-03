@@ -235,4 +235,33 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         PersistedSuggestion suggestion = vertexA.suggestions().iterator().next();
         assertThat(suggestion.get().label(), is("Start date"));
     }
+
+    @Test
+    public void distance_from_center_vertex_is_set_for_each_vertex_in_sub_graph(){
+       assertThat(
+               vertexInWholeGraph(vertexA).minDistanceFromCenterVertex(),
+               is(0)
+       );
+        assertThat(
+                vertexInWholeGraph(vertexB).minDistanceFromCenterVertex(),
+                is(1)
+        );
+        assertThat(
+                vertexInWholeGraph(vertexC).minDistanceFromCenterVertex(),
+                is(2)
+        );
+    }
+
+    @Test
+    public void the_minimum_distance_from_center_vertex_is_returned(){
+        assertThat(
+                vertexInWholeGraph(vertexC).minDistanceFromCenterVertex(),
+                is(2)
+        );
+        vertexC().addRelationToVertex(vertexA());
+        assertThat(
+                vertexInWholeGraph(vertexC).minDistanceFromCenterVertex(),
+                is(1)
+        );
+    }
 }

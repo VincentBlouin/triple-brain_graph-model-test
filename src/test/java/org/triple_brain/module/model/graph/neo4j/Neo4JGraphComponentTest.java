@@ -23,6 +23,9 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
     @Inject
     protected TestScenarios testScenarios;
 
+    @Inject
+    protected  Neo4JSubGraphExtractorFactory neo4JSubGraphExtractorFactory;
+
     protected Vertex vertexA;
     protected Vertex vertexB;
     protected Vertex vertexC;
@@ -81,10 +84,11 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
 
     @Override
     public SubGraph wholeGraph() {
-        return Neo4JSubGraph.withVerticesAndEdges(
-                allVertices(),
-                allEdges()
-        );
+        Integer depthThatShouldCoverWholeGraph = 1000;
+        return neo4JSubGraphExtractorFactory.withCenterVertexAndDepth(
+                vertexA,
+                depthThatShouldCoverWholeGraph
+        ).load();
     }
 
     @Override
@@ -160,8 +164,13 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
         return vertexC;
     }
 
-    protected Set<Vertex> allVertices() {
-        Set<Vertex> vertices = new HashSet<Vertex>();
+    @Override
+    public VertexInSubGraph vertexInWholeGraph(Vertex vertex) {
+        return wholeGraph().vertexWithIdentifier(vertex.id());
+    }
+
+    protected Set<VertexInSubGraph> allVertices() {
+        Set<VertexInSubGraph> vertices = new HashSet<VertexInSubGraph>();
         ExecutionEngine engine = new ExecutionEngine(graphDb);
         ExecutionResult result = engine.execute(
                 "START n = node(*) " +
