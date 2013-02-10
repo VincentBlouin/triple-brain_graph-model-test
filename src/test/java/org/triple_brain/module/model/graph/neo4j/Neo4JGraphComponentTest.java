@@ -55,7 +55,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
                 "roger_lamothe",
                 "roger.lamothe@example.org"
         );
-        transaction = graphDb.beginTx();
+        startTransaction();
         userGraph = neo4JUserGraphFactory.withUser(user);
         VerticesCalledABAndC verticesCalledABAndC = testScenarios.makeGraphHave3VerticesABCWhereAIsDefaultCenterVertexAndAPointsToBAndBPointsToC(
                 userGraph
@@ -85,7 +85,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
     @Override
     public SubGraph wholeGraph() {
         Integer depthThatShouldCoverWholeGraph = 1000;
-        return neo4JSubGraphExtractorFactory.withCenterVertexAndDepth(
+            return neo4JSubGraphExtractorFactory.withCenterVertexAndDepth(
                 vertexA,
                 depthThatShouldCoverWholeGraph
         ).load();
@@ -152,6 +152,11 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
     @Override
     public Vertex vertexA() {
         return vertexA;
+    }
+
+    @Override
+    public void setDefaultVertexAkaVertexA(Vertex vertexA) {
+        this.vertexA = vertexA;
     }
 
     @Override
@@ -240,6 +245,19 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
 
     protected int numberOfEdges() {
         return allEdges().size();
+    }
+
+    private void commit(){
+        finishTransaction();
+        startTransaction();
+    }
+
+    private void startTransaction(){
+        transaction = graphDb.beginTx();
+    }
+
+    private void finishTransaction(){
+        transaction.success();
     }
 
 }

@@ -123,6 +123,11 @@ public class JenaGraphComponentTest implements GraphComponentTest {
     }
 
     @Override
+    public void setDefaultVertexAkaVertexA(Vertex vertexA) {
+        this.vertexA = vertexA;
+    }
+
+    @Override
     public Vertex vertexB() {
         return vertexB;
     }

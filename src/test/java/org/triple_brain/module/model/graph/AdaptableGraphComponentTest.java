@@ -2,6 +2,9 @@ package org.triple_brain.module.model.graph;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -96,6 +99,11 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     }
 
     @Override
+    public void setDefaultVertexAkaVertexA(Vertex vertexA) {
+        graphComponentTest.setDefaultVertexAkaVertexA(vertexA);
+    }
+
+    @Override
     public Vertex vertexB() {
         return graphComponentTest.vertexB();
     }
@@ -123,5 +131,19 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     @Override
     public VertexInSubGraph vertexInWholeGraph(Vertex vertex) {
         return graphComponentTest.vertexInWholeGraph(vertex);
+    }
+
+    protected JSONArray verticesAsArray(JSONObject verticesAsObject){
+        JSONArray verticesAsArray = new JSONArray();
+        JSONArray keys = verticesAsObject.names();
+        for(int i = 0; i < keys.length(); i++){
+            try{
+                JSONObject vertex = verticesAsObject.getJSONObject(keys.getString(i));
+                verticesAsArray.put(vertex);
+            }catch(JSONException e){
+                throw new RuntimeException(e);
+            }
+        }
+        return verticesAsArray;
     }
 }

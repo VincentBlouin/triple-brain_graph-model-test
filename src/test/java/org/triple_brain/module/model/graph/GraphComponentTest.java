@@ -14,6 +14,7 @@ public interface GraphComponentTest {
     public void user(User user);
     public UserGraph userGraph();
     public Vertex vertexA();
+    public void setDefaultVertexAkaVertexA(Vertex vertexA);
     public Vertex vertexB();
     public Vertex vertexC();
     public VertexInSubGraph vertexInWholeGraph(Vertex vertex);
