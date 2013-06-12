@@ -24,6 +24,13 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
+    public void can_update_note(){
+        assertThat(vertexA().note(), is(""));
+        vertexA().note("Its vertex a !");
+        assertThat(vertexA().note(), is("Its vertex a !"));
+    }
+
+    @Test
     public void can_add_vertex_and_relation() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
         Edge edge = vertexA.addVertexAndRelation();
