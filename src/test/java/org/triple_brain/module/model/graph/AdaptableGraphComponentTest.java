@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.triple_brain.module.model.User;
 import org.triple_brain.module.model.graph.neo4j.Neo4JTestModule;
 import org.triple_brain.module.model.graph.scenarios.TestScenarios;
@@ -71,6 +72,8 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     public static void realAfterClass(){
         injector.getInstance(GraphComponentTest.class)
                 .afterClass();
+        injector.getInstance(GraphDatabaseService.class)
+                .shutdown();
     }
 
     @Override
