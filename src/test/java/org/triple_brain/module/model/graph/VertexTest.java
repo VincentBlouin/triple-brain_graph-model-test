@@ -1,6 +1,5 @@
 package org.triple_brain.module.model.graph;
 
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.triple_brain.module.model.ExternalFriendlyResource;
 import org.triple_brain.module.model.ModelTestScenarios;
@@ -247,44 +246,4 @@ public class VertexTest extends AdaptableGraphComponentTest {
                 is(not(nullValue()))
         );
     }
-
-    @Test
-    public void updating_vertex_updates_last_modification_date(){
-        DateTime lastModificationDate = vertexA.lastModificationDate();
-        vertexA.label("patate");
-        assertTrue(vertexA.lastModificationDate().isAfter(
-                lastModificationDate
-        ));
-
-        lastModificationDate = vertexA.lastModificationDate();
-        vertexA.note("note");
-        assertTrue(vertexA.lastModificationDate().isAfter(
-                lastModificationDate
-        ));
-
-        lastModificationDate = vertexA.lastModificationDate();
-        vertexA.addType(ModelTestScenarios.personType());
-        assertTrue(vertexA.lastModificationDate().isAfter(
-                lastModificationDate
-        ));
-
-        lastModificationDate = vertexA.lastModificationDate();
-        vertexA.removeFriendlyResource(ModelTestScenarios.person());
-        assertTrue(vertexA.lastModificationDate().isAfter(
-                lastModificationDate
-        ));
-
-        lastModificationDate = vertexA.lastModificationDate();
-        vertexA.addSameAs(ModelTestScenarios.timBernersLee());
-        assertTrue(vertexA.lastModificationDate().isAfter(
-                lastModificationDate
-        ));
-
-        lastModificationDate = vertexA.lastModificationDate();
-        vertexA.addSuggestions(ModelTestScenarios.startDateSuggestion());
-        assertTrue(vertexA.lastModificationDate().isAfter(
-                lastModificationDate
-        ));
-    }
-
 }

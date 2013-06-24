@@ -1,7 +1,5 @@
 package org.triple_brain.module.model.graph;
 
-import org.joda.time.DateTime;
-import org.junit.Assert;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertTrue;
@@ -67,15 +65,5 @@ public class EdgeTest extends AdaptableGraphComponentTest {
                 edge.lastModificationDate(),
                 is(not(nullValue()))
         );
-    }
-
-    @Test
-    public void updating_label_updates_last_modification_date(){
-        Edge edge = vertexA.addVertexAndRelation();
-        DateTime lastModificationDate = edge.lastModificationDate();
-        edge.label("patate");
-        Assert.assertTrue(edge.lastModificationDate().isAfter(
-                lastModificationDate
-        ));
     }
 }
