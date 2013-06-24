@@ -4,6 +4,7 @@ import com.hp.hpl.jena.vocabulary.RDFS;
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
 import org.neo4j.graphdb.*;
+import org.neo4j.kernel.logging.BufferingLogger;
 import org.triple_brain.module.model.TripleBrainUris;
 import org.triple_brain.module.model.User;
 import org.triple_brain.module.model.graph.*;
@@ -176,17 +177,15 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
 
     protected Set<VertexInSubGraph> allVertices() {
         Set<VertexInSubGraph> vertices = new HashSet<VertexInSubGraph>();
-        ExecutionEngine engine = new ExecutionEngine(graphDb);
+        ExecutionEngine engine = new ExecutionEngine(graphDb, new BufferingLogger());
         ExecutionResult result = engine.execute(
                 "START n = node(*) " +
                         "MATCH n-[:" +
                         Relationships.TYPE +
-                        "]->({" +
-                        Neo4JUserGraph.URI_PROPERTY_NAME +
-                        ":\"" +
-                        TripleBrainUris.TRIPLE_BRAIN_VERTEX +
-                        "\"})" +
-                        " RETURN n"
+                        "]-type " +
+                        "WHERE type." + Neo4JUserGraph.URI_PROPERTY_NAME + " " +
+                        "= '" + TripleBrainUris.TRIPLE_BRAIN_VERTEX + "' " +
+                        "RETURN n"
         );
         while (result.hasNext()) {
             vertices.add(
@@ -201,7 +200,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
 
     protected Set<Node> allNodes() {
         Set<Node> nodes = new HashSet<Node>();
-        ExecutionEngine engine = new ExecutionEngine(graphDb);
+        ExecutionEngine engine = new ExecutionEngine(graphDb, new BufferingLogger());
         ExecutionResult result = engine.execute(
                 "START n = node(*) " +
                         " RETURN n"
@@ -216,7 +215,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
 
     protected Set<Relationship> allRelationships() {
         Set<Relationship> relationships = new HashSet<Relationship>();
-        ExecutionEngine engine = new ExecutionEngine(graphDb);
+        ExecutionEngine engine = new ExecutionEngine(graphDb, new BufferingLogger());
         ExecutionResult result = engine.execute(
                 "START r = relationship(*) " +
                         " RETURN r"

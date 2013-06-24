@@ -10,6 +10,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.factory.GraphDatabaseSetting;
 import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.graphdb.index.ReadableIndex;
+import org.neo4j.kernel.logging.BufferingLogger;
 import org.neo4j.test.TestGraphDatabaseFactory;
 import org.triple_brain.module.model.ExternalFriendlyResourcePersistenceUtils;
 import org.triple_brain.module.model.graph.GraphComponentTest;
@@ -36,7 +37,7 @@ public class Neo4JTestModule extends AbstractModule {
                 graphDb
         );
         bind(ExecutionEngine.class).toInstance(
-                new ExecutionEngine(graphDb)
+                new ExecutionEngine(graphDb, new BufferingLogger())
         );
 
         FactoryModuleBuilder factoryModuleBuilder = new FactoryModuleBuilder();
