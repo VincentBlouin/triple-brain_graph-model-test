@@ -1,9 +1,13 @@
 package org.triple_brain.module.model.graph;
 
+import org.joda.time.DateTime;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
@@ -45,5 +49,33 @@ public class EdgeTest extends AdaptableGraphComponentTest {
         Edge edge = vertexA.addVertexAndRelation();
         edge.label("likes");
         assertThat(edge.label(), is("likes"));
+    }
+
+    @Test
+    public void there_is_a_creation_date(){
+        Edge edge = vertexA.addVertexAndRelation();
+        assertThat(
+                edge.creationDate(),
+                is(not(nullValue()))
+        );
+    }
+
+    @Test
+    public void there_is_a_last_modification_date(){
+        Edge edge = vertexA.addVertexAndRelation();
+        assertThat(
+                edge.lastModificationDate(),
+                is(not(nullValue()))
+        );
+    }
+
+    @Test
+    public void updating_label_updates_last_modification_date(){
+        Edge edge = vertexA.addVertexAndRelation();
+        DateTime lastModificationDate = edge.lastModificationDate();
+        edge.label("patate");
+        Assert.assertTrue(edge.lastModificationDate().isAfter(
+                lastModificationDate
+        ));
     }
 }
