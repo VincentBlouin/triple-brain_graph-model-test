@@ -246,4 +246,26 @@ public class VertexTest extends AdaptableGraphComponentTest {
                 is(not(nullValue()))
         );
     }
+
+    @Test
+    public void a_vertex_is_private_by_default(){
+        Vertex newVertex = vertexA.addVertexAndRelation().destinationVertex();
+        assertFalse(newVertex.isPublic());
+    }
+
+    @Test
+    public void can_make_a_vertex_public(){
+        assertFalse(vertexA.isPublic());
+        vertexA.makePublic();
+        assertTrue(vertexA.isPublic());
+    }
+
+    @Test
+    public void can_make_a_vertex_private(){
+        vertexA.makePublic();
+        assertTrue(vertexA.isPublic());
+        vertexA.makePrivate();
+        assertFalse(vertexA.isPublic());
+    }
+
 }
