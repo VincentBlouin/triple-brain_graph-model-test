@@ -55,7 +55,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
         user = User.withUsernameEmailAndLocales(
                 "roger_lamothe",
                 "roger.lamothe@example.org",
-                ""
+                "[fr]"
         );
         startTransaction();
         userGraph = neo4JUserGraphFactory.withUser(user);

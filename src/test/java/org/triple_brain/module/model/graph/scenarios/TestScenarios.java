@@ -61,7 +61,7 @@ public class TestScenarios {
         return User.withUsernameEmailAndLocales(
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString() + "@example.org",
-                ""
+                "[fr]"
         );
     }
 
