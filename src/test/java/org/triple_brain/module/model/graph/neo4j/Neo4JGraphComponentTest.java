@@ -52,9 +52,10 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
 
     @Override
     public void before() {
-        user = User.withUsernameAndEmail(
+        user = User.withUsernameEmailAndLocales(
                 "roger_lamothe",
-                "roger.lamothe@example.org"
+                "roger.lamothe@example.org",
+                ""
         );
         startTransaction();
         userGraph = neo4JUserGraphFactory.withUser(user);

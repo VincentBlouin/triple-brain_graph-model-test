@@ -58,9 +58,10 @@ public class TestScenarios {
     }
 
     public static User randomUser() {
-        return User.withUsernameAndEmail(
+        return User.withUsernameEmailAndLocales(
                 UUID.randomUUID().toString(),
-                UUID.randomUUID().toString() + "@example.org"
+                UUID.randomUUID().toString() + "@example.org",
+                ""
         );
     }
 

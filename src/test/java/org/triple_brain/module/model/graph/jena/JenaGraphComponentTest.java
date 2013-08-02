@@ -51,7 +51,7 @@
 //
 //    @Override
 //    public void before(){
-//        user = User.withUsernameAndEmail(
+//        user = User.withUsernameEmailAndLocales(
 //                "roger_lamothe",
 //                "roger.lamothe@example.org"
 //        );
