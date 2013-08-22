@@ -54,6 +54,9 @@ public class Neo4JTestModule extends AbstractModule {
         install(factoryModuleBuilder
                 .build(Neo4JSubGraphExtractorFactory.class));
 
+        install(factoryModuleBuilder
+                .build(Neo4JGraphElementFactory.class));
+
         bind(GraphComponentTest.class).toInstance(
                 new Neo4JGraphComponentTest()
         );

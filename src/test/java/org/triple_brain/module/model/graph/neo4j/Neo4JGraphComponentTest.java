@@ -178,23 +178,21 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
 
     protected Set<VertexInSubGraph> allVertices() {
         Set<VertexInSubGraph> vertices = new HashSet<VertexInSubGraph>();
-        ExecutionEngine engine = new ExecutionEngine(graphDb, new BufferingLogger());
-        ExecutionResult result = engine.execute(
-                "START n = node(*) " +
-                        "MATCH n-[:" +
-                        Relationships.TYPE +
-                        "]-type " +
-                        "WHERE type." + Neo4JUserGraph.URI_PROPERTY_NAME + " " +
-                        "= '" + TripleBrainUris.TRIPLE_BRAIN_VERTEX + "' " +
-                        "RETURN n"
-        );
-        while (result.hasNext()) {
-            vertices.add(
-                    vertexFactory.loadUsingNodeOfOwner(
-                            (Node) result.next().get("n").get(),
-                            user
-                    )
-            );
+        for(Node node : allNodes()){
+            boolean hasTypes = node.hasProperty(Relationships.TYPE.name());
+            if(hasTypes){
+                String typesListAsString = (String) node.getProperty(
+                        Relationships.TYPE.name()
+                );
+                if(typesListAsString.contains(TripleBrainUris.TRIPLE_BRAIN_VERTEX)){
+                    vertices.add(
+                            vertexFactory.loadUsingNodeOfOwner(
+                                    node,
+                                    user
+                            )
+                    );
+                }
+            }
         }
         return vertices;
     }

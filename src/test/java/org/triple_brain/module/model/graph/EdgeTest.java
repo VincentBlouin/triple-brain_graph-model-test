@@ -1,6 +1,8 @@
 package org.triple_brain.module.model.graph;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.triple_brain.module.model.ModelTestScenarios;
 
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
@@ -13,6 +15,7 @@ import static org.junit.Assert.assertThat;
 * Copyright Mozilla Public License 1.1
 */
 public class EdgeTest extends AdaptableGraphComponentTest {
+
     @Test
     public void can_add_relation() {
         Vertex vertexD = vertexA.addVertexAndRelation().destinationVertex();
@@ -65,5 +68,13 @@ public class EdgeTest extends AdaptableGraphComponentTest {
                 edge.lastModificationDate(),
                 is(not(nullValue()))
         );
+    }
+
+    @Test
+    public void can_add_same_as(){
+        Edge newEdge = vertexA.addVertexAndRelation();
+        Assert.assertTrue(newEdge.getSameAs().isEmpty());
+        newEdge.addSameAs(ModelTestScenarios.creatorPredicate());
+        assertFalse(newEdge.getSameAs().isEmpty());
     }
 }
