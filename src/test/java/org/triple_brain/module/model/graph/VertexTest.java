@@ -170,6 +170,17 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
+    public void can_get_empty_list_after_removing_last_same_as(){
+        vertexA.addSameAs(
+                ModelTestScenarios.timBernersLee()
+        );
+        vertexA.removeFriendlyResource(
+                ModelTestScenarios.timBernersLee()
+        );
+        assertTrue(vertexA.getSameAs().isEmpty());
+    }
+
+    @Test
     public void deleting_a_vertex_does_not_delete_its_identifications_in_the_graph(){
         ExternalFriendlyResource timBernersLee = ModelTestScenarios.timBernersLee();
         assertFalse(
