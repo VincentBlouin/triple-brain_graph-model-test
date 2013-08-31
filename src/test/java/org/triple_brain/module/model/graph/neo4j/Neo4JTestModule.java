@@ -12,9 +12,12 @@ import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.graphdb.index.ReadableIndex;
 import org.neo4j.kernel.logging.BufferingLogger;
 import org.neo4j.test.TestGraphDatabaseFactory;
-import org.triple_brain.module.model.ExternalFriendlyResourcePersistenceUtils;
+import org.triple_brain.module.model.FriendlyResource;
+import org.triple_brain.module.model.FriendlyResourceFactory;
 import org.triple_brain.module.model.graph.GraphComponentTest;
 import org.triple_brain.module.model.graph.GraphFactory;
+import org.triple_brain.module.model.suggestion.Suggestion;
+import org.triple_brain.module.model.suggestion.SuggestionFactory;
 import org.triple_brain.module.neo4j_graph_manipulator.graph.*;
 
 /*
@@ -57,10 +60,23 @@ public class Neo4JTestModule extends AbstractModule {
         install(factoryModuleBuilder
                 .build(Neo4JGraphElementFactory.class));
 
+        install(factoryModuleBuilder
+                .implement(FriendlyResource.class, Neo4JFriendlyResource.class)
+                .build(FriendlyResourceFactory.class)
+        );
+        install(factoryModuleBuilder
+                .build(Neo4JFriendlyResourceFactory.class)
+        );
+        install(factoryModuleBuilder
+                .implement(Suggestion.class, Neo4JSuggestion.class)
+                .build(SuggestionFactory.class)
+        );
+        install(factoryModuleBuilder
+                .build(Neo4JSuggestionFactory.class)
+        );
         bind(GraphComponentTest.class).toInstance(
                 new Neo4JGraphComponentTest()
         );
-
         bind(new TypeLiteral<ReadableIndex<Node>>() {
         }).toInstance(
                 graphDb.index()
@@ -76,16 +92,6 @@ public class Neo4JTestModule extends AbstractModule {
         );
 
         bind(GraphFactory.class).to(Neo4JGraphFactory.class);
-
-        requireBinding(SuggestionNeo4JConverter.class);
-
-        bind(ExternalFriendlyResourcePersistenceUtils.class).to(
-                Neo4JExternalFriendlyResourcePersistenceUtils.class
-        );
-
-        requireBinding(Neo4JExternalFriendlyResourcePersistenceUtils.class);
-
-        requireBinding(Neo4JExternalResourceUtils.class);
 
         requireBinding(Neo4JUtils.class);
     }

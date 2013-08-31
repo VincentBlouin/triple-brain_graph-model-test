@@ -139,7 +139,7 @@
 //
 //    @Override
 //    public VertexInSubGraph vertexInWholeGraph(Vertex vertex) {
-//        return wholeGraph().vertexWithIdentifier(vertex.id());
+//        return wholeGraph().vertexWithIdentifier(vertex.uri());
 //    }
 //
 //    protected Model model(){

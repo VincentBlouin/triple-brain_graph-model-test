@@ -2,11 +2,11 @@ package org.triple_brain.module.model.graph;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.triple_brain.module.model.ExternalFriendlyResource;
-import org.triple_brain.module.model.ModelTestScenarios;
+import org.triple_brain.module.common_utils.Uris;
+import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
 import org.triple_brain.module.model.graph.exceptions.NonExistingResourceException;
-import org.triple_brain.module.model.suggestion.PersistedSuggestion;
+import org.triple_brain.module.model.suggestion.Suggestion;
 
 import java.util.List;
 
@@ -35,9 +35,9 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     public void can_get_graph_with_custom_center_vertex() {
         SubGraph graph = userGraph.graphWithDepthAndCenterVertexId(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
-                vertexB.id());
+                vertexB.uri());
         assertThat(graph, is(not(nullValue())));
-        Vertex centerVertex = graph.vertexWithIdentifier(vertexB.id());
+        Vertex centerVertex = graph.vertexWithIdentifier(vertexB.uri());
         assertThat(graph.numberOfEdges(), is(2));
         assertThat(graph.numberOfVertices(), is(3));
         assertThat(centerVertex.label(), is("vertex B"));
@@ -49,7 +49,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         SubGraph graph = userGraph.graphWithDefaultVertexAndDepth(DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES);
         assertThat(graph, is(not(nullValue())));
         assertThat(graph.numberOfEdgesAndVertices(), is(numberOfEdgesAndVertices()));
-        Vertex centerVertex = graph.vertexWithIdentifier(vertexA.id());
+        Vertex centerVertex = graph.vertexWithIdentifier(vertexA.uri());
         assertThat(centerVertex.label(), is("vertex A"));
     }
 
@@ -72,7 +72,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     public void can_get_a_limited_graph_with_a_custom_center_vertex() {
         SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
                 1,
-                vertexC.id()
+                vertexC.uri()
         );
         assertThat(subGraph.numberOfVertices(), is(2));
         assertThat(subGraph.numberOfEdges(), is(1));
@@ -85,7 +85,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     public void can_get_sub_graph_of_destination_vertex_of_center_vertex() {
         Edge newEdge = vertexC.addVertexAndRelation();
         SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
-                2, vertexB.id()
+                2, vertexB.uri()
         );
         assertThat(subGraph.numberOfEdges(), is(3));
         assertThat(subGraph.numberOfVertices(), is(4));
@@ -101,7 +101,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         SubGraph subGraph;
         Edge newEdge = vertexA.addVertexAndRelation();
         subGraph = userGraph.graphWithDepthAndCenterVertexId(
-                2, vertexB.id()
+                2, vertexB.uri()
         );
         assertThat(subGraph.numberOfVertices(), is(4));
         assertThat(subGraph.numberOfEdges(), is(3));
@@ -119,7 +119,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
 
         SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
                 2,
-                vertexA.id()
+                vertexA.uri()
         );
         assertTrue(subGraph.containsVertex(edgeGoingOutOfC.destinationVertex()));
     }
@@ -132,7 +132,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         assertTrue(subGraph.containsVertex(vertexA));
 
         subGraph = userGraph.graphWithDepthAndCenterVertexId(
-                0, vertexB.id()
+                0, vertexB.uri()
         );
         assertThat(subGraph.numberOfVertices(), is(1));
         assertThat(subGraph.numberOfEdges(), is(0));
@@ -145,17 +145,17 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
             userGraph.graphWithDefaultVertexAndDepth(-1);
             fail();
         } catch (InvalidDepthOfSubVerticesException e) {
-            assertThat(e.getMessage(), is("Invalid depth of sub vertices. Depth was:-1 and center vertex id was:" + vertexA.id()));
+            assertThat(e.getMessage(), is("Invalid depth of sub vertices. Depth was:-1 and center vertex uri was:" + vertexA.uri()));
         }
     }
 
     @Test
     public void an_exception_is_thrown_when_getting_graph_with_custom_center_vertex_with_negative_depth() {
         try {
-            userGraph.graphWithDepthAndCenterVertexId(-1, vertexB.id());
+            userGraph.graphWithDepthAndCenterVertexId(-1, vertexB.uri());
             fail();
         } catch (InvalidDepthOfSubVerticesException e) {
-            assertThat(e.getMessage(), is("Invalid depth of sub vertices. Depth was:-1 and center vertex id was:" + vertexB.id()));
+            assertThat(e.getMessage(), is("Invalid depth of sub vertices. Depth was:-1 and center vertex uri was:" + vertexB.uri()));
         }
     }
 
@@ -163,10 +163,10 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     public void an_exception_is_thrown_when_getting_graph_with_non_existing_center_vertex() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
         try {
-            userGraph.graphWithDepthAndCenterVertexId(1, "invalid_URI");
+            userGraph.graphWithDepthAndCenterVertexId(1, Uris.get("/invalid_uri"));
             fail();
         } catch (NonExistingResourceException e) {
-            assertThat(e.getMessage(), is("Resource with URI: invalid_URI not found"));
+            assertThat(e.getMessage(), is("Resource with URI: /invalid_uri not found"));
         }
         assertThat(numberOfEdgesAndVertices(), is(numberOfEdgesAndVertices));
     }
@@ -177,9 +177,9 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         newEdge.label("new edge");
         SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
                 1,
-                vertexA.id()
+                vertexA.uri()
         );
-        List<String> vertexBConnectedEdgesLabel = subGraph.vertexWithIdentifier(vertexB.id())
+        List<String> vertexBConnectedEdgesLabel = subGraph.vertexWithIdentifier(vertexB.uri())
                 .hiddenConnectedEdgesLabel();
         assertFalse(vertexBConnectedEdgesLabel.isEmpty());
         assertThat(vertexBConnectedEdgesLabel.size(), is(2));
@@ -193,14 +193,14 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         newEdge.label("edge between frontier vertices");
         SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
                 1,
-                vertexB.id()
+                vertexB.uri()
         );
         List<String> vertexCConnectedEdgesLabel = subGraph.vertexWithIdentifier(
-                vertexC.id()
+                vertexC.uri()
         ).hiddenConnectedEdgesLabel();
         assertThat(vertexCConnectedEdgesLabel.size(), is(0));
         Vertex vertexCFromSubGraph = subGraph.vertexWithIdentifier(
-                vertexC.id()
+                vertexC.uri()
         );
         assertThat(vertexCFromSubGraph.connectedEdges().size(), is(2));
     }
@@ -217,23 +217,23 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 vertexA.getAdditionalTypes().isEmpty()
         );
         vertexA.addType(
-                ModelTestScenarios.personType()
+                modelTestScenarios.personType()
         );
         SubGraph subGraph = wholeGraph();
-        vertexA = subGraph.vertexWithIdentifier(vertexA.id());
-        ExternalFriendlyResource additionalType = vertexA.getAdditionalTypes().iterator().next();
+        vertexA = subGraph.vertexWithIdentifier(vertexA.uri());
+        FriendlyResource additionalType = vertexA.getAdditionalTypes().iterator().next();
         assertThat(additionalType.label(), is("Person"));
     }
 
     @Test
     public void vertex_suggestions_have_their_properties_sub_graph(){
         vertexA.addSuggestions(
-                ModelTestScenarios.startDateSuggestion()
+                modelTestScenarios.startDateSuggestion()
         );
         SubGraph subGraph = wholeGraph();
-        vertexA = subGraph.vertexWithIdentifier(vertexA.id());
-        PersistedSuggestion suggestion = vertexA.suggestions().iterator().next();
-        assertThat(suggestion.get().label(), is("Start date"));
+        vertexA = subGraph.vertexWithIdentifier(vertexA.uri());
+        Suggestion suggestion = vertexA.suggestions().iterator().next();
+        assertThat(suggestion.label(), is("Start date"));
     }
 
     @Test

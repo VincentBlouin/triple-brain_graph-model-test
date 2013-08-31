@@ -1,5 +1,6 @@
 package org.triple_brain.module.model.graph;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.codehaus.jettison.json.JSONArray;
@@ -36,6 +37,9 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     @Inject
     protected GraphFactory graphMaker;
 
+    @Inject
+    ModelTestScenarios modelTestScenarios;
+
     protected static Injector injector;
 
 
@@ -44,7 +48,13 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     @BeforeClass
     public static void realBeforeClass() {
         injector = Guice.createInjector(
-                new Neo4JTestModule()
+                new Neo4JTestModule(),
+                new AbstractModule() {
+                    @Override
+                    protected void configure() {
+                        requireBinding(ModelTestScenarios.class);
+                    }
+                }
         );
         injector.getInstance(GraphComponentTest.class)
                 .beforeClass();

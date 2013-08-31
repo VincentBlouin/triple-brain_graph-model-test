@@ -2,7 +2,8 @@ package org.triple_brain.module.model.graph;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.triple_brain.module.model.ModelTestScenarios;
+
+import java.net.URI;
 
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
@@ -26,7 +27,7 @@ public class EdgeTest extends AdaptableGraphComponentTest {
 
         assertThat(newEdge.sourceVertex(), is(vertexE));
         assertThat(newEdge.destinationVertex(), is(vertexA));
-        assertTrue(userGraph.haveElementWithId(newEdge.id()));
+        assertTrue(userGraph.haveElementWithId(newEdge.uri()));
         assertThat(newEdge.label(), is(""));
         assertThat(numberOfEdgesAndVertices(), is(numberOfEdgesAndVertices + 1));
     }
@@ -35,7 +36,7 @@ public class EdgeTest extends AdaptableGraphComponentTest {
     public void can_remove_an_edge() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
         Edge edge = vertexA.edgeThatLinksToDestinationVertex(vertexB);
-        String edgeId = edge.id();
+        URI edgeId = edge.uri();
         assertTrue(userGraph.haveElementWithId(edgeId));
         edge.remove();
         assertFalse(userGraph.haveElementWithId(edgeId));
@@ -74,7 +75,7 @@ public class EdgeTest extends AdaptableGraphComponentTest {
     public void can_add_same_as(){
         Edge newEdge = vertexA.addVertexAndRelation();
         Assert.assertTrue(newEdge.getSameAs().isEmpty());
-        newEdge.addSameAs(ModelTestScenarios.creatorPredicate());
+        newEdge.addSameAs(modelTestScenarios.creatorPredicate());
         assertFalse(newEdge.getSameAs().isEmpty());
     }
 }
