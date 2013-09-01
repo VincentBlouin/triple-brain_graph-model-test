@@ -112,7 +112,7 @@ public class ModelTestScenarios {
                         .put(SuggestionJsonFields.LABEL, label)
                         .put(
                                 SuggestionJsonFields.ORIGIN,
-                                originUri
+                                "identification_" + originUri
                         )
             );
         }catch(JSONException e){

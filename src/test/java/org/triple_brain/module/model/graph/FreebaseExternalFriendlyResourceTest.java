@@ -1,7 +1,7 @@
 package org.triple_brain.module.model.graph;
 
 import org.junit.Test;
-import org.triple_brain.module.model.FreebaseExternalFriendlyResource;
+import org.triple_brain.module.model.FreebaseFriendlyResource;
 import org.triple_brain.module.model.FriendlyResource;
 
 import static org.junit.Assert.assertTrue;
@@ -14,7 +14,7 @@ public class FreebaseExternalFriendlyResourceTest extends AdaptableGraphComponen
     @Test
     public void can_get_images(){
         FriendlyResource timBernersLee = modelTestScenarios.timBernersLeeInFreebase();
-        assertTrue(FreebaseExternalFriendlyResource.isFromFreebase(timBernersLee));
+        assertTrue(FreebaseFriendlyResource.isFromFreebase(timBernersLee));
     }
 
 }
