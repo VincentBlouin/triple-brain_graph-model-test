@@ -26,20 +26,17 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_update_note(){
-        assertThat(vertexA().note(), is(""));
-        vertexA().note("Its vertex a !");
-        assertThat(vertexA().note(), is("Its vertex a !"));
+    public void can_update_comment(){
+        assertThat(vertexA().comment(), is(""));
+        vertexA().comment("Its vertex a !");
+        assertThat(vertexA().comment(), is("Its vertex a !"));
     }
 
     @Test
     public void can_add_vertex_and_relation() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
         Edge edge = vertexA.addVertexAndRelation();
-
         assertThat(edge, is(not(nullValue())));
-        assertTrue(edge.hasLabel());
-
         Integer newNumberOfEdgesAndVertices = numberOfEdgesAndVertices();
         assertThat(newNumberOfEdgesAndVertices, is(numberOfEdgesAndVertices + 2));
         assertTrue(vertexA.hasEdge(edge));
@@ -48,7 +45,6 @@ public class VertexTest extends AdaptableGraphComponentTest {
 
         Vertex destinationVertex = edge.destinationVertex();
         assertThat(destinationVertex, is(not(nullValue())));
-        assertTrue(destinationVertex.hasLabel());
     }
 
     @Test
@@ -108,7 +104,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
                 vertexA.getAdditionalTypes().size(),
                 is(2)
         );
-        vertexA.removeFriendlyResource(modelTestScenarios.personType());
+        vertexA.removeIdentification(modelTestScenarios.personType());
         assertThat(
                 vertexA.getAdditionalTypes().size(),
                 is(1)
@@ -134,12 +130,12 @@ public class VertexTest extends AdaptableGraphComponentTest {
         );
         assertTrue(
                 modelTestScenarios.nameSuggestion().origins().iterator().next()
-                        .isTheIdentificationWithUri(
-                                modelTestScenarios.person().uri()
+                        .isRelatedToFriendlyResource(
+                                modelTestScenarios.person()
                         )
         );
         assertThat(vertexA.suggestions().size(), is(2));
-        vertexA.removeFriendlyResource(
+        vertexA.removeIdentification(
                 modelTestScenarios.person()
         );
         assertThat(vertexA.suggestions().size(), is(1));
@@ -176,7 +172,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
         vertexA.addSameAs(
                 modelTestScenarios.timBernersLee()
         );
-        vertexA.removeFriendlyResource(
+        vertexA.removeIdentification(
                 modelTestScenarios.timBernersLee()
         );
         assertTrue(vertexA.getSameAs().isEmpty());

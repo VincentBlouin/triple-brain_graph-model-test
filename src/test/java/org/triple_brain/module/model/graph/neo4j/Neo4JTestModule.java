@@ -74,6 +74,9 @@ public class Neo4JTestModule extends AbstractModule {
         install(factoryModuleBuilder
                 .build(Neo4JSuggestionFactory.class)
         );
+        install(factoryModuleBuilder
+                .build(Neo4JSuggestionOriginFactory.class)
+        );
         bind(GraphComponentTest.class).toInstance(
                 new Neo4JGraphComponentTest()
         );
