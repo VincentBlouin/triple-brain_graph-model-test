@@ -85,12 +85,20 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
     }
 
     @Override
-    public SubGraph wholeGraph() {
+    public SubGraph wholeGraphAroundDefaultCenterVertex() {
         Integer depthThatShouldCoverWholeGraph = 1000;
-            return neo4JSubGraphExtractorFactory.withCenterVertexAndDepth(
+        return neo4JSubGraphExtractorFactory.withCenterVertexAndDepth(
                 vertexA,
                 depthThatShouldCoverWholeGraph
         ).load();
+    }
+
+    @Override
+    public SubGraph wholeGraph() {
+        return Neo4JSubGraph.withVerticesAndEdges(
+                allVertices(),
+                allEdges()
+        );
     }
 
     @Override
@@ -173,7 +181,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
 
     @Override
     public VertexInSubGraph vertexInWholeGraph(Vertex vertex) {
-        return wholeGraph().vertexWithIdentifier(vertex.uri());
+        return wholeGraphAroundDefaultCenterVertex().vertexWithIdentifier(vertex.uri());
     }
 
     protected Set<VertexInSubGraph> allVertices() {
@@ -189,11 +197,14 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
                         "RETURN n"
         );
         while (result.hasNext()) {
+            System.out.println();
+            VertexInSubGraph vertex = vertexFactory.createOrLoadUsingNodeOfOwner(
+                    (Node) result.next().get("n").get(),
+                    user
+            );
+            System.out.println(vertex.uri());
             vertices.add(
-                    vertexFactory.loadUsingNodeOfOwner(
-                            (Node) result.next().get("n").get(),
-                            user
-                    )
+                    vertex
             );
         }
         return vertices;

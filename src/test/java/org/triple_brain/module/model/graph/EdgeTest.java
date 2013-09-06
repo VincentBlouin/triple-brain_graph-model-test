@@ -22,7 +22,7 @@ public class EdgeTest extends AdaptableGraphComponentTest {
         Vertex vertexD = vertexA.addVertexAndRelation().destinationVertex();
         Vertex vertexE = vertexD.addVertexAndRelation().destinationVertex();
 
-        Integer numberOfEdgesAndVertices = wholeGraph().numberOfEdgesAndVertices();
+        Integer numberOfEdgesAndVertices = wholeGraphAroundDefaultCenterVertex().numberOfEdgesAndVertices();
         Edge newEdge = vertexE.addRelationToVertex(vertexA);
 
         assertThat(newEdge.sourceVertex(), is(vertexE));

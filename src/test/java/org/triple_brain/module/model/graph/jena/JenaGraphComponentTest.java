@@ -139,7 +139,7 @@
 //
 //    @Override
 //    public VertexInSubGraph vertexInWholeGraph(Vertex vertex) {
-//        return wholeGraph().vertexWithIdentifier(vertex.uri());
+//        return wholeGraphAroundDefaultCenterVertex().vertexWithIdentifier(vertex.uri());
 //    }
 //
 //    protected Model model(){
@@ -161,7 +161,7 @@
 //    }
 //
 //    @Override
-//    public SubGraph wholeGraph(){
+//    public SubGraph wholeGraphAroundDefaultCenterVertex(){
 //        return userGraph.graphWithDefaultVertexAndDepth(
 //                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
 //        );

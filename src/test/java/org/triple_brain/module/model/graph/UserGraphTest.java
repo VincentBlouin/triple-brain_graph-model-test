@@ -219,7 +219,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         vertexA.addType(
                 modelTestScenarios.personType()
         );
-        SubGraph subGraph = wholeGraph();
+        SubGraph subGraph = wholeGraphAroundDefaultCenterVertex();
         vertexA = subGraph.vertexWithIdentifier(vertexA.uri());
         FriendlyResource additionalType = vertexA.getAdditionalTypes().iterator().next();
         assertThat(additionalType.label(), is("Person"));
@@ -230,7 +230,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         vertexA.addSuggestions(
                 modelTestScenarios.startDateSuggestion()
         );
-        SubGraph subGraph = wholeGraph();
+        SubGraph subGraph = wholeGraphAroundDefaultCenterVertex();
         vertexA = subGraph.vertexWithIdentifier(vertexA.uri());
         Suggestion suggestion = vertexA.suggestions().iterator().next();
         assertThat(suggestion.label(), is("Start date"));
@@ -263,5 +263,13 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 vertexInWholeGraph(vertexC).minDistanceFromCenterVertex(),
                 is(1)
         );
+    }
+
+    @Test
+    public void can_create_new_vertex_out_of_nothing(){
+        Vertex vertex = userGraph.createVertex();
+        System.out.println(vertex.uri() + " patate");
+        SubGraph subGraph = wholeGraph();
+        assertTrue(subGraph.containsVertex(vertex));
     }
 }
