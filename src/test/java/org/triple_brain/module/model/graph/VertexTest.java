@@ -227,6 +227,19 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
+    public void can_add_generic_identification(){
+        assertFalse(vertexA.getGenericIdentifications().contains(
+                modelTestScenarios.extraterrestrial()
+        ));
+        vertexA.addGenericIdentification(
+                modelTestScenarios.extraterrestrial()
+        );
+        assertTrue(vertexA.getGenericIdentifications().contains(
+                modelTestScenarios.extraterrestrial()
+        ));
+    }
+
+    @Test
     public void can_test_if_vertex_has_destination_vertex(){
         assertFalse(vertexA.hasDestinationVertex(vertexC));
         vertexA.addRelationToVertex(vertexC);
@@ -276,4 +289,5 @@ public class VertexTest extends AdaptableGraphComponentTest {
         vertexA.makePrivate();
         assertFalse(vertexA.isPublic());
     }
+
 }
