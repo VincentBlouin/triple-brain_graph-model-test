@@ -14,6 +14,7 @@ import org.neo4j.kernel.logging.BufferingLogger;
 import org.neo4j.test.TestGraphDatabaseFactory;
 import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.FriendlyResourceFactory;
+import org.triple_brain.module.model.WholeGraph;
 import org.triple_brain.module.model.graph.GraphComponentTest;
 import org.triple_brain.module.model.graph.GraphFactory;
 import org.triple_brain.module.model.suggestion.Suggestion;
@@ -27,7 +28,7 @@ public class Neo4JTestModule extends AbstractModule {
 
     @Override
     protected void configure() {
-
+        bind(WholeGraph.class).to(Neo4JWholeGraph.class);
         GraphDatabaseService graphDb = new TestGraphDatabaseFactory()
                 .newImpermanentDatabaseBuilder()
                 .setConfig(GraphDatabaseSettings.node_keys_indexable, Neo4JUserGraph.URI_PROPERTY_NAME)

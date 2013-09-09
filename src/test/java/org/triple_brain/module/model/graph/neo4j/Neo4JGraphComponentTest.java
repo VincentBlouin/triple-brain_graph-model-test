@@ -197,12 +197,9 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
                         "RETURN n"
         );
         while (result.hasNext()) {
-            System.out.println();
-            VertexInSubGraph vertex = vertexFactory.createOrLoadUsingNodeOfOwner(
-                    (Node) result.next().get("n").get(),
-                    user
+            VertexInSubGraph vertex = vertexFactory.createOrLoadUsingNode(
+                    (Node) result.next().get("n").get()
             );
-            System.out.println(vertex.uri());
             vertices.add(
                     vertex
             );
