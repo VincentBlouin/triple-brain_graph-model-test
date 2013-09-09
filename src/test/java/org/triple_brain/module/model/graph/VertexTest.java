@@ -289,5 +289,4 @@ public class VertexTest extends AdaptableGraphComponentTest {
         vertexA.makePrivate();
         assertFalse(vertexA.isPublic());
     }
-
 }
