@@ -2,6 +2,7 @@ package org.triple_brain.module.model.graph;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.triple_brain.module.model.FriendlyResource;
 
 import java.net.URI;
 
@@ -77,5 +78,20 @@ public class EdgeTest extends AdaptableGraphComponentTest {
         Assert.assertTrue(newEdge.getSameAs().isEmpty());
         newEdge.addSameAs(modelTestScenarios.creatorPredicate());
         assertFalse(newEdge.getSameAs().isEmpty());
+    }
+
+    @Test
+    public void can_check_equality(){
+        Edge anEdge = vertexA.addVertexAndRelation();
+        assertTrue(anEdge.equals(anEdge));
+        Edge anotherEdge = vertexA.addVertexAndRelation();
+        assertFalse(anEdge.equals(anotherEdge));
+    }
+
+    @Test
+    public void can_compare_to_friendly_resource(){
+        Edge anEdge = vertexA.addVertexAndRelation();
+        FriendlyResource anEdgeAsFriendlyResource = (FriendlyResource) anEdge;
+        assertTrue(anEdge.equals(anEdgeAsFriendlyResource));
     }
 }

@@ -7,6 +7,7 @@ import org.triple_brain.module.model.suggestion.Suggestion;
 
 import java.net.URI;
 
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -289,4 +290,17 @@ public class VertexTest extends AdaptableGraphComponentTest {
         vertexA.makePrivate();
         assertFalse(vertexA.isPublic());
     }
+
+    @Test
+    public void can_check_equality(){
+        assertTrue(vertexA.equals(vertexA));
+        assertFalse(vertexB.equals(vertexB));
+    }
+
+    @Test
+    public void can_compare_to_friendly_resource(){
+        FriendlyResource vertexAAsFriendlyResource = (FriendlyResource) vertexA;
+        assertTrue(vertexA.equals(vertexAAsFriendlyResource));
+    }
 }
+
