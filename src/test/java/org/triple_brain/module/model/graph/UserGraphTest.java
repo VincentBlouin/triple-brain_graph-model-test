@@ -268,7 +268,6 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     @Test
     public void can_create_new_vertex_out_of_nothing(){
         Vertex vertex = userGraph.createVertex();
-        System.out.println(vertex.uri() + " patate");
         SubGraph subGraph = wholeGraph();
         assertTrue(subGraph.containsVertex(vertex));
     }
