@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -31,5 +33,19 @@ public class WholeGraphTest extends AdaptableGraphComponentTest {
             }
             visitedVertices.add(vertex);
         }
+    }
+
+    @Test
+    public void can_get_edges(){
+        int nbEdges = 0;
+        Iterator<Edge> edgeIterator = wholeGraph.getAllEdges();
+        while(edgeIterator.hasNext()){
+            nbEdges++;
+            edgeIterator.next();
+        }
+        assertThat(
+                nbEdges,
+                is(2)
+        );
     }
 }
