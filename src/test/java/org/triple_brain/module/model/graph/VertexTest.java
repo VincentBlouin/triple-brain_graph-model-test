@@ -294,7 +294,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
     @Test
     public void can_check_equality(){
         assertTrue(vertexA.equals(vertexA));
-        assertFalse(vertexB.equals(vertexB));
+        assertFalse(vertexA.equals(vertexB));
     }
 
     @Test
