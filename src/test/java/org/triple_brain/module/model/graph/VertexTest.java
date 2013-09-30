@@ -5,9 +5,13 @@ import org.triple_brain.module.common_utils.Uris;
 import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.suggestion.Suggestion;
 
+import javax.inject.Inject;
 import java.net.URI;
+import java.util.HashSet;
+import java.util.Set;
 
 import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -18,6 +22,10 @@ import static org.junit.Assert.*;
 * Copyright Mozilla Public License 1.1
 */
 public class VertexTest extends AdaptableGraphComponentTest {
+
+    @Inject
+    protected VertexFactory vertexFactory;
+
     @Test
     public void can_update_label() {
         Edge newEdge = vertexA.addVertexAndRelation();
@@ -301,6 +309,84 @@ public class VertexTest extends AdaptableGraphComponentTest {
     public void can_compare_to_friendly_resource(){
         FriendlyResource vertexAAsFriendlyResource = (FriendlyResource) vertexA;
         assertTrue(vertexA.equals(vertexAAsFriendlyResource));
+    }
+
+    @Test
+    public void can_get_empty_set_of_included_vertices_for_a_vertex_that_have_none(){
+        assertTrue(
+                vertexA.getIncludedVertices().isEmpty()
+        );
+    }
+
+    @Test
+    public void can_create_vertex_from_vertices_set(){
+        Vertex newVertex = vertexFactory.createFromVertices(
+                vertexBAndC()
+        );
+        Set<Vertex> includedVertices = newVertex.getIncludedVertices();
+        assertTrue(includedVertices.contains(vertexB));
+        assertTrue(includedVertices.contains(vertexC));
+        assertFalse(includedVertices.contains(vertexA));
+    }
+
+    @Test
+    public void more_than_one_vertex_is_required_to_create_vertex_from_vertices(){
+        Set<Vertex> empty = new HashSet<>();
+        try{
+            vertexFactory.createFromVertices(
+                    empty
+            );
+            fail();
+        }catch(Exception exception){
+            //continue
+        }
+        Set<Vertex> one = new HashSet<>();
+        one.add(vertexA);
+        try{
+            vertexFactory.createFromVertices(
+                    one
+            );
+            fail();
+        }catch(Exception exception){
+            //continue
+        }
+    }
+
+    @Test
+    public void removing_a_vertex_removes_it_from_included_vertices_as_well(){
+        Vertex newVertex = vertexFactory.createFromVertices(
+                vertexBAndC()
+        );
+        assertThat(
+                newVertex.getIncludedVertices().size(),
+                is(2)
+        );
+        vertexB.remove();
+        assertThat(
+                newVertex.getIncludedVertices().size(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void removing_vertex_that_has_included_vertices_doesnt_remove_its_included_vertices(){
+        Vertex newVertex = vertexFactory.createFromVertices(
+                vertexBAndC()
+        );
+        newVertex.remove();
+        assertTrue(
+                wholeGraph().containsVertex(vertexB)
+        );
+        assertTrue(
+                wholeGraph().containsVertex(vertexC)
+        );
+    }
+
+    private Set<Vertex> vertexBAndC(){
+        Set<Vertex> vertexBAndC = new HashSet<>();
+        vertexBAndC.add(vertexB);
+        vertexBAndC.add(vertexC);
+        return vertexBAndC;
     }
 }
 
