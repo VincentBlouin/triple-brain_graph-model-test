@@ -382,6 +382,14 @@ public class VertexTest extends AdaptableGraphComponentTest {
         );
     }
 
+    @Test
+    public void including_a_vertex_doesnt_add_to_it_any_included_vertices(){
+        vertexFactory.createFromVertices(
+                vertexBAndC()
+        );
+        assertTrue(vertexB.getIncludedVertices().isEmpty());
+    }
+
     private Set<Vertex> vertexBAndC(){
         Set<Vertex> vertexBAndC = new HashSet<>();
         vertexBAndC.add(vertexB);
