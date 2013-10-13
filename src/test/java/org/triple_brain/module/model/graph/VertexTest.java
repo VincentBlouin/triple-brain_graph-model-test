@@ -390,6 +390,36 @@ public class VertexTest extends AdaptableGraphComponentTest {
         assertTrue(vertexB.getIncludedVertices().isEmpty());
     }
 
+    @Test
+    public void can_get_number_of_connected_edges(){
+        assertThat(
+                vertexB().getNumberOfConnectedEdges(),
+                is(2)
+        );
+    }
+
+    @Test
+    public void when_deleting_a_vertex_it_decrements_the_number_of_connected_vertices_of_its_neighbors(){
+        vertexC.addVertexAndRelation();
+        assertThat(
+                vertexC.getNumberOfConnectedEdges(),
+                is(2)
+        );
+        assertThat(
+                vertexA.getNumberOfConnectedEdges(),
+                is(1)
+        );
+        vertexB.remove();
+        assertThat(
+                vertexC.getNumberOfConnectedEdges(),
+                is(1)
+        );
+        assertThat(
+                vertexA.getNumberOfConnectedEdges(),
+                is(0)
+        );
+    }
+
     private Set<Vertex> vertexBAndC(){
         Set<Vertex> vertexBAndC = new HashSet<>();
         vertexBAndC.add(vertexB);
