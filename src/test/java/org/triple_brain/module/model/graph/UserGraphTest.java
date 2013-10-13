@@ -8,8 +8,6 @@ import org.triple_brain.module.model.graph.exceptions.InvalidDepthOfSubVerticesE
 import org.triple_brain.module.model.graph.exceptions.NonExistingResourceException;
 import org.triple_brain.module.model.suggestion.Suggestion;
 
-import java.util.List;
-
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -169,40 +167,6 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
             assertThat(e.getMessage(), is("Resource with URI: /invalid_uri not found"));
         }
         assertThat(numberOfEdgesAndVertices(), is(numberOfEdgesAndVertices));
-    }
-
-    @Test
-    public void frontier_vertices_with_hidden_vertices_have_a_list_of_their_hidden_properties_name() {
-        Edge newEdge = vertexB.addVertexAndRelation();
-        newEdge.label("new edge");
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
-                1,
-                vertexA.uri()
-        );
-        List<String> vertexBConnectedEdgesLabel = subGraph.vertexWithIdentifier(vertexB.uri())
-                .hiddenConnectedEdgesLabel();
-        assertFalse(vertexBConnectedEdgesLabel.isEmpty());
-        assertThat(vertexBConnectedEdgesLabel.size(), is(2));
-        assertTrue(vertexBConnectedEdgesLabel.contains("between vertex B and vertex C"));
-        assertTrue(vertexBConnectedEdgesLabel.contains("new edge"));
-    }
-
-    @Test
-    public void connected_frontier_vertices_have_their_edge() {
-        Edge newEdge = vertexC.addRelationToVertex(vertexA);
-        newEdge.label("edge between frontier vertices");
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
-                1,
-                vertexB.uri()
-        );
-        List<String> vertexCConnectedEdgesLabel = subGraph.vertexWithIdentifier(
-                vertexC.uri()
-        ).hiddenConnectedEdgesLabel();
-        assertThat(vertexCConnectedEdgesLabel.size(), is(0));
-        Vertex vertexCFromSubGraph = subGraph.vertexWithIdentifier(
-                vertexC.uri()
-        );
-        assertThat(vertexCFromSubGraph.connectedEdges().size(), is(2));
     }
 
     @Test
