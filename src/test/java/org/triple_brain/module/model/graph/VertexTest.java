@@ -420,6 +420,21 @@ public class VertexTest extends AdaptableGraphComponentTest {
         );
     }
 
+    @Test
+    public void adding_a_relation_to_existing_vertices_increments_number_of_connected_edges(){
+        int numberOfEdgesForVertexA = vertexA.getNumberOfConnectedEdges();
+        int numberOfEdgesForVertexC = vertexC.getNumberOfConnectedEdges();
+        vertexC.addRelationToVertex(vertexA);
+        assertThat(
+                vertexA().getNumberOfConnectedEdges(),
+                is(numberOfEdgesForVertexA + 1)
+        );
+        assertThat(
+                vertexC().getNumberOfConnectedEdges(),
+                is(numberOfEdgesForVertexC + 1)
+        );
+    }
+
     private Set<Vertex> vertexBAndC(){
         Set<Vertex> vertexBAndC = new HashSet<>();
         vertexBAndC.add(vertexB);
