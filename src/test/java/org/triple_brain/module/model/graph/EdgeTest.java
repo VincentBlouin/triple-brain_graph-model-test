@@ -94,4 +94,14 @@ public class EdgeTest extends AdaptableGraphComponentTest {
         FriendlyResource anEdgeAsFriendlyResource = (FriendlyResource) anEdge;
         assertTrue(anEdge.equals(anEdgeAsFriendlyResource));
     }
+
+    @Test
+    public void can_inverse(){
+        Edge betweenAAndB = vertexA.edgeThatLinksToDestinationVertex(vertexB);
+        assertThat(betweenAAndB.sourceVertex(), is(vertexA));
+        assertThat(betweenAAndB.destinationVertex(), is(vertexB));
+        betweenAAndB.inverse();
+        assertThat(betweenAAndB.sourceVertex(), is(vertexB));
+        assertThat(betweenAAndB.destinationVertex(), is(vertexA));
+    }
 }
