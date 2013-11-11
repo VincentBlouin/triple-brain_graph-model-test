@@ -312,29 +312,39 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_get_empty_set_of_included_vertices_for_a_vertex_that_have_none(){
+    public void can_get_empty_set_of_included_graph_elements_for_a_vertex_that_have_none(){
         assertTrue(
                 vertexA.getIncludedVertices().isEmpty()
+        );
+        assertTrue(
+                vertexA.getIncludedEdges().isEmpty()
         );
     }
 
     @Test
-    public void can_create_vertex_from_vertices_set(){
-        Vertex newVertex = vertexFactory.createFromVertices(
-                vertexBAndC()
+    public void can_create_vertex_from_graph_elements_set(){
+        Vertex newVertex = vertexFactory.createFromGraphElements(
+                vertexBAndC(),
+                edgeBetweenBAndCInSet()
         );
         Set<Vertex> includedVertices = newVertex.getIncludedVertices();
         assertTrue(includedVertices.contains(vertexB));
         assertTrue(includedVertices.contains(vertexC));
         assertFalse(includedVertices.contains(vertexA));
+        Set<Edge> includedEdges = newVertex.getIncludedEdges();
+        assertTrue(includedEdges.contains(
+                vertexB.edgeThatLinksToDestinationVertex(vertexC)
+        ));
     }
 
     @Test
-    public void more_than_one_vertex_is_required_to_create_vertex_from_vertices(){
-        Set<Vertex> empty = new HashSet<>();
+    public void more_than_one_graph_element_are_required_to_create_vertex_from_graph_elements(){
+        Set<Vertex> emptyVertices = new HashSet<>();
+        Set<Edge> emptyEdges = new HashSet<>();
         try{
-            vertexFactory.createFromVertices(
-                    empty
+            vertexFactory.createFromGraphElements(
+                    emptyVertices,
+                    emptyEdges
             );
             fail();
         }catch(Exception exception){
@@ -343,8 +353,9 @@ public class VertexTest extends AdaptableGraphComponentTest {
         Set<Vertex> one = new HashSet<>();
         one.add(vertexA);
         try{
-            vertexFactory.createFromVertices(
-                    one
+            vertexFactory.createFromGraphElements(
+                    one,
+                    emptyEdges
             );
             fail();
         }catch(Exception exception){
@@ -353,25 +364,60 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void removing_a_vertex_removes_it_from_included_vertices_as_well(){
-        Vertex newVertex = vertexFactory.createFromVertices(
-                vertexBAndC()
+    public void removing_a_graph_element_removes_it_from_included_graph_elements_as_well(){
+        Vertex newVertex = vertexFactory.createFromGraphElements(
+                vertexBAndC(),
+                edgeBetweenBAndCInSet()
         );
         assertThat(
                 newVertex.getIncludedVertices().size(),
                 is(2)
+        );
+        assertThat(
+                newVertex.getIncludedEdges().size(),
+                is(1)
+        );
+        vertexB.edgeThatLinksToDestinationVertex(vertexC).remove();
+        assertThat(
+                newVertex.getIncludedVertices().size(),
+                is(2)
+        );
+        assertThat(
+                newVertex.getIncludedEdges().size(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void removing_a_vertex_removes_its_delete_edges_from_included_graph_elements_as_well(){
+        Vertex newVertex = vertexFactory.createFromGraphElements(
+                vertexBAndC(),
+                edgeBetweenBAndCInSet()
+        );
+        assertThat(
+                newVertex.getIncludedVertices().size(),
+                is(2)
+        );
+        assertThat(
+                newVertex.getIncludedEdges().size(),
+                is(1)
         );
         vertexB.remove();
         assertThat(
                 newVertex.getIncludedVertices().size(),
                 is(1)
         );
+        assertThat(
+                newVertex.getIncludedEdges().size(),
+                is(0)
+        );
     }
 
     @Test
-    public void removing_vertex_that_has_included_vertices_doesnt_remove_its_included_vertices(){
-        Vertex newVertex = vertexFactory.createFromVertices(
-                vertexBAndC()
+    public void removing_vertex_that_has_included_graph_elements_doesnt_remove_its_included_graph_elements(){
+        Vertex newVertex = vertexFactory.createFromGraphElements(
+                vertexBAndC(),
+                edgeBetweenBAndCInSet()
         );
         newVertex.remove();
         assertTrue(
@@ -383,11 +429,13 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void including_a_vertex_doesnt_add_to_it_any_included_vertices(){
-        vertexFactory.createFromVertices(
-                vertexBAndC()
+    public void including_a_vertex_doesnt_add_to_it_any_included_graph_elements(){
+        vertexFactory.createFromGraphElements(
+                vertexBAndC(),
+                edgeBetweenBAndCInSet()
         );
         assertTrue(vertexB.getIncludedVertices().isEmpty());
+        assertTrue(vertexB.getIncludedEdges().isEmpty());
     }
 
     @Test
@@ -433,6 +481,17 @@ public class VertexTest extends AdaptableGraphComponentTest {
                 vertexC().getNumberOfConnectedEdges(),
                 is(numberOfEdgesForVertexC + 1)
         );
+    }
+
+    private Set<Edge> edgeBetweenBAndCInSet(){
+
+        Set<Edge> edges = new HashSet<>();
+        edges.add(
+                vertexB.edgeThatLinksToDestinationVertex(
+                        vertexC
+                )
+        );
+        return edges;
     }
 
     private Set<Vertex> vertexBAndC(){

@@ -15,10 +15,7 @@ import org.neo4j.test.TestGraphDatabaseFactory;
 import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.FriendlyResourceFactory;
 import org.triple_brain.module.model.WholeGraph;
-import org.triple_brain.module.model.graph.GraphComponentTest;
-import org.triple_brain.module.model.graph.GraphFactory;
-import org.triple_brain.module.model.graph.VertexFactory;
-import org.triple_brain.module.model.graph.VertexInSubGraph;
+import org.triple_brain.module.model.graph.*;
 import org.triple_brain.module.model.suggestion.Suggestion;
 import org.triple_brain.module.model.suggestion.SuggestionFactory;
 import org.triple_brain.module.neo4j_graph_manipulator.graph.*;
@@ -57,6 +54,10 @@ public class Neo4JTestModule extends AbstractModule {
         install(factoryModuleBuilder
                 .implement(VertexInSubGraph.class, Neo4JVertexInSubGraph.class)
                 .build(VertexFactory.class));
+
+        install(factoryModuleBuilder
+                .implement(Edge.class, Neo4JEdge.class)
+                .build(EdgeFactory.class));
 
         install(factoryModuleBuilder
                 .build(Neo4JVertexFactory.class));
