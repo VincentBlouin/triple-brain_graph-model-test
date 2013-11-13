@@ -104,4 +104,13 @@ public class EdgeTest extends AdaptableGraphComponentTest {
         assertThat(betweenAAndB.sourceVertex(), is(vertexB));
         assertThat(betweenAAndB.destinationVertex(), is(vertexA));
     }
+
+    @Test
+    public void deleting_a_relation_decrements_number_of_connected_edges_to_vertices(){
+        assertThat(vertexA.getNumberOfConnectedEdges(), is(1));
+        assertThat(vertexB.getNumberOfConnectedEdges(), is(2));
+        vertexA.edgeThatLinksToDestinationVertex(vertexB).remove();
+        assertThat(vertexA.getNumberOfConnectedEdges(), is(0));
+        assertThat(vertexB.getNumberOfConnectedEdges(), is(1));
+    }
 }
