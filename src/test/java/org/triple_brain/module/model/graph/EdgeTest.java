@@ -34,6 +34,19 @@ public class EdgeTest extends AdaptableGraphComponentTest {
     }
 
     @Test
+    public void a_vertex_can_have_multiple_relations_with_same_vertex(){
+        assertTrue(
+                vertexB.hasDestinationVertex(vertexC)
+        );
+        assertThat(vertexC.connectedEdges().size(), is(1));
+        vertexB.addRelationToVertex(vertexC);
+        /*  don't test with getNumberOfConnectedEdges
+            because we want to test the actual value and not the cached one
+         */
+        assertThat(vertexC.connectedEdges().size(), is(2));
+    }
+
+    @Test
     public void can_remove_an_edge() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
         Edge edge = vertexA.edgeThatLinksToDestinationVertex(vertexB);
