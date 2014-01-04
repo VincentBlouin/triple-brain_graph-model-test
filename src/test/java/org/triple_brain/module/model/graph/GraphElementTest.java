@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /*
@@ -64,5 +65,13 @@ public class GraphElementTest extends AdaptableGraphComponentTest{
                 vertexAGraphElement.getIdentifications().size(),
                 is(3)
         );
+    }
+
+    @Test
+    public void a_graph_element_is_not_identified_to_itself_if_used_as_an_identification_for_another_element(){
+        assertTrue(vertexB.getIdentifications().isEmpty());
+        GraphElement vertexAGraphElement = vertexA;
+        vertexAGraphElement.addSameAs(vertexB);
+        assertTrue(vertexB.getIdentifications().isEmpty());
     }
 }
