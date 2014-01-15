@@ -1,6 +1,7 @@
 package org.triple_brain.module.model.graph;
 
 import org.junit.Test;
+import org.triple_brain.module.model.graph.vertex.Vertex;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -14,7 +15,7 @@ public class GraphElementTest extends AdaptableGraphComponentTest{
     @Test
     public void cannot_identify_to_self(){
         String errorMessage = "identification cannot be the same";
-        GraphElement vertexAGraphElement = vertexA;
+        GraphElementOperator vertexAGraphElement = vertexA;
         try{
             vertexAGraphElement.addGenericIdentification(vertexA);
             fail();
@@ -38,7 +39,7 @@ public class GraphElementTest extends AdaptableGraphComponentTest{
     @Test
     public void an_exception_is_thrown_when_adding_already_existing_identification(){
         String errorMessage = "cannot have duplicate identifications";
-        GraphElement vertexAGraphElement = vertexA;
+        GraphElementOperator vertexAGraphElement = vertexA;
         Vertex vertexD = vertexA.addVertexAndRelation().destinationVertex();
         try{
             vertexAGraphElement.addGenericIdentification(vertexB);
@@ -70,7 +71,7 @@ public class GraphElementTest extends AdaptableGraphComponentTest{
     @Test
     public void a_graph_element_is_not_identified_to_itself_if_used_as_an_identification_for_another_element(){
         assertTrue(vertexB.getIdentifications().isEmpty());
-        GraphElement vertexAGraphElement = vertexA;
+        GraphElementOperator vertexAGraphElement = vertexA;
         vertexAGraphElement.addSameAs(vertexB);
         assertTrue(vertexB.getIdentifications().isEmpty());
     }

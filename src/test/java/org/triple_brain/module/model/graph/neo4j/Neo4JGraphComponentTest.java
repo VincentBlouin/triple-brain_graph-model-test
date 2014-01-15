@@ -7,9 +7,16 @@ import org.neo4j.graphdb.*;
 import org.neo4j.kernel.logging.BufferingLogger;
 import org.triple_brain.module.model.TripleBrainUris;
 import org.triple_brain.module.model.User;
-import org.triple_brain.module.model.graph.*;
+import org.triple_brain.module.model.graph.GraphComponentTest;
+import org.triple_brain.module.model.graph.SubGraph;
+import org.triple_brain.module.model.graph.UserGraph;
+import org.triple_brain.module.model.graph.edge.EdgeOperator;
 import org.triple_brain.module.model.graph.scenarios.TestScenarios;
 import org.triple_brain.module.model.graph.scenarios.VerticesCalledABAndC;
+import org.triple_brain.module.model.graph.vertex.Vertex;
+import org.triple_brain.module.model.graph.vertex.VertexInSubGraph;
+import org.triple_brain.module.model.graph.vertex.VertexInSubGraphOperator;
+import org.triple_brain.module.model.graph.vertex.VertexOperator;
 import org.triple_brain.module.neo4j_graph_manipulator.graph.*;
 
 import javax.inject.Inject;
@@ -27,9 +34,9 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
     @Inject
     protected  Neo4JSubGraphExtractorFactory neo4JSubGraphExtractorFactory;
 
-    protected Vertex vertexA;
-    protected Vertex vertexB;
-    protected Vertex vertexC;
+    protected VertexOperator vertexA;
+    protected VertexOperator vertexB;
+    protected VertexOperator vertexC;
 
     protected static User user;
 
@@ -103,7 +110,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
 
     @Override
     public void removeWholeGraph() {
-        for (Vertex vertex : allVertices()) {
+        for (VertexOperator vertex : allVertices()) {
             vertex.remove();
         }
     }
@@ -160,22 +167,22 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
     }
 
     @Override
-    public Vertex vertexA() {
+    public VertexOperator vertexA() {
         return vertexA;
     }
 
     @Override
-    public void setDefaultVertexAkaVertexA(Vertex vertexA) {
+    public void setDefaultVertexAkaVertexA(VertexOperator vertexA) {
         this.vertexA = vertexA;
     }
 
     @Override
-    public Vertex vertexB() {
+    public VertexOperator vertexB() {
         return vertexB;
     }
 
     @Override
-    public Vertex vertexC() {
+    public VertexOperator vertexC() {
         return vertexC;
     }
 
@@ -184,8 +191,8 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
         return wholeGraphAroundDefaultCenterVertex().vertexWithIdentifier(vertex.uri());
     }
 
-    protected Set<VertexInSubGraph> allVertices() {
-        Set<VertexInSubGraph> vertices = new HashSet<VertexInSubGraph>();
+    protected Set<VertexInSubGraphOperator> allVertices() {
+        Set<VertexInSubGraphOperator> vertices = new HashSet<VertexInSubGraphOperator>();
         ExecutionEngine engine = new ExecutionEngine(graphDb, new BufferingLogger());
         ExecutionResult result = engine.execute(
                 "START n = node(*) " +
@@ -197,7 +204,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
                         "RETURN n"
         );
         while (result.hasNext()) {
-            VertexInSubGraph vertex = vertexFactory.createOrLoadUsingNode(
+            VertexInSubGraphOperator vertex = vertexFactory.createOrLoadUsingNode(
                     (Node) result.next().get("n").get()
             );
             vertices.add(
@@ -241,9 +248,9 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
         return allVertices().size();
     }
 
-    protected Set<Edge> allEdges() {
-        Set<Edge> edges = new HashSet<Edge>();
-        for (Vertex vertex : allVertices()) {
+    protected Set<EdgeOperator> allEdges() {
+        Set<EdgeOperator> edges = new HashSet<EdgeOperator>();
+        for (VertexOperator vertex : allVertices()) {
             edges.addAll(
                     vertex.connectedEdges()
             );

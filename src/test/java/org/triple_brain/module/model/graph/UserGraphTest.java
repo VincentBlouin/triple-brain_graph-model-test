@@ -4,8 +4,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.triple_brain.module.common_utils.Uris;
 import org.triple_brain.module.model.FriendlyResource;
+import org.triple_brain.module.model.graph.edge.Edge;
 import org.triple_brain.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
 import org.triple_brain.module.model.graph.exceptions.NonExistingResourceException;
+import org.triple_brain.module.model.graph.vertex.Vertex;
 import org.triple_brain.module.model.suggestion.Suggestion;
 
 import static org.hamcrest.CoreMatchers.not;

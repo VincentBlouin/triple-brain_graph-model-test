@@ -3,15 +3,16 @@ package org.triple_brain.module.model.graph;
 import com.google.inject.Inject;
 import org.junit.Test;
 import org.triple_brain.module.model.WholeGraph;
+import org.triple_brain.module.model.graph.edge.EdgeOperator;
+import org.triple_brain.module.model.graph.vertex.Vertex;
+import org.triple_brain.module.model.graph.vertex.VertexOperator;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /*
 * Copyright Mozilla Public License 1.1
@@ -25,7 +26,7 @@ public class WholeGraphTest extends AdaptableGraphComponentTest {
     public void there_are_no_duplicates_in_vertices(){
         assertTrue(wholeGraph.getAllVertices().hasNext());
         Set<Vertex> visitedVertices = new HashSet<Vertex>();
-        Iterator<Vertex> vertexIterator = wholeGraph.getAllVertices();
+        Iterator<VertexOperator> vertexIterator = wholeGraph.getAllVertices();
         while(vertexIterator.hasNext()){
             Vertex vertex = vertexIterator.next();
             if(visitedVertices.contains(vertex)){
@@ -38,7 +39,7 @@ public class WholeGraphTest extends AdaptableGraphComponentTest {
     @Test
     public void can_get_edges(){
         int nbEdges = 0;
-        Iterator<Edge> edgeIterator = wholeGraph.getAllEdges();
+        Iterator<EdgeOperator> edgeIterator = wholeGraph.getAllEdges();
         while(edgeIterator.hasNext()){
             nbEdges++;
             edgeIterator.next();

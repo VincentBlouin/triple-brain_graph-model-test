@@ -3,7 +3,11 @@ package org.triple_brain.module.model.graph.scenarios;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.index.ReadableIndex;
 import org.triple_brain.module.model.User;
-import org.triple_brain.module.model.graph.*;
+import org.triple_brain.module.model.graph.GraphComponentTest;
+import org.triple_brain.module.model.graph.GraphFactory;
+import org.triple_brain.module.model.graph.UserGraph;
+import org.triple_brain.module.model.graph.edge.Edge;
+import org.triple_brain.module.model.graph.vertex.VertexOperator;
 
 import javax.inject.Inject;
 import java.util.UUID;
@@ -25,11 +29,11 @@ public class TestScenarios {
     public VerticesCalledABAndC makeGraphHave3VerticesABCWhereAIsDefaultCenterVertexAndAPointsToBAndBPointsToC(UserGraph userGraph) {
         graphComponentTest.removeWholeGraph();
         graphFactory.createForUser(userGraph.user());
-        Vertex vertexA = userGraph.defaultVertex();
+        VertexOperator vertexA = userGraph.defaultVertex();
         vertexA.label("vertex A");
-        Vertex vertexB = vertexA.addVertexAndRelation().destinationVertex();
+        VertexOperator vertexB = (VertexOperator) vertexA.addVertexAndRelation().destinationVertex();
         vertexB.label("vertex B");
-        Vertex vertexC = vertexB.addVertexAndRelation().destinationVertex();
+        VertexOperator vertexC = (VertexOperator) vertexB.addVertexAndRelation().destinationVertex();
         vertexC.label("vertex C");
         Edge betweenAAndB = vertexA.edgeThatLinksToDestinationVertex(vertexB);
         betweenAAndB.label("between vertex A and vertex B");
@@ -50,9 +54,9 @@ public class TestScenarios {
         return verticesCalledABAndC;
     }
 
-    public Vertex addPineAppleVertexToVertex(Vertex vertex) {
+    public VertexOperator addPineAppleVertexToVertex(VertexOperator vertex) {
         Edge newEdge = vertex.addVertexAndRelation();
-        Vertex pineApple = newEdge.destinationVertex();
+        VertexOperator pineApple = (VertexOperator) newEdge.destinationVertex();
         pineApple.label("pine Apple");
         return pineApple;
     }

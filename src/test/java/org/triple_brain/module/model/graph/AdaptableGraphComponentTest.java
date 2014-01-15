@@ -14,6 +14,9 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.triple_brain.module.model.User;
 import org.triple_brain.module.model.graph.neo4j.Neo4JTestModule;
 import org.triple_brain.module.model.graph.scenarios.TestScenarios;
+import org.triple_brain.module.model.graph.vertex.Vertex;
+import org.triple_brain.module.model.graph.vertex.VertexInSubGraph;
+import org.triple_brain.module.model.graph.vertex.VertexOperator;
 
 import javax.inject.Inject;
 
@@ -24,9 +27,9 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
 
     protected UserGraph userGraph;
 
-    protected Vertex vertexA;
-    protected Vertex vertexB;
-    protected Vertex vertexC;
+    protected VertexOperator vertexA;
+    protected VertexOperator vertexB;
+    protected VertexOperator vertexC;
 
     @Inject
     protected TestScenarios testScenarios;
@@ -107,22 +110,22 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     }
 
     @Override
-    public Vertex vertexA() {
+    public VertexOperator vertexA() {
         return graphComponentTest.vertexA();
     }
 
     @Override
-    public void setDefaultVertexAkaVertexA(Vertex vertexA) {
+    public void setDefaultVertexAkaVertexA(VertexOperator vertexA) {
         graphComponentTest.setDefaultVertexAkaVertexA(vertexA);
     }
 
     @Override
-    public Vertex vertexB() {
+    public VertexOperator vertexB() {
         return graphComponentTest.vertexB();
     }
 
     @Override
-    public Vertex vertexC() {
+    public VertexOperator vertexC() {
         return graphComponentTest.vertexC();
     }
 

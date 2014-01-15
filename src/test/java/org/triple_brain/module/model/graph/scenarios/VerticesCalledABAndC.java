@@ -1,31 +1,31 @@
 package org.triple_brain.module.model.graph.scenarios;
 
-import org.triple_brain.module.model.graph.Vertex;
+import org.triple_brain.module.model.graph.vertex.VertexOperator;
 
 /*
 * Copyright Mozilla Public License 1.1
 */
 public class VerticesCalledABAndC {
 
-    private Vertex vertexA;
-    private Vertex vertexB;
-    private Vertex vertexC;
+    private VertexOperator vertexA;
+    private VertexOperator vertexB;
+    private VertexOperator vertexC;
 
-    public VerticesCalledABAndC(Vertex vertexA, Vertex vertexB, Vertex vertexC){
+    public VerticesCalledABAndC(VertexOperator vertexA, VertexOperator vertexB, VertexOperator vertexC){
         this.vertexA = vertexA;
         this.vertexB = vertexB;
         this.vertexC = vertexC;
     }
 
-    public Vertex vertexA(){
+    public VertexOperator vertexA(){
         return vertexA;
     }
 
-    public Vertex vertexB(){
+    public VertexOperator vertexB(){
         return vertexB;
     }
 
-    public Vertex vertexC(){
+    public VertexOperator vertexC(){
         return vertexC;
     }
 }

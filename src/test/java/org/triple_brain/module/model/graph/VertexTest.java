@@ -3,6 +3,10 @@ package org.triple_brain.module.model.graph;
 import org.junit.Test;
 import org.triple_brain.module.common_utils.Uris;
 import org.triple_brain.module.model.FriendlyResource;
+import org.triple_brain.module.model.graph.edge.Edge;
+import org.triple_brain.module.model.graph.vertex.Vertex;
+import org.triple_brain.module.model.graph.vertex.VertexFactory;
+import org.triple_brain.module.model.graph.vertex.VertexOperator;
 import org.triple_brain.module.model.suggestion.Suggestion;
 
 import javax.inject.Inject;
@@ -169,7 +173,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
     @Test
     public void can_add_same_as(){
         Edge newEdge = vertexA.addVertexAndRelation();
-        Vertex newVertex = newEdge.destinationVertex();
+        VertexOperator newVertex = (VertexOperator) newEdge.destinationVertex();
         newVertex.label("Tim Berners Lee");
         assertTrue(newVertex.getSameAs().isEmpty());
         newVertex.addSameAs(modelTestScenarios.timBernersLee());
@@ -227,7 +231,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
     @Test
     public void can_get_same_as(){
         Edge newEdge = vertexA.addVertexAndRelation();
-        Vertex newVertex = newEdge.destinationVertex();
+        VertexOperator newVertex = (VertexOperator) newEdge.destinationVertex();
         newVertex.label("Tim Berners Lee");
         assertTrue(newVertex.getSameAs().isEmpty());
         newVertex.addSameAs(modelTestScenarios.timBernersLee());
@@ -415,7 +419,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
 
     @Test
     public void removing_vertex_that_has_included_graph_elements_doesnt_remove_its_included_graph_elements(){
-        Vertex newVertex = vertexFactory.createFromGraphElements(
+        VertexOperator newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
                 edgeBetweenBAndCInSet()
         );
