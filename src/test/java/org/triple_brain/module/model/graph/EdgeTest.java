@@ -24,8 +24,8 @@ public class EdgeTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_add_relation() {
-        VertexOperator vertexD = (VertexOperator) vertexA.addVertexAndRelation().destinationVertex();
-        VertexOperator vertexE = (VertexOperator) vertexD.addVertexAndRelation().destinationVertex();
+        VertexOperator vertexD = vertexA.addVertexAndRelation().destinationVertex();
+        VertexOperator vertexE = vertexD.addVertexAndRelation().destinationVertex();
 
         Integer numberOfEdgesAndVertices = wholeGraphAroundDefaultCenterVertex().numberOfEdgesAndVertices();
         EdgeOperator newEdge = vertexE.addRelationToVertex(vertexA);

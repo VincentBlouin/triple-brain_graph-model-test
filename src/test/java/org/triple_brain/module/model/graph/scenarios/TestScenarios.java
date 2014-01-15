@@ -7,6 +7,7 @@ import org.triple_brain.module.model.graph.GraphComponentTest;
 import org.triple_brain.module.model.graph.GraphFactory;
 import org.triple_brain.module.model.graph.UserGraph;
 import org.triple_brain.module.model.graph.edge.Edge;
+import org.triple_brain.module.model.graph.edge.EdgeOperator;
 import org.triple_brain.module.model.graph.vertex.VertexOperator;
 
 import javax.inject.Inject;
@@ -31,9 +32,9 @@ public class TestScenarios {
         graphFactory.createForUser(userGraph.user());
         VertexOperator vertexA = userGraph.defaultVertex();
         vertexA.label("vertex A");
-        VertexOperator vertexB = (VertexOperator) vertexA.addVertexAndRelation().destinationVertex();
+        VertexOperator vertexB = vertexA.addVertexAndRelation().destinationVertex();
         vertexB.label("vertex B");
-        VertexOperator vertexC = (VertexOperator) vertexB.addVertexAndRelation().destinationVertex();
+        VertexOperator vertexC = vertexB.addVertexAndRelation().destinationVertex();
         vertexC.label("vertex C");
         Edge betweenAAndB = vertexA.edgeThatLinksToDestinationVertex(vertexB);
         betweenAAndB.label("between vertex A and vertex B");
@@ -55,8 +56,8 @@ public class TestScenarios {
     }
 
     public VertexOperator addPineAppleVertexToVertex(VertexOperator vertex) {
-        Edge newEdge = vertex.addVertexAndRelation();
-        VertexOperator pineApple = (VertexOperator) newEdge.destinationVertex();
+        EdgeOperator newEdge = vertex.addVertexAndRelation();
+        VertexOperator pineApple = newEdge.destinationVertex();
         pineApple.label("pine Apple");
         return pineApple;
     }
