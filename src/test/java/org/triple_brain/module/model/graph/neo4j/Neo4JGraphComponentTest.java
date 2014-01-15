@@ -5,7 +5,6 @@ import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
 import org.neo4j.graphdb.*;
 import org.neo4j.kernel.logging.BufferingLogger;
-import org.triple_brain.module.model.TripleBrainUris;
 import org.triple_brain.module.model.User;
 import org.triple_brain.module.model.graph.GraphComponentTest;
 import org.triple_brain.module.model.graph.SubGraph;
@@ -17,7 +16,10 @@ import org.triple_brain.module.model.graph.vertex.Vertex;
 import org.triple_brain.module.model.graph.vertex.VertexInSubGraph;
 import org.triple_brain.module.model.graph.vertex.VertexInSubGraphOperator;
 import org.triple_brain.module.model.graph.vertex.VertexOperator;
-import org.triple_brain.module.neo4j_graph_manipulator.graph.*;
+import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4JSubGraph;
+import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4JSubGraphExtractorFactory;
+import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4JUserGraphFactory;
+import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4JVertexFactory;
 
 import javax.inject.Inject;
 import java.util.HashSet;
@@ -196,11 +198,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
         ExecutionEngine engine = new ExecutionEngine(graphDb, new BufferingLogger());
         ExecutionResult result = engine.execute(
                 "START n = node(*) " +
-                        "MATCH n-[:" +
-                        Relationships.TYPE +
-                        "]-type " +
-                        "WHERE type." + Neo4JUserGraph.URI_PROPERTY_NAME + " " +
-                        "= '" + TripleBrainUris.TRIPLE_BRAIN_VERTEX + "' " +
+                        "MATCH n:vertex " +
                         "RETURN n"
         );
         while (result.hasNext()) {
