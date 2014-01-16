@@ -32,12 +32,12 @@ public class Neo4JTestModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(WholeGraph.class).to(Neo4JWholeGraph.class);
+        bind(WholeGraph.class).to(Neo4jWholeGraph.class);
         GraphDatabaseService graphDb = new TestGraphDatabaseFactory()
                 .newImpermanentDatabaseBuilder()
-                .setConfig(GraphDatabaseSettings.node_keys_indexable, Neo4JUserGraph.URI_PROPERTY_NAME)
+                .setConfig(GraphDatabaseSettings.node_keys_indexable, Neo4jUserGraph.URI_PROPERTY_NAME)
                 .setConfig(GraphDatabaseSettings.node_auto_indexing, GraphDatabaseSetting.TRUE)
-                .setConfig( GraphDatabaseSettings.relationship_keys_indexable, Neo4JUserGraph.URI_PROPERTY_NAME )
+                .setConfig( GraphDatabaseSettings.relationship_keys_indexable, Neo4jUserGraph.URI_PROPERTY_NAME )
                 .setConfig( GraphDatabaseSettings.relationship_auto_indexing, GraphDatabaseSetting.TRUE )
                 .newGraphDatabase();
 
@@ -51,44 +51,44 @@ public class Neo4JTestModule extends AbstractModule {
         FactoryModuleBuilder factoryModuleBuilder = new FactoryModuleBuilder();
 
         install(factoryModuleBuilder
-                .build(Neo4JEdgeFactory.class));
+                .build(Neo4jEdgeFactory.class));
 
         install(factoryModuleBuilder
-                .build(Neo4JUserGraphFactory.class));
+                .build(Neo4jUserGraphFactory.class));
 
         install(factoryModuleBuilder
-                .implement(VertexInSubGraphOperator.class, Neo4JVertexInSubGraphOperator.class)
+                .implement(VertexInSubGraphOperator.class, Neo4jVertexInSubGraphOperator.class)
                 .build(VertexFactory.class));
 
         install(factoryModuleBuilder
-                .implement(Edge.class, Neo4JEdgeOperator.class)
+                .implement(Edge.class, Neo4jEdgeOperator.class)
                 .build(EdgeFactory.class));
 
         install(factoryModuleBuilder
-                .build(Neo4JVertexFactory.class));
+                .build(Neo4jVertexFactory.class));
 
         install(factoryModuleBuilder
-                .build(Neo4JSubGraphExtractorFactory.class));
+                .build(Neo4jSubGraphExtractorFactory.class));
 
         install(factoryModuleBuilder
-                .build(Neo4JGraphElementFactory.class));
+                .build(Neo4jGraphElementFactory.class));
 
         install(factoryModuleBuilder
-                .implement(FriendlyResource.class, Neo4JFriendlyResource.class)
+                .implement(FriendlyResource.class, Neo4jFriendlyResource.class)
                 .build(FriendlyResourceFactory.class)
         );
         install(factoryModuleBuilder
-                .build(Neo4JFriendlyResourceFactory.class)
+                .build(Neo4jFriendlyResourceFactory.class)
         );
         install(factoryModuleBuilder
-                .implement(Suggestion.class, Neo4JSuggestion.class)
+                .implement(Suggestion.class, Neo4jSuggestion.class)
                 .build(SuggestionFactory.class)
         );
         install(factoryModuleBuilder
-                .build(Neo4JSuggestionFactory.class)
+                .build(Neo4jSuggestionFactory.class)
         );
         install(factoryModuleBuilder
-                .build(Neo4JSuggestionOriginFactory.class)
+                .build(Neo4jSuggestionOriginFactory.class)
         );
         bind(GraphComponentTest.class).toInstance(
                 new Neo4JGraphComponentTest()
@@ -107,7 +107,7 @@ public class Neo4JTestModule extends AbstractModule {
                         .getAutoIndex()
         );
 
-        bind(GraphFactory.class).to(Neo4JGraphFactory.class);
-        requireBinding(Neo4JUtils.class);
+        bind(GraphFactory.class).to(Neo4jGraphFactory.class);
+        requireBinding(Neo4jUtils.class);
     }
 }

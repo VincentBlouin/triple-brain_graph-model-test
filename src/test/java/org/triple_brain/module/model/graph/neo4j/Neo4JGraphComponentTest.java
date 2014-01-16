@@ -16,10 +16,10 @@ import org.triple_brain.module.model.graph.vertex.Vertex;
 import org.triple_brain.module.model.graph.vertex.VertexInSubGraph;
 import org.triple_brain.module.model.graph.vertex.VertexInSubGraphOperator;
 import org.triple_brain.module.model.graph.vertex.VertexOperator;
-import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4JSubGraph;
-import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4JSubGraphExtractorFactory;
-import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4JUserGraphFactory;
-import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4JVertexFactory;
+import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jSubGraph;
+import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jSubGraphExtractorFactory;
+import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jUserGraphFactory;
+import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jVertexFactory;
 
 import javax.inject.Inject;
 import java.util.HashSet;
@@ -34,7 +34,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
     protected TestScenarios testScenarios;
 
     @Inject
-    protected  Neo4JSubGraphExtractorFactory neo4JSubGraphExtractorFactory;
+    protected Neo4jSubGraphExtractorFactory neo4jSubGraphExtractorFactory;
 
     protected VertexOperator vertexA;
     protected VertexOperator vertexB;
@@ -48,10 +48,10 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
     protected GraphDatabaseService graphDb;
 
     @Inject
-    protected Neo4JVertexFactory vertexFactory;
+    protected Neo4jVertexFactory vertexFactory;
 
     @Inject
-    protected Neo4JUserGraphFactory neo4JUserGraphFactory;
+    protected Neo4jUserGraphFactory neo4jUserGraphFactory;
 
     protected UserGraph userGraph;
 
@@ -67,7 +67,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
                 "[fr]"
         );
         startTransaction();
-        userGraph = neo4JUserGraphFactory.withUser(user);
+        userGraph = neo4jUserGraphFactory.withUser(user);
         VerticesCalledABAndC verticesCalledABAndC = testScenarios.makeGraphHave3VerticesABCWhereAIsDefaultCenterVertexAndAPointsToBAndBPointsToC(
                 userGraph
         );
@@ -96,7 +96,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
     @Override
     public SubGraph wholeGraphAroundDefaultCenterVertex() {
         Integer depthThatShouldCoverWholeGraph = 1000;
-        return neo4JSubGraphExtractorFactory.withCenterVertexAndDepth(
+        return neo4jSubGraphExtractorFactory.withCenterVertexAndDepth(
                 vertexA,
                 depthThatShouldCoverWholeGraph
         ).load();
@@ -104,7 +104,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
 
     @Override
     public SubGraph wholeGraph() {
-        return Neo4JSubGraph.withVerticesAndEdges(
+        return Neo4jSubGraph.withVerticesAndEdges(
                 allVertices(),
                 allEdges()
         );
