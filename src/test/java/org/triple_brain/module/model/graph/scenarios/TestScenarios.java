@@ -6,7 +6,6 @@ import org.triple_brain.module.model.User;
 import org.triple_brain.module.model.graph.GraphComponentTest;
 import org.triple_brain.module.model.graph.GraphFactory;
 import org.triple_brain.module.model.graph.UserGraph;
-import org.triple_brain.module.model.graph.edge.Edge;
 import org.triple_brain.module.model.graph.edge.EdgeOperator;
 import org.triple_brain.module.model.graph.vertex.VertexOperator;
 
@@ -36,9 +35,9 @@ public class TestScenarios {
         vertexB.label("vertex B");
         VertexOperator vertexC = vertexB.addVertexAndRelation().destinationVertex();
         vertexC.label("vertex C");
-        Edge betweenAAndB = vertexA.edgeThatLinksToDestinationVertex(vertexB);
+        EdgeOperator betweenAAndB = vertexA.edgeThatLinksToDestinationVertex(vertexB);
         betweenAAndB.label("between vertex A and vertex B");
-        Edge betweenBAndC = vertexB.edgeThatLinksToDestinationVertex(vertexC);
+        EdgeOperator betweenBAndC = vertexB.edgeThatLinksToDestinationVertex(vertexC);
         betweenBAndC.label("between vertex B and vertex C");
         return new VerticesCalledABAndC(
                 vertexA,

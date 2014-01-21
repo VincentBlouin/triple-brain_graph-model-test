@@ -33,8 +33,8 @@ public class VertexTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_update_label() {
-        Edge newEdge = vertexA.addVertexAndRelation();
-        Vertex vertex = newEdge.destinationVertex();
+        EdgeOperator newEdge = vertexA.addVertexAndRelation();
+        VertexOperator vertex = newEdge.destinationVertex();
         vertex.label("Ju-Ji-Tsu");
         assertThat(vertex.label(), is("Ju-Ji-Tsu"));
     }

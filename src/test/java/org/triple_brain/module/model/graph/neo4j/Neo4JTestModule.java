@@ -12,13 +12,13 @@ import org.neo4j.graphdb.factory.GraphDatabaseSettings;
 import org.neo4j.graphdb.index.ReadableIndex;
 import org.neo4j.kernel.logging.BufferingLogger;
 import org.neo4j.test.TestGraphDatabaseFactory;
-import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.FriendlyResourceFactory;
 import org.triple_brain.module.model.WholeGraph;
+import org.triple_brain.module.model.graph.FriendlyResourceOperator;
 import org.triple_brain.module.model.graph.GraphComponentTest;
 import org.triple_brain.module.model.graph.GraphFactory;
-import org.triple_brain.module.model.graph.edge.Edge;
 import org.triple_brain.module.model.graph.edge.EdgeFactory;
+import org.triple_brain.module.model.graph.edge.EdgeOperator;
 import org.triple_brain.module.model.graph.vertex.VertexFactory;
 import org.triple_brain.module.model.graph.vertex.VertexInSubGraphOperator;
 import org.triple_brain.module.model.suggestion.Suggestion;
@@ -61,7 +61,7 @@ public class Neo4JTestModule extends AbstractModule {
                 .build(VertexFactory.class));
 
         install(factoryModuleBuilder
-                .implement(Edge.class, Neo4jEdgeOperator.class)
+                .implement(EdgeOperator.class, Neo4jEdgeOperator.class)
                 .build(EdgeFactory.class));
 
         install(factoryModuleBuilder
@@ -74,7 +74,7 @@ public class Neo4JTestModule extends AbstractModule {
                 .build(Neo4jGraphElementFactory.class));
 
         install(factoryModuleBuilder
-                .implement(FriendlyResource.class, Neo4jFriendlyResource.class)
+                .implement(FriendlyResourceOperator.class, Neo4jFriendlyResource.class)
                 .build(FriendlyResourceFactory.class)
         );
         install(factoryModuleBuilder

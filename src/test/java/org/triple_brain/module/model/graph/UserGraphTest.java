@@ -46,7 +46,9 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     @Test
     public void can_get_circular_graph_with_default_center_vertex() {
         vertexC.addRelationToVertex(vertexA);
-        SubGraph graph = userGraph.graphWithDefaultVertexAndDepth(DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES);
+        SubGraph graph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
         assertThat(graph, is(not(nullValue())));
         assertThat(graph.numberOfEdgesAndVertices(), is(numberOfEdgesAndVertices()));
         Vertex centerVertex = graph.vertexWithIdentifier(vertexA.uri());
@@ -185,7 +187,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         vertexA.addType(
                 modelTestScenarios.personType()
         );
-        SubGraph subGraph = wholeGraphAroundDefaultCenterVertex();
+        SubGraphOperator subGraph = wholeGraphAroundDefaultCenterVertex();
         vertexA = subGraph.vertexWithIdentifier(vertexA.uri());
         FriendlyResource additionalType = vertexA.getAdditionalTypes().iterator().next();
         assertThat(additionalType.label(), is("Person"));
@@ -196,7 +198,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         vertexA.addSuggestions(
                 modelTestScenarios.startDateSuggestion()
         );
-        SubGraph subGraph = wholeGraphAroundDefaultCenterVertex();
+        SubGraphOperator subGraph = wholeGraphAroundDefaultCenterVertex();
         vertexA = subGraph.vertexWithIdentifier(vertexA.uri());
         Suggestion suggestion = vertexA.suggestions().iterator().next();
         assertThat(suggestion.label(), is("Start date"));
@@ -234,7 +236,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     @Test
     public void can_create_new_vertex_out_of_nothing(){
         Vertex vertex = userGraph.createVertex();
-        SubGraph subGraph = wholeGraph();
+        SubGraphOperator subGraph = wholeGraph();
         assertTrue(subGraph.containsVertex(vertex));
     }
 }

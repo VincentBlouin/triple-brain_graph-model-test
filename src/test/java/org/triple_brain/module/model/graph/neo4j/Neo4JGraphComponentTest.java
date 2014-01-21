@@ -8,7 +8,10 @@ import org.neo4j.kernel.logging.BufferingLogger;
 import org.triple_brain.module.model.User;
 import org.triple_brain.module.model.graph.GraphComponentTest;
 import org.triple_brain.module.model.graph.SubGraph;
+import org.triple_brain.module.model.graph.SubGraphOperator;
 import org.triple_brain.module.model.graph.UserGraph;
+import org.triple_brain.module.model.graph.edge.Edge;
+import org.triple_brain.module.model.graph.edge.EdgeFactory;
 import org.triple_brain.module.model.graph.edge.EdgeOperator;
 import org.triple_brain.module.model.graph.scenarios.TestScenarios;
 import org.triple_brain.module.model.graph.scenarios.VerticesCalledABAndC;
@@ -16,7 +19,6 @@ import org.triple_brain.module.model.graph.vertex.Vertex;
 import org.triple_brain.module.model.graph.vertex.VertexInSubGraph;
 import org.triple_brain.module.model.graph.vertex.VertexInSubGraphOperator;
 import org.triple_brain.module.model.graph.vertex.VertexOperator;
-import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jSubGraph;
 import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jSubGraphExtractorFactory;
 import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jUserGraphFactory;
 import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jVertexFactory;
@@ -36,13 +38,8 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
     @Inject
     protected Neo4jSubGraphExtractorFactory neo4jSubGraphExtractorFactory;
 
-    protected VertexOperator vertexA;
-    protected VertexOperator vertexB;
-    protected VertexOperator vertexC;
-
-    protected static User user;
-
-    protected Transaction transaction;
+    @Inject
+    protected EdgeFactory edgeFactory;
 
     @Inject
     protected GraphDatabaseService graphDb;
@@ -52,6 +49,14 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
 
     @Inject
     protected Neo4jUserGraphFactory neo4jUserGraphFactory;
+
+    protected VertexOperator vertexA;
+    protected VertexOperator vertexB;
+    protected VertexOperator vertexC;
+
+    protected static User user;
+
+    protected Transaction transaction;
 
     protected UserGraph userGraph;
 
@@ -94,17 +99,22 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
     }
 
     @Override
-    public SubGraph wholeGraphAroundDefaultCenterVertex() {
+    public SubGraphOperator wholeGraphAroundDefaultCenterVertex() {
         Integer depthThatShouldCoverWholeGraph = 1000;
-        return neo4jSubGraphExtractorFactory.withCenterVertexAndDepth(
+        SubGraph subGraph = neo4jSubGraphExtractorFactory.withCenterVertexAndDepth(
                 vertexA,
                 depthThatShouldCoverWholeGraph
         ).load();
+        return SubGraphOperator.withVerticesAndEdges(
+                convertVertexSetToOperator(subGraph.vertices()),
+                convertEdgeSetToOperator(subGraph.edges())
+        );
     }
 
+
     @Override
-    public SubGraph wholeGraph() {
-        return Neo4jSubGraph.withVerticesAndEdges(
+    public SubGraphOperator wholeGraph() {
+        return SubGraphOperator.withVerticesAndEdges(
                 allVertices(),
                 allEdges()
         );
@@ -123,7 +133,7 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
                 anyRelationshipContainsLabel(label);
     }
 
-    protected boolean anyNodeContainsLabel(String label){
+    protected boolean anyNodeContainsLabel(String label) {
         for (Node node : allNodes()) {
             if (hasLabel(node, label)) {
                 return true;
@@ -141,14 +151,14 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
         return false;
     }
 
-    protected boolean hasLabel(PropertyContainer propertyContainer, String label){
-        try{
+    protected boolean hasLabel(PropertyContainer propertyContainer, String label) {
+        try {
             String labelProperty = RDFS.label.getURI();
             return propertyContainer.hasProperty(
                     labelProperty
             ) &&
                     propertyContainer.getProperty(labelProperty).equals(label);
-        }catch(IllegalStateException e){
+        } catch (IllegalStateException e) {
             return false;
         }
     }
@@ -260,17 +270,43 @@ public class Neo4JGraphComponentTest implements GraphComponentTest {
         return allEdges().size();
     }
 
-    private void commit(){
+    private void commit() {
         finishTransaction();
         startTransaction();
     }
 
-    private void startTransaction(){
+    private void startTransaction() {
         transaction = graphDb.beginTx();
     }
 
-    private void finishTransaction(){
+    private void finishTransaction() {
         transaction.success();
     }
 
+    private Set<VertexInSubGraphOperator> convertVertexSetToOperator(Set<VertexInSubGraph> vertices) {
+        Set<VertexInSubGraphOperator> verticesOperator = new HashSet<VertexInSubGraphOperator>();
+        for (VertexInSubGraph vertexInSubGraph : vertices) {
+            VertexInSubGraphOperator vertexInSubGraphOperator = vertexFactory.createOrLoadUsingUri(
+                    vertexInSubGraph.uri()
+            );
+            vertexInSubGraphOperator.setMinDistanceFromCenterVertex(
+                    vertexInSubGraph.minDistanceFromCenterVertex()
+            );
+            verticesOperator.add(
+                    vertexInSubGraphOperator
+            );
+        }
+        return verticesOperator;
+    }
+
+    private Set<EdgeOperator> convertEdgeSetToOperator(Set<Edge> edges) {
+        Set<EdgeOperator> edgesOperator = new HashSet<EdgeOperator>();
+        for(Edge edge: edges){
+            edgesOperator.add(
+                    edgeFactory.createOrLoadUsingUri(
+                            edge.uri()
+                    ));
+        }
+        return edgesOperator;
+    }
 }

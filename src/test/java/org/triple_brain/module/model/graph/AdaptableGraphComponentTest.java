@@ -130,12 +130,12 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     }
 
     @Override
-    public SubGraph wholeGraphAroundDefaultCenterVertex() {
+    public SubGraphOperator wholeGraphAroundDefaultCenterVertex() {
         return graphComponentTest.wholeGraphAroundDefaultCenterVertex();
     }
 
     @Override
-    public SubGraph wholeGraph() {
+    public SubGraphOperator wholeGraph() {
         return graphComponentTest.wholeGraph();
     }
 

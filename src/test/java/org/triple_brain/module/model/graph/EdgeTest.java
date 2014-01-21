@@ -66,7 +66,7 @@ public class EdgeTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_update_label() {
-        Edge edge = vertexA.addVertexAndRelation();
+        EdgeOperator edge = vertexA.addVertexAndRelation();
         edge.label("likes");
         assertThat(edge.label(), is("likes"));
     }

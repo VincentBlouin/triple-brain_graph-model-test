@@ -10,8 +10,8 @@ import org.triple_brain.module.model.graph.vertex.VertexOperator;
 */
 public interface GraphComponentTest {
     public int numberOfEdgesAndVertices();
-    public SubGraph wholeGraphAroundDefaultCenterVertex();
-    public SubGraph wholeGraph();
+    public SubGraphOperator wholeGraphAroundDefaultCenterVertex();
+    public SubGraphOperator wholeGraph();
     public void removeWholeGraph();
     public boolean graphContainsLabel(String label);
     public User user();
