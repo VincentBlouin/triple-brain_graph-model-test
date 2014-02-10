@@ -1,17 +1,24 @@
 package org.triple_brain.module.model.graph;
 
 import org.junit.Test;
+import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.FriendlyResourceFactory;
+import org.triple_brain.module.model.Image;
 
 import javax.inject.Inject;
 import java.net.URI;
+import java.util.Date;
+import java.util.HashSet;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 /*
 * Copyright Mozilla Public License 1.1
 */
 public class FriendlyResourceTest extends AdaptableGraphComponentTest{
+
     @Inject
     FriendlyResourceFactory friendlyResourceFactory;
 
@@ -26,6 +33,42 @@ public class FriendlyResourceTest extends AdaptableGraphComponentTest{
         }catch(Exception e){
             //continue
         }
+    }
+
+    @Test
+    public void setting_null_label_converts_to_empty_string(){
+        FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
+                URI.create("/some_uri"),
+                null,
+                new HashSet<Image>(),
+                "",
+                new Date(),
+                new Date()
+        );
+        FriendlyResource friendlyResource = friendlyResourceFactory.createOrLoadUsingPojo(
+                friendlyResourcePojo
+        );
+        assertThat(
+                friendlyResource.label(), is("")
+        );
+    }
+
+    @Test
+    public void setting_null_comment_converts_to_empty_string(){
+        FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
+                URI.create("/some_uri"),
+                "",
+                new HashSet<Image>(),
+                null,
+                new Date(),
+                new Date()
+        );
+        FriendlyResource friendlyResource = friendlyResourceFactory.createOrLoadUsingPojo(
+                friendlyResourcePojo
+        );
+        assertThat(
+                friendlyResource.comment(), is("")
+        );
     }
 
     @Test

@@ -9,9 +9,11 @@ import org.triple_brain.module.model.graph.vertex.Vertex;
 import org.triple_brain.module.model.graph.vertex.VertexFactory;
 import org.triple_brain.module.model.graph.vertex.VertexOperator;
 import org.triple_brain.module.model.suggestion.Suggestion;
+import org.triple_brain.module.model.suggestion.SuggestionOperator;
 
 import javax.inject.Inject;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -138,9 +140,14 @@ public class VertexTest extends AdaptableGraphComponentTest {
         vertexA.addType(
                 modelTestScenarios.event()
         );
+        Set<SuggestionOperator> suggestions = new HashSet<SuggestionOperator>(
+                Arrays.asList(
+                        modelTestScenarios.nameSuggestion(),
+                        modelTestScenarios.startDateSuggestion()
+                )
+        );
         vertexA.addSuggestions(
-                modelTestScenarios.nameSuggestion(),
-                modelTestScenarios.startDateSuggestion()
+                suggestions
         );
         assertTrue(
                 modelTestScenarios.nameSuggestion().origins().iterator().next()
@@ -163,8 +170,13 @@ public class VertexTest extends AdaptableGraphComponentTest {
     @Test
     public void can_add_suggestions_to_a_vertex() throws Exception {
         assertTrue(vertexA.suggestions().isEmpty());
+        Set<SuggestionOperator> suggestions = new HashSet<SuggestionOperator>(
+                Arrays.asList(
+                        modelTestScenarios.startDateSuggestion()
+                )
+        );
         vertexA.addSuggestions(
-                modelTestScenarios.startDateSuggestion()
+                suggestions
         );
         assertFalse(vertexA.suggestions().isEmpty());
         Suggestion getSuggestion = vertexA.suggestions().iterator().next();

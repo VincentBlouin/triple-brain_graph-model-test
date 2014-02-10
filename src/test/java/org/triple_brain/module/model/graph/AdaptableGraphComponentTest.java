@@ -41,7 +41,7 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     protected GraphFactory graphMaker;
 
     @Inject
-    ModelTestScenarios modelTestScenarios;
+    public ModelTestScenarios modelTestScenarios;
 
     protected static Injector injector;
 

@@ -9,6 +9,11 @@ import org.triple_brain.module.model.graph.exceptions.InvalidDepthOfSubVerticesE
 import org.triple_brain.module.model.graph.exceptions.NonExistingResourceException;
 import org.triple_brain.module.model.graph.vertex.Vertex;
 import org.triple_brain.module.model.suggestion.Suggestion;
+import org.triple_brain.module.model.suggestion.SuggestionOperator;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
@@ -195,8 +200,13 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
 
     @Test
     public void vertex_suggestions_have_their_properties_sub_graph(){
+        Set<SuggestionOperator> suggestions = new HashSet<SuggestionOperator>(
+                Arrays.asList(
+                        modelTestScenarios.startDateSuggestion()
+                )
+        );
         vertexA.addSuggestions(
-                modelTestScenarios.startDateSuggestion()
+                suggestions
         );
         SubGraphOperator subGraph = wholeGraphAroundDefaultCenterVertex();
         vertexA = subGraph.vertexWithIdentifier(vertexA.uri());
