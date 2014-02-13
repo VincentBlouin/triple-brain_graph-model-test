@@ -35,11 +35,22 @@ public class Neo4JTestModule extends AbstractModule {
         bind(WholeGraph.class).to(Neo4jWholeGraph.class);
         GraphDatabaseService graphDb = new TestGraphDatabaseFactory()
                 .newImpermanentDatabaseBuilder()
-                .setConfig(GraphDatabaseSettings.node_keys_indexable, Neo4jUserGraph.URI_PROPERTY_NAME)
-                .setConfig(GraphDatabaseSettings.node_auto_indexing, GraphDatabaseSetting.TRUE)
-                .setConfig( GraphDatabaseSettings.relationship_keys_indexable, Neo4jUserGraph.URI_PROPERTY_NAME )
-                .setConfig( GraphDatabaseSettings.relationship_auto_indexing, GraphDatabaseSetting.TRUE )
-                .newGraphDatabase();
+                .setConfig(
+                        GraphDatabaseSettings.node_keys_indexable,
+                        Neo4jUserGraph.URI_PROPERTY_NAME
+                )
+                .setConfig(
+                        GraphDatabaseSettings.node_auto_indexing,
+                        GraphDatabaseSetting.TRUE
+                )
+                .setConfig(
+                        GraphDatabaseSettings.relationship_keys_indexable,
+                        Neo4jUserGraph.URI_PROPERTY_NAME
+                )
+                .setConfig(
+                        GraphDatabaseSettings.relationship_auto_indexing,
+                        GraphDatabaseSetting.TRUE
+                ).newGraphDatabase();
 
         bind(GraphDatabaseService.class).toInstance(
                 graphDb
