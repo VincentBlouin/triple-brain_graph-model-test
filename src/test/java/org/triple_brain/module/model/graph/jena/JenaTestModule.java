@@ -4,7 +4,7 @@
 //import com.google.inject.name.Names;
 //import org.triple_brain.graphmanipulator.jena.JenaConnection;
 //import org.triple_brain.graphmanipulator.jena.graph.JenaGraphFactory;
-//import org.triple_brain.module.model.graph.GraphComponentTest;
+//import org.triple_brain.module.model.test.GraphComponentTest;
 //import org.triple_brain.module.model.graph.GraphFactory;
 //import org.triple_brain.module.repository_sql.JenaFriendlyDataSource;
 //import org.triple_brain.module.repository_sql.JenaH2DataSource;

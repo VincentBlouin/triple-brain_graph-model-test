@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.triple_brain.module.model.WholeGraph;
 import org.triple_brain.module.model.graph.edge.EdgeOperator;
 import org.triple_brain.module.model.graph.vertex.Vertex;
-import org.triple_brain.module.model.graph.vertex.VertexOperator;
+import org.triple_brain.module.model.graph.vertex.VertexInSubGraphOperator;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,7 +26,7 @@ public class WholeGraphTest extends AdaptableGraphComponentTest {
     public void there_are_no_duplicates_in_vertices(){
         assertTrue(wholeGraph.getAllVertices().hasNext());
         Set<Vertex> visitedVertices = new HashSet<Vertex>();
-        Iterator<VertexOperator> vertexIterator = wholeGraph.getAllVertices();
+        Iterator<VertexInSubGraphOperator> vertexIterator = wholeGraph.getAllVertices();
         while(vertexIterator.hasNext()){
             Vertex vertex = vertexIterator.next();
             if(visitedVertices.contains(vertex)){

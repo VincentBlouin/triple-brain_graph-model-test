@@ -1,19 +1,22 @@
 package org.triple_brain.module.model.graph;
 
+import com.google.common.collect.ImmutableSet;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.triple_brain.module.common_utils.Uris;
 import org.triple_brain.module.model.FriendlyResource;
+import org.triple_brain.module.model.FriendlyResourceFactory;
+import org.triple_brain.module.model.Image;
+import org.triple_brain.module.model.test.SubGraphOperator;
 import org.triple_brain.module.model.graph.edge.Edge;
 import org.triple_brain.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
 import org.triple_brain.module.model.graph.exceptions.NonExistingResourceException;
-import org.triple_brain.module.model.graph.vertex.Vertex;
-import org.triple_brain.module.model.suggestion.Suggestion;
-import org.triple_brain.module.model.suggestion.SuggestionOperator;
+import org.triple_brain.module.model.graph.vertex.*;
+import org.triple_brain.module.model.suggestion.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import javax.inject.Inject;
+import java.net.URI;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
@@ -25,6 +28,13 @@ import static org.junit.Assert.*;
 */
 public class UserGraphTest extends AdaptableGraphComponentTest {
     public static final int DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES = 10;
+
+    @Inject
+    protected VertexFactory vertexFactory;
+
+    @Inject
+    protected FriendlyResourceFactory friendlyResourceFactory;
+
     @Test
     public void can_get_graph_with_default_center_vertex() {
         SubGraph graph = userGraph.graphWithDefaultVertexAndDepth(
@@ -47,6 +57,341 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         assertThat(graph.numberOfVertices(), is(3));
         assertThat(centerVertex.label(), is("vertex B"));
     }
+
+    @Test
+    public void correct_edges_are_in_graph() {
+        Edge betweenAAndB = vertexA.edgeThatLinksToDestinationVertex(vertexB);
+        Edge betweenBAndC = vertexB.edgeThatLinksToDestinationVertex(vertexC);
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        assertThat(
+                subGraph.edges().size(),
+                is(2)
+        );
+        assertTrue(
+                subGraph.containsEdge(betweenAAndB)
+        );
+        assertTrue(
+                subGraph.containsEdge(betweenBAndC)
+        );
+    }
+
+    @Test
+    public void source_and_destination_vertex_are_in_edges() {
+        Edge betweenAAndB = vertexA.edgeThatLinksToDestinationVertex(vertexB);
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        Edge betweenAAndBFromSubGraph = subGraph.edgeWithIdentifier(
+                betweenAAndB.uri()
+        );
+        assertTrue(
+                betweenAAndBFromSubGraph.sourceVertex().equals(
+                        vertexA
+                )
+        );
+        assertTrue(
+                betweenAAndBFromSubGraph.destinationVertex().equals(
+                        vertexB
+                )
+        );
+    }
+
+    @Test
+    public void has_generic_identifications(){
+        vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        assertTrue(
+                vertexAInSubGraph.getGenericIdentifications().values().iterator().hasNext()
+        );
+    }
+
+    @Test
+    public void has_same_as(){
+        vertexA.addSameAs(
+                modelTestScenarios.computerScientistType()
+        );
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        assertTrue(
+                vertexAInSubGraph.getSameAs().values().iterator().hasNext()
+        );
+    }
+
+    @Test
+    public void has_types(){
+        vertexA.addType(
+                modelTestScenarios.personType()
+        );
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        assertTrue(
+                vertexAInSubGraph.getAdditionalTypes().entrySet().iterator().hasNext()
+        );
+        FriendlyResource additionalType = vertexAInSubGraph.getAdditionalTypes().values().iterator().next();
+        assertThat(additionalType.label(), is("Person"));
+    }
+
+    @Test
+    public void vertex_suggestions_have_their_properties_sub_graph() {
+        Set<SuggestionPojo> suggestions = new HashSet<>(
+                Arrays.asList(
+                        modelTestScenarios.startDateSuggestionFromEventIdentification()
+                )
+        );
+        vertexA.addSuggestions(
+                suggestions
+        );
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        Suggestion suggestion = vertexAInSubGraph.suggestions().values().iterator().next();
+        assertThat(suggestion.label(), is("Start date"));
+    }
+    @Test
+    public void suggestions_have_their_own_label() {
+        Set<SuggestionPojo> suggestions = new HashSet<>(
+                Arrays.asList(
+                        modelTestScenarios.startDateSuggestionFromEventIdentification(),
+                        modelTestScenarios.nameSuggestionFromPersonIdentification()
+                )
+        );
+        vertexA.addSuggestions(
+                suggestions
+        );
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        List<String> labels = new ArrayList<>();
+        for(Suggestion suggestion : vertexAInSubGraph.suggestions().values()){
+            labels.add(suggestion.label());
+        }
+        assertTrue(labels.contains("Start date"));
+        assertTrue(labels.contains("Name"));
+    }
+
+    @Test
+    public void has_suggestions_origin() {
+        Set<SuggestionPojo> suggestions = new HashSet<>(
+                Arrays.asList(
+                        modelTestScenarios.startDateSuggestionFromEventIdentification()
+                )
+        );
+        vertexA.addSuggestions(
+                suggestions
+        );
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        Suggestion suggestion = vertexAInSubGraph.suggestions().values().iterator().next();
+        SuggestionOrigin origin = suggestion.origins().iterator().next();
+        FriendlyResourcePojo identification = new FriendlyResourcePojo(
+                URI.create("http://rdf.freebase.com/rdf/time/event")
+        );
+        assertTrue(
+                origin.isRelatedToFriendlyResource(
+                        identification
+                )
+        );
+    }
+
+    @Test
+    @Ignore("to complete")
+    public void has_suggestion_multiple_origins() {
+        vertexA.addSuggestions(
+                new HashSet<>(
+                        Arrays.asList(
+                                modelTestScenarios.nameSuggestionFromPersonIdentification()
+                        )
+                )
+        );
+        vertexA.addSuggestions(
+                new HashSet<>(
+                        Arrays.asList(
+                                modelTestScenarios.nameSuggestionFromSymbolIdentification()
+                        )
+                )
+        );
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        Suggestion suggestionInSubGraph = vertexAInSubGraph.suggestions().values().iterator().next();
+        assertThat(
+                suggestionInSubGraph.origins().size(),
+                is(2)
+        );
+    }
+
+    @Test
+    public void can_get_multiple_suggestions_in_sub_graph() {
+        Set<SuggestionPojo> suggestions = new HashSet<>(
+                Arrays.asList(
+                        modelTestScenarios.startDateSuggestionFromEventIdentification(),
+                        modelTestScenarios.nameSuggestionFromPersonIdentification()
+                )
+        );
+        vertexA.addSuggestions(
+                suggestions
+        );
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        assertThat(
+                vertexAInSubGraph.suggestions().size(),
+                is(2)
+        );
+    }
+
+    @Test
+    public void has_included_vertices_and_edges(){
+        VertexOperator newVertex = vertexFactory.createFromGraphElements(
+                vertexBAndC(),
+                edgeBetweenBAndCInSet()
+        );
+        newVertex.addRelationToVertex(vertexA);
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        VertexInSubGraph compositeVertexInSubGraph = subGraph.vertexWithIdentifier(
+                newVertex.uri()
+        );
+        assertThat(
+                compositeVertexInSubGraph.getIncludedVertices().size(),
+                is(2)
+        );
+        assertThat(
+                compositeVertexInSubGraph.getIncludedEdges().size(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void included_edges_have_source_and_destination_vertices(){
+        VertexOperator newVertex = vertexFactory.createFromGraphElements(
+                vertexBAndC(),
+                edgeBetweenBAndCInSet()
+        );
+        newVertex.addRelationToVertex(vertexA);
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        Edge edge = subGraph.vertexWithIdentifier(
+                newVertex.uri()
+        ).getIncludedEdges().values().iterator().next();
+        assertNotNull(
+                edge.sourceVertex()
+        );
+        assertNotNull(
+                edge.destinationVertex()
+        );
+    }
+
+    @Test
+    public void has_vertices_images(){
+        Image image1 = Image.withUriForSmallAndBigger(
+                URI.create("/small_1"),
+                URI.create("/large_1")
+        );
+        Image image2 = Image.withUriForSmallAndBigger(
+                URI.create("/small_2"),
+                URI.create("/large_2")
+        );
+        Set<Image> images = ImmutableSet.of(
+                image1,
+                image2
+        );
+        vertexA.addImages(images);
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        assertThat(
+                vertexAInSubGraph.images().size(),
+                is(2)
+        );
+        assertTrue(
+                vertexAInSubGraph.images().contains(image1)
+        );
+        assertTrue(
+                vertexAInSubGraph.images().contains(image2)
+        );
+    }
+
+    @Test
+    public void has_identification_images(){
+        Image image1 = Image.withUriForSmallAndBigger(
+                URI.create("/small_1"),
+                URI.create("/large_1")
+        );
+        Image image2 = Image.withUriForSmallAndBigger(
+                URI.create("/small_2"),
+                URI.create("/large_2")
+        );
+        Set<Image> images = ImmutableSet.of(
+                image1,
+                image2
+        );
+        FriendlyResourceOperator friendlyResourceOperator = friendlyResourceFactory.withUri(
+                modelTestScenarios.computerScientistType().uri()
+        );
+        vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        friendlyResourceOperator.addImages(
+                images
+        );
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        FriendlyResource identificationInSubGraph = vertexAInSubGraph.getGenericIdentifications().values().iterator().next();
+        assertThat(
+                identificationInSubGraph.images().size(),
+                is(2)
+        );
+        assertTrue(
+                identificationInSubGraph.images().contains(image1)
+        );
+        assertTrue(
+                identificationInSubGraph.images().contains(image2)
+        );
+    }
+
 
     @Test
     public void can_get_circular_graph_with_default_center_vertex() {
@@ -185,68 +530,63 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void vertex_additional_type_label_is_in_sub_graph(){
-        assertTrue(
-                vertexA.getAdditionalTypes().isEmpty()
-        );
-        vertexA.addType(
-                modelTestScenarios.personType()
-        );
-        SubGraphOperator subGraph = wholeGraphAroundDefaultCenterVertex();
-        vertexA = subGraph.vertexWithIdentifier(vertexA.uri());
-        FriendlyResource additionalType = vertexA.getAdditionalTypes().iterator().next();
-        assertThat(additionalType.label(), is("Person"));
-    }
-
-    @Test
-    public void vertex_suggestions_have_their_properties_sub_graph(){
-        Set<SuggestionOperator> suggestions = new HashSet<SuggestionOperator>(
-                Arrays.asList(
-                        modelTestScenarios.startDateSuggestion()
-                )
-        );
-        vertexA.addSuggestions(
-                suggestions
-        );
-        SubGraphOperator subGraph = wholeGraphAroundDefaultCenterVertex();
-        vertexA = subGraph.vertexWithIdentifier(vertexA.uri());
-        Suggestion suggestion = vertexA.suggestions().iterator().next();
-        assertThat(suggestion.label(), is("Start date"));
-    }
-
-    @Test
-    public void distance_from_center_vertex_is_set_for_each_vertex_in_sub_graph(){
-       assertThat(
-               vertexInWholeGraph(vertexA).minDistanceFromCenterVertex(),
-               is(0)
-       );
+    public void distance_from_center_vertex_is_set_for_each_vertex_in_sub_graph() {
         assertThat(
-                vertexInWholeGraph(vertexB).minDistanceFromCenterVertex(),
+                vertexInWholeConnectedGraph(vertexA).minDistanceFromCenterVertex(),
+                is(0)
+        );
+        assertThat(
+                vertexInWholeConnectedGraph(vertexB).minDistanceFromCenterVertex(),
                 is(1)
         );
         assertThat(
-                vertexInWholeGraph(vertexC).minDistanceFromCenterVertex(),
+                vertexInWholeConnectedGraph(vertexC).minDistanceFromCenterVertex(),
                 is(2)
         );
     }
 
     @Test
-    public void the_minimum_distance_from_center_vertex_is_returned(){
+    public void the_minimum_distance_from_center_vertex_is_returned() {
         assertThat(
-                vertexInWholeGraph(vertexC).minDistanceFromCenterVertex(),
+                vertexInWholeConnectedGraph(vertexC).minDistanceFromCenterVertex(),
                 is(2)
         );
         vertexC().addRelationToVertex(vertexA());
         assertThat(
-                vertexInWholeGraph(vertexC).minDistanceFromCenterVertex(),
+                vertexInWholeConnectedGraph(vertexC).minDistanceFromCenterVertex(),
                 is(1)
         );
     }
 
     @Test
-    public void can_create_new_vertex_out_of_nothing(){
+    public void can_create_new_vertex_out_of_nothing() {
         Vertex vertex = userGraph.createVertex();
         SubGraphOperator subGraph = wholeGraph();
         assertTrue(subGraph.containsVertex(vertex));
     }
+
+    @Override
+    public VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
+        return (VertexInSubGraphPojo) userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        ).vertexWithIdentifier(vertex.uri());
+    }
+
+    private Set<Vertex> vertexBAndC() {
+        Set<Vertex> vertexBAndC = new HashSet<>();
+        vertexBAndC.add(vertexB);
+        vertexBAndC.add(vertexC);
+        return vertexBAndC;
+    }
+
+    private Set<Edge> edgeBetweenBAndCInSet() {
+        Set<Edge> edges = new HashSet<>();
+        edges.add(
+                vertexB.edgeThatLinksToDestinationVertex(
+                        vertexC
+                )
+        );
+        return edges;
+    }
+
 }

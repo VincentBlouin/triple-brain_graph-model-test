@@ -1,5 +1,6 @@
 package org.triple_brain.module.model.graph;
 
+import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.FriendlyResourceFactory;
@@ -9,7 +10,9 @@ import javax.inject.Inject;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Set;
 
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -17,26 +20,26 @@ import static org.junit.Assert.fail;
 /*
 * Copyright Mozilla Public License 1.1
 */
-public class FriendlyResourceTest extends AdaptableGraphComponentTest{
+public class FriendlyResourceTest extends AdaptableGraphComponentTest {
 
     @Inject
     FriendlyResourceFactory friendlyResourceFactory;
 
     @Test
-    public void an_exception_is_thrown_when_creating_with_empty_uri(){
+    public void an_exception_is_thrown_when_creating_with_empty_uri() {
         URI emptyUri = URI.create("");
-        try{
-            friendlyResourceFactory.createOrLoadFromUri(
+        try {
+            friendlyResourceFactory.withUri(
                     emptyUri
             );
             fail();
-        }catch(Exception e){
+        } catch (Exception e) {
             //continue
         }
     }
 
     @Test
-    public void setting_null_label_converts_to_empty_string(){
+    public void setting_null_label_converts_to_empty_string() {
         FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
                 URI.create("/some_uri"),
                 null,
@@ -54,7 +57,7 @@ public class FriendlyResourceTest extends AdaptableGraphComponentTest{
     }
 
     @Test
-    public void setting_null_comment_converts_to_empty_string(){
+    public void setting_null_comment_converts_to_empty_string() {
         FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
                 URI.create("/some_uri"),
                 "",
@@ -72,8 +75,94 @@ public class FriendlyResourceTest extends AdaptableGraphComponentTest{
     }
 
     @Test
+    public void can_add_images() {
+        Image image1 = Image.withUriForSmallAndBigger(
+                URI.create("/small_1"),
+                URI.create("/large_1")
+        );
+        Image image2 = Image.withUriForSmallAndBigger(
+                URI.create("/small_2"),
+                URI.create("/large_2")
+        );
+        Set<Image> images = ImmutableSet.of(
+                image1,
+                image2
+        );
+        vertexA.addImages(
+                images
+        );
+        images = vertexA.images();
+        assertThat(
+                images.size(),
+                is(2)
+        );
+        assertTrue(
+                images.contains(image1)
+        );
+        assertTrue(
+                images.contains(image2)
+        );
+    }
+
+    @Test
+    public void adding_a_set_of_images_does_not_erase_previous() {
+        Image image1 = Image.withUriForSmallAndBigger(
+                URI.create("/small_1"),
+                URI.create("/large_1")
+        );
+        Set<Image> images = ImmutableSet.of(
+                image1
+        );
+        vertexA.addImages(images);
+        assertThat(
+                vertexA.images().size(),
+                is(1)
+        );
+        Image image2 = Image.withUriForSmallAndBigger(
+                URI.create("/small_2"),
+                URI.create("/large_2")
+        );
+        images = ImmutableSet.of(
+                image2
+        );
+        vertexA.addImages(images);
+        assertThat(
+                vertexA.images().size(),
+                is(2)
+        );
+        assertTrue(
+                vertexA.images().contains(image1)
+        );
+        assertTrue(
+                vertexA.images().contains(image2)
+        );
+    }
+
+    @Test
+    public void cannot_associate_to_same_image_twice() {
+        Image image1 = Image.withUriForSmallAndBigger(
+                URI.create("/small_1"),
+                URI.create("/large_1")
+        );
+        Set<Image> images = ImmutableSet.of(
+                image1
+        );
+        vertexA.addImages(
+                images
+        );
+        images = vertexA.images();
+        assertThat(
+                images.size(), is(1)
+        );
+        vertexA.addImages(images);
+        assertThat(
+                images.size(), is(1)
+        );
+    }
+
+    @Test
     //todo
-    public void resources_label_are_associated_to_a_locale(){
+    public void resources_label_are_associated_to_a_locale() {
         GraphElement vertexAGraphElement = vertexA;
         vertexAGraphElement.label();
     }

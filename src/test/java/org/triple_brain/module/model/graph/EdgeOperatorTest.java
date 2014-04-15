@@ -20,7 +20,7 @@ import static org.junit.Assert.assertThat;
 /*
 * Copyright Mozilla Public License 1.1
 */
-public class EdgeTest extends AdaptableGraphComponentTest {
+public class EdgeOperatorTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_add_relation() {
@@ -38,7 +38,32 @@ public class EdgeTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void a_vertex_can_have_multiple_relations_with_same_vertex(){
+    public void can_update_label() {
+        EdgeOperator edge = vertexA.addVertexAndRelation();
+        edge.label("likes");
+        assertThat(edge.label(), is("likes"));
+    }
+
+    @Test
+    public void there_is_a_creation_date() {
+        Edge edge = vertexA.addVertexAndRelation();
+        assertThat(
+                edge.creationDate(),
+                is(not(nullValue()))
+        );
+    }
+
+    @Test
+    public void there_is_a_last_modification_date() {
+        Edge edge = vertexA.addVertexAndRelation();
+        assertThat(
+                edge.lastModificationDate(),
+                is(not(nullValue()))
+        );
+    }
+
+    @Test
+    public void a_vertex_can_have_multiple_relations_with_same_vertex() {
         assertTrue(
                 vertexB.hasDestinationVertex(vertexC)
         );
@@ -65,40 +90,26 @@ public class EdgeTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_update_label() {
-        EdgeOperator edge = vertexA.addVertexAndRelation();
-        edge.label("likes");
-        assertThat(edge.label(), is("likes"));
+    public void deleting_a_relation_decrements_number_of_connected_edges_to_vertices() {
+        assertThat(vertexA.getNumberOfConnectedEdges(), is(1));
+        assertThat(vertexB.getNumberOfConnectedEdges(), is(2));
+        vertexA.edgeThatLinksToDestinationVertex(vertexB).remove();
+        assertThat(vertexA.getNumberOfConnectedEdges(), is(0));
+        assertThat(vertexB.getNumberOfConnectedEdges(), is(1));
     }
 
     @Test
-    public void there_is_a_creation_date(){
-        Edge edge = vertexA.addVertexAndRelation();
-        assertThat(
-                edge.creationDate(),
-                is(not(nullValue()))
-        );
-    }
-
-    @Test
-    public void there_is_a_last_modification_date(){
-        Edge edge = vertexA.addVertexAndRelation();
-        assertThat(
-                edge.lastModificationDate(),
-                is(not(nullValue()))
-        );
-    }
-
-    @Test
-    public void can_add_same_as(){
+    public void can_add_same_as() {
         EdgeOperator newEdge = vertexA.addVertexAndRelation();
         Assert.assertTrue(newEdge.getSameAs().isEmpty());
-        newEdge.addSameAs(modelTestScenarios.creatorPredicate());
+        newEdge.addSameAs(
+                modelTestScenarios.creatorPredicate()
+        );
         assertFalse(newEdge.getSameAs().isEmpty());
     }
 
     @Test
-    public void can_check_equality(){
+    public void can_check_equality() {
         Edge anEdge = vertexA.addVertexAndRelation();
         assertTrue(anEdge.equals(anEdge));
         Edge anotherEdge = vertexA.addVertexAndRelation();
@@ -106,28 +117,19 @@ public class EdgeTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_compare_to_friendly_resource(){
+    public void can_compare_to_friendly_resource() {
         Edge anEdge = vertexA.addVertexAndRelation();
         FriendlyResource anEdgeAsFriendlyResource = (FriendlyResource) anEdge;
         assertTrue(anEdge.equals(anEdgeAsFriendlyResource));
     }
 
     @Test
-    public void can_inverse(){
+    public void can_inverse() {
         EdgeOperator betweenAAndB = vertexA.edgeThatLinksToDestinationVertex(vertexB);
         assertThat(betweenAAndB.sourceVertex(), is((Vertex) vertexA));
         assertThat(betweenAAndB.destinationVertex(), is((Vertex) vertexB));
         betweenAAndB.inverse();
         assertThat(betweenAAndB.sourceVertex(), is((Vertex) vertexB));
         assertThat(betweenAAndB.destinationVertex(), is((Vertex) vertexA));
-    }
-
-    @Test
-    public void deleting_a_relation_decrements_number_of_connected_edges_to_vertices(){
-        assertThat(vertexA.getNumberOfConnectedEdges(), is(1));
-        assertThat(vertexB.getNumberOfConnectedEdges(), is(2));
-        vertexA.edgeThatLinksToDestinationVertex(vertexB).remove();
-        assertThat(vertexA.getNumberOfConnectedEdges(), is(0));
-        assertThat(vertexB.getNumberOfConnectedEdges(), is(1));
     }
 }

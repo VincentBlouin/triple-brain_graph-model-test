@@ -1,5 +1,6 @@
 package org.triple_brain.module.model.graph;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.triple_brain.module.common_utils.Uris;
 import org.triple_brain.module.model.FriendlyResource;
@@ -9,12 +10,13 @@ import org.triple_brain.module.model.graph.vertex.Vertex;
 import org.triple_brain.module.model.graph.vertex.VertexFactory;
 import org.triple_brain.module.model.graph.vertex.VertexOperator;
 import org.triple_brain.module.model.suggestion.Suggestion;
-import org.triple_brain.module.model.suggestion.SuggestionOperator;
+import org.triple_brain.module.model.suggestion.SuggestionPojo;
 
 import javax.inject.Inject;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static junit.framework.Assert.assertTrue;
@@ -28,7 +30,7 @@ import static org.junit.Assert.*;
 /*
 * Copyright Mozilla Public License 1.1
 */
-public class VertexTest extends AdaptableGraphComponentTest {
+public class VertexOperatorTest extends AdaptableGraphComponentTest {
 
     @Inject
     protected VertexFactory vertexFactory;
@@ -42,10 +44,44 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_update_comment(){
-        assertThat(vertexA().comment(), is(""));
-        vertexA().comment("Its vertex a !");
-        assertThat(vertexA().comment(), is("Its vertex a !"));
+    public void can_update_comment() {
+        assertThat(
+                vertexA().comment(),
+                is("")
+        );
+        vertexA().comment(
+                "Its vertex a !"
+        );
+        assertThat(
+                vertexA().comment(),
+                is("Its vertex a !")
+        );
+    }
+
+    @Test
+    public void can_check_if_vertex_has_edge() {
+        EdgeOperator edge = vertexA.edgeThatLinksToDestinationVertex(vertexB);
+        assertTrue(
+                vertexA.hasEdge(
+                        edge
+                )
+        );
+        assertTrue(
+                vertexB.hasEdge(
+                        edge
+                )
+        );
+        edge.remove();
+        assertFalse(
+                vertexA.hasEdge(
+                        edge
+                )
+        );
+        assertFalse(
+                vertexB.hasEdge(
+                        edge
+                )
+        );
     }
 
     @Test
@@ -75,6 +111,21 @@ public class VertexTest extends AdaptableGraphComponentTest {
 
         Integer updatedNumberOfEdgesAndVertices = numberOfEdgesAndVertices();
         assertThat(updatedNumberOfEdgesAndVertices, is(numberOfEdgesAndVertices - 3));
+    }
+
+    @Test
+    public void removing_a_vertex_decreases_the_number_of_edges_of_its_neighbors() {
+        Integer numberOfEdgesForA = vertexA.getNumberOfConnectedEdges();
+        Integer numberOfEdgesForC = vertexC.getNumberOfConnectedEdges();
+        vertexB.remove();
+        assertThat(
+                vertexA.getNumberOfConnectedEdges(),
+                is(numberOfEdgesForA - 1)
+        );
+        assertThat(
+                vertexC.getNumberOfConnectedEdges(),
+                is(numberOfEdgesForC - 1)
+        );
     }
 
     @Test
@@ -125,7 +176,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
                 vertexA.getAdditionalTypes().size(),
                 is(1)
         );
-        FriendlyResource remainingType = vertexA.getAdditionalTypes().iterator().next();
+        FriendlyResource remainingType = vertexA.getAdditionalTypes().values().iterator().next();
         assertThat(
                 remainingType.label(),
                 is(computerScientistType.label())
@@ -133,24 +184,66 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void when_removing_an_external_resource_the_suggestions_that_depend_on_it_are_removed(){
+    public void can_add_suggestions_to_a_vertex() throws Exception {
+        assertTrue(
+                vertexA.suggestions().isEmpty()
+        );
+        Set<SuggestionPojo> suggestions = new HashSet<>(
+                Arrays.asList(
+                        modelTestScenarios.startDateSuggestionFromEventIdentification()
+                )
+        );
+        vertexA.addSuggestions(
+                suggestions
+        );
+        assertFalse(
+                vertexA.suggestions().isEmpty()
+        );
+        Suggestion addedSuggestion = vertexA.suggestions().values().iterator().next();
+        assertThat(
+                addedSuggestion.label(),
+                is("Start date")
+        );
+        assertThat(
+                addedSuggestion.domain().uri(),
+                is(
+                        URI.create("http://rdf.freebase.com/rdf/type/datetime")
+                )
+        );
+        assertThat(
+                addedSuggestion.sameAs().uri(),
+                is(
+                        URI.create("http://rdf.freebase.com/rdf/time/event/start_date")
+                )
+        );
+        assertTrue(
+                addedSuggestion.origins().iterator().next().isRelatedToFriendlyResource(
+                        new FriendlyResourcePojo(
+                                URI.create("http://rdf.freebase.com/rdf/time/event")
+                        )
+                )
+        );
+    }
+
+    @Test
+    public void when_removing_an_external_resource_the_suggestions_that_depend_on_it_are_removed() {
         vertexA.addType(
                 modelTestScenarios.person()
         );
         vertexA.addType(
                 modelTestScenarios.event()
         );
-        Set<SuggestionOperator> suggestions = new HashSet<SuggestionOperator>(
+        Set<SuggestionPojo> suggestions = new HashSet<>(
                 Arrays.asList(
-                        modelTestScenarios.nameSuggestion(),
-                        modelTestScenarios.startDateSuggestion()
+                        modelTestScenarios.nameSuggestionFromPersonIdentification(),
+                        modelTestScenarios.startDateSuggestionFromEventIdentification()
                 )
         );
         vertexA.addSuggestions(
                 suggestions
         );
         assertTrue(
-                modelTestScenarios.nameSuggestion().origins().iterator().next()
+                modelTestScenarios.nameSuggestionFromPersonIdentification().origins().iterator().next()
                         .isRelatedToFriendlyResource(
                                 modelTestScenarios.person()
                         )
@@ -160,31 +253,34 @@ public class VertexTest extends AdaptableGraphComponentTest {
                 modelTestScenarios.person()
         );
         assertThat(vertexA.suggestions().size(), is(1));
-        Suggestion remainingSuggestion = vertexA.suggestions().iterator().next();
-        assertSame(
-                remainingSuggestion.sameAs().uri().toString(),
-                modelTestScenarios.startDateSuggestion().sameAs().uri().toString()
+        Suggestion remainingSuggestion = vertexA.suggestions().values().iterator().next();
+        assertThat(
+                remainingSuggestion.sameAs().uri(),
+                is(modelTestScenarios.startDateSuggestionFromEventIdentification().sameAs().uri())
         );
     }
 
     @Test
-    public void can_add_suggestions_to_a_vertex() throws Exception {
-        assertTrue(vertexA.suggestions().isEmpty());
-        Set<SuggestionOperator> suggestions = new HashSet<SuggestionOperator>(
-                Arrays.asList(
-                        modelTestScenarios.startDateSuggestion()
+    @Ignore("to complete")
+    public void can_add_another_origin_to_suggestion() throws Exception {
+        vertexA.addSuggestions(
+                new HashSet<>(
+                        Arrays.asList(
+                                modelTestScenarios.nameSuggestionFromPersonIdentification()
+                        )
                 )
         );
         vertexA.addSuggestions(
-                suggestions
+                new HashSet<>(
+                        Arrays.asList(
+                                modelTestScenarios.nameSuggestionFromSymbolIdentification()
+                        )
+                )
         );
-        assertFalse(vertexA.suggestions().isEmpty());
-        Suggestion getSuggestion = vertexA.suggestions().iterator().next();
-        assertThat(getSuggestion.label(), is("Start date"));
     }
 
     @Test
-    public void can_add_same_as(){
+    public void can_add_same_as() {
         EdgeOperator newEdge = vertexA.addVertexAndRelation();
         VertexOperator newVertex = newEdge.destinationVertex();
         newVertex.label("Tim Berners Lee");
@@ -194,7 +290,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_get_empty_list_after_removing_last_same_as(){
+    public void can_get_empty_list_after_removing_last_same_as() {
         vertexA.addSameAs(
                 modelTestScenarios.timBernersLee()
         );
@@ -205,7 +301,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void deleting_a_vertex_does_not_delete_its_identifications_in_the_graph(){
+    public void deleting_a_vertex_does_not_delete_its_identifications_in_the_graph() {
         assertFalse(
                 userGraph.haveElementWithId(
                         Uris.get("http://www.w3.org/People/Berners-Lee/card#i")
@@ -229,7 +325,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_assign_the_same_identification_to_2_vertices(){
+    public void can_assign_the_same_identification_to_2_vertices() {
         FriendlyResource timBernersLee = modelTestScenarios.timBernersLee();
         vertexA.addSameAs(
                 timBernersLee
@@ -237,50 +333,50 @@ public class VertexTest extends AdaptableGraphComponentTest {
         vertexB.addSameAs(
                 timBernersLee
         );
-        assertTrue(vertexA.getSameAs().iterator().next().equals(timBernersLee));
-        assertTrue(vertexB.getSameAs().iterator().next().equals(timBernersLee));
+        assertTrue(vertexA.getSameAs().values().iterator().next().equals(timBernersLee));
+        assertTrue(vertexB.getSameAs().values().iterator().next().equals(timBernersLee));
     }
 
     @Test
-    public void can_get_same_as(){
+    public void can_get_same_as() {
         EdgeOperator newEdge = vertexA.addVertexAndRelation();
         VertexOperator newVertex = newEdge.destinationVertex();
         newVertex.label("Tim Berners Lee");
         assertTrue(newVertex.getSameAs().isEmpty());
         newVertex.addSameAs(modelTestScenarios.timBernersLee());
-        FriendlyResource sameAs = newVertex.getSameAs().iterator().next();
+        FriendlyResource sameAs = newVertex.getSameAs().values().iterator().next();
         assertThat(sameAs.label(), is(modelTestScenarios.timBernersLee().label()));
     }
 
     @Test
-    public void can_add_generic_identification(){
-        assertFalse(vertexA.getGenericIdentifications().contains(
-                modelTestScenarios.extraterrestrial()
+    public void can_add_generic_identification() {
+        assertFalse(vertexA.getGenericIdentifications().containsKey(
+                modelTestScenarios.extraterrestrial().uri()
         ));
         vertexA.addGenericIdentification(
                 modelTestScenarios.extraterrestrial()
         );
-        assertTrue(vertexA.getGenericIdentifications().contains(
-                modelTestScenarios.extraterrestrial()
+        assertTrue(vertexA.getGenericIdentifications().containsKey(
+                modelTestScenarios.extraterrestrial().uri()
         ));
     }
 
     @Test
-    public void can_test_if_vertex_has_destination_vertex(){
+    public void can_test_if_vertex_has_destination_vertex() {
         assertFalse(vertexA.hasDestinationVertex(vertexC));
         vertexA.addRelationToVertex(vertexC);
         assertTrue(vertexA.hasDestinationVertex(vertexC));
     }
 
     @Test
-    public void source_vertex_is_not_a_destination_vertex(){
+    public void source_vertex_is_not_a_destination_vertex() {
         vertexA.addRelationToVertex(vertexC);
         assertTrue(vertexA.hasDestinationVertex(vertexC));
         assertFalse(vertexC.hasDestinationVertex(vertexA));
     }
 
     @Test
-    public void there_is_a_creation_date(){
+    public void there_is_a_creation_date() {
         assertThat(
                 vertexA.creationDate(),
                 is(not(nullValue()))
@@ -288,7 +384,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void there_is_a_last_modification_date(){
+    public void there_is_a_last_modification_date() {
         assertThat(
                 vertexA.lastModificationDate(),
                 is(not(nullValue()))
@@ -296,20 +392,20 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void a_vertex_is_private_by_default(){
+    public void a_vertex_is_private_by_default() {
         Vertex newVertex = vertexA.addVertexAndRelation().destinationVertex();
         assertFalse(newVertex.isPublic());
     }
 
     @Test
-    public void can_make_a_vertex_public(){
+    public void can_make_a_vertex_public() {
         assertFalse(vertexA.isPublic());
         vertexA.makePublic();
         assertTrue(vertexA.isPublic());
     }
 
     @Test
-    public void can_make_a_vertex_private(){
+    public void can_make_a_vertex_private() {
         vertexA.makePublic();
         assertTrue(vertexA.isPublic());
         vertexA.makePrivate();
@@ -317,19 +413,19 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_check_equality(){
+    public void can_check_equality() {
         assertTrue(vertexA.equals(vertexA));
         assertFalse(vertexA.equals(vertexB));
     }
 
     @Test
-    public void can_compare_to_friendly_resource(){
-        FriendlyResource vertexAAsFriendlyResource = (FriendlyResource) vertexA;
+    public void can_compare_to_friendly_resource() {
+        FriendlyResource vertexAAsFriendlyResource = vertexA;
         assertTrue(vertexA.equals(vertexAAsFriendlyResource));
     }
 
     @Test
-    public void can_get_empty_set_of_included_graph_elements_for_a_vertex_that_have_none(){
+    public void can_get_empty_set_of_included_graph_elements_for_a_vertex_that_have_none() {
         assertTrue(
                 vertexA.getIncludedVertices().isEmpty()
         );
@@ -339,49 +435,49 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_create_vertex_from_graph_elements_set(){
+    public void can_create_vertex_from_graph_elements_set() {
         Vertex newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
                 edgeBetweenBAndCInSet()
         );
-        Set<Vertex> includedVertices = newVertex.getIncludedVertices();
-        assertTrue(includedVertices.contains(vertexB));
-        assertTrue(includedVertices.contains(vertexC));
-        assertFalse(includedVertices.contains(vertexA));
-        Set<Edge> includedEdges = newVertex.getIncludedEdges();
-        assertTrue(includedEdges.contains(
-                vertexB.edgeThatLinksToDestinationVertex(vertexC)
+        Map<URI, ?extends Vertex> includedVertices = newVertex.getIncludedVertices();
+        assertTrue(includedVertices.containsKey(vertexB.uri()));
+        assertTrue(includedVertices.containsKey(vertexC.uri()));
+        assertFalse(includedVertices.containsKey(vertexA.uri()));
+        Map<URI, ?extends Edge> includedEdges = newVertex.getIncludedEdges();
+        assertTrue(includedEdges.containsKey(
+                vertexB.edgeThatLinksToDestinationVertex(vertexC).uri()
         ));
     }
 
     @Test
-    public void more_than_one_graph_element_are_required_to_create_vertex_from_graph_elements(){
+    public void more_than_one_graph_element_are_required_to_create_vertex_from_graph_elements() {
         Set<Vertex> emptyVertices = new HashSet<>();
         Set<Edge> emptyEdges = new HashSet<>();
-        try{
+        try {
             vertexFactory.createFromGraphElements(
                     emptyVertices,
                     emptyEdges
             );
             fail();
-        }catch(Exception exception){
+        } catch (Exception exception) {
             //continue
         }
         Set<Vertex> one = new HashSet<>();
         one.add(vertexA);
-        try{
+        try {
             vertexFactory.createFromGraphElements(
                     one,
                     emptyEdges
             );
             fail();
-        }catch(Exception exception){
+        } catch (Exception exception) {
             //continue
         }
     }
 
     @Test
-    public void removing_a_graph_element_removes_it_from_included_graph_elements_as_well(){
+    public void removing_a_graph_element_removes_it_from_included_graph_elements_as_well() {
         Vertex newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
                 edgeBetweenBAndCInSet()
@@ -406,7 +502,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void removing_a_vertex_removes_its_delete_edges_from_included_graph_elements_as_well(){
+    public void removing_a_vertex_removes_its_delete_edges_from_included_graph_elements_as_well() {
         Vertex newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
                 edgeBetweenBAndCInSet()
@@ -431,7 +527,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void removing_vertex_that_has_included_graph_elements_doesnt_remove_its_included_graph_elements(){
+    public void removing_vertex_that_has_included_graph_elements_doesnt_remove_its_included_graph_elements() {
         VertexOperator newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
                 edgeBetweenBAndCInSet()
@@ -446,7 +542,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void including_a_vertex_doesnt_add_to_it_any_included_graph_elements(){
+    public void including_a_vertex_doesnt_add_to_it_any_included_graph_elements() {
         vertexFactory.createFromGraphElements(
                 vertexBAndC(),
                 edgeBetweenBAndCInSet()
@@ -456,7 +552,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_get_number_of_connected_edges(){
+    public void can_get_number_of_connected_edges() {
         assertThat(
                 vertexB().getNumberOfConnectedEdges(),
                 is(2)
@@ -464,7 +560,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void when_deleting_a_vertex_it_decrements_the_number_of_connected_vertices_of_its_neighbors(){
+    public void when_deleting_a_vertex_it_decrements_the_number_of_connected_vertices_of_its_neighbors() {
         vertexC.addVertexAndRelation();
         assertThat(
                 vertexC.getNumberOfConnectedEdges(),
@@ -486,7 +582,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void adding_a_relation_to_existing_vertices_increments_number_of_connected_edges(){
+    public void adding_a_relation_to_existing_vertices_increments_number_of_connected_edges() {
         int numberOfEdgesForVertexA = vertexA.getNumberOfConnectedEdges();
         int numberOfEdgesForVertexC = vertexC.getNumberOfConnectedEdges();
         vertexC.addRelationToVertex(vertexA);
@@ -500,7 +596,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
         );
     }
 
-    private Set<Edge> edgeBetweenBAndCInSet(){
+    private Set<Edge> edgeBetweenBAndCInSet() {
 
         Set<Edge> edges = new HashSet<>();
         edges.add(
@@ -511,7 +607,7 @@ public class VertexTest extends AdaptableGraphComponentTest {
         return edges;
     }
 
-    private Set<Vertex> vertexBAndC(){
+    private Set<Vertex> vertexBAndC() {
         Set<Vertex> vertexBAndC = new HashSet<>();
         vertexBAndC.add(vertexB);
         vertexBAndC.add(vertexC);

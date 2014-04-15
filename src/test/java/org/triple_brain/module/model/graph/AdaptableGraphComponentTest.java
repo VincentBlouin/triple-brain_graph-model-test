@@ -10,13 +10,16 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.neo4j.graphdb.GraphDatabaseService;
+import org.triple_brain.module.model.test.SubGraphOperator;
 import org.triple_brain.module.model.User;
-import org.triple_brain.module.model.graph.neo4j.Neo4JTestModule;
-import org.triple_brain.module.model.graph.scenarios.TestScenarios;
+import org.triple_brain.module.model.graph.edge.Edge;
+import org.triple_brain.module.model.graph.edge.EdgePojo;
+import org.triple_brain.module.model.test.scenarios.TestScenarios;
 import org.triple_brain.module.model.graph.vertex.Vertex;
-import org.triple_brain.module.model.graph.vertex.VertexInSubGraph;
+import org.triple_brain.module.model.graph.vertex.VertexInSubGraphPojo;
 import org.triple_brain.module.model.graph.vertex.VertexOperator;
+import org.triple_brain.module.model.test.GraphComponentTest;
+import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jModule;
 
 import javax.inject.Inject;
 
@@ -51,7 +54,7 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     @BeforeClass
     public static void realBeforeClass() {
         injector = Guice.createInjector(
-                new Neo4JTestModule(),
+                Neo4jModule.forTestingUsingEmbedded(),
                 new AbstractModule() {
                     @Override
                     protected void configure() {
@@ -85,8 +88,6 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     public static void realAfterClass(){
         injector.getInstance(GraphComponentTest.class)
                 .afterClass();
-        injector.getInstance(GraphDatabaseService.class)
-                .shutdown();
     }
 
     @Override
@@ -130,7 +131,7 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     }
 
     @Override
-    public SubGraphOperator wholeGraphAroundDefaultCenterVertex() {
+    public SubGraphPojo wholeGraphAroundDefaultCenterVertex() {
         return graphComponentTest.wholeGraphAroundDefaultCenterVertex();
     }
 
@@ -150,8 +151,13 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     }
 
     @Override
-    public VertexInSubGraph vertexInWholeGraph(Vertex vertex) {
-        return graphComponentTest.vertexInWholeGraph(vertex);
+    public VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
+        return graphComponentTest.vertexInWholeConnectedGraph(vertex);
+    }
+
+    @Override
+    public EdgePojo edgeInWholeGraph(Edge edge) {
+        return graphComponentTest.edgeInWholeGraph(edge);
     }
 
     protected JSONArray verticesAsArray(JSONObject verticesAsObject){

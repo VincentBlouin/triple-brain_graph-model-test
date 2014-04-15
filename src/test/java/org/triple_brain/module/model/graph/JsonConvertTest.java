@@ -3,7 +3,6 @@ package org.triple_brain.module.model.graph;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Test;
 import org.triple_brain.module.model.graph.edge.Edge;
-import org.triple_brain.module.model.graph.edge.EdgePojo;
 import org.triple_brain.module.model.graph.vertex.Vertex;
 import org.triple_brain.module.model.graph.vertex.VertexFactory;
 import org.triple_brain.module.model.graph.vertex.VertexInSubGraphPojo;
@@ -11,7 +10,7 @@ import org.triple_brain.module.model.graph.vertex.VertexOperator;
 import org.triple_brain.module.model.json.graph.EdgeJson;
 import org.triple_brain.module.model.json.graph.SubGraphJson;
 import org.triple_brain.module.model.json.graph.VertexInSubGraphJson;
-import org.triple_brain.module.model.suggestion.SuggestionOperator;
+import org.triple_brain.module.model.suggestion.SuggestionPojo;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -33,9 +32,7 @@ public class JsonConvertTest extends AdaptableGraphComponentTest {
     @Test
     public void can_convert_vertex_to_and_from() {
         JSONObject vertexAJson = VertexInSubGraphJson.toJson(
-                new VertexInSubGraphPojo(
-                        vertexA()
-                )
+                vertexInWholeConnectedGraph(vertexA)
         );
         VertexInSubGraphPojo vertexA = VertexInSubGraphJson.fromJson(
                 vertexAJson
@@ -51,8 +48,9 @@ public class JsonConvertTest extends AdaptableGraphComponentTest {
                 vertexBAndC(),
                 edgeBetweenBAndCInSet()
         );
+        newVertex.addRelationToVertex(vertexA);
         JSONObject newVertexJson = VertexInSubGraphJson.toJson(
-                new VertexInSubGraphPojo(
+                vertexInWholeConnectedGraph(
                         newVertex
                 )
         );
@@ -71,19 +69,17 @@ public class JsonConvertTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_convert_when_having_suggestions() {
-        Set<SuggestionOperator> suggestions = new HashSet<SuggestionOperator>(
+        Set<SuggestionPojo> suggestions = new HashSet<>(
                 Arrays.asList(
-                        modelTestScenarios.nameSuggestion(),
-                        modelTestScenarios.startDateSuggestion()
+                        modelTestScenarios.nameSuggestionFromPersonIdentification(),
+                        modelTestScenarios.startDateSuggestionFromEventIdentification()
                 )
         );
         vertexA.addSuggestions(
                 suggestions
         );
         JSONObject vertexAJson = VertexInSubGraphJson.toJson(
-                new VertexInSubGraphPojo(
-                        vertexA
-                )
+                vertexInWholeConnectedGraph(vertexA)
         );
         VertexInSubGraphPojo vertexAPojo = VertexInSubGraphJson.fromJson(
                 vertexAJson
@@ -97,7 +93,7 @@ public class JsonConvertTest extends AdaptableGraphComponentTest {
     @Test
     public void converting_edge_to_json_throws_no_error() {
         EdgeJson.toJson(
-                new EdgePojo(
+                edgeInWholeGraph(
                         vertexA.edgeThatLinksToDestinationVertex(vertexB)
                 )
         );
@@ -150,13 +146,15 @@ public class JsonConvertTest extends AdaptableGraphComponentTest {
                 vertexBAndC(),
                 edgeBetweenBAndCInSet()
         );
+        newVertex.addRelationToVertex(vertexA);
         JSONObject newVertexJson = VertexInSubGraphJson.toJson(
-                new VertexInSubGraphPojo(
-                        newVertex
-                )
+                vertexInWholeConnectedGraph(newVertex)
         );
-        JSONObject includedVertices = newVertexJson.getJSONObject("includedVertices");
-        Vertex vertexBFromJson = VertexInSubGraphJson.fromJson(includedVertices.getJSONObject(
+        JSONObject includedVertices = newVertexJson.getJSONObject(
+                "vertex"
+        ).getJSONObject("includedVertices");
+        Vertex vertexBFromJson = VertexInSubGraphJson.fromJson(
+                includedVertices.getJSONObject(
                 vertexB.uri().toString()
         ));
         assertTrue(

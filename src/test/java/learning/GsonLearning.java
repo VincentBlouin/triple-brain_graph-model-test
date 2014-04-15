@@ -25,10 +25,7 @@ public class GsonLearning extends AdaptableGraphComponentTest{
     @Test
     public void can_convert_vertex()throws Exception{
         Gson gson = new Gson();
-        FriendlyResourceOperator timBernersLeeOperator = modelTestScenarios.timBernersLee();
-        FriendlyResource timBernersLeePojo = new FriendlyResourcePojo(
-                timBernersLeeOperator
-        );
+        FriendlyResource timBernersLeePojo = modelTestScenarios.timBernersLee();
         vertexB.addSameAs(
                 timBernersLeePojo
         );

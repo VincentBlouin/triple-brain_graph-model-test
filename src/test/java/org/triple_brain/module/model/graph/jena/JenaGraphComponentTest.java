@@ -9,8 +9,8 @@
 //import org.triple_brain.graphmanipulator.jena.graph.JenaUserGraph;
 //import org.triple_brain.module.model.User;
 //import org.triple_brain.module.model.graph.*;
-//import org.triple_brain.module.model.graph.scenarios.TestScenarios;
-//import org.triple_brain.module.model.graph.scenarios.VerticesCalledABAndC;
+//import org.triple_brain.module.model.test.scenarios.TestScenarios;
+//import org.triple_brain.module.model.test.scenarios.VerticesCalledABAndC;
 //
 //import javax.inject.Inject;
 //import javax.inject.Named;
@@ -138,7 +138,7 @@
 //    }
 //
 //    @Override
-//    public VertexInSubGraph vertexInWholeGraph(Vertex vertex) {
+//    public VertexInSubGraph vertexInWholeConnectedGraph(Vertex vertex) {
 //        return wholeGraphAroundDefaultCenterVertex().vertexWithIdentifier(vertex.uri());
 //    }
 //
