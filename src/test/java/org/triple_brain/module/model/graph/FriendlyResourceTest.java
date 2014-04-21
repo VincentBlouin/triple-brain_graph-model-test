@@ -159,12 +159,4 @@ public class FriendlyResourceTest extends AdaptableGraphComponentTest {
                 images.size(), is(1)
         );
     }
-
-    @Test
-    //todo
-    public void resources_label_are_associated_to_a_locale() {
-        GraphElement vertexAGraphElement = vertexA;
-        vertexAGraphElement.label();
-    }
-
 }
