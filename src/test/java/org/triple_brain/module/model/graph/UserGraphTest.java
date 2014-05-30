@@ -319,12 +319,12 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
 
     @Test
     public void has_vertices_images(){
-        Image image1 = Image.withUriForSmallAndBigger(
-                URI.create("/small_1"),
+        Image image1 = Image.withBase64ForSmallAndUriForBigger(
+                UUID.randomUUID().toString(),
                 URI.create("/large_1")
         );
-        Image image2 = Image.withUriForSmallAndBigger(
-                URI.create("/small_2"),
+        Image image2 = Image.withBase64ForSmallAndUriForBigger(
+                UUID.randomUUID().toString(),
                 URI.create("/large_2")
         );
         Set<Image> images = ImmutableSet.of(
@@ -352,12 +352,12 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
 
     @Test
     public void has_identification_images(){
-        Image image1 = Image.withUriForSmallAndBigger(
-                URI.create("/small_1"),
+        Image image1 = Image.withBase64ForSmallAndUriForBigger(
+                UUID.randomUUID().toString(),
                 URI.create("/large_1")
         );
-        Image image2 = Image.withUriForSmallAndBigger(
-                URI.create("/small_2"),
+        Image image2 = Image.withBase64ForSmallAndUriForBigger(
+                UUID.randomUUID().toString(),
                 URI.create("/large_2")
         );
         Set<Image> images = ImmutableSet.of(

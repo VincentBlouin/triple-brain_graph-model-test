@@ -1,6 +1,7 @@
 package org.triple_brain.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.FriendlyResourceFactory;
@@ -11,6 +12,7 @@ import java.net.URI;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
@@ -76,12 +78,12 @@ public class FriendlyResourceTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_add_images() {
-        Image image1 = Image.withUriForSmallAndBigger(
-                URI.create("/small_1"),
+        Image image1 = Image.withBase64ForSmallAndUriForBigger(
+                UUID.randomUUID().toString(),
                 URI.create("/large_1")
         );
-        Image image2 = Image.withUriForSmallAndBigger(
-                URI.create("/small_2"),
+        Image image2 = Image.withBase64ForSmallAndUriForBigger(
+                UUID.randomUUID().toString(),
                 URI.create("/large_2")
         );
         Set<Image> images = ImmutableSet.of(
@@ -106,8 +108,8 @@ public class FriendlyResourceTest extends AdaptableGraphComponentTest {
 
     @Test
     public void adding_a_set_of_images_does_not_erase_previous() {
-        Image image1 = Image.withUriForSmallAndBigger(
-                URI.create("/small_1"),
+        Image image1 = Image.withBase64ForSmallAndUriForBigger(
+                UUID.randomUUID().toString(),
                 URI.create("/large_1")
         );
         Set<Image> images = ImmutableSet.of(
@@ -118,8 +120,8 @@ public class FriendlyResourceTest extends AdaptableGraphComponentTest {
                 vertexA.images().size(),
                 is(1)
         );
-        Image image2 = Image.withUriForSmallAndBigger(
-                URI.create("/small_2"),
+        Image image2 = Image.withBase64ForSmallAndUriForBigger(
+                UUID.randomUUID().toString(),
                 URI.create("/large_2")
         );
         images = ImmutableSet.of(
@@ -140,8 +142,8 @@ public class FriendlyResourceTest extends AdaptableGraphComponentTest {
 
     @Test
     public void cannot_associate_to_same_image_twice() {
-        Image image1 = Image.withUriForSmallAndBigger(
-                URI.create("/small_1"),
+        Image image1 = Image.withBase64ForSmallAndUriForBigger(
+                UUID.randomUUID().toString(),
                 URI.create("/large_1")
         );
         Set<Image> images = ImmutableSet.of(
