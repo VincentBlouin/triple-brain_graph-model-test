@@ -7,12 +7,14 @@ import org.triple_brain.module.common_utils.Uris;
 import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.FriendlyResourceFactory;
 import org.triple_brain.module.model.Image;
-import org.triple_brain.module.model.test.SubGraphOperator;
 import org.triple_brain.module.model.graph.edge.Edge;
 import org.triple_brain.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
 import org.triple_brain.module.model.graph.exceptions.NonExistingResourceException;
 import org.triple_brain.module.model.graph.vertex.*;
-import org.triple_brain.module.model.suggestion.*;
+import org.triple_brain.module.model.suggestion.Suggestion;
+import org.triple_brain.module.model.suggestion.SuggestionOrigin;
+import org.triple_brain.module.model.suggestion.SuggestionPojo;
+import org.triple_brain.module.model.test.SubGraphOperator;
 
 import javax.inject.Inject;
 import java.net.URI;
@@ -99,7 +101,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void has_generic_identifications(){
+    public void has_generic_identifications() {
         vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         );
@@ -115,7 +117,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void has_same_as(){
+    public void has_same_as() {
         vertexA.addSameAs(
                 modelTestScenarios.computerScientistType()
         );
@@ -131,7 +133,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void has_types(){
+    public void has_types() {
         vertexA.addType(
                 modelTestScenarios.personType()
         );
@@ -152,10 +154,12 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     public void vertex_suggestions_have_their_properties_sub_graph() {
         Set<SuggestionPojo> suggestions = new HashSet<>(
                 Arrays.asList(
-                        modelTestScenarios.startDateSuggestionFromEventIdentification()
+                        modelTestScenarios.startDateSuggestionFromEventIdentification(
+                                user()
+                        )
                 )
         );
-        vertexA.addSuggestions(
+        vertexA.setSuggestions(
                 suggestions
         );
         SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
@@ -167,16 +171,18 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         Suggestion suggestion = vertexAInSubGraph.suggestions().values().iterator().next();
         assertThat(suggestion.label(), is("Start date"));
     }
+
     @Test
     public void suggestions_have_their_own_label() {
         Set<SuggestionPojo> suggestions = new HashSet<>(
                 Arrays.asList(
-                        modelTestScenarios.startDateSuggestionFromEventIdentification(),
-                        modelTestScenarios.nameSuggestionFromPersonIdentification()
+                        modelTestScenarios.startDateSuggestionFromEventIdentification(user()),
+                        modelTestScenarios.nameSuggestionFromPersonIdentification(user())
                 )
         );
-        vertexA.addSuggestions(
+        vertexA.setSuggestions(
                 suggestions
+
         );
         SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
@@ -185,7 +191,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 vertexA.uri()
         );
         List<String> labels = new ArrayList<>();
-        for(Suggestion suggestion : vertexAInSubGraph.suggestions().values()){
+        for (Suggestion suggestion : vertexAInSubGraph.suggestions().values()) {
             labels.add(suggestion.label());
         }
         assertTrue(labels.contains("Start date"));
@@ -196,10 +202,10 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     public void has_suggestions_origin() {
         Set<SuggestionPojo> suggestions = new HashSet<>(
                 Arrays.asList(
-                        modelTestScenarios.startDateSuggestionFromEventIdentification()
+                        modelTestScenarios.startDateSuggestionFromEventIdentification(user())
                 )
         );
-        vertexA.addSuggestions(
+        vertexA.setSuggestions(
                 suggestions
         );
         SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
@@ -223,17 +229,11 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     @Test
     @Ignore("to complete")
     public void has_suggestion_multiple_origins() {
-        vertexA.addSuggestions(
+        vertexA.setSuggestions(
                 new HashSet<>(
                         Arrays.asList(
-                                modelTestScenarios.nameSuggestionFromPersonIdentification()
-                        )
-                )
-        );
-        vertexA.addSuggestions(
-                new HashSet<>(
-                        Arrays.asList(
-                                modelTestScenarios.nameSuggestionFromSymbolIdentification()
+                                modelTestScenarios.nameSuggestionFromPersonIdentification(user()),
+                                modelTestScenarios.nameSuggestionFromSymbolIdentification(user())
                         )
                 )
         );
@@ -254,11 +254,11 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     public void can_get_multiple_suggestions_in_sub_graph() {
         Set<SuggestionPojo> suggestions = new HashSet<>(
                 Arrays.asList(
-                        modelTestScenarios.startDateSuggestionFromEventIdentification(),
-                        modelTestScenarios.nameSuggestionFromPersonIdentification()
+                        modelTestScenarios.startDateSuggestionFromEventIdentification(user()),
+                        modelTestScenarios.nameSuggestionFromPersonIdentification(user())
                 )
         );
-        vertexA.addSuggestions(
+        vertexA.setSuggestions(
                 suggestions
         );
         SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
@@ -274,7 +274,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void has_included_vertices_and_edges(){
+    public void has_included_vertices_and_edges() {
         VertexOperator newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
                 edgeBetweenBAndCInSet()
@@ -297,7 +297,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void included_edges_have_source_and_destination_vertices(){
+    public void included_edges_have_source_and_destination_vertices() {
         VertexOperator newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
                 edgeBetweenBAndCInSet()
@@ -318,7 +318,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void has_vertices_images(){
+    public void has_vertices_images() {
         Image image1 = Image.withBase64ForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
                 URI.create("/large_1")
@@ -351,7 +351,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void has_identification_images(){
+    public void has_identification_images() {
         Image image1 = Image.withBase64ForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
                 URI.create("/large_1")

@@ -190,7 +190,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         );
         Set<SuggestionPojo> suggestions = new HashSet<>(
                 Arrays.asList(
-                        modelTestScenarios.startDateSuggestionFromEventIdentification()
+                        modelTestScenarios.startDateSuggestionFromEventIdentification(user())
                 )
         );
         vertexA.addSuggestions(
@@ -235,15 +235,15 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         );
         Set<SuggestionPojo> suggestions = new HashSet<>(
                 Arrays.asList(
-                        modelTestScenarios.nameSuggestionFromPersonIdentification(),
-                        modelTestScenarios.startDateSuggestionFromEventIdentification()
+                        modelTestScenarios.nameSuggestionFromPersonIdentification(user()),
+                        modelTestScenarios.startDateSuggestionFromEventIdentification(user())
                 )
         );
         vertexA.addSuggestions(
                 suggestions
         );
         assertTrue(
-                modelTestScenarios.nameSuggestionFromPersonIdentification().origins().iterator().next()
+                modelTestScenarios.nameSuggestionFromPersonIdentification(user()).origins().iterator().next()
                         .isRelatedToFriendlyResource(
                                 modelTestScenarios.person()
                         )
@@ -256,7 +256,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         Suggestion remainingSuggestion = vertexA.suggestions().values().iterator().next();
         assertThat(
                 remainingSuggestion.sameAs().uri(),
-                is(modelTestScenarios.startDateSuggestionFromEventIdentification().sameAs().uri())
+                is(modelTestScenarios.startDateSuggestionFromEventIdentification(user()).sameAs().uri())
         );
     }
 
@@ -266,14 +266,14 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         vertexA.addSuggestions(
                 new HashSet<>(
                         Arrays.asList(
-                                modelTestScenarios.nameSuggestionFromPersonIdentification()
+                                modelTestScenarios.nameSuggestionFromPersonIdentification(user())
                         )
                 )
         );
         vertexA.addSuggestions(
                 new HashSet<>(
                         Arrays.asList(
-                                modelTestScenarios.nameSuggestionFromSymbolIdentification()
+                                modelTestScenarios.nameSuggestionFromSymbolIdentification(user())
                         )
                 )
         );
