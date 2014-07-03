@@ -168,7 +168,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
                 vertexA.uri()
         );
-        Suggestion suggestion = vertexAInSubGraph.suggestions().values().iterator().next();
+        Suggestion suggestion = vertexAInSubGraph.getSuggestions().iterator().next();
         assertThat(suggestion.label(), is("Start date"));
     }
 
@@ -191,7 +191,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 vertexA.uri()
         );
         List<String> labels = new ArrayList<>();
-        for (Suggestion suggestion : vertexAInSubGraph.suggestions().values()) {
+        for (Suggestion suggestion : vertexAInSubGraph.getSuggestions()) {
             labels.add(suggestion.label());
         }
         assertTrue(labels.contains("Start date"));
@@ -214,7 +214,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
                 vertexA.uri()
         );
-        Suggestion suggestion = vertexAInSubGraph.suggestions().values().iterator().next();
+        Suggestion suggestion = vertexAInSubGraph.getSuggestions().iterator().next();
         SuggestionOrigin origin = suggestion.origins().iterator().next();
         FriendlyResourcePojo identification = new FriendlyResourcePojo(
                 URI.create("http://rdf.freebase.com/rdf/time/event")
@@ -243,7 +243,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
                 vertexA.uri()
         );
-        Suggestion suggestionInSubGraph = vertexAInSubGraph.suggestions().values().iterator().next();
+        Suggestion suggestionInSubGraph = vertexAInSubGraph.getSuggestions().iterator().next();
         assertThat(
                 suggestionInSubGraph.origins().size(),
                 is(2)
@@ -268,7 +268,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 vertexA.uri()
         );
         assertThat(
-                vertexAInSubGraph.suggestions().size(),
+                vertexAInSubGraph.getSuggestions().size(),
                 is(2)
         );
     }

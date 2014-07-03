@@ -186,7 +186,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
     @Test
     public void can_add_suggestions_to_a_vertex() throws Exception {
         assertTrue(
-                vertexA.suggestions().isEmpty()
+                vertexA.getSuggestions().isEmpty()
         );
         Set<SuggestionPojo> suggestions = new HashSet<>(
                 Arrays.asList(
@@ -197,9 +197,9 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
                 suggestions
         );
         assertFalse(
-                vertexA.suggestions().isEmpty()
+                vertexA.getSuggestions().isEmpty()
         );
-        Suggestion addedSuggestion = vertexA.suggestions().values().iterator().next();
+        Suggestion addedSuggestion = vertexA.getSuggestions().iterator().next();
         assertThat(
                 addedSuggestion.label(),
                 is("Start date")
@@ -222,41 +222,6 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
                                 URI.create("http://rdf.freebase.com/rdf/time/event")
                         )
                 )
-        );
-    }
-
-    @Test
-    public void when_removing_an_external_resource_the_suggestions_that_depend_on_it_are_removed() {
-        vertexA.addType(
-                modelTestScenarios.person()
-        );
-        vertexA.addType(
-                modelTestScenarios.event()
-        );
-        Set<SuggestionPojo> suggestions = new HashSet<>(
-                Arrays.asList(
-                        modelTestScenarios.nameSuggestionFromPersonIdentification(user()),
-                        modelTestScenarios.startDateSuggestionFromEventIdentification(user())
-                )
-        );
-        vertexA.addSuggestions(
-                suggestions
-        );
-        assertTrue(
-                modelTestScenarios.nameSuggestionFromPersonIdentification(user()).origins().iterator().next()
-                        .isRelatedToFriendlyResource(
-                                modelTestScenarios.person()
-                        )
-        );
-        assertThat(vertexA.suggestions().size(), is(2));
-        vertexA.removeIdentification(
-                modelTestScenarios.person()
-        );
-        assertThat(vertexA.suggestions().size(), is(1));
-        Suggestion remainingSuggestion = vertexA.suggestions().values().iterator().next();
-        assertThat(
-                remainingSuggestion.sameAs().uri(),
-                is(modelTestScenarios.startDateSuggestionFromEventIdentification(user()).sameAs().uri())
         );
     }
 

@@ -85,7 +85,7 @@ public class JsonConvertTest extends AdaptableGraphComponentTest {
                 vertexAJson
         );
         assertThat(
-                vertexAPojo.suggestions().size(),
+                vertexAPojo.getSuggestions().size(),
                 is(2)
         );
     }
