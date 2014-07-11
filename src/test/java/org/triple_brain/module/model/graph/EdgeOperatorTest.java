@@ -34,7 +34,10 @@ public class EdgeOperatorTest extends AdaptableGraphComponentTest {
         assertThat(newEdge.destinationVertex(), is((Vertex) vertexA));
         assertTrue(userGraph.haveElementWithId(newEdge.uri()));
         assertThat(newEdge.label(), is(""));
-        assertThat(numberOfEdgesAndVertices(), is(numberOfEdgesAndVertices + 1));
+        assertThat(
+                wholeGraphAroundDefaultCenterVertex().numberOfEdgesAndVertices(),
+                is(numberOfEdgesAndVertices + 1)
+        );
     }
 
     @Test

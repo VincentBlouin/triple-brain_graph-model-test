@@ -400,7 +400,6 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         assertThat(graph, is(not(nullValue())));
-        assertThat(graph.numberOfEdgesAndVertices(), is(numberOfEdgesAndVertices()));
         Vertex centerVertex = graph.vertexWithIdentifier(vertexA.uri());
         assertThat(centerVertex.label(), is("vertex A"));
     }
