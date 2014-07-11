@@ -33,6 +33,7 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     protected VertexOperator vertexA;
     protected VertexOperator vertexB;
     protected VertexOperator vertexC;
+    protected VertexOperator vertexOfAnotherUser;
 
     @Inject
     protected TestScenarios testScenarios;
@@ -74,6 +75,7 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
         vertexA = vertexA();
         vertexB = vertexB();
         vertexC = vertexC();
+        vertexOfAnotherUser = vertexOfAnotherUser();
     }
 
     @After
@@ -128,6 +130,11 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     @Override
     public VertexOperator vertexC() {
         return graphComponentTest.vertexC();
+    }
+
+    @Override
+    public VertexOperator vertexOfAnotherUser() {
+        return graphComponentTest.vertexOfAnotherUser();
     }
 
     @Override

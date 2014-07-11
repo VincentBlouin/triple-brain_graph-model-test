@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.triple_brain.module.model.graph.vertex.Vertex;
 import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jFriendlyResource;
 
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -83,9 +84,12 @@ public class GraphElementOperatorTest extends AdaptableGraphComponentTest {
     public void a_graph_element_is_not_identified_to_itself_if_used_as_an_identification_for_another_element() {
         assertTrue(vertexB.getIdentifications().isEmpty());
         GraphElementOperator vertexAGraphElement = vertexA;
-        FriendlyResourcePojo vertexBPojo = new FriendlyResourcePojo(
+        IdentificationPojo vertexBPojo = new IdentificationPojo(
                 vertexB.uri(),
-                vertexB.label()
+                new FriendlyResourcePojo(
+                        vertexB.uri(),
+                        vertexB.label()
+                )
         );
         vertexAGraphElement.addSameAs(vertexBPojo);
         assertTrue(vertexB.getIdentifications().isEmpty());
@@ -93,7 +97,7 @@ public class GraphElementOperatorTest extends AdaptableGraphComponentTest {
 
     @Test
     public void adding_identification_returns_identification_created_fields(){
-        FriendlyResourcePojo identification = vertexA.addSameAs(
+        IdentificationPojo identification = vertexA.addSameAs(
                 modelTestScenarios.timBernersLee()
         );
         assertNotNull(
@@ -103,4 +107,36 @@ public class GraphElementOperatorTest extends AdaptableGraphComponentTest {
                 identification.lastModificationDate()
         );
     }
+
+    @Test
+    public void users_identification_have_their_own_uri_for_same_identification(){
+        IdentificationPojo identificationOfAnotherUser = vertexOfAnotherUser.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        IdentificationPojo identification = vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        assertTrue(
+                identificationOfAnotherUser.getExternalResourceUri().equals(
+                        identification.getExternalResourceUri()
+                )
+        );
+        assertFalse(
+                identificationOfAnotherUser.uri().equals(
+                        identification.uri()
+                )
+        );
+    }
+
+    @Test
+    public void uri_of_identification_does_not_change_if_added_twice(){
+        IdentificationPojo identification = vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        IdentificationPojo identification2 = vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        assertTrue(identification.uri().equals(identification2.uri()));
+    }
+
 }

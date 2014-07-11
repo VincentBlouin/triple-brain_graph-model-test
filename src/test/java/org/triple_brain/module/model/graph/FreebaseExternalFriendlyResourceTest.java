@@ -13,7 +13,7 @@ public class FreebaseExternalFriendlyResourceTest extends AdaptableGraphComponen
 
     @Test
     public void can_get_images(){
-        FriendlyResource timBernersLee = modelTestScenarios.timBernersLeeInFreebase();
+        Identification timBernersLee = modelTestScenarios.timBernersLeeInFreebase();
         assertTrue(FreebaseFriendlyResource.isFromFreebase(timBernersLee));
     }
 

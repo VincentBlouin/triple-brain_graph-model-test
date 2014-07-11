@@ -5,10 +5,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Test;
 import org.triple_brain.module.model.FriendlyResource;
-import org.triple_brain.module.model.graph.AdaptableGraphComponentTest;
-import org.triple_brain.module.model.graph.FriendlyResourceOperator;
-import org.triple_brain.module.model.graph.FriendlyResourcePojo;
-import org.triple_brain.module.model.graph.SubGraph;
+import org.triple_brain.module.model.graph.*;
 import org.triple_brain.module.model.graph.vertex.VertexInSubGraphPojo;
 
 import java.util.HashMap;
@@ -25,7 +22,7 @@ public class GsonLearning extends AdaptableGraphComponentTest{
     @Test
     public void can_convert_vertex()throws Exception{
         Gson gson = new Gson();
-        FriendlyResource timBernersLeePojo = modelTestScenarios.timBernersLee();
+        Identification timBernersLeePojo = modelTestScenarios.timBernersLee();
         vertexB.addSameAs(
                 timBernersLeePojo
         );
@@ -42,7 +39,7 @@ public class GsonLearning extends AdaptableGraphComponentTest{
         JSONObject jsonObject = new JSONObject(json);
         VertexInSubGraphPojo vertexInSubGraphPojo = gson.fromJson(json, VertexInSubGraphPojo.class);
         System.out.println(vertexBInSubGraphPojo);
-    };
+    }
 
     @Test
     public void map_converts_to_object_and_not_array()throws Exception{
@@ -62,7 +59,7 @@ public class GsonLearning extends AdaptableGraphComponentTest{
             );
             fail();
         }catch(Exception e){
-
+           //success
         }
     }
 

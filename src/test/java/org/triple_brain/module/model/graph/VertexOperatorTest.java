@@ -160,10 +160,10 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_remove_an_additional_type_to_vertex() throws Exception {
-        vertexA.addType(
+        Identification personType = vertexA.addType(
                 modelTestScenarios.personType()
         );
-        FriendlyResource computerScientistType = modelTestScenarios.computerScientistType();
+        Identification computerScientistType = modelTestScenarios.computerScientistType();
         vertexA.addType(
                 computerScientistType
         );
@@ -171,7 +171,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
                 vertexA.getAdditionalTypes().size(),
                 is(2)
         );
-        vertexA.removeIdentification(modelTestScenarios.personType());
+        vertexA.removeIdentification(personType);
         assertThat(
                 vertexA.getAdditionalTypes().size(),
                 is(1)
@@ -205,13 +205,13 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
                 is("Start date")
         );
         assertThat(
-                addedSuggestion.domain().uri(),
+                addedSuggestion.getDomainUri(),
                 is(
                         URI.create("http://rdf.freebase.com/rdf/type/datetime")
                 )
         );
         assertThat(
-                addedSuggestion.sameAs().uri(),
+                addedSuggestion.getSameAsUri(),
                 is(
                         URI.create("http://rdf.freebase.com/rdf/time/event/start_date")
                 )
@@ -256,11 +256,12 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_get_empty_list_after_removing_last_same_as() {
-        vertexA.addSameAs(
+        Identification timBernersLee = vertexA.addSameAs(
                 modelTestScenarios.timBernersLee()
         );
+        assertFalse(vertexA.getSameAs().isEmpty());
         vertexA.removeIdentification(
-                modelTestScenarios.timBernersLee()
+                timBernersLee
         );
         assertTrue(vertexA.getSameAs().isEmpty());
     }
@@ -272,9 +273,8 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
                         Uris.get("http://www.w3.org/People/Berners-Lee/card#i")
                 )
         );
-        FriendlyResource timBernersLee = modelTestScenarios.timBernersLee();
-        vertexA.addSameAs(
-                timBernersLee
+        Identification timBernersLee = vertexA.addSameAs(
+                modelTestScenarios.timBernersLee()
         );
         assertTrue(
                 userGraph.haveElementWithId(
@@ -291,12 +291,11 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_assign_the_same_identification_to_2_vertices() {
-        FriendlyResource timBernersLee = modelTestScenarios.timBernersLee();
-        vertexA.addSameAs(
-                timBernersLee
+        Identification timBernersLee = vertexA.addSameAs(
+                modelTestScenarios.timBernersLee()
         );
         vertexB.addSameAs(
-                timBernersLee
+                modelTestScenarios.timBernersLee()
         );
         assertTrue(vertexA.getSameAs().values().iterator().next().equals(timBernersLee));
         assertTrue(vertexB.getSameAs().values().iterator().next().equals(timBernersLee));
@@ -318,11 +317,11 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         assertFalse(vertexA.getGenericIdentifications().containsKey(
                 modelTestScenarios.extraterrestrial().uri()
         ));
-        vertexA.addGenericIdentification(
+        Identification ExtraTerrestrial = vertexA.addGenericIdentification(
                 modelTestScenarios.extraterrestrial()
         );
         assertTrue(vertexA.getGenericIdentifications().containsKey(
-                modelTestScenarios.extraterrestrial().uri()
+                ExtraTerrestrial.uri()
         ));
     }
 
@@ -560,6 +559,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
                 is(numberOfEdgesForVertexC + 1)
         );
     }
+
 
     private Set<Edge> edgeBetweenBAndCInSet() {
 

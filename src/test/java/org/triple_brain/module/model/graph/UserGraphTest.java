@@ -364,11 +364,11 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 image1,
                 image2
         );
-        FriendlyResourceOperator friendlyResourceOperator = friendlyResourceFactory.withUri(
-                modelTestScenarios.computerScientistType().uri()
-        );
-        vertexA.addGenericIdentification(
+        IdentificationPojo addedIdentification = vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
+        );
+        FriendlyResourceOperator friendlyResourceOperator = friendlyResourceFactory.withUri(
+                addedIdentification.uri()
         );
         friendlyResourceOperator.addImages(
                 images
