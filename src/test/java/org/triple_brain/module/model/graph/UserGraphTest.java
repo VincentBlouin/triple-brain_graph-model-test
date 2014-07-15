@@ -151,6 +151,23 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
+    public void can_return_multiple_identifications_for_one_graph_element() {
+        vertexA.addGenericIdentification(
+                modelTestScenarios.personType()
+        );
+        vertexA.addGenericIdentification(
+                modelTestScenarios.timBernersLee()
+        );
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        assertThat(vertexAInSubGraph.getIdentifications().size(), is(2));
+    }
+
+    @Test
     public void vertex_suggestions_have_their_properties_sub_graph() {
         Set<SuggestionPojo> suggestions = new HashSet<>(
                 Arrays.asList(
