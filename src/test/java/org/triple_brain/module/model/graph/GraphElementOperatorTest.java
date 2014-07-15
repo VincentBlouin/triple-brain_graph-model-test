@@ -1,8 +1,14 @@
 package org.triple_brain.module.model.graph;
 
+import com.google.inject.Inject;
 import org.junit.Test;
+import org.triple_brain.module.model.Image;
 import org.triple_brain.module.model.graph.vertex.Vertex;
 import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jFriendlyResource;
+
+import java.net.URI;
+import java.util.HashSet;
+import java.util.Set;
 
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
@@ -12,6 +18,10 @@ import static org.junit.Assert.*;
 * Copyright Mozilla Public License 1.1
 */
 public class GraphElementOperatorTest extends AdaptableGraphComponentTest {
+
+    @Inject
+    IdentificationFactory identificationFactory;
+
     @Test
     public void cannot_identify_to_self() {
         String errorMessage = "identification cannot be the same";
@@ -138,5 +148,40 @@ public class GraphElementOperatorTest extends AdaptableGraphComponentTest {
         );
         assertTrue(identification.uri().equals(identification2.uri()));
     }
+
+    @Test
+    public void adding_existing_identification_returns_existing_images(){
+        IdentificationPojo identification = vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        assertThat(identification.images().size(), is(0));
+        Set<Image> images = new HashSet<>();
+        images.add(Image.withBase64ForSmallAndUriForBigger(
+                "dummy base 64",
+                URI.create("/big_image")
+        ));
+        identificationFactory.withUri(identification.uri()).addImages(
+            images
+        );
+        IdentificationPojo sameIdentification = vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        assertThat(sameIdentification.images().size(), is(1));
+    }
+    @Test
+    public void adding_existing_identification_returns_existing_description(){
+        IdentificationPojo identification = vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        assertTrue(identification.comment().isEmpty());
+        identificationFactory.withUri(identification.uri()).comment(
+                "A computer scientist is ..."
+        );
+        IdentificationPojo sameIdentification = vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        assertFalse(sameIdentification.comment().isEmpty());
+    }
+
 
 }

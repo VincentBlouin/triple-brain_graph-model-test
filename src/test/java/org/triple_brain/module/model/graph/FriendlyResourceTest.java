@@ -1,7 +1,6 @@
 package org.triple_brain.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
-import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.FriendlyResourceFactory;
