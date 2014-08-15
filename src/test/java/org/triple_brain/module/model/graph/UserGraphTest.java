@@ -1,6 +1,7 @@
 package org.triple_brain.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
+import org.hamcrest.CoreMatchers;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.triple_brain.module.common_utils.Uris;
@@ -579,6 +580,23 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         Vertex vertex = userGraph.createVertex();
         SubGraphOperator subGraph = wholeGraph();
         assertTrue(subGraph.containsVertex(vertex));
+    }
+
+    @Test
+    public void vertex_details_are_not_included_in_edge_source_and_destination_vertex(){
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        Vertex sourceVertexInEdge = subGraph.edges().values().iterator().next().sourceVertex();
+        assertThat(
+                sourceVertexInEdge.label(),
+                is(CoreMatchers.nullValue())
+        );
+        Vertex destinationVertexInEdge = subGraph.edges().values().iterator().next().destinationVertex();
+        assertThat(
+                destinationVertexInEdge.label(),
+                is(CoreMatchers.nullValue())
+        );
     }
 
     @Override
