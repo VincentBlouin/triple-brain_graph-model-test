@@ -11,6 +11,9 @@ import org.triple_brain.module.model.Image;
 import org.triple_brain.module.model.graph.edge.Edge;
 import org.triple_brain.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
 import org.triple_brain.module.model.graph.exceptions.NonExistingResourceException;
+import org.triple_brain.module.model.graph.schema.Schema;
+import org.triple_brain.module.model.graph.schema.SchemaOperator;
+import org.triple_brain.module.model.graph.schema.SchemaPojo;
 import org.triple_brain.module.model.graph.vertex.*;
 import org.triple_brain.module.model.suggestion.Suggestion;
 import org.triple_brain.module.model.suggestion.SuggestionOrigin;
@@ -22,6 +25,7 @@ import java.net.URI;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
@@ -580,6 +584,57 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         Vertex vertex = userGraph.createVertex();
         SubGraphOperator subGraph = wholeGraph();
         assertTrue(subGraph.containsVertex(vertex));
+    }
+
+    @Test
+    public void can_create_schema() {
+        Schema schema = userGraph.createSchema();
+        assertThat(schema.uri(), is(notNullValue()));
+    }
+
+    @Test
+    public void can_get_schema() {
+        Schema schema = userGraph.createSchema();
+        URI originalUri = schema.uri();
+        schema = userGraph.schemaPojoWithUri(originalUri);
+        assertThat(schema.uri(), is(originalUri));
+    }
+
+    @Test
+    public void schema_contains_its_properties() {
+        SchemaOperator schemaOperator = userGraph.schemaOperatorWithUri(
+                userGraph.createSchema().uri()
+        );
+        schemaOperator.label("patate");
+        GraphElement createdProperty = schemaOperator.addProperty();
+        SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
+                schemaOperator.uri()
+        );
+        assertThat(
+                schemaPojo.getProperties().values().iterator().next(),
+                is(createdProperty)
+        );
+    }
+
+    @Test
+    public void schema_properties_includes_their_identifications() {
+        SchemaOperator schemaOperator = userGraph.schemaOperatorWithUri(
+                userGraph.createSchema().uri()
+        );
+        GraphElementOperator createdProperty = schemaOperator.addProperty();
+        IdentificationPojo createdComputerScientistType = createdProperty.addType(
+                modelTestScenarios.computerScientistType()
+        );
+        SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
+                schemaOperator.uri()
+        );
+        GraphElementPojo property = schemaPojo.getProperties().values().iterator().next();
+        IdentificationPojo identificationPojo = property.getIdentifications().values().iterator().next();
+        assertThat(
+                identificationPojo,
+                is(createdComputerScientistType)
+        );
+
     }
 
     @Test
