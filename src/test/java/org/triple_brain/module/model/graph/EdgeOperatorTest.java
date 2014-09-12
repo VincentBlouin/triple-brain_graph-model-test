@@ -1,3 +1,7 @@
+/*
+ * Copyright Vincent Blouin under the Mozilla Public License 1.1
+ */
+
 package org.triple_brain.module.model.graph;
 
 import org.junit.Assert;
@@ -17,9 +21,6 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
-/*
-* Copyright Mozilla Public License 1.1
-*/
 public class EdgeOperatorTest extends AdaptableGraphComponentTest {
 
     @Test
@@ -81,7 +82,7 @@ public class EdgeOperatorTest extends AdaptableGraphComponentTest {
     @Test
     public void can_remove_an_edge() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
-        EdgeOperator edge = vertexA.edgeThatLinksToDestinationVertex(vertexB);
+        EdgeOperator edge = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         URI edgeId = edge.uri();
         assertTrue(userGraph.haveElementWithId(edgeId));
         edge.remove();
@@ -96,7 +97,7 @@ public class EdgeOperatorTest extends AdaptableGraphComponentTest {
     public void deleting_a_relation_decrements_number_of_connected_edges_to_vertices() {
         assertThat(vertexA.getNumberOfConnectedEdges(), is(1));
         assertThat(vertexB.getNumberOfConnectedEdges(), is(2));
-        vertexA.edgeThatLinksToDestinationVertex(vertexB).remove();
+        vertexA.getEdgeThatLinksToDestinationVertex(vertexB).remove();
         assertThat(vertexA.getNumberOfConnectedEdges(), is(0));
         assertThat(vertexB.getNumberOfConnectedEdges(), is(1));
     }
@@ -128,7 +129,7 @@ public class EdgeOperatorTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_inverse() {
-        EdgeOperator betweenAAndB = vertexA.edgeThatLinksToDestinationVertex(vertexB);
+        EdgeOperator betweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         assertThat(betweenAAndB.sourceVertex(), is((Vertex) vertexA));
         assertThat(betweenAAndB.destinationVertex(), is((Vertex) vertexB));
         betweenAAndB.inverse();

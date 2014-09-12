@@ -1,3 +1,7 @@
+/*
+ * Copyright Vincent Blouin under the Mozilla Public License 1.1
+ */
+
 package org.triple_brain.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
@@ -30,9 +34,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 
-/*
-* Copyright Mozilla Public License 1.1
-*/
 public class UserGraphTest extends AdaptableGraphComponentTest {
     public static final int DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES = 10;
 
@@ -67,8 +68,8 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
 
     @Test
     public void correct_edges_are_in_graph() {
-        Edge betweenAAndB = vertexA.edgeThatLinksToDestinationVertex(vertexB);
-        Edge betweenBAndC = vertexB.edgeThatLinksToDestinationVertex(vertexC);
+        Edge betweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        Edge betweenBAndC = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
         SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
@@ -86,7 +87,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
 
     @Test
     public void source_and_destination_vertex_are_in_edges() {
-        Edge betweenAAndB = vertexA.edgeThatLinksToDestinationVertex(vertexB);
+        Edge betweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
@@ -550,34 +551,6 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         assertThat(userGraph.toRdfXml(), is(not(nullValue())));
     }
 
-    @Test
-    public void distance_from_center_vertex_is_set_for_each_vertex_in_sub_graph() {
-        assertThat(
-                vertexInWholeConnectedGraph(vertexA).minDistanceFromCenterVertex(),
-                is(0)
-        );
-        assertThat(
-                vertexInWholeConnectedGraph(vertexB).minDistanceFromCenterVertex(),
-                is(1)
-        );
-        assertThat(
-                vertexInWholeConnectedGraph(vertexC).minDistanceFromCenterVertex(),
-                is(2)
-        );
-    }
-
-    @Test
-    public void the_minimum_distance_from_center_vertex_is_returned() {
-        assertThat(
-                vertexInWholeConnectedGraph(vertexC).minDistanceFromCenterVertex(),
-                is(2)
-        );
-        vertexC().addRelationToVertex(vertexA());
-        assertThat(
-                vertexInWholeConnectedGraph(vertexC).minDistanceFromCenterVertex(),
-                is(1)
-        );
-    }
 
     @Test
     public void can_create_new_vertex_out_of_nothing() {
@@ -671,7 +644,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     private Set<Edge> edgeBetweenBAndCInSet() {
         Set<Edge> edges = new HashSet<>();
         edges.add(
-                vertexB.edgeThatLinksToDestinationVertex(
+                vertexB.getEdgeThatLinksToDestinationVertex(
                         vertexC
                 )
         );

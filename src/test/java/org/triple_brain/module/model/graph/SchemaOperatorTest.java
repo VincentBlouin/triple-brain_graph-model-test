@@ -1,18 +1,19 @@
+/*
+ * Copyright Vincent Blouin under the Mozilla Public License 1.1
+ */
+
 package org.triple_brain.module.model.graph;
 
 import org.junit.Test;
 import org.triple_brain.module.model.graph.schema.SchemaOperator;
 
+import java.net.URI;
 import java.util.Collection;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-/*
-* Copyright Mozilla Public License 1.1
-*/
 public class SchemaOperatorTest extends AdaptableGraphComponentTest {
 
     @Test
@@ -56,6 +57,40 @@ public class SchemaOperatorTest extends AdaptableGraphComponentTest {
         );
     }
 
+    @Test
+    public void cannot_remove_a_schema() {
+        SchemaOperator schemaOperator = createSchema();
+        URI propertyUri = schemaOperator.addProperty().uri();
+        assertTrue(
+                userGraph.haveElementWithId(
+                        propertyUri
+                )
+        );
+        schemaOperator.remove();
+        assertTrue(
+                userGraph.haveElementWithId(
+                        propertyUri
+                )
+        );
+    }
+
+    @Test
+    public void can_remove_a_schema_property() {
+        SchemaOperator schemaOperator = createSchema();
+        GraphElementOperator property = schemaOperator.addProperty();
+        URI propertyUri = property.uri();
+        assertTrue(
+                userGraph.haveElementWithId(
+                        propertyUri
+                )
+        );
+        property.remove();
+        assertFalse(
+                userGraph.haveElementWithId(
+                        propertyUri
+                )
+        );
+    }
     private SchemaOperator createSchema() {
         return userGraph.schemaOperatorWithUri(
                 userGraph.createSchema().uri()

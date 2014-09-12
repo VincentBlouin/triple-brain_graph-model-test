@@ -1,3 +1,7 @@
+/*
+ * Copyright Vincent Blouin under the Mozilla Public License 1.1
+ */
+
 package org.triple_brain.module.model.graph;
 
 import org.junit.Ignore;
@@ -27,9 +31,6 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 
 
-/*
-* Copyright Mozilla Public License 1.1
-*/
 public class VertexOperatorTest extends AdaptableGraphComponentTest {
 
     @Inject
@@ -60,7 +61,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_check_if_vertex_has_edge() {
-        EdgeOperator edge = vertexA.edgeThatLinksToDestinationVertex(vertexB);
+        EdgeOperator edge = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         assertTrue(
                 vertexA.hasEdge(
                         edge
@@ -125,6 +126,37 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         assertThat(
                 vertexC.getNumberOfConnectedEdges(),
                 is(numberOfEdgesForC - 1)
+        );
+    }
+
+    @Test
+    public void removing_a_vertex_removes_its_relations(){
+        URI edgeBetweenCAndBUri = vertexB.getEdgeThatLinksToDestinationVertex(
+                vertexC
+        ).uri();
+        URI edgeBetweenAAndBUri = vertexB.getEdgeThatLinksToDestinationVertex(
+                vertexC
+        ).uri();
+        assertTrue(
+                userGraph.haveElementWithId(
+                        edgeBetweenCAndBUri
+                )
+        );
+        assertTrue(
+                userGraph.haveElementWithId(
+                        edgeBetweenAAndBUri
+                )
+        );
+        vertexB.remove();
+        assertFalse(
+                userGraph.haveElementWithId(
+                        edgeBetweenCAndBUri
+                )
+        );
+        assertFalse(
+                userGraph.haveElementWithId(
+                        edgeBetweenAAndBUri
+                )
         );
     }
 
@@ -410,7 +442,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         assertFalse(includedVertices.containsKey(vertexA.uri()));
         Map<URI, ?extends Edge> includedEdges = newVertex.getIncludedEdges();
         assertTrue(includedEdges.containsKey(
-                vertexB.edgeThatLinksToDestinationVertex(vertexC).uri()
+                vertexB.getEdgeThatLinksToDestinationVertex(vertexC).uri()
         ));
     }
 
@@ -454,7 +486,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
                 newVertex.getIncludedEdges().size(),
                 is(1)
         );
-        vertexB.edgeThatLinksToDestinationVertex(vertexC).remove();
+        vertexB.getEdgeThatLinksToDestinationVertex(vertexC).remove();
         assertThat(
                 newVertex.getIncludedVertices().size(),
                 is(2)
@@ -565,7 +597,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
 
         Set<Edge> edges = new HashSet<>();
         edges.add(
-                vertexB.edgeThatLinksToDestinationVertex(
+                vertexB.getEdgeThatLinksToDestinationVertex(
                         vertexC
                 )
         );

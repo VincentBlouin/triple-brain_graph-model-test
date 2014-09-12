@@ -1,3 +1,7 @@
+/*
+ * Copyright Vincent Blouin under the Mozilla Public License 1.1
+ */
+
 package org.triple_brain.module.model.graph;
 
 import com.google.inject.Inject;
@@ -14,9 +18,6 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
-/*
-* Copyright Mozilla Public License 1.1
-*/
 public class GraphElementOperatorTest extends AdaptableGraphComponentTest {
 
     @Inject

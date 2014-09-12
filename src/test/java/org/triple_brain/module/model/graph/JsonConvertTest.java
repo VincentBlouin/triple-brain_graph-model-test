@@ -1,3 +1,7 @@
+/*
+ * Copyright Vincent Blouin under the Mozilla Public License 1.1
+ */
+
 package org.triple_brain.module.model.graph;
 
 import org.codehaus.jettison.json.JSONObject;
@@ -21,9 +25,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-/*
-* Copyright Mozilla Public License 1.1
-*/
 public class JsonConvertTest extends AdaptableGraphComponentTest {
 
     @Inject
@@ -94,7 +95,7 @@ public class JsonConvertTest extends AdaptableGraphComponentTest {
     public void converting_edge_to_json_throws_no_error() {
         EdgeJson.toJson(
                 edgeInWholeGraph(
-                        vertexA.edgeThatLinksToDestinationVertex(vertexB)
+                        vertexA.getEdgeThatLinksToDestinationVertex(vertexB)
                 )
         );
     }
@@ -172,7 +173,7 @@ public class JsonConvertTest extends AdaptableGraphComponentTest {
     private Set<Edge> edgeBetweenBAndCInSet() {
         Set<Edge> edges = new HashSet<>();
         edges.add(
-                vertexB.edgeThatLinksToDestinationVertex(
+                vertexB.getEdgeThatLinksToDestinationVertex(
                         vertexC
                 )
         );

@@ -1,3 +1,7 @@
+/*
+ * Copyright Vincent Blouin under the Mozilla Public License 1.1
+ */
+
 package org.triple_brain.module.model.graph;
 
 import org.triple_brain.module.common_utils.Uris;
@@ -7,9 +11,6 @@ import org.triple_brain.module.model.suggestion.SuggestionPojo;
 
 import java.net.URI;
 
-/*
-* Copyright Mozilla Public License 1.1
-*/
 public class ModelTestScenarios {
 
     public IdentificationPojo personType() {

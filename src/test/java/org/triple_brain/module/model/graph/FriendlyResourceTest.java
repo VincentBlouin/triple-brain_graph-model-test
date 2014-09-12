@@ -1,3 +1,7 @@
+/*
+ * Copyright Vincent Blouin under the Mozilla Public License 1.1
+ */
+
 package org.triple_brain.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
@@ -18,9 +22,6 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-/*
-* Copyright Mozilla Public License 1.1
-*/
 public class FriendlyResourceTest extends AdaptableGraphComponentTest {
 
     @Inject
