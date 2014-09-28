@@ -4,7 +4,6 @@
 
 package org.triple_brain.module.model.graph;
 
-import org.triple_brain.module.common_utils.Uris;
 import org.triple_brain.module.model.User;
 import org.triple_brain.module.model.UserUris;
 import org.triple_brain.module.model.suggestion.SuggestionPojo;
@@ -101,39 +100,48 @@ public class ModelTestScenarios {
     }
 
     public SuggestionPojo nameSuggestionFromPersonIdentification(User user) {
-        URI personUri = Uris.get("http://xmlns.com/foaf/0.1/Person");
-        return SuggestionPojo.fromSameAsAndDomainUriLabelAndOrigin(
-                URI.create("http://xmlns.com/foaf/0.1/name"),
-                personUri,
-                "Name",
-                personUri.toString(),
+        return SuggestionPojo.forSameAsTypeAndOrigin(
+                new FriendlyResourcePojo(
+                        URI.create("http://xmlns.com/foaf/0.1/name"),
+                        "Name"
+                ),
+                new FriendlyResourcePojo(
+                        URI.create("http://rdf.freebase.com/rdf/type/text"),
+                        "Text"
+                ),
+                "http://xmlns.com/foaf/0.1/Person",
                 user
         );
     }
 
     public SuggestionPojo nameSuggestionFromSymbolIdentification(User user) {
-        URI symbolUri = Uris.get("http://rdf.freebase.com/rdf/m/09ddf");
-        return SuggestionPojo.fromSameAsAndDomainUriLabelAndOrigin(
-                URI.create("http://xmlns.com/foaf/0.1/name"),
+        String symbolUri = "http://rdf.freebase.com/rdf/m/09ddf";
+        return SuggestionPojo.forSameAsTypeAndOrigin(
+                new FriendlyResourcePojo(
+                        URI.create("http://xmlns.com/foaf/0.1/name"),
+                        "Name"
+                ),
+                new FriendlyResourcePojo(
+                        URI.create("http://rdf.freebase.com/rdf/type/text"),
+                        "Text"
+                ),
                 symbolUri,
-                "Name",
-                symbolUri.toString(),
                 user
         );
     }
 
     public SuggestionPojo startDateSuggestionFromEventIdentification(User user) {
-        return SuggestionPojo.fromSameAsAndDomainUriLabelAndOrigin(
-                URI.create("http://rdf.freebase.com/rdf/time/event/start_date"),
-                URI.create("http://rdf.freebase.com/rdf/type/datetime"),
-                "Start date",
+        return SuggestionPojo.forSameAsTypeAndOrigin(
+                new FriendlyResourcePojo(
+                        URI.create("http://rdf.freebase.com/rdf/time/event/start_date"),
+                        "Start date"
+                ),
+                new FriendlyResourcePojo(
+                        URI.create("http://rdf.freebase.com/rdf/type/datetime"),
+                        "Date"
+                ),
                 "http://rdf.freebase.com/rdf/time/event",
                 user
         );
     }
-
-    private URI generateUriForUser(User user) {
-        return new UserUris(user).generateIdentificationUri();
-    }
-
 }

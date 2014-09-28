@@ -130,7 +130,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void removing_a_vertex_removes_its_relations(){
+    public void removing_a_vertex_removes_its_relations() {
         URI edgeBetweenCAndBUri = vertexB.getEdgeThatLinksToDestinationVertex(
                 vertexC
         ).uri();
@@ -237,13 +237,13 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
                 is("Start date")
         );
         assertThat(
-                addedSuggestion.getDomainUri(),
+                addedSuggestion.getType().uri(),
                 is(
                         URI.create("http://rdf.freebase.com/rdf/type/datetime")
                 )
         );
         assertThat(
-                addedSuggestion.getSameAsUri(),
+                addedSuggestion.getSameAs().uri(),
                 is(
                         URI.create("http://rdf.freebase.com/rdf/time/event/start_date")
                 )
@@ -272,6 +272,64 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
                         Arrays.asList(
                                 modelTestScenarios.nameSuggestionFromSymbolIdentification(user())
                         )
+                )
+        );
+    }
+
+    @Test
+    public void accepting_a_suggestion_adds_a_new_neighbor() {
+        Integer numberOfEdges = vertexA.getNumberOfConnectedEdges();
+        vertexA.acceptSuggestion(
+                modelTestScenarios.nameSuggestionFromPersonIdentification(
+                        user()
+                )
+        );
+        Integer newNumberOfEdges = vertexA.getNumberOfConnectedEdges();
+        assertThat(
+                newNumberOfEdges,
+                is(numberOfEdges + 1)
+        );
+    }
+
+    @Test
+    public void edge_from_accepting_suggestion_has_suggestion_label() {
+        SuggestionPojo nameSuggestion = modelTestScenarios.nameSuggestionFromPersonIdentification(
+                user()
+        );
+        Edge edge = vertexA.acceptSuggestion(nameSuggestion);
+        assertThat(edge.label(), is(nameSuggestion.label()));
+    }
+
+    @Test
+    public void edge_from_accepting_suggestion_has_suggestion_same_as() {
+        SuggestionPojo nameSuggestion = modelTestScenarios.nameSuggestionFromPersonIdentification(
+                user()
+        );
+        Edge edge = vertexA.acceptSuggestion(nameSuggestion);
+        Identification identification = edge.getSameAs().values().iterator().next();
+        assertThat(
+                identification.getExternalResourceUri(),
+                is(nameSuggestion.getSameAs().uri())
+        );
+    }
+
+    @Test
+    public void new_vertex_from_accepting_suggestion_has_suggestion_same_as_and_type() {
+        SuggestionPojo nameSuggestion = modelTestScenarios.nameSuggestionFromPersonIdentification(
+                user()
+        );
+        Vertex newVertex = vertexA.acceptSuggestion(nameSuggestion).destinationVertex();
+        assertThat(newVertex.getAdditionalTypes().size(), is(2));
+        assertTrue(
+                hasTypeWithExternalUri(
+                        newVertex,
+                        nameSuggestion.getSameAs().uri()
+                )
+        );
+        assertTrue(
+                hasTypeWithExternalUri(
+                        newVertex,
+                        nameSuggestion.getType().uri()
                 )
         );
     }
@@ -436,11 +494,11 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
                 vertexBAndC(),
                 edgeBetweenBAndCInSet()
         );
-        Map<URI, ?extends Vertex> includedVertices = newVertex.getIncludedVertices();
+        Map<URI, ? extends Vertex> includedVertices = newVertex.getIncludedVertices();
         assertTrue(includedVertices.containsKey(vertexB.uri()));
         assertTrue(includedVertices.containsKey(vertexC.uri()));
         assertFalse(includedVertices.containsKey(vertexA.uri()));
-        Map<URI, ?extends Edge> includedEdges = newVertex.getIncludedEdges();
+        Map<URI, ? extends Edge> includedEdges = newVertex.getIncludedEdges();
         assertTrue(includedEdges.containsKey(
                 vertexB.getEdgeThatLinksToDestinationVertex(vertexC).uri()
         ));
@@ -609,6 +667,15 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         vertexBAndC.add(vertexB);
         vertexBAndC.add(vertexC);
         return vertexBAndC;
+    }
+
+    private Boolean hasTypeWithExternalUri(Vertex vertex, URI externalUri) {
+        for (Identification identification : vertex.getAdditionalTypes().values()) {
+            if (identification.getExternalResourceUri().equals(externalUri)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
