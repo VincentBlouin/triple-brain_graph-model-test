@@ -341,6 +341,39 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
+    public void included_edges_only_hold_source_and_destination_vertex_uris() {
+        Edge includedEdge = edgeBetweenBAndCInSet().iterator().next();
+        Vertex includedEdgeSourceVertex = includedEdge.sourceVertex();
+        Vertex includedEdgeDestinationVertex = includedEdge.destinationVertex();
+        assertFalse(
+                includedEdgeSourceVertex.label().isEmpty()
+        );
+        assertFalse(
+                includedEdgeDestinationVertex.label().isEmpty()
+        );
+        VertexOperator newVertex = vertexFactory.createFromGraphElements(
+                vertexBAndC(),
+                edgeBetweenBAndCInSet()
+        );
+
+        newVertex.addRelationToVertex(vertexA);
+        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        includedEdge = subGraph.vertexWithIdentifier(
+                newVertex.uri()
+        ).getIncludedEdges().values().iterator().next();
+        includedEdgeSourceVertex = includedEdge.sourceVertex();
+        includedEdgeDestinationVertex = includedEdge.destinationVertex();
+        assertTrue(
+                includedEdgeSourceVertex.label().isEmpty()
+        );
+        assertTrue(
+                includedEdgeDestinationVertex.label().isEmpty()
+        );
+    }
+
+    @Test
     public void has_vertices_images() {
         Image image1 = Image.withBase64ForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
