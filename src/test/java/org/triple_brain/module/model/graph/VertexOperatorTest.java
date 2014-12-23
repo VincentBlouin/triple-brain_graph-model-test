@@ -195,7 +195,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         Identification personType = vertexA.addType(
                 modelTestScenarios.personType()
         );
-        Identification computerScientistType = modelTestScenarios.computerScientistType();
+        IdentificationPojo computerScientistType = modelTestScenarios.computerScientistType();
         vertexA.addType(
                 computerScientistType
         );
@@ -358,23 +358,18 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
 
     @Test
     public void deleting_a_vertex_does_not_delete_its_identifications_in_the_graph() {
-        assertFalse(
-                userGraph.haveElementWithId(
-                        Uris.get("http://www.w3.org/People/Berners-Lee/card#i")
-                )
-        );
-        Identification timBernersLee = vertexA.addSameAs(
-                modelTestScenarios.timBernersLee()
-        );
         assertTrue(
                 userGraph.haveElementWithId(
-                        timBernersLee.uri()
+                        vertexB.uri()
                 )
+        );
+        vertexA.addSameAs(
+                vertexB
         );
         vertexA.remove();
         assertTrue(
                 userGraph.haveElementWithId(
-                        timBernersLee.uri()
+                        vertexB.uri()
                 )
         );
     }
@@ -387,8 +382,16 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         vertexB.addSameAs(
                 modelTestScenarios.timBernersLee()
         );
-        assertTrue(vertexA.getSameAs().values().iterator().next().equals(timBernersLee));
-        assertTrue(vertexB.getSameAs().values().iterator().next().equals(timBernersLee));
+        assertTrue(
+                vertexA.getSameAs().containsKey(
+                        timBernersLee.getExternalResourceUri()
+                )
+        );
+        assertTrue(
+                vertexB.getSameAs().containsKey(
+                        timBernersLee.getExternalResourceUri()
+                )
+        );
     }
 
     @Test
@@ -405,13 +408,13 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
     @Test
     public void can_add_generic_identification() {
         assertFalse(vertexA.getGenericIdentifications().containsKey(
-                modelTestScenarios.extraterrestrial().uri()
+                modelTestScenarios.extraterrestrial().getExternalResourceUri()
         ));
         Identification ExtraTerrestrial = vertexA.addGenericIdentification(
                 modelTestScenarios.extraterrestrial()
         );
         assertTrue(vertexA.getGenericIdentifications().containsKey(
-                ExtraTerrestrial.uri()
+                ExtraTerrestrial.getExternalResourceUri()
         ));
     }
 

@@ -23,7 +23,7 @@ public class GsonLearning extends AdaptableGraphComponentTest{
     @Test
     public void can_convert_vertex()throws Exception{
         Gson gson = new Gson();
-        Identification timBernersLeePojo = modelTestScenarios.timBernersLee();
+        IdentificationPojo timBernersLeePojo = modelTestScenarios.timBernersLee();
         vertexB.addSameAs(
                 timBernersLeePojo
         );

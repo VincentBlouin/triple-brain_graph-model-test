@@ -123,8 +123,7 @@ public class EdgeOperatorTest extends AdaptableGraphComponentTest {
     @Test
     public void can_compare_to_friendly_resource() {
         Edge anEdge = vertexA.addVertexAndRelation();
-        FriendlyResource anEdgeAsFriendlyResource = (FriendlyResource) anEdge;
-        assertTrue(anEdge.equals(anEdgeAsFriendlyResource));
+        assertTrue(anEdge.equals(anEdge));
     }
 
     @Test

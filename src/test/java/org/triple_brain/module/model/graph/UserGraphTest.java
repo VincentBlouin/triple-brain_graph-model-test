@@ -420,15 +420,14 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 image1,
                 image2
         );
-        IdentificationPojo addedIdentification = vertexA.addGenericIdentification(
-                modelTestScenarios.computerScientistType()
-        );
-        FriendlyResourceOperator friendlyResourceOperator = friendlyResourceFactory.withUri(
-                addedIdentification.uri()
-        );
-        friendlyResourceOperator.addImages(
+        IdentificationPojo identification =  modelTestScenarios.computerScientistType();
+        identification.setImages(
                 images
         );
+        vertexA.addGenericIdentification(
+                identification
+        );
+
         SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
