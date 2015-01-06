@@ -9,6 +9,8 @@ import org.triple_brain.module.model.UserUris;
 import org.triple_brain.module.model.suggestion.SuggestionPojo;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ModelTestScenarios {
 
@@ -143,5 +145,16 @@ public class ModelTestScenarios {
                 "http://rdf.freebase.com/rdf/time/event",
                 user
         );
+    }
+
+    public Map<URI, SuggestionPojo> suggestionsToMap(SuggestionPojo ... suggestions){
+        Map<URI, SuggestionPojo> suggestionPojoMap = new HashMap<>();
+        for(SuggestionPojo suggestionPojo : suggestions){
+            suggestionPojoMap.put(
+                    suggestionPojo.uri(),
+                    suggestionPojo
+            );
+        }
+        return suggestionPojoMap;
     }
 }

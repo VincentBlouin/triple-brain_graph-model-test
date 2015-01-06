@@ -70,14 +70,11 @@ public class JsonConvertTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_convert_when_having_suggestions() {
-        Set<SuggestionPojo> suggestions = new HashSet<>(
-                Arrays.asList(
+        vertexA.setSuggestions(
+                suggestionsToMap(
                         modelTestScenarios.nameSuggestionFromPersonIdentification(user()),
                         modelTestScenarios.startDateSuggestionFromEventIdentification(user())
                 )
-        );
-        vertexA.setSuggestions(
-                suggestions
         );
         JSONObject vertexAJson = VertexInSubGraphJson.toJson(
                 vertexInWholeConnectedGraph(vertexA)

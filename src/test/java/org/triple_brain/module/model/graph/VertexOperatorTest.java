@@ -161,7 +161,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_add_an_additional_type_to_vertex() throws Exception {
+    public void can_add_an_additional_type_to_vertex(){
         assertTrue(
                 vertexA.getAdditionalTypes().isEmpty()
         );
@@ -174,7 +174,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_add_multiple_additional_types_to_a_vertex() throws Exception {
+    public void can_add_multiple_additional_types_to_a_vertex(){
         assertTrue(
                 vertexA.getAdditionalTypes().isEmpty()
         );
@@ -191,7 +191,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_remove_an_additional_type_to_vertex() throws Exception {
+    public void can_remove_an_additional_type_to_vertex(){
         Identification personType = vertexA.addType(
                 modelTestScenarios.personType()
         );
@@ -216,22 +216,19 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void can_add_suggestions_to_a_vertex() throws Exception {
+    public void can_add_suggestions_to_a_vertex(){
         assertTrue(
                 vertexA.getSuggestions().isEmpty()
         );
-        Set<SuggestionPojo> suggestions = new HashSet<>(
-                Arrays.asList(
+        vertexA.addSuggestions(
+                suggestionsToMap(
                         modelTestScenarios.startDateSuggestionFromEventIdentification(user())
                 )
-        );
-        vertexA.addSuggestions(
-                suggestions
         );
         assertFalse(
                 vertexA.getSuggestions().isEmpty()
         );
-        Suggestion addedSuggestion = vertexA.getSuggestions().iterator().next();
+        Suggestion addedSuggestion = vertexA.getSuggestions().values().iterator().next();
         assertThat(
                 addedSuggestion.label(),
                 is("Start date")
@@ -259,19 +256,15 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
 
     @Test
     @Ignore("to complete")
-    public void can_add_another_origin_to_suggestion() throws Exception {
+    public void can_add_another_origin_to_suggestion(){
         vertexA.addSuggestions(
-                new HashSet<>(
-                        Arrays.asList(
-                                modelTestScenarios.nameSuggestionFromPersonIdentification(user())
-                        )
+                suggestionsToMap(
+                        modelTestScenarios.nameSuggestionFromPersonIdentification(user())
                 )
         );
         vertexA.addSuggestions(
-                new HashSet<>(
-                        Arrays.asList(
-                                modelTestScenarios.nameSuggestionFromSymbolIdentification(user())
-                        )
+                suggestionsToMap(
+                        modelTestScenarios.nameSuggestionFromSymbolIdentification(user())
                 )
         );
     }

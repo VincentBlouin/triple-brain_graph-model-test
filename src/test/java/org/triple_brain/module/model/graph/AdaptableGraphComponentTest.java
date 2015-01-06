@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.triple_brain.module.model.suggestion.SuggestionPojo;
 import org.triple_brain.module.model.test.SubGraphOperator;
 import org.triple_brain.module.model.User;
 import org.triple_brain.module.model.graph.edge.Edge;
@@ -26,6 +27,9 @@ import org.triple_brain.module.model.test.GraphComponentTest;
 import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jModule;
 
 import javax.inject.Inject;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdaptableGraphComponentTest implements GraphComponentTest {
 
@@ -168,17 +172,7 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
         return graphComponentTest.edgeInWholeGraph(edge);
     }
 
-    protected JSONArray verticesAsArray(JSONObject verticesAsObject){
-        JSONArray verticesAsArray = new JSONArray();
-        JSONArray keys = verticesAsObject.names();
-        for(int i = 0; i < keys.length(); i++){
-            try{
-                JSONObject vertex = verticesAsObject.getJSONObject(keys.getString(i));
-                verticesAsArray.put(vertex);
-            }catch(JSONException e){
-                throw new RuntimeException(e);
-            }
-        }
-        return verticesAsArray;
+    public Map<URI, SuggestionPojo> suggestionsToMap(SuggestionPojo ... suggestions){
+        return modelTestScenarios.suggestionsToMap(suggestions);
     }
 }

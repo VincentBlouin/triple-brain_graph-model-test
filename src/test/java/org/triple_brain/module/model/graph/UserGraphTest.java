@@ -175,15 +175,12 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
 
     @Test
     public void vertex_suggestions_have_their_properties_sub_graph() {
-        Set<SuggestionPojo> suggestions = new HashSet<>(
-                Arrays.asList(
+        vertexA.setSuggestions(
+                suggestionsToMap(
                         modelTestScenarios.startDateSuggestionFromEventIdentification(
                                 user()
                         )
                 )
-        );
-        vertexA.setSuggestions(
-                suggestions
         );
         SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
@@ -191,21 +188,17 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
                 vertexA.uri()
         );
-        Suggestion suggestion = vertexAInSubGraph.getSuggestions().iterator().next();
+        Suggestion suggestion = vertexAInSubGraph.getSuggestions().values().iterator().next();
         assertThat(suggestion.label(), is("Start date"));
     }
 
     @Test
     public void suggestions_have_their_own_label() {
-        Set<SuggestionPojo> suggestions = new HashSet<>(
-                Arrays.asList(
+        vertexA.setSuggestions(
+                suggestionsToMap(
                         modelTestScenarios.startDateSuggestionFromEventIdentification(user()),
                         modelTestScenarios.nameSuggestionFromPersonIdentification(user())
                 )
-        );
-        vertexA.setSuggestions(
-                suggestions
-
         );
         SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
@@ -214,7 +207,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 vertexA.uri()
         );
         List<String> labels = new ArrayList<>();
-        for (Suggestion suggestion : vertexAInSubGraph.getSuggestions()) {
+        for (Suggestion suggestion : vertexAInSubGraph.getSuggestions().values()) {
             labels.add(suggestion.label());
         }
         assertTrue(labels.contains("Start date"));
@@ -223,13 +216,10 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
 
     @Test
     public void has_suggestions_origin() {
-        Set<SuggestionPojo> suggestions = new HashSet<>(
-                Arrays.asList(
+        vertexA.setSuggestions(
+                suggestionsToMap(
                         modelTestScenarios.startDateSuggestionFromEventIdentification(user())
                 )
-        );
-        vertexA.setSuggestions(
-                suggestions
         );
         SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
@@ -237,7 +227,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
                 vertexA.uri()
         );
-        Suggestion suggestion = vertexAInSubGraph.getSuggestions().iterator().next();
+        Suggestion suggestion = vertexAInSubGraph.getSuggestions().values().iterator().next();
         SuggestionOrigin origin = suggestion.origins().iterator().next();
         FriendlyResourcePojo identification = new FriendlyResourcePojo(
                 URI.create("http://rdf.freebase.com/rdf/time/event")
@@ -253,11 +243,9 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     @Ignore("to complete")
     public void has_suggestion_multiple_origins() {
         vertexA.setSuggestions(
-                new HashSet<>(
-                        Arrays.asList(
-                                modelTestScenarios.nameSuggestionFromPersonIdentification(user()),
-                                modelTestScenarios.nameSuggestionFromSymbolIdentification(user())
-                        )
+                suggestionsToMap(
+                        modelTestScenarios.nameSuggestionFromPersonIdentification(user()),
+                        modelTestScenarios.nameSuggestionFromSymbolIdentification(user())
                 )
         );
         SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
@@ -266,7 +254,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
                 vertexA.uri()
         );
-        Suggestion suggestionInSubGraph = vertexAInSubGraph.getSuggestions().iterator().next();
+        Suggestion suggestionInSubGraph = vertexAInSubGraph.getSuggestions().values().iterator().next();
         assertThat(
                 suggestionInSubGraph.origins().size(),
                 is(2)
@@ -275,14 +263,11 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_get_multiple_suggestions_in_sub_graph() {
-        Set<SuggestionPojo> suggestions = new HashSet<>(
-                Arrays.asList(
+        vertexA.setSuggestions(
+                suggestionsToMap(
                         modelTestScenarios.startDateSuggestionFromEventIdentification(user()),
                         modelTestScenarios.nameSuggestionFromPersonIdentification(user())
                 )
-        );
-        vertexA.setSuggestions(
-                suggestions
         );
         SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
@@ -420,7 +405,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 image1,
                 image2
         );
-        IdentificationPojo identification =  modelTestScenarios.computerScientistType();
+        IdentificationPojo identification = modelTestScenarios.computerScientistType();
         identification.setImages(
                 images
         );
@@ -643,7 +628,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void vertex_details_are_not_included_in_edge_source_and_destination_vertex(){
+    public void vertex_details_are_not_included_in_edge_source_and_destination_vertex() {
         SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
@@ -682,5 +667,4 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         );
         return edges;
     }
-
 }
