@@ -7,28 +7,25 @@ package org.triple_brain.module.model.graph;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.triple_brain.module.model.suggestion.SuggestionPojo;
-import org.triple_brain.module.model.test.SubGraphOperator;
 import org.triple_brain.module.model.User;
+import org.triple_brain.module.model.WholeGraph;
 import org.triple_brain.module.model.graph.edge.Edge;
 import org.triple_brain.module.model.graph.edge.EdgePojo;
-import org.triple_brain.module.model.test.scenarios.TestScenarios;
 import org.triple_brain.module.model.graph.vertex.Vertex;
 import org.triple_brain.module.model.graph.vertex.VertexInSubGraphPojo;
 import org.triple_brain.module.model.graph.vertex.VertexOperator;
+import org.triple_brain.module.model.suggestion.SuggestionPojo;
 import org.triple_brain.module.model.test.GraphComponentTest;
+import org.triple_brain.module.model.test.SubGraphOperator;
+import org.triple_brain.module.model.test.scenarios.TestScenarios;
 import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jModule;
 
 import javax.inject.Inject;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 
 public class AdaptableGraphComponentTest implements GraphComponentTest {
@@ -51,6 +48,9 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
 
     @Inject
     public ModelTestScenarios modelTestScenarios;
+
+    @Inject
+    WholeGraph wholeGraph;
 
     protected static Injector injector;
 
