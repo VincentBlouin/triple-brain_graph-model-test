@@ -21,7 +21,6 @@ import org.triple_brain.module.model.graph.schema.SchemaPojo;
 import org.triple_brain.module.model.graph.vertex.*;
 import org.triple_brain.module.model.suggestion.Suggestion;
 import org.triple_brain.module.model.suggestion.SuggestionOrigin;
-import org.triple_brain.module.model.suggestion.SuggestionPojo;
 import org.triple_brain.module.model.test.SubGraphOperator;
 
 import javax.inject.Inject;

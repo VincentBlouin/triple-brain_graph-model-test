@@ -6,7 +6,6 @@ package org.triple_brain.module.model.graph;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.graph.edge.Edge;
 import org.triple_brain.module.model.graph.edge.EdgeOperator;
 import org.triple_brain.module.model.graph.vertex.Vertex;

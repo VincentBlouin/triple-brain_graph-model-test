@@ -14,10 +14,8 @@ import org.triple_brain.module.model.graph.vertex.VertexOperator;
 import org.triple_brain.module.model.json.graph.EdgeJson;
 import org.triple_brain.module.model.json.graph.SubGraphJson;
 import org.triple_brain.module.model.json.graph.VertexInSubGraphJson;
-import org.triple_brain.module.model.suggestion.SuggestionPojo;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 

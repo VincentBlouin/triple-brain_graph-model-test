@@ -11,7 +11,6 @@ import org.triple_brain.module.model.graph.edge.EdgeOperator;
 import org.triple_brain.module.model.graph.schema.SchemaOperator;
 import org.triple_brain.module.model.graph.vertex.Vertex;
 import org.triple_brain.module.model.graph.vertex.VertexInSubGraphOperator;
-import org.triple_brain.module.model.graph.vertex.VertexOperator;
 
 import java.util.HashSet;
 import java.util.Iterator;

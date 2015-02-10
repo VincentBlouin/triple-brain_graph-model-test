@@ -6,7 +6,6 @@ package org.triple_brain.module.model.graph;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.triple_brain.module.common_utils.Uris;
 import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.graph.edge.Edge;
 import org.triple_brain.module.model.graph.edge.EdgeOperator;
@@ -18,7 +17,6 @@ import org.triple_brain.module.model.suggestion.SuggestionPojo;
 
 import javax.inject.Inject;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
