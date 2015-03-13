@@ -435,22 +435,36 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     @Test
     public void can_get_circular_graph_with_default_center_vertex() {
         vertexC.addRelationToVertex(vertexA);
-        SubGraph graph = userGraph.graphWithDefaultVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        SubGraph graph = userGraph.graphWithDepthAndCenterVertexId(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                vertexA.uri()
         );
-        assertThat(graph, is(not(nullValue())));
-        Vertex centerVertex = graph.vertexWithIdentifier(vertexA.uri());
-        assertThat(centerVertex.label(), is("vertex A"));
+        assertThat(
+                graph,
+                is(not(nullValue()))
+        );
+        Vertex centerVertex = graph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        assertThat(
+                centerVertex.label(),
+                is("vertex A")
+        );
     }
 
     @Test
     public void can_get_a_limited_graph_with_default_center_vertex() throws Exception {
-        SubGraph subGraph = userGraph.graphWithDefaultVertexAndDepth(2);
+        SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
+                2,
+                vertexA.uri()
+        );
         assertThat(subGraph.numberOfEdges(), is(2));
         assertThat(subGraph.numberOfVertices(), is(3));
         assertTrue(subGraph.containsVertex(vertexA));
 
-        subGraph = userGraph.graphWithDefaultVertexAndDepth(1);
+        subGraph = userGraph.graphWithDepthAndCenterVertexId(
+                1, vertexA.uri()
+        );
         assertThat(subGraph.numberOfEdges(), is(1));
         assertThat(subGraph.numberOfVertices(), is(2));
         assertFalse(subGraph.containsVertex(vertexC));
@@ -516,7 +530,10 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
 
     @Test
     public void with_a_depth_of_sub_vertices_of_zero_only_central_vertex_is_returned() {
-        SubGraph subGraph = userGraph.graphWithDefaultVertexAndDepth(0);
+        SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
+                0,
+                vertexA.uri()
+        );
         assertThat(subGraph.numberOfVertices(), is(1));
         assertThat(subGraph.numberOfEdges(), is(0));
         assertTrue(subGraph.containsVertex(vertexA));
@@ -532,7 +549,10 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     @Test
     public void an_exception_is_thrown_when_getting_graph_with_default_center_vertex_with_negative_depth() {
         try {
-            userGraph.graphWithDefaultVertexAndDepth(-1);
+            userGraph.graphWithDepthAndCenterVertexId(
+                    -1,
+                    vertexA.uri()
+            );
             fail();
         } catch (InvalidDepthOfSubVerticesException e) {
             assertThat(e.getMessage(), is("Invalid depth of sub vertices. Depth was:-1 and center vertex uri was:" + vertexA.uri()));
