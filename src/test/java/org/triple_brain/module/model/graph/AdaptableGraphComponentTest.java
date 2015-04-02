@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.triple_brain.module.model.ModelModule;
 import org.triple_brain.module.model.User;
 import org.triple_brain.module.model.WholeGraph;
 import org.triple_brain.module.model.graph.edge.Edge;
@@ -61,6 +62,7 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     public static void realBeforeClass() {
         injector = Guice.createInjector(
                 Neo4jModule.forTestingUsingEmbedded(),
+                new ModelModule(),
                 new AbstractModule() {
                     @Override
                     protected void configure() {
