@@ -39,7 +39,8 @@ public class JsTestScenariosBuilder {
             new MergeBubbleGraphScenario(),
             new ThreeBubblesGraphScenario(),
             new GraphWithAnInverseRelationScenario(),
-            new GraphWithSimilarRelationsScenario()
+            new GraphWithSimilarRelationsScenario(),
+            new OneBubbleHavingSuggestionsGraphScenario()
     );
 
     UserGraph userGraph;

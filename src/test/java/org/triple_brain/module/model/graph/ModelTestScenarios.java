@@ -4,9 +4,8 @@
 
 package org.triple_brain.module.model.graph;
 
-import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.User;
-import org.triple_brain.module.model.UserUris;
+import org.triple_brain.module.model.suggestion.Suggestion;
 import org.triple_brain.module.model.suggestion.SuggestionPojo;
 
 import java.net.URI;
@@ -127,7 +126,7 @@ public class ModelTestScenarios {
                         URI.create("http://rdf.freebase.com/rdf/type/text"),
                         "Text"
                 ),
-                "http://xmlns.com/foaf/0.1/Person",
+                Suggestion.SUGGESTION_IDENTIFICATION_PREFIX + "http://xmlns.com/foaf/0.1/Person",
                 user
         );
     }
@@ -143,7 +142,7 @@ public class ModelTestScenarios {
                         URI.create("http://rdf.freebase.com/rdf/type/text"),
                         "Text"
                 ),
-                symbolUri,
+                Suggestion.SUGGESTION_IDENTIFICATION_PREFIX + symbolUri,
                 user
         );
     }
@@ -158,7 +157,27 @@ public class ModelTestScenarios {
                         URI.create("http://rdf.freebase.com/rdf/type/datetime"),
                         "Date"
                 ),
-                "http://rdf.freebase.com/rdf/time/event",
+                Suggestion.SUGGESTION_IDENTIFICATION_PREFIX + "http://rdf.freebase.com/rdf/time/event",
+                user
+        );
+    }
+
+    public SuggestionPojo peopleInvolvedSuggestionFromEventIdentification(User user) {
+        FriendlyResourcePojo sameAs = new FriendlyResourcePojo(
+                URI.create("http://rdf.freebase.com/rdf/people/person"),
+                "Person"
+        );
+        sameAs.setComment(
+                "A person is a human being (man, woman or child) known to have actually existed. Living persons, celebrities and politicians are persons, as are deceased persons.\n\nNote: A person topic is distinct from a user in Metaweb. Users have profiles that can only be edited by the users themselves. A person topic can be edited by anyone and is intended as a factual representation of details about a person.\n\nFor more information, please see the Freebase wiki page on person."
+        );
+        return SuggestionPojo.forSameAsTypeAndOrigin(
+                new FriendlyResourcePojo(
+                        URI.create("http://rdf.freebase.com/rdf/time/event/people_involved"),
+                        "People involved"
+                ),
+                sameAs,
+                Suggestion.SUGGESTION_IDENTIFICATION_PREFIX +
+                        "http://rdf.freebase.com/rdf/time/event",
                 user
         );
     }
