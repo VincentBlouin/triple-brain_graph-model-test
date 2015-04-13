@@ -5,10 +5,7 @@
 package js_test_data;
 import com.google.common.collect.Sets;
 import com.google.inject.Injector;
-import js_test_data.scenarios.DeepGraphScenario;
-import js_test_data.scenarios.GraphWithAnInverseRelationScenario;
-import js_test_data.scenarios.MergeBubbleGraphScenario;
-import js_test_data.scenarios.ThreeBubblesGraphScenario;
+import js_test_data.scenarios.*;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.jettison.json.JSONObject;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -41,7 +38,8 @@ public class JsTestScenariosBuilder {
             new DeepGraphScenario(),
             new MergeBubbleGraphScenario(),
             new ThreeBubblesGraphScenario(),
-            new GraphWithAnInverseRelationScenario()
+            new GraphWithAnInverseRelationScenario(),
+            new GraphWithSimilarRelationsScenario()
     );
 
     UserGraph userGraph;

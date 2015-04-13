@@ -4,6 +4,7 @@
 
 package org.triple_brain.module.model.graph;
 
+import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.User;
 import org.triple_brain.module.model.UserUris;
 import org.triple_brain.module.model.suggestion.SuggestionPojo;
@@ -57,12 +58,27 @@ public class ModelTestScenarios {
                 ));
     }
 
+    public IdentificationPojo possessionIdentification() {
+        FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
+                "Possession"
+        );
+        friendlyResourcePojo.setComment(
+                "In law, possession is the control a person intentionally exercises toward a thing. In all cases, to possess something, a person must have an intention to possess it. A person may be in possession of some property. Like ownership, the possession of things is commonly regulated by states under property law."
+        );
+        return new IdentificationPojo(
+                URI.create(
+                        "http://rdf.freebase.com/rdf/m/0613q"
+                ),
+                friendlyResourcePojo
+        );
+    }
+
     public IdentificationPojo timBernersLeeInFreebase() {
         return new IdentificationPojo(
                 URI.create(
                         "http://rdf.freebase.com/rdf/en/tim_berners-lee"
                 ),
-                new FriendlyResourcePojo(                        
+                new FriendlyResourcePojo(
                         "Tim Berners-Lee"
                 )
         );
@@ -147,9 +163,9 @@ public class ModelTestScenarios {
         );
     }
 
-    public Map<URI, SuggestionPojo> suggestionsToMap(SuggestionPojo ... suggestions){
+    public Map<URI, SuggestionPojo> suggestionsToMap(SuggestionPojo... suggestions) {
         Map<URI, SuggestionPojo> suggestionPojoMap = new HashMap<>();
-        for(SuggestionPojo suggestionPojo : suggestions){
+        for (SuggestionPojo suggestionPojo : suggestions) {
             suggestionPojoMap.put(
                     suggestionPojo.uri(),
                     suggestionPojo
