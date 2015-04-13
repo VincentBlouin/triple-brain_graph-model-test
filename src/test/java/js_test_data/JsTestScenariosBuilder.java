@@ -40,7 +40,8 @@ public class JsTestScenariosBuilder {
             new ThreeBubblesGraphScenario(),
             new GraphWithAnInverseRelationScenario(),
             new GraphWithSimilarRelationsScenario(),
-            new OneBubbleHavingSuggestionsGraphScenario()
+            new OneBubbleHavingSuggestionsGraphScenario(),
+            new KaraokeSchemaGraphScenario()
     );
 
     UserGraph userGraph;
