@@ -131,6 +131,21 @@ public class ModelTestScenarios {
         );
     }
 
+    public IdentificationPojo tShirt() {
+        FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
+                "T-shirt"
+        );
+        friendlyResourcePojo.setComment(
+                "A T-shirt is a style of fabric shirt, named after the T shape of the body and sleeves."
+        );
+        return new IdentificationPojo(
+                URI.create(
+                        "http://rdf.freebase.com/rdf/m/013s93"
+                ),
+                friendlyResourcePojo
+        );
+    }
+
     public SuggestionPojo nameSuggestionFromPersonIdentification(User user) {
         return SuggestionPojo.forSameAsTypeAndOrigin(
                 new FriendlyResourcePojo(
