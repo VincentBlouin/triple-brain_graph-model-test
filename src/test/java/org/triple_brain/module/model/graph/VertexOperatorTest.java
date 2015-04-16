@@ -550,6 +550,25 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
     }
 
     @Test
+    public void can_remove_a_vertex_having_no_relations() {
+        VertexOperator vertexWithNoRelations = vertexFactory.createForOwnerUsername(
+                user().username()
+        );
+        URI vertexWithNoRelationsUri = vertexWithNoRelations.uri();
+        assertTrue(
+                userGraph.haveElementWithId(
+                        vertexWithNoRelationsUri
+                )
+        );
+        vertexWithNoRelations.remove();
+        assertFalse(
+                userGraph.haveElementWithId(
+                        vertexWithNoRelationsUri
+                )
+        );
+    }
+
+    @Test
     public void removing_a_vertex_removes_its_delete_edges_from_included_graph_elements_as_well() {
         Vertex newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
