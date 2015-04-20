@@ -14,28 +14,6 @@ import java.util.Map;
 
 public class ModelTestScenarios {
 
-    public IdentificationPojo impact(){
-        return new IdentificationPojo(
-                URI.create(
-                        "http://xmlns.com/foaf/0.1/Person"
-                ),
-                new FriendlyResourcePojo(
-                        "Impact"
-                )
-        );
-    }
-
-    public IdentificationPojo impactOnSociety(){
-        return new IdentificationPojo(
-                URI.create(
-                        "   "
-                ),
-                new FriendlyResourcePojo(
-                        "Impact On Society"
-                )
-        );
-    }
-
     public IdentificationPojo personType() {
         return new IdentificationPojo(
                 URI.create(
