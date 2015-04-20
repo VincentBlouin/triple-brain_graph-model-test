@@ -97,7 +97,7 @@ public class JsonConvertTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_convert_subgraph_to_and_from() {
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 10
         );
         JSONObject subGraphJson = SubGraphJson.toJson(
@@ -114,7 +114,7 @@ public class JsonConvertTest extends AdaptableGraphComponentTest {
 
     @Test
     public void subgraph_vertices_are_a_json_object_with_uri_as_key()throws Exception{
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 10
         );
         JSONObject subGraphJson = SubGraphJson.toJson(

@@ -44,7 +44,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_get_graph_with_default_center_vertex() {
-        SubGraph graph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraph graph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         assertThat(graph, is(not(nullValue())));
@@ -69,7 +69,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     public void correct_edges_are_in_graph() {
         Edge betweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         Edge betweenBAndC = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         assertThat(
@@ -87,7 +87,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     @Test
     public void source_and_destination_vertex_are_in_edges() {
         Edge betweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         Edge betweenAAndBFromSubGraph = subGraph.edgeWithIdentifier(
@@ -110,7 +110,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         );
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
@@ -126,7 +126,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         vertexA.addSameAs(
                 modelTestScenarios.computerScientistType()
         );
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
@@ -142,7 +142,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         vertexA.addType(
                 modelTestScenarios.personType()
         );
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
@@ -163,7 +163,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         vertexA.addGenericIdentification(
                 modelTestScenarios.timBernersLee()
         );
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
@@ -181,7 +181,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                         )
                 )
         );
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
@@ -199,7 +199,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                         modelTestScenarios.nameSuggestionFromPersonIdentification(user())
                 )
         );
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
@@ -220,7 +220,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                         modelTestScenarios.startDateSuggestionFromEventIdentification(user())
                 )
         );
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
@@ -247,7 +247,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                         modelTestScenarios.nameSuggestionFromSymbolIdentification(user())
                 )
         );
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
@@ -268,7 +268,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                         modelTestScenarios.nameSuggestionFromPersonIdentification(user())
                 )
         );
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
@@ -287,7 +287,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 edgeBetweenBAndCInSet()
         );
         newVertex.addRelationToVertex(vertexA);
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         VertexInSubGraph compositeVertexInSubGraph = subGraph.vertexWithIdentifier(
@@ -310,7 +310,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 edgeBetweenBAndCInSet()
         );
         newVertex.addRelationToVertex(vertexA);
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         Edge edge = subGraph.vertexWithIdentifier(
@@ -341,7 +341,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
         );
 
         newVertex.addRelationToVertex(vertexA);
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         includedEdge = subGraph.vertexWithIdentifier(
@@ -372,7 +372,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 image2
         );
         vertexA.addImages(images);
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
@@ -412,7 +412,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 identification
         );
 
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
@@ -648,7 +648,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
 
     @Test
     public void vertex_details_are_not_included_in_edge_source_and_destination_vertex() {
-        SubGraphPojo subGraph = userGraph.graphWithDefaultVertexAndDepth(
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
         Vertex sourceVertexInEdge = subGraph.edges().values().iterator().next().sourceVertex();
@@ -665,7 +665,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
 
     @Override
     public VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
-        return (VertexInSubGraphPojo) userGraph.graphWithDefaultVertexAndDepth(
+        return (VertexInSubGraphPojo) userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         ).vertexWithIdentifier(vertex.uri());
     }

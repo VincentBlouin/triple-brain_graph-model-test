@@ -162,7 +162,7 @@
 //
 //    @Override
 //    public SubGraph wholeGraphAroundDefaultCenterVertex(){
-//        return userGraph.graphWithDefaultVertexAndDepth(
+//        return userGraph.graphWithAnyVertexAndDepth(
 //                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
 //        );
 //    }
