@@ -610,6 +610,24 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
+    public void schemas_have_their_identifications() {
+        SchemaOperator schemaOperator = userGraph.schemaOperatorWithUri(
+                userGraph.createSchema().uri()
+        );
+        IdentificationPojo createdComputerScientistType = schemaOperator.addType(
+                modelTestScenarios.computerScientistType()
+        );
+        SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
+                schemaOperator.uri()
+        );
+        IdentificationPojo identificationPojo = schemaPojo.getIdentifications().values().iterator().next();
+        assertThat(
+                identificationPojo,
+                is(createdComputerScientistType)
+        );
+    }
+
+    @Test
     public void schema_contains_its_properties() {
         SchemaOperator schemaOperator = userGraph.schemaOperatorWithUri(
                 userGraph.createSchema().uri()
@@ -643,7 +661,6 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 identificationPojo,
                 is(createdComputerScientistType)
         );
-
     }
 
     @Test
