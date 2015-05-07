@@ -5,6 +5,7 @@
 package org.triple_brain.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.triple_brain.module.model.FriendlyResource;
 import org.triple_brain.module.model.FriendlyResourceFactory;
@@ -160,5 +161,11 @@ public class FriendlyResourceTest extends AdaptableGraphComponentTest {
         assertThat(
                 images.size(), is(1)
         );
+    }
+
+    @Test
+    @Ignore("the thinking over this functionality isn't over")
+    public void can_get_uris_that_identify_to_resource(){
+
     }
 }
