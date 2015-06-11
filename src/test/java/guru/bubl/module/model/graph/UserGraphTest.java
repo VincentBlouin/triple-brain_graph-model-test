@@ -2,26 +2,27 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package org.triple_brain.module.model.graph;
+package guru.bubl.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
+import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
+import guru.bubl.module.model.graph.exceptions.NonExistingResourceException;
+import guru.bubl.module.model.graph.schema.Schema;
+import guru.bubl.module.model.graph.schema.SchemaOperator;
+import guru.bubl.module.model.graph.schema.SchemaPojo;
+import guru.bubl.module.model.graph.vertex.*;
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.core.Is;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.triple_brain.module.common_utils.Uris;
-import org.triple_brain.module.model.FriendlyResource;
-import org.triple_brain.module.model.FriendlyResourceFactory;
-import org.triple_brain.module.model.Image;
-import org.triple_brain.module.model.graph.edge.Edge;
-import org.triple_brain.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
-import org.triple_brain.module.model.graph.exceptions.NonExistingResourceException;
-import org.triple_brain.module.model.graph.schema.Schema;
-import org.triple_brain.module.model.graph.schema.SchemaOperator;
-import org.triple_brain.module.model.graph.schema.SchemaPojo;
-import org.triple_brain.module.model.graph.vertex.*;
-import org.triple_brain.module.model.suggestion.Suggestion;
-import org.triple_brain.module.model.suggestion.SuggestionOrigin;
-import org.triple_brain.module.model.test.SubGraphOperator;
+import guru.bubl.module.common_utils.Uris;
+import guru.bubl.module.model.FriendlyResource;
+import guru.bubl.module.model.FriendlyResourceFactory;
+import guru.bubl.module.model.Image;
+import guru.bubl.module.model.suggestion.Suggestion;
+import guru.bubl.module.model.suggestion.SuggestionOrigin;
+import guru.bubl.module.model.test.SubGraphOperator;
 
 import javax.inject.Inject;
 import java.net.URI;
@@ -555,7 +556,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
             );
             fail();
         } catch (InvalidDepthOfSubVerticesException e) {
-            assertThat(e.getMessage(), is("Invalid depth of sub vertices. Depth was:-1 and center vertex uri was:" + vertexA.uri()));
+            assertThat(e.getMessage(), Is.is("Invalid depth of sub vertices. Depth was:-1 and center vertex uri was:" + vertexA.uri()));
         }
     }
 
@@ -565,7 +566,7 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
             userGraph.graphWithDepthAndCenterVertexId(-1, vertexB.uri());
             fail();
         } catch (InvalidDepthOfSubVerticesException e) {
-            assertThat(e.getMessage(), is("Invalid depth of sub vertices. Depth was:-1 and center vertex uri was:" + vertexB.uri()));
+            assertThat(e.getMessage(), Is.is("Invalid depth of sub vertices. Depth was:-1 and center vertex uri was:" + vertexB.uri()));
         }
     }
 

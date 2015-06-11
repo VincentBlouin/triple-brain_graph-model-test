@@ -9,15 +9,34 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.triple_brain</groupId>
+        <groupId>guru.bubl</groupId>
         <artifactId>parent-pom</artifactId>
         <version>1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.triple_brain.test</groupId>
+    <groupId>guru.bubl.test</groupId>
     <artifactId>graph_model-test</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License (GPL)</name>
+            <url>http://www.gnu.org/licenses/gpl.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>vblouin</id>
+            <name>Vincent Blouin</name>
+            <email>vincent.blouin@gmail.com</email>
+            <timezone>-5</timezone>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
 
     <build>
         <plugins>
@@ -36,39 +55,33 @@
         </plugins>
     </build>
 
-
     <dependencies>
-
         <dependency>
-            <groupId>org.triple_brain.module</groupId>
-            <artifactId>triple_brain-neo4j-graph-manipulator</artifactId>
+            <groupId>guru.bubl.module</groupId>
+            <artifactId>neo4j-graph-manipulator</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
-
         <dependency>
-            <groupId>org.triple_brain.module</groupId>
-            <artifactId>triple_brain-model</artifactId>
+            <groupId>guru.bubl.module</groupId>
+            <artifactId>model</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
-
         <dependency>
-            <groupId>org.triple_brain.module</groupId>
-            <artifactId>triple_brain-neo4j-graph-manipulator</artifactId>
+            <groupId>guru.bubl.module</groupId>
+            <artifactId>neo4j-graph-manipulator</artifactId>
             <version>1.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-kernel</artifactId>
             <scope>test</scope>
             <version>${neo4j.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-kernel</artifactId>
@@ -76,21 +89,18 @@
             <scope>test</scope>
             <version>${neo4j.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-cypher</artifactId>
             <scope>test</scope>
             <version>${neo4j.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-lucene-index</artifactId>
             <scope>test</scope>
             <version>${neo4j.version}</version>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -110,5 +120,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

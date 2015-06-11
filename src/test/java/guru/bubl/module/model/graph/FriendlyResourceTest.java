@@ -2,14 +2,14 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package org.triple_brain.module.model.graph;
+package guru.bubl.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.triple_brain.module.model.FriendlyResource;
-import org.triple_brain.module.model.FriendlyResourceFactory;
-import org.triple_brain.module.model.Image;
+import guru.bubl.module.model.FriendlyResource;
+import guru.bubl.module.model.FriendlyResourceFactory;
+import guru.bubl.module.model.Image;
 
 import javax.inject.Inject;
 import java.net.URI;

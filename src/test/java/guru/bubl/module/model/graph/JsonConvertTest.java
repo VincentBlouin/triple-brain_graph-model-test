@@ -2,18 +2,18 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package org.triple_brain.module.model.graph;
+package guru.bubl.module.model.graph;
 
+import guru.bubl.module.model.graph.edge.Edge;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Test;
-import org.triple_brain.module.model.graph.edge.Edge;
-import org.triple_brain.module.model.graph.vertex.Vertex;
-import org.triple_brain.module.model.graph.vertex.VertexFactory;
-import org.triple_brain.module.model.graph.vertex.VertexInSubGraphPojo;
-import org.triple_brain.module.model.graph.vertex.VertexOperator;
-import org.triple_brain.module.model.json.graph.EdgeJson;
-import org.triple_brain.module.model.json.graph.SubGraphJson;
-import org.triple_brain.module.model.json.graph.VertexInSubGraphJson;
+import guru.bubl.module.model.graph.vertex.Vertex;
+import guru.bubl.module.model.graph.vertex.VertexFactory;
+import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
+import guru.bubl.module.model.graph.vertex.VertexOperator;
+import guru.bubl.module.model.json.graph.EdgeJson;
+import guru.bubl.module.model.json.graph.SubGraphJson;
+import guru.bubl.module.model.json.graph.VertexInSubGraphJson;
 
 import javax.inject.Inject;
 import java.util.HashSet;

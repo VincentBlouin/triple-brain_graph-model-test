@@ -2,11 +2,11 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package org.triple_brain.module.model.graph;
+package guru.bubl.module.model.graph;
 
-import org.triple_brain.module.model.User;
-import org.triple_brain.module.model.suggestion.Suggestion;
-import org.triple_brain.module.model.suggestion.SuggestionPojo;
+import guru.bubl.module.model.User;
+import guru.bubl.module.model.suggestion.Suggestion;
+import guru.bubl.module.model.suggestion.SuggestionPojo;
 
 import java.net.URI;
 import java.util.HashMap;

@@ -2,7 +2,7 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package org.triple_brain.module.model.graph;
+package guru.bubl.module.model.graph;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -11,19 +11,19 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.triple_brain.module.model.ModelModule;
-import org.triple_brain.module.model.User;
-import org.triple_brain.module.model.WholeGraph;
-import org.triple_brain.module.model.graph.edge.Edge;
-import org.triple_brain.module.model.graph.edge.EdgePojo;
-import org.triple_brain.module.model.graph.vertex.Vertex;
-import org.triple_brain.module.model.graph.vertex.VertexInSubGraphPojo;
-import org.triple_brain.module.model.graph.vertex.VertexOperator;
-import org.triple_brain.module.model.suggestion.SuggestionPojo;
-import org.triple_brain.module.model.test.GraphComponentTest;
-import org.triple_brain.module.model.test.SubGraphOperator;
-import org.triple_brain.module.model.test.scenarios.TestScenarios;
-import org.triple_brain.module.neo4j_graph_manipulator.graph.Neo4jModule;
+import guru.bubl.module.model.ModelModule;
+import guru.bubl.module.model.User;
+import guru.bubl.module.model.WholeGraph;
+import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.edge.EdgePojo;
+import guru.bubl.module.model.graph.vertex.Vertex;
+import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
+import guru.bubl.module.model.graph.vertex.VertexOperator;
+import guru.bubl.module.model.suggestion.SuggestionPojo;
+import guru.bubl.module.model.test.GraphComponentTest;
+import guru.bubl.module.model.test.SubGraphOperator;
+import guru.bubl.module.model.test.scenarios.TestScenarios;
+import guru.bubl.module.neo4j_graph_manipulator.graph.Neo4jModule;
 
 import javax.inject.Inject;
 import java.net.URI;

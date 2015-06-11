@@ -2,18 +2,19 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package org.triple_brain.module.model.graph;
+package guru.bubl.module.model.graph;
 
+import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.vertex.Vertex;
+import guru.bubl.module.model.graph.vertex.VertexFactory;
+import guru.bubl.module.model.graph.vertex.VertexOperator;
+import org.hamcrest.core.Is;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.triple_brain.module.model.FriendlyResource;
-import org.triple_brain.module.model.graph.edge.Edge;
-import org.triple_brain.module.model.graph.edge.EdgeOperator;
-import org.triple_brain.module.model.graph.vertex.Vertex;
-import org.triple_brain.module.model.graph.vertex.VertexFactory;
-import org.triple_brain.module.model.graph.vertex.VertexOperator;
-import org.triple_brain.module.model.suggestion.Suggestion;
-import org.triple_brain.module.model.suggestion.SuggestionPojo;
+import guru.bubl.module.model.FriendlyResource;
+import guru.bubl.module.model.suggestion.Suggestion;
+import guru.bubl.module.model.suggestion.SuggestionPojo;
 
 import javax.inject.Inject;
 import java.net.URI;
@@ -300,7 +301,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         Identification identification = edge.getSameAs().values().iterator().next();
         assertThat(
                 identification.getExternalResourceUri(),
-                is(nameSuggestion.getSameAs().uri())
+                Is.is(nameSuggestion.getSameAs().uri())
         );
     }
 

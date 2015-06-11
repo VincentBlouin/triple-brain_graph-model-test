@@ -2,14 +2,14 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package org.triple_brain.module.model.graph;
+package guru.bubl.module.model.graph;
 
+import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.vertex.Vertex;
+import guru.bubl.module.model.graph.vertex.VertexOperator;
 import org.junit.Assert;
 import org.junit.Test;
-import org.triple_brain.module.model.graph.edge.Edge;
-import org.triple_brain.module.model.graph.edge.EdgeOperator;
-import org.triple_brain.module.model.graph.vertex.Vertex;
-import org.triple_brain.module.model.graph.vertex.VertexOperator;
 
 import java.net.URI;
 

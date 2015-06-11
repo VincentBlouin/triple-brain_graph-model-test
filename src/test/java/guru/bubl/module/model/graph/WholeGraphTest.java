@@ -2,15 +2,15 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package org.triple_brain.module.model.graph;
+package guru.bubl.module.model.graph;
 
 import com.google.inject.Inject;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.schema.SchemaOperator;
+import guru.bubl.module.model.graph.vertex.Vertex;
+import guru.bubl.module.model.graph.vertex.VertexInSubGraphOperator;
 import org.junit.Test;
-import org.triple_brain.module.model.WholeGraph;
-import org.triple_brain.module.model.graph.edge.EdgeOperator;
-import org.triple_brain.module.model.graph.schema.SchemaOperator;
-import org.triple_brain.module.model.graph.vertex.Vertex;
-import org.triple_brain.module.model.graph.vertex.VertexInSubGraphOperator;
+import guru.bubl.module.model.WholeGraph;
 
 import java.util.HashSet;
 import java.util.Iterator;

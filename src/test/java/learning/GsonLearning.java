@@ -5,12 +5,13 @@
 package learning;
 
 import com.google.gson.Gson;
+import guru.bubl.module.model.graph.AdaptableGraphComponentTest;
+import guru.bubl.module.model.graph.IdentificationPojo;
+import guru.bubl.module.model.graph.SubGraph;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Test;
-import org.triple_brain.module.model.FriendlyResource;
-import org.triple_brain.module.model.graph.*;
-import org.triple_brain.module.model.graph.vertex.VertexInSubGraphPojo;
+import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +20,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-public class GsonLearning extends AdaptableGraphComponentTest{
+public class GsonLearning extends AdaptableGraphComponentTest {
     @Test
     public void can_convert_vertex()throws Exception{
         Gson gson = new Gson();
