@@ -99,6 +99,21 @@ public class WholeGraphTest extends AdaptableGraphComponentTest {
         );
     }
 
+    @Test
+    public void can_get_all_graph_elements(){
+        createSchema().addProperty();
+        int nbGraphElements = 0;
+        Iterator<GraphElementOperator> graphElementIterator = wholeGraph.getAllGraphElements();
+        while (graphElementIterator.hasNext()) {
+            nbGraphElements++;
+            graphElementIterator.next();
+        }
+        assertThat(
+                nbGraphElements,
+                is(8)
+        );
+    }
+
     private SchemaOperator createSchema() {
         return userGraph.schemaOperatorWithUri(
                 userGraph.createSchema().uri()
