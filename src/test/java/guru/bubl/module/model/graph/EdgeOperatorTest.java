@@ -104,7 +104,7 @@ public class EdgeOperatorTest extends AdaptableGraphComponentTest {
     @Test
     public void can_add_same_as() {
         EdgeOperator newEdge = vertexA.addVertexAndRelation();
-        Assert.assertTrue(newEdge.getSameAs().isEmpty());
+        assertTrue(newEdge.getSameAs().isEmpty());
         newEdge.addSameAs(
                 modelTestScenarios.creatorPredicate()
         );

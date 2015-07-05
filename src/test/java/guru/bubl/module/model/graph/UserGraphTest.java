@@ -107,6 +107,39 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
     }
 
     @Test
+    public void elements_with_no_identifications_dont_have_identifications() {
+        vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        Vertex vertexBInSubgraph = subGraph.vertices().get(vertexB.uri());
+        assertTrue(
+                vertexBInSubgraph.getIdentifications().isEmpty()
+        );
+    }
+
+    @Test
+    public void elements_with_no_included_vertices_dont_have_included_vertices() {
+        VertexOperator newVertex = vertexFactory.createFromGraphElements(
+                vertexBAndC(),
+                edgeBetweenBAndCInSet()
+        );
+        newVertex.addRelationToVertex(vertexA);
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterVertexId(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                newVertex.uri()
+        );
+        VertexInSubGraph vertexAInSubgraph = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        assertTrue(
+                vertexAInSubgraph.getIncludedVertices().isEmpty()
+        );
+    }
+
+    @Test
     public void has_generic_identifications() {
         vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
@@ -287,9 +320,9 @@ public class UserGraphTest extends AdaptableGraphComponentTest {
                 vertexBAndC(),
                 edgeBetweenBAndCInSet()
         );
-        newVertex.addRelationToVertex(vertexA);
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterVertexId(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                newVertex.uri()
         );
         VertexInSubGraph compositeVertexInSubGraph = subGraph.vertexWithIdentifier(
                 newVertex.uri()

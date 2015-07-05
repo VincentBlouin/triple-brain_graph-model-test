@@ -4,8 +4,11 @@
 
 package guru.bubl.module.model.graph;
 
+import guru.bubl.module.model.graph.vertex.Vertex;
+import org.junit.Assert;
 import org.junit.Test;
 import guru.bubl.module.model.Image;
+import org.parboiled.common.StringUtils;
 
 import java.net.URI;
 import java.util.HashSet;
@@ -150,9 +153,8 @@ public class GraphElementOperatorTest extends AdaptableGraphComponentTest {
         IdentificationPojo identification = vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         );
-        assertThat(
-                identification.images(),
-                is(nullValue())
+        assertTrue(
+                identification.images().isEmpty()
         );
         Set<Image> images = new HashSet<>();
         images.add(Image.withBase64ForSmallAndUriForBigger(
@@ -166,16 +168,42 @@ public class GraphElementOperatorTest extends AdaptableGraphComponentTest {
         IdentificationPojo sameIdentification = vertexA.addGenericIdentification(
                 identification
         );
-        assertThat(sameIdentification.images().size(), is(1));
+        assertThat(sameIdentification.images().size(), is(0));
+    }
+
+    @Test
+    public void identifications_can_have_images(){
+        IdentificationPojo computerScientist = vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        assertTrue(
+                computerScientist.images().isEmpty()
+        );
+        Set<Image> images = new HashSet<>();
+        images.add(Image.withBase64ForSmallAndUriForBigger(
+                "dummy base 64",
+                URI.create("/big_image")
+        ));
+        IdentificationPojo person = modelTestScenarios.person();
+        person.setImages(
+                images
+        );
+        person = vertexA.addGenericIdentification(
+                person
+        );
+        assertFalse(
+                person.images().isEmpty()
+        );
     }
     @Test
     public void adding_existing_identification_returns_existing_description(){
         IdentificationPojo identification = vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         );
-        assertThat(
-                identification.comment(),
-                is(nullValue())
+        assertTrue(
+                StringUtils.isEmpty(
+                        identification.comment()
+                )
         );
         identification = modelTestScenarios.computerScientistType();
         identification.setComment(
@@ -184,7 +212,7 @@ public class GraphElementOperatorTest extends AdaptableGraphComponentTest {
         IdentificationPojo sameIdentification = vertexA.addGenericIdentification(
                 identification
         );
-        assertFalse(sameIdentification.comment().isEmpty());
+        assertTrue(sameIdentification.comment().isEmpty());
     }
 
     @Test
@@ -199,6 +227,19 @@ public class GraphElementOperatorTest extends AdaptableGraphComponentTest {
         vertexA.removeIdentification(identification);
         assertFalse(
                 vertexA.getIdentifications().containsValue(identification)
+        );
+    }
+
+    @Test
+    public void identifications_do_not_apply_for_all_elements(){
+        vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        assertFalse(
+                vertexA.getIdentifications().isEmpty()
+        );
+        assertTrue(
+                vertexB.getIdentifications().isEmpty()
         );
     }
 

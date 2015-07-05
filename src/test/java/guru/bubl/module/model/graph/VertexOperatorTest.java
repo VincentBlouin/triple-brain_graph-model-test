@@ -207,10 +207,12 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
                 vertexA.getAdditionalTypes().size(),
                 is(1)
         );
-        FriendlyResource remainingType = vertexA.getAdditionalTypes().values().iterator().next();
+        Identification remainingType = vertexA.getAdditionalTypes().values().iterator().next();
         assertThat(
-                remainingType.label(),
-                is(computerScientistType.label())
+                remainingType.getExternalResourceUri(),
+                is(
+                        computerScientistType.getExternalResourceUri()
+                )
         );
     }
 
@@ -393,8 +395,13 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         newVertex.label("Tim Berners Lee");
         assertTrue(newVertex.getSameAs().isEmpty());
         newVertex.addSameAs(modelTestScenarios.timBernersLee());
-        FriendlyResource sameAs = newVertex.getSameAs().values().iterator().next();
-        assertThat(sameAs.label(), is(modelTestScenarios.timBernersLee().label()));
+        Identification sameAs = newVertex.getSameAs().values().iterator().next();
+        assertThat(
+                sameAs.getExternalResourceUri(),
+                is(
+                        modelTestScenarios.timBernersLee().getExternalResourceUri()
+                )
+        );
     }
 
     @Test
