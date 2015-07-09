@@ -159,10 +159,6 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
         graphComponentTest.removeWholeGraph();
     }
 
-    @Override
-    public boolean graphContainsLabel(String label) {
-        return graphComponentTest.graphContainsLabel(label);
-    }
 
     @Override
     public VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {

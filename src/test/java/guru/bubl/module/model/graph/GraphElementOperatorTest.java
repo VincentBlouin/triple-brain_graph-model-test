@@ -4,10 +4,8 @@
 
 package guru.bubl.module.model.graph;
 
-import guru.bubl.module.model.graph.vertex.Vertex;
-import org.junit.Assert;
-import org.junit.Test;
 import guru.bubl.module.model.Image;
+import org.junit.Test;
 import org.parboiled.common.StringUtils;
 
 import java.net.URI;
@@ -16,7 +14,6 @@ import java.util.Set;
 
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 
 public class GraphElementOperatorTest extends AdaptableGraphComponentTest {

@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.vertex.Vertex;
+import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphOperator;
 import org.junit.Test;
 import guru.bubl.module.model.WholeGraph;
@@ -26,11 +27,10 @@ public class WholeGraphTest extends AdaptableGraphComponentTest {
 
     @Test
     public void there_are_no_duplicates_in_vertices() {
-        assertTrue(wholeGraph.getAllVertices().hasNext());
+        assertFalse(wholeGraph.getAllVertices().isEmpty());
         Set<Vertex> visitedVertices = new HashSet<Vertex>();
-        Iterator<VertexInSubGraphOperator> vertexIterator = wholeGraph.getAllVertices();
-        while (vertexIterator.hasNext()) {
-            Vertex vertex = vertexIterator.next();
+        Set<VertexInSubGraphOperator> vertices = wholeGraph.getAllVertices();
+        for(VertexInSubGraph vertex: vertices) {
             if (visitedVertices.contains(vertex)) {
                 fail();
             }
@@ -40,14 +40,8 @@ public class WholeGraphTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_get_all_vertices() {
-        int nbVertices = 0;
-        Iterator<VertexInSubGraphOperator> vertexIterator = wholeGraph.getAllVertices();
-        while (vertexIterator.hasNext()) {
-            nbVertices++;
-            vertexIterator.next();
-        }
         assertThat(
-                nbVertices,
+                wholeGraph.getAllVertices().size(),
                 is(4)
         );
     }
@@ -55,28 +49,16 @@ public class WholeGraphTest extends AdaptableGraphComponentTest {
     @Test
     public void schemas_are_not_included_in_vertices() {
         createSchema();
-        int nbVertices = 0;
-        Iterator<VertexInSubGraphOperator> vertexIterator = wholeGraph.getAllVertices();
-        while (vertexIterator.hasNext()) {
-            nbVertices++;
-            vertexIterator.next();
-        }
         assertThat(
-                nbVertices,
+                wholeGraph.getAllVertices().size(),
                 is(4)
         );
     }
 
     @Test
     public void can_get_edges() {
-        int nbEdges = 0;
-        Iterator<EdgeOperator> edgeIterator = wholeGraph.getAllEdges();
-        while (edgeIterator.hasNext()) {
-            nbEdges++;
-            edgeIterator.next();
-        }
         assertThat(
-                nbEdges,
+                wholeGraph.getAllEdges().size(),
                 is(2)
         );
     }

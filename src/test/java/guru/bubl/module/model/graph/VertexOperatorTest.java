@@ -60,7 +60,9 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
 
     @Test
     public void can_check_if_vertex_has_edge() {
-        EdgeOperator edge = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        EdgeOperator edge = vertexA.getEdgeThatLinksToDestinationVertex(
+                vertexB
+        );
         assertTrue(
                 vertexA.hasEdge(
                         edge
