@@ -131,7 +131,10 @@ public class EdgeOperatorTest extends AdaptableGraphComponentTest {
         assertThat(betweenAAndB.sourceVertex(), is((Vertex) vertexA));
         assertThat(betweenAAndB.destinationVertex(), is((Vertex) vertexB));
         betweenAAndB.inverse();
-        assertThat(betweenAAndB.sourceVertex(), is((Vertex) vertexB));
+        assertThat(
+                betweenAAndB.sourceVertex().uri(),
+                is(vertexB.uri())
+        );
         assertThat(betweenAAndB.destinationVertex(), is((Vertex) vertexA));
     }
 }

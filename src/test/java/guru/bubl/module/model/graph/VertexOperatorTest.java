@@ -33,7 +33,7 @@ import static org.junit.Assert.*;
 public class VertexOperatorTest extends AdaptableGraphComponentTest {
 
     @Inject
-    protected VertexFactory vertexFactory;
+    VertexFactory vertexFactory;
 
     @Test
     public void can_update_label() {
@@ -113,6 +113,14 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
 
         Integer updatedNumberOfEdgesAndVertices = numberOfEdgesAndVertices();
         assertThat(updatedNumberOfEdgesAndVertices, is(numberOfEdgesAndVertices - 3));
+    }
+
+    @Test
+    public void can_get_number_of_connected_edges() {
+        assertThat(
+                vertexB().getNumberOfConnectedEdges(),
+                is(2)
+        );
     }
 
     @Test
@@ -548,7 +556,9 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
                 newVertex.getIncludedEdges().size(),
                 is(1)
         );
-        vertexB.getEdgeThatLinksToDestinationVertex(vertexC).remove();
+        vertexB.getEdgeThatLinksToDestinationVertex(
+                vertexC
+        ).remove();
         assertThat(
                 newVertex.getIncludedVertices().size(),
                 is(2)
@@ -626,14 +636,6 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         );
         assertTrue(vertexB.getIncludedVertices().isEmpty());
         assertTrue(vertexB.getIncludedEdges().isEmpty());
-    }
-
-    @Test
-    public void can_get_number_of_connected_edges() {
-        assertThat(
-                vertexB().getNumberOfConnectedEdges(),
-                is(2)
-        );
     }
 
     @Test

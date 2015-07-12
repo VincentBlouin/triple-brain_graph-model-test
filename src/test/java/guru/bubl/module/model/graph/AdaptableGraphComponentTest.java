@@ -7,6 +7,7 @@ package guru.bubl.module.model.graph;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import guru.bubl.module.model.graph.vertex.VertexFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

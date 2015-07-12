@@ -69,14 +69,8 @@ public class WholeGraphTest extends AdaptableGraphComponentTest {
         createSchema();
         createSchema();
         createSchema();
-        int nbSchemas = 0;
-        Iterator<SchemaOperator> schemaIterator = wholeGraph.getAllSchemas();
-        while (schemaIterator.hasNext()) {
-            nbSchemas++;
-            schemaIterator.next();
-        }
         assertThat(
-                nbSchemas,
+                wholeGraph.getAllSchemas().size(),
                 is(4)
         );
     }
@@ -84,14 +78,8 @@ public class WholeGraphTest extends AdaptableGraphComponentTest {
     @Test
     public void can_get_all_graph_elements(){
         createSchema().addProperty();
-        int nbGraphElements = 0;
-        Iterator<GraphElementOperator> graphElementIterator = wholeGraph.getAllGraphElements();
-        while (graphElementIterator.hasNext()) {
-            nbGraphElements++;
-            graphElementIterator.next();
-        }
         assertThat(
-                nbGraphElements,
+                wholeGraph.getAllGraphElements().size(),
                 is(8)
         );
     }
