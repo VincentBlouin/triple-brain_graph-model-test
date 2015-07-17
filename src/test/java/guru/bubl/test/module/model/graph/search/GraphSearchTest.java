@@ -2,20 +2,20 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package guru.bubl.module.model.graph.search;
+package guru.bubl.test.module.model.graph.search;
 
 import com.google.common.collect.Sets;
 import guru.bubl.module.model.Image;
 import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
-import guru.bubl.module.utils.ModelTestScenarios;
+import guru.bubl.test.module.utils.ModelTestScenarios;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.search.EdgeSearchResult;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.search.PropertySearchResult;
 import guru.bubl.module.model.search.VertexSearchResult;
-import guru.bubl.module.utils.search.Neo4jSearchRelatedTest;
+import guru.bubl.test.module.utils.search.Neo4jSearchRelatedTest;
 import org.junit.Test;
 
 import java.net.URI;

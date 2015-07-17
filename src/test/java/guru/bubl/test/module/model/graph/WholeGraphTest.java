@@ -2,10 +2,10 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package guru.bubl.module.model.graph;
+package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.schema.SchemaOperator;
-import guru.bubl.module.utils.ModelTestResources;
+import guru.bubl.test.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphOperator;

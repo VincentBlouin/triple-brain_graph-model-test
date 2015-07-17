@@ -2,16 +2,17 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package guru.bubl.module.model.graph;
+package guru.bubl.test.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
+import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
 import guru.bubl.module.model.graph.exceptions.NonExistingResourceException;
 import guru.bubl.module.model.graph.schema.Schema;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.schema.SchemaPojo;
-import guru.bubl.module.utils.ModelTestResources;
+import guru.bubl.test.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.*;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.Is;

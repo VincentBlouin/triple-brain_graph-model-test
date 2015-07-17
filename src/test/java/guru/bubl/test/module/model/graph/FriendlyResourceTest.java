@@ -2,10 +2,11 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package guru.bubl.module.model.graph;
+package guru.bubl.test.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
-import guru.bubl.module.utils.ModelTestResources;
+import guru.bubl.module.model.graph.FriendlyResourcePojo;
+import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.Image;

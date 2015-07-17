@@ -2,10 +2,13 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package guru.bubl.module.model.graph;
+package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.Image;
-import guru.bubl.module.utils.ModelTestResources;
+import guru.bubl.module.model.graph.FriendlyResourcePojo;
+import guru.bubl.module.model.graph.GraphElementOperator;
+import guru.bubl.module.model.graph.IdentificationPojo;
+import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 import org.parboiled.common.StringUtils;
 

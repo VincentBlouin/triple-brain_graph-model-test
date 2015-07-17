@@ -2,7 +2,7 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package guru.bubl.module.utils;
+package guru.bubl.test.module.utils;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;

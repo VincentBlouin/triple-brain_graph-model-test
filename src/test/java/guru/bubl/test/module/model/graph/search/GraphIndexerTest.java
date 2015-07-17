@@ -2,9 +2,9 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package guru.bubl.module.model.graph.search;
+package guru.bubl.test.module.model.graph.search;
 
-import guru.bubl.module.utils.search.Neo4jSearchRelatedTest;
+import guru.bubl.test.module.utils.search.Neo4jSearchRelatedTest;
 import org.junit.Ignore;
 
 @Ignore
