@@ -4,14 +4,24 @@
 
 package guru.bubl.test.module.model.graph;
 
+import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.User;
+import guru.bubl.module.model.graph.GraphElement;
 import guru.bubl.module.model.graph.Identification;
+import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.search.GraphElementSearchResult;
+import guru.bubl.module.model.search.VertexSearchResult;
 import guru.bubl.test.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
+import guru.bubl.test.module.utils.ModelTestScenarios;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Set;
+
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class IdentifiedToTest extends ModelTestResources {
@@ -19,7 +29,7 @@ public class IdentifiedToTest extends ModelTestResources {
     User someUser;
 
     @Before
-    public void beforeRelatedIdentificationTest(){
+    public void beforeRelatedIdentificationTest() {
         someUser = User.withEmailAndUsername("a", "b");
     }
 
@@ -38,10 +48,11 @@ public class IdentifiedToTest extends ModelTestResources {
                 modelTestScenarios.tShirt()
         );
         assertTrue(
-                identifiedTo.getForIdentificationAndUser(
-                        modelTestScenarios.tShirt(),
-                        someUser
-                ).contains(
+                searchResultsHaveResource(
+                        identifiedTo.getForIdentificationAndUser(
+                                modelTestScenarios.tShirt(),
+                                someUser
+                        ),
                         aVertexRepresentingATshirt
                 )
         );
@@ -68,18 +79,20 @@ public class IdentifiedToTest extends ModelTestResources {
                 modelTestScenarios.tShirt()
         );
         assertTrue(
-                identifiedTo.getForIdentificationAndUser(
-                        modelTestScenarios.tShirt(),
-                        someUser
-                ).contains(
+                searchResultsHaveResource(
+                        identifiedTo.getForIdentificationAndUser(
+                                modelTestScenarios.tShirt(),
+                                someUser
+                        ),
                         aVertexRepresentingATshirt
                 )
         );
         assertTrue(
-                identifiedTo.getForIdentificationAndUser(
-                        modelTestScenarios.tShirt(),
-                        someUser
-                ).contains(
+                searchResultsHaveResource(
+                        identifiedTo.getForIdentificationAndUser(
+                                modelTestScenarios.tShirt(),
+                                someUser
+                        ),
                         anotherVertexRepresentingATshirt
                 )
         );
@@ -143,23 +156,29 @@ public class IdentifiedToTest extends ModelTestResources {
         );
         User otherUser = User.withEmailAndUsername("c", "d");
         VertexOperator otherUserResource = testScenarios.createAVertex(
-                        otherUser
-                );
+                otherUser
+        );
 
         otherUserResource.addType(
                 modelTestScenarios.tShirt()
         );
         assertTrue(
-                identifiedTo.getForIdentificationAndUser(
-                        modelTestScenarios.tShirt(),
-                        someUser
-                ).contains(user1Resource)
+                searchResultsHaveResource(
+                        identifiedTo.getForIdentificationAndUser(
+                                modelTestScenarios.tShirt(),
+                                someUser
+                        ),
+                        user1Resource
+                )
         );
         assertFalse(
-                identifiedTo.getForIdentificationAndUser(
-                        modelTestScenarios.tShirt(),
-                        someUser
-                ).contains(otherUserResource)
+                searchResultsHaveResource(
+                        identifiedTo.getForIdentificationAndUser(
+                                modelTestScenarios.tShirt(),
+                                someUser
+                        ),
+                        otherUserResource
+                )
         );
     }
 
@@ -182,11 +201,52 @@ public class IdentifiedToTest extends ModelTestResources {
         otherUserResource.removeIdentification(
                 otherUserIdentification
         );
-        assertTrue(
+        searchResultsHaveResource(
                 identifiedTo.getForIdentificationAndUser(
                         modelTestScenarios.tShirt(),
                         someUser
-                ).contains(user1Resource)
+                ),
+                user1Resource
         );
+    }
+
+    @Test
+    public void includes_the_surrounding_edges_of_a_vertex_related_to_the_identification(){
+        VertexOperator vertex = testScenarios.createAVertex(
+                someUser
+        );
+        vertex.addGenericIdentification(
+                new ModelTestScenarios().event()
+        );
+        VertexSearchResult searchResult = (VertexSearchResult) identifiedTo.getForIdentificationAndUser(
+                new ModelTestScenarios().event(),
+                someUser
+        ).iterator().next();
+        assertTrue(
+                searchResult.getProperties().isEmpty()
+        );
+        EdgeOperator newEdge = vertex.addVertexAndRelation();
+        searchResult = (VertexSearchResult) identifiedTo.getForIdentificationAndUser(
+                new ModelTestScenarios().event(),
+                someUser
+        ).iterator().next();
+        assertFalse(
+                searchResult.getProperties().isEmpty()
+        );
+        assertTrue(
+                searchResult.getProperties().containsValue(
+                        newEdge
+                )
+        );
+    }
+
+
+    public Boolean searchResultsHaveResource(Set<GraphElementSearchResult> searchResults, FriendlyResource resource) {
+        for (GraphElementSearchResult searchResult : searchResults) {
+            if (searchResult.getGraphElement().equals(resource)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
