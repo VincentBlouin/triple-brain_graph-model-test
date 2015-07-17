@@ -11,6 +11,7 @@ import guru.bubl.module.model.graph.exceptions.NonExistingResourceException;
 import guru.bubl.module.model.graph.schema.Schema;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.schema.SchemaPojo;
+import guru.bubl.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.*;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.Is;
@@ -34,7 +35,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 
-public class UserGraphTest extends AdaptableGraphComponentTest {
+public class UserGraphTest extends ModelTestResources {
     public static final int DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES = 10;
 
     @Inject

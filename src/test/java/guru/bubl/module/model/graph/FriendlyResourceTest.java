@@ -5,13 +5,11 @@
 package guru.bubl.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
-import org.junit.Ignore;
+import guru.bubl.module.utils.ModelTestResources;
 import org.junit.Test;
 import guru.bubl.module.model.FriendlyResource;
-import guru.bubl.module.model.FriendlyResourceFactory;
 import guru.bubl.module.model.Image;
 
-import javax.inject.Inject;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashSet;
@@ -23,10 +21,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-public class FriendlyResourceTest extends AdaptableGraphComponentTest {
-
-    @Inject
-    FriendlyResourceFactory friendlyResourceFactory;
+public class FriendlyResourceTest extends ModelTestResources {
 
     @Test
     public void an_exception_is_thrown_when_creating_with_empty_uri() {
@@ -163,9 +158,9 @@ public class FriendlyResourceTest extends AdaptableGraphComponentTest {
         );
     }
 
-    @Test
-    @Ignore("the thinking over this functionality isn't over")
-    public void can_get_uris_that_identify_to_resource(){
-
-    }
+//    @Test
+//    @Ignore("the thinking over this functionality isn't over")
+//    public void can_get_uris_that_identify_to_resource(){
+//
+//    }
 }

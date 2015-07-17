@@ -4,23 +4,16 @@
 
 package guru.bubl.module.model.graph;
 
-import guru.bubl.module.model.IdentifiedTo;
 import guru.bubl.module.model.User;
+import guru.bubl.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import javax.inject.Inject;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-@Ignore
-public class IdentifiedToTest extends AdaptableGraphComponentTest {
-
-    @Inject
-    IdentifiedTo identifiedTo;
+public class IdentifiedToTest extends ModelTestResources {
 
     User someUser;
 

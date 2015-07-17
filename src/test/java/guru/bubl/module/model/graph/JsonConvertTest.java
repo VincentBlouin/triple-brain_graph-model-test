@@ -5,17 +5,16 @@
 package guru.bubl.module.model.graph;
 
 import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.utils.ModelTestResources;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Test;
 import guru.bubl.module.model.graph.vertex.Vertex;
-import guru.bubl.module.model.graph.vertex.VertexFactory;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.json.graph.EdgeJson;
 import guru.bubl.module.model.json.graph.SubGraphJson;
 import guru.bubl.module.model.json.graph.VertexInSubGraphJson;
 
-import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,10 +22,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class JsonConvertTest extends AdaptableGraphComponentTest {
-
-    @Inject
-    protected VertexFactory vertexFactory;
+public class JsonConvertTest extends ModelTestResources {
 
     @Test
     public void can_convert_vertex_to_and_from() {

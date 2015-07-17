@@ -5,6 +5,7 @@
 package guru.bubl.module.model.graph;
 
 import guru.bubl.module.model.graph.schema.SchemaOperator;
+import guru.bubl.module.utils.ModelTestResources;
 import org.junit.Test;
 
 import java.net.URI;
@@ -14,7 +15,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.*;
 
-public class SchemaOperatorTest extends AdaptableGraphComponentTest {
+public class SchemaOperatorTest extends ModelTestResources {
 
     @Test
     public void can_add_property() {

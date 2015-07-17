@@ -4,26 +4,20 @@
 
 package guru.bubl.module.model.graph;
 
-import com.google.inject.Inject;
-import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
+import guru.bubl.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphOperator;
 import org.junit.Test;
-import guru.bubl.module.model.WholeGraph;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
-public class WholeGraphTest extends AdaptableGraphComponentTest {
-
-    @Inject
-    WholeGraph wholeGraph;
+public class WholeGraphTest extends ModelTestResources {
 
     @Test
     public void there_are_no_duplicates_in_vertices() {

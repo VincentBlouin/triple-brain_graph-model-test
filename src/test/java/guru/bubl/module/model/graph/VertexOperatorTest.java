@@ -6,6 +6,7 @@ package guru.bubl.module.model.graph;
 
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
@@ -30,7 +31,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 
 
-public class VertexOperatorTest extends AdaptableGraphComponentTest {
+public class VertexOperatorTest extends ModelTestResources {
 
     @Inject
     VertexFactory vertexFactory;
@@ -46,14 +47,14 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
     @Test
     public void can_update_comment() {
         assertThat(
-                vertexA().comment(),
+                vertexA.comment(),
                 is("")
         );
-        vertexA().comment(
+        vertexA.comment(
                 "Its vertex a !"
         );
         assertThat(
-                vertexA().comment(),
+                vertexA.comment(),
                 is("Its vertex a !")
         );
     }
@@ -118,7 +119,7 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
     @Test
     public void can_get_number_of_connected_edges() {
         assertThat(
-                vertexB().getNumberOfConnectedEdges(),
+                vertexB.getNumberOfConnectedEdges(),
                 is(2)
         );
     }
@@ -666,11 +667,11 @@ public class VertexOperatorTest extends AdaptableGraphComponentTest {
         int numberOfEdgesForVertexC = vertexC.getNumberOfConnectedEdges();
         vertexC.addRelationToVertex(vertexA);
         assertThat(
-                vertexA().getNumberOfConnectedEdges(),
+                vertexA.getNumberOfConnectedEdges(),
                 is(numberOfEdgesForVertexA + 1)
         );
         assertThat(
-                vertexC().getNumberOfConnectedEdges(),
+                vertexC.getNumberOfConnectedEdges(),
                 is(numberOfEdgesForVertexC + 1)
         );
     }

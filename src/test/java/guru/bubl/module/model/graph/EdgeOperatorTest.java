@@ -6,9 +6,9 @@ package guru.bubl.module.model.graph;
 
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.net.URI;
@@ -20,7 +20,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
-public class EdgeOperatorTest extends AdaptableGraphComponentTest {
+public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void can_add_relation() {

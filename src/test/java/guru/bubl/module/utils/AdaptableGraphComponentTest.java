@@ -2,19 +2,21 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package guru.bubl.module.model.graph;
+package guru.bubl.module.utils;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import guru.bubl.module.model.*;
+import guru.bubl.module.model.graph.GraphFactory;
+import guru.bubl.module.model.graph.SubGraphPojo;
+import guru.bubl.module.model.graph.UserGraph;
+import guru.bubl.module.utils.ModelTestScenarios;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import guru.bubl.module.model.ModelModule;
-import guru.bubl.module.model.User;
-import guru.bubl.module.model.WholeGraph;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgePojo;
 import guru.bubl.module.model.graph.vertex.Vertex;
@@ -40,6 +42,15 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     protected VertexOperator vertexOfAnotherUser;
 
     @Inject
+    IdentifiedTo identifiedTo;
+
+    @Inject
+    FriendlyResourceFactory friendlyResourceFactory;
+
+    @Inject
+    protected VertexFactory vertexFactory;
+
+    @Inject
     protected TestScenarios testScenarios;
 
     @Inject
@@ -54,7 +65,7 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     @Inject
     WholeGraph wholeGraph;
 
-    protected static Injector injector;
+    public static Injector injector;
 
 
     public void beforeClass(){}

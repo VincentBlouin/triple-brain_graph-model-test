@@ -5,7 +5,7 @@
 package learning;
 
 import com.google.gson.Gson;
-import guru.bubl.module.model.graph.AdaptableGraphComponentTest;
+import guru.bubl.module.utils.AdaptableGraphComponentTest;
 import guru.bubl.module.model.graph.IdentificationPojo;
 import guru.bubl.module.model.graph.SubGraph;
 import org.codehaus.jettison.json.JSONArray;

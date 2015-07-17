@@ -5,6 +5,7 @@
 package guru.bubl.module.model.graph;
 
 import guru.bubl.module.model.Image;
+import guru.bubl.module.utils.ModelTestResources;
 import org.junit.Test;
 import org.parboiled.common.StringUtils;
 
@@ -16,7 +17,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
-public class GraphElementOperatorTest extends AdaptableGraphComponentTest {
+public class GraphElementOperatorTest extends ModelTestResources {
 
     @Test
     public void cannot_identify_to_self() {
