@@ -483,6 +483,34 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+    public void making_a_vertex_public_makes_all_its_edges_public_where_the_other_end_vertex_is_also_public(){
+        vertexA.makePublic();
+        vertexC.makePrivate();
+        vertexB.makePrivate();
+        assertFalse(
+                vertexB.getEdgeThatLinksToDestinationVertex(
+                        vertexA
+                ).isPublic()
+        );
+        assertFalse(
+                vertexB.getEdgeThatLinksToDestinationVertex(
+                        vertexC
+                ).isPublic()
+        );
+        vertexB.makePublic();
+        assertTrue(
+                vertexB.getEdgeThatLinksToDestinationVertex(
+                        vertexA
+                ).isPublic()
+        );
+        assertFalse(
+                vertexB.getEdgeThatLinksToDestinationVertex(
+                        vertexC
+                ).isPublic()
+        );
+    }
+
+    @Test
     public void can_check_equality() {
         assertTrue(vertexA.equals(vertexA));
         assertFalse(vertexA.equals(vertexB));
