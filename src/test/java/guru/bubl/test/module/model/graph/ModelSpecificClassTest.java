@@ -14,7 +14,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        IdentifiedToTest.class
+        EdgeOperatorTest.class
 })
-public class ModelSpecificClassTest extends ModelTestRunner {
-}
+public class ModelSpecificClassTest extends ModelTestRunner {}

@@ -137,4 +137,31 @@ public class EdgeOperatorTest extends ModelTestResources {
         );
         assertThat(betweenAAndB.destinationVertex(), is((Vertex) vertexA));
     }
+
+    @Test
+    public void an_edge_is_private_at_creation_if_both_end_vertices_are_private(){
+        Edge edge = vertexA.addVertexAndRelation();
+        assertFalse(
+                edge.isPublic()
+        );
+    }
+
+    @Test
+    public void an_edge_is_private_at_creation_if_one_of_the_end_vertices_is_private(){
+        vertexA.makePublic();
+        Edge edge = vertexA.addVertexAndRelation();
+        assertFalse(
+                edge.isPublic()
+        );
+    }
+
+    @Test
+    public void an_edge_is_public_at_creation_if_both_end_vertices_are_public(){
+        vertexA.makePublic();
+        vertexC.makePublic();
+        Edge edge = vertexA.addRelationToVertex(vertexC);
+        assertTrue(
+                edge.isPublic()
+        );
+    }
 }
