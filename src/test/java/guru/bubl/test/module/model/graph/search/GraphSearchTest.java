@@ -778,6 +778,30 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
+    public void includes_private_edges_if_owner(){
+        vertexB.makePublic();
+        vertexA.makePublic();
+        vertexC.makePublic();
+        Map<URI, GraphElementPojo> relations = graphSearch.searchSchemasOwnVerticesAndPublicOnesForAutoCompletionByLabel(
+                "vertex Bareau",
+                user
+        ).iterator().next().getProperties();
+        assertThat(
+                relations.size(),
+                is(2)
+        );
+        vertexC.makePrivate();
+        relations = graphSearch.searchSchemasOwnVerticesAndPublicOnesForAutoCompletionByLabel(
+                "vertex Bareau",
+                user
+        ).iterator().next().getProperties();
+        assertThat(
+                relations.size(),
+                is(2)
+        );
+    }
+
+    @Test
     public void has_number_of_references_to_an_identification() {
 
     }
