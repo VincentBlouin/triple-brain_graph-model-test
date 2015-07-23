@@ -756,6 +756,28 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
+    public void does_not_include_private_edges_of_another_user(){
+        vertexB.makePublic();
+        vertexA.makePublic();
+        vertexC.makePublic();
+        Map<URI, GraphElementPojo> relations = graphSearch.searchPublicVerticesOnly(
+                "vertex Bareau"
+        ).iterator().next().getProperties();
+        assertThat(
+                relations.size(),
+                is(2)
+        );
+        vertexC.makePrivate();
+        relations = graphSearch.searchPublicVerticesOnly(
+                "vertex Bareau"
+        ).iterator().next().getProperties();
+        assertThat(
+                relations.size(),
+                is(1)
+        );
+    }
+
+    @Test
     public void has_number_of_references_to_an_identification() {
 
     }
