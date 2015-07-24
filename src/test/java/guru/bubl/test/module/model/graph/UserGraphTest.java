@@ -142,6 +142,19 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+    public void schemas_with_no_identifications_dont_have_identifications() {
+        vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
+                userGraph.createSchema().uri()
+        );
+        assertTrue(
+                schemaPojo.getIdentifications().isEmpty()
+        );
+    }
+
+    @Test
     public void has_generic_identifications() {
         vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
