@@ -7,6 +7,7 @@ package guru.bubl.test.module.model.graph;
 import com.google.common.collect.ImmutableSet;
 import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
 import guru.bubl.module.model.graph.exceptions.NonExistingResourceException;
 import guru.bubl.module.model.graph.schema.Schema;
@@ -726,6 +727,32 @@ public class UserGraphTest extends ModelTestResources {
         assertThat(
                 destinationVertexInEdge.label(),
                 is(CoreMatchers.nullValue())
+        );
+    }
+
+    @Test
+    public void changing_edge_source_vertex_reflects_in_getting_subgraph() {
+        EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterVertexId(
+                1,
+                vertexB.uri()
+        );
+        assertThat(
+                subGraph.edgeWithIdentifier(
+                        edge.uri()
+                ).sourceVertex(),
+                is(vertexB)
+        );
+        edge.changeSourceVertex(vertexA);
+        subGraph = userGraph.graphWithDepthAndCenterVertexId(
+                1,
+                vertexA.uri()
+        );
+        assertThat(
+                subGraph.edgeWithIdentifier(
+                        edge.uri()
+                ).sourceVertex(),
+                is(vertexA)
         );
     }
 

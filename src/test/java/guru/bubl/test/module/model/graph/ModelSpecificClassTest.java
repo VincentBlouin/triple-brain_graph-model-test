@@ -5,6 +5,7 @@
 package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.IdentifiedTo;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.test.module.model.graph.search.GraphSearchTest;
 import guru.bubl.test.module.utils.ModelTestRunner;
 import org.junit.Ignore;
@@ -14,6 +15,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        GraphSearchTest.class
+        EdgeOperatorTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}

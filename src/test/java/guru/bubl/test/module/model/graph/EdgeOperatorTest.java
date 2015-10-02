@@ -164,4 +164,46 @@ public class EdgeOperatorTest extends ModelTestResources {
                 edge.isPublic()
         );
     }
+
+    @Test
+    public void can_change_source_vertex(){
+        EdgeOperator edge = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        assertThat(
+                edge.sourceVertex(),
+                is(vertexA)
+        );
+        edge.changeSourceVertex(vertexB);
+        assertThat(
+                edge.sourceVertex(),
+                is(vertexB)
+        );
+    }
+
+    @Test
+    public void changing_source_vertex_increments_number_of_connected_vertices_for_new_source_vertex(){
+        EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
+        assertThat(
+                vertexA.getNumberOfConnectedEdges(),
+                is(1)
+        );
+        edge.changeSourceVertex(vertexA);
+        assertThat(
+                vertexA.getNumberOfConnectedEdges(),
+                is(2)
+        );
+    }
+
+    @Test
+    public void changing_source_vertex_decrements_number_of_connected_vertices_for_previous_source_vertex(){
+        EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
+        assertThat(
+                vertexB.getNumberOfConnectedEdges(),
+                is(2)
+        );
+        edge.changeSourceVertex(vertexA);
+        assertThat(
+                vertexB.getNumberOfConnectedEdges(),
+                is(1)
+        );
+    }
 }
