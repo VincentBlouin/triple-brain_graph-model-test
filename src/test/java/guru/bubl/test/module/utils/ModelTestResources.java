@@ -7,6 +7,9 @@ package guru.bubl.test.module.utils;
 import guru.bubl.module.model.FriendlyResourceFactory;
 import guru.bubl.module.model.IdentifiedTo;
 import guru.bubl.module.model.User;
+import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
+import guru.bubl.module.model.center_graph_element.CenterGraphElementOperatorFactory;
+import guru.bubl.module.model.center_graph_element.CenterGraphElementsOperatorFactory;
 import guru.bubl.module.model.graph.GraphFactory;
 import guru.bubl.module.model.graph.SubGraphPojo;
 import guru.bubl.module.model.graph.UserGraph;
@@ -37,6 +40,12 @@ import java.sql.Connection;
 import java.util.Map;
 
 public class ModelTestResources {
+
+    @Inject
+    public CenterGraphElementOperatorFactory centerGraphElementOperatorFactory;
+
+    @Inject
+    public CenterGraphElementsOperatorFactory centerGraphElementsOperatorFactory;
 
     @Inject
     public IdentifiedTo identifiedTo;
