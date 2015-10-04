@@ -2,7 +2,7 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package guru.bubl.test.module.model.graph;
+package guru.bubl.test.module.model;
 
 import com.googlecode.junittoolbox.WildcardPatternSuite;
 import guru.bubl.test.module.utils.ModelTestRunner;
