@@ -26,7 +26,7 @@ public class CenterGraphElementOperatorTest extends ModelTestResources{
         ).get().iterator().next();
         assertThat(
                 centerGraphElement.getNumberOfVisits(),
-                is(1)
+                is(2)
         );
         centerGraphElementOperator.incrementNumberOfVisits();
         centerGraphElement = centerGraphElementsOperatorFactory.forUser(
@@ -34,7 +34,7 @@ public class CenterGraphElementOperatorTest extends ModelTestResources{
         ).get().iterator().next();
         assertThat(
                 centerGraphElement.getNumberOfVisits(),
-                is(2)
+                is(3)
         );
     }
 }
