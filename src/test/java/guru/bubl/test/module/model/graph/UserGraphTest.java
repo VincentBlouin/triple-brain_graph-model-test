@@ -5,6 +5,8 @@
 package guru.bubl.test.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
+import guru.bubl.module.model.center_graph_element.CenterGraphElement;
+import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
 import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
