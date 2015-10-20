@@ -4,15 +4,14 @@
 
 package guru.bubl.test.module.utils;
 
+import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.FriendlyResourceFactory;
 import guru.bubl.module.model.IdentifiedTo;
 import guru.bubl.module.model.User;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperatorFactory;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementsOperatorFactory;
-import guru.bubl.module.model.graph.GraphFactory;
-import guru.bubl.module.model.graph.SubGraphPojo;
-import guru.bubl.module.model.graph.UserGraph;
+import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeFactory;
 import guru.bubl.module.model.graph.edge.EdgePojo;
@@ -182,5 +181,12 @@ public class ModelTestResources {
 
     protected int numberOfEdges() {
         return wholeGraph.getAllEdges().size();
+    }
+
+    protected IdentificationPojo identificationFromFriendlyResource(FriendlyResourceOperator resource){
+        return new IdentificationPojo(
+                resource.uri(),
+                new FriendlyResourcePojo(resource)
+        );
     }
 }

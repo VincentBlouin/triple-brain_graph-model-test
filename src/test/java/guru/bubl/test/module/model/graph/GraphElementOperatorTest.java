@@ -27,19 +27,29 @@ public class GraphElementOperatorTest extends ModelTestResources {
         String errorMessage = "identification cannot be the same";
         GraphElementOperator vertexAGraphElement = vertexA;
         try {
-            vertexAGraphElement.addGenericIdentification(vertexA);
+            vertexAGraphElement.addGenericIdentification(
+                    identificationFromFriendlyResource(
+                            vertexA
+                    )
+            );
             fail();
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), is(errorMessage));
         }
         try {
-            vertexAGraphElement.addSameAs(vertexA);
+            vertexAGraphElement.addSameAs(
+                    identificationFromFriendlyResource(
+                            vertexA
+                    )
+            );
             fail();
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), is(errorMessage));
         }
         try {
-            vertexAGraphElement.addType(vertexA);
+            vertexAGraphElement.addType(identificationFromFriendlyResource(
+                    vertexA
+            ));
             fail();
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), is(errorMessage));
@@ -106,7 +116,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void adding_identification_returns_identification_created_fields(){
+    public void adding_identification_returns_identification_created_fields() {
         IdentificationPojo identification = vertexA.addSameAs(
                 modelTestScenarios.timBernersLee()
         );
@@ -119,7 +129,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void users_identification_have_their_own_uri_for_same_identification(){
+    public void users_identification_have_their_own_uri_for_same_identification() {
         IdentificationPojo identificationOfAnotherUser = vertexOfAnotherUser.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         );
@@ -139,7 +149,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void uri_of_identification_does_not_change_if_added_twice(){
+    public void uri_of_identification_does_not_change_if_added_twice() {
         IdentificationPojo identification = vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         );
@@ -150,7 +160,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void adding_existing_identification_keeps_existing_images(){
+    public void adding_existing_identification_keeps_existing_images() {
         IdentificationPojo identification = vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         );
@@ -173,7 +183,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void identifications_can_have_images(){
+    public void identifications_can_have_images() {
         IdentificationPojo computerScientist = vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         );
@@ -196,8 +206,9 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 person.images().isEmpty()
         );
     }
+
     @Test
-    public void adding_existing_identification_returns_existing_description(){
+    public void adding_existing_identification_returns_existing_description() {
         IdentificationPojo identification = vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         );
@@ -217,7 +228,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void can_remove_identification_having_no_external_uri(){
+    public void can_remove_identification_having_no_external_uri() {
         IdentificationPojo identification = vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         );
@@ -232,7 +243,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void identifications_do_not_apply_for_all_elements(){
+    public void identifications_do_not_apply_for_all_elements() {
         vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         );

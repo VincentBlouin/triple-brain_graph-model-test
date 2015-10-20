@@ -174,7 +174,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void can_add_an_additional_type_to_vertex(){
+    public void can_add_an_additional_type_to_vertex() {
         assertTrue(
                 vertexA.getAdditionalTypes().isEmpty()
         );
@@ -187,7 +187,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void can_add_multiple_additional_types_to_a_vertex(){
+    public void can_add_multiple_additional_types_to_a_vertex() {
         assertTrue(
                 vertexA.getAdditionalTypes().isEmpty()
         );
@@ -204,7 +204,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void can_remove_an_additional_type_to_vertex(){
+    public void can_remove_an_additional_type_to_vertex() {
         Identification personType = vertexA.addType(
                 modelTestScenarios.personType()
         );
@@ -231,7 +231,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void can_add_suggestions_to_a_vertex(){
+    public void can_add_suggestions_to_a_vertex() {
         assertTrue(
                 vertexA.getSuggestions().isEmpty()
         );
@@ -271,7 +271,7 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     @Ignore("to complete")
-    public void can_add_another_origin_to_suggestion(){
+    public void can_add_another_origin_to_suggestion() {
         vertexA.addSuggestions(
                 suggestionsToMap(
                         modelTestScenarios.nameSuggestionFromPersonIdentification(user())
@@ -372,7 +372,9 @@ public class VertexOperatorTest extends ModelTestResources {
                 )
         );
         vertexA.addSameAs(
-                vertexB
+                identificationFromFriendlyResource(
+                        vertexB
+                )
         );
         vertexA.remove();
         assertTrue(
@@ -483,7 +485,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void making_a_vertex_public_makes_all_its_edges_public_where_the_other_end_vertex_is_also_public(){
+    public void making_a_vertex_public_makes_all_its_edges_public_where_the_other_end_vertex_is_also_public() {
         vertexA.makePublic();
         vertexC.makePrivate();
         vertexB.makePrivate();
@@ -511,7 +513,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void making_a_vertex_private_makes_all_its_edges_private(){
+    public void making_a_vertex_private_makes_all_its_edges_private() {
         vertexA.makePublic();
         vertexB.makePublic();
         vertexC.makePrivate();
