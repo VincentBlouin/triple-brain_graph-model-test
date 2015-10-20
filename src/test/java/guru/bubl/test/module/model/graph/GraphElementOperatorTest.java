@@ -255,4 +255,33 @@ public class GraphElementOperatorTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void on_creation_identifications_have_1_reference(){
+        IdentificationPojo identification = vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        assertThat(
+                identification.getNbReferences(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void adding_an_identification_increments_number_of_references(){
+        IdentificationPojo identification = vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        assertThat(
+                identification.getNbReferences(),
+                is(1)
+        );
+        identification = vertexB.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        assertThat(
+                identification.getNbReferences(),
+                is(2)
+        );
+    }
+
 }
