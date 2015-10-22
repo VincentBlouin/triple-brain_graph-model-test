@@ -6,6 +6,7 @@ package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.Identification;
+import guru.bubl.module.model.graph.IdentificationFactory;
 import guru.bubl.module.model.graph.IdentificationPojo;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
@@ -13,6 +14,7 @@ import guru.bubl.test.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
+import guru.bubl.test.module.utils.ModelTestScenarios;
 import org.hamcrest.core.Is;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -38,6 +40,9 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Inject
     VertexFactory vertexFactory;
+
+    @Inject
+    IdentificationFactory identificationFactory;
 
     @Test
     public void can_update_label() {
@@ -117,6 +122,42 @@ public class VertexOperatorTest extends ModelTestResources {
 
         Integer updatedNumberOfEdgesAndVertices = numberOfEdgesAndVertices();
         assertThat(updatedNumberOfEdgesAndVertices, is(numberOfEdgesAndVertices - 3));
+    }
+
+    @Test
+    public void removing_a_vertex_decrements_number_of_references_to_its_identification(){
+        IdentificationPojo computerScientist = vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        IdentificationPojo personIdentification = vertexA.addGenericIdentification(
+                modelTestScenarios.person()
+        );
+        vertexB.addGenericIdentification(
+                modelTestScenarios.person()
+        );
+        computerScientist = vertexA.getIdentifications().get(computerScientist.getExternalResourceUri());
+        assertThat(
+                computerScientist.getNbReferences(),
+                is(1)
+        );
+        personIdentification = vertexA.getIdentifications().get(personIdentification.getExternalResourceUri());
+        assertThat(
+                personIdentification.getNbReferences(),
+                is(2)
+        );
+        vertexA.remove();
+        assertThat(
+                identificationFactory.withUri(
+                        computerScientist.uri()
+                ).getNbReferences(),
+                is(0)
+        );
+        assertThat(
+                identificationFactory.withUri(
+                        personIdentification.uri()
+                ).getNbReferences(),
+                is(1)
+        );
     }
 
     @Test
@@ -737,7 +778,6 @@ public class VertexOperatorTest extends ModelTestResources {
                 is(numberOfEdgesForVertexC + 1)
         );
     }
-
 
     private Set<Edge> edgeBetweenBAndCInSet() {
 

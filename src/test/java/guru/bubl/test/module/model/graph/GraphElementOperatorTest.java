@@ -284,4 +284,27 @@ public class GraphElementOperatorTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void removing_an_identification_decrements_number_of_references(){
+        vertexA.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        vertexB.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        IdentificationPojo identification = vertexB.getIdentifications().values().iterator().next();
+        assertThat(
+                identification.getNbReferences(),
+                is(2)
+        );
+        vertexA.removeIdentification(
+                vertexA.getIdentifications().values().iterator().next()
+        );
+        identification = vertexB.getIdentifications().values().iterator().next();
+        assertThat(
+                identification.getNbReferences(),
+                is(1)
+        );
+    }
+
 }
