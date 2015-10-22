@@ -94,6 +94,15 @@ public class SchemaOperatorTest extends ModelTestResources {
                 )
         );
     }
+
+    @Test
+    public void removing_a_schema_property_decrements_number_of_references_to_its_identification(){
+        SchemaOperator schemaOperator = createSchema();
+        GraphElementOperator property = schemaOperator.addProperty();
+        testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(
+                property
+        );
+    }
     private SchemaOperator createSchema() {
         return userGraph.schemaOperatorWithUri(
                 userGraph.createSchema().uri()

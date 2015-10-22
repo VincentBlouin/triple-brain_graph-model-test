@@ -306,5 +306,4 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 is(1)
         );
     }
-
 }

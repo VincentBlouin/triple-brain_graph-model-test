@@ -38,6 +38,9 @@ import java.net.URI;
 import java.sql.Connection;
 import java.util.Map;
 
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+
 public class ModelTestResources {
 
     @Inject
@@ -90,6 +93,9 @@ public class ModelTestResources {
 
     @Inject
     protected Neo4jGraphIndexer graphIndexer;
+
+    @Inject
+    protected IdentificationFactory identificationFactory;
 
     protected VertexOperator vertexA;
     protected VertexOperator vertexB;
@@ -187,6 +193,41 @@ public class ModelTestResources {
         return new IdentificationPojo(
                 resource.uri(),
                 new FriendlyResourcePojo(resource)
+        );
+    }
+
+    protected void testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(GraphElementOperator graphElement){
+        IdentificationPojo computerScientist = graphElement.addGenericIdentification(
+                modelTestScenarios.computerScientistType()
+        );
+        IdentificationPojo personIdentification = graphElement.addGenericIdentification(
+                modelTestScenarios.person()
+        );
+        vertexB.addGenericIdentification(
+                modelTestScenarios.person()
+        );
+        computerScientist = graphElement.getIdentifications().get(computerScientist.getExternalResourceUri());
+        assertThat(
+                computerScientist.getNbReferences(),
+                is(1)
+        );
+        personIdentification = graphElement.getIdentifications().get(personIdentification.getExternalResourceUri());
+        assertThat(
+                personIdentification.getNbReferences(),
+                is(2)
+        );
+        graphElement.remove();
+        assertThat(
+                identificationFactory.withUri(
+                        computerScientist.uri()
+                ).getNbReferences(),
+                is(0)
+        );
+        assertThat(
+                identificationFactory.withUri(
+                        personIdentification.uri()
+                ).getNbReferences(),
+                is(1)
         );
     }
 }

@@ -4,6 +4,7 @@
 
 package guru.bubl.test.module.model.graph;
 
+import guru.bubl.module.model.graph.IdentificationPojo;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.test.module.utils.ModelTestResources;
@@ -99,6 +100,13 @@ public class EdgeOperatorTest extends ModelTestResources {
         vertexA.getEdgeThatLinksToDestinationVertex(vertexB).remove();
         assertThat(vertexA.getNumberOfConnectedEdges(), is(0));
         assertThat(vertexB.getNumberOfConnectedEdges(), is(1));
+    }
+
+    @Test
+    public void removing_an_edge_decrements_number_of_references_to_its_identification(){
+        testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(
+                vertexA.getEdgeThatLinksToDestinationVertex(vertexB)
+        );
     }
 
     @Test
