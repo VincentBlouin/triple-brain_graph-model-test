@@ -225,6 +225,23 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+    public void has_number_of_references_to_an_identification(){
+        vertexA.addGenericIdentification(
+                modelTestScenarios.personType()
+        );
+        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        );
+        IdentificationPojo identification = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        ).getIdentifications().values().iterator().next();
+        assertThat(
+                identification.getNbReferences(),
+                is(1)
+        );
+    }
+
+    @Test
     public void vertex_suggestions_have_their_properties_sub_graph() {
         vertexA.setSuggestions(
                 suggestionsToMap(
