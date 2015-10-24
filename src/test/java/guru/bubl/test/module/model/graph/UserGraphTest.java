@@ -192,7 +192,7 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void has_types() {
         vertexA.addType(
-                modelTestScenarios.personType()
+                modelTestScenarios.person()
         );
         SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
@@ -210,7 +210,7 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void can_return_multiple_identifications_for_one_graph_element() {
         vertexA.addGenericIdentification(
-                modelTestScenarios.personType()
+                modelTestScenarios.person()
         );
         vertexA.addGenericIdentification(
                 modelTestScenarios.timBernersLee()
@@ -227,7 +227,7 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void has_number_of_references_to_an_identification(){
         vertexA.addGenericIdentification(
-                modelTestScenarios.personType()
+                modelTestScenarios.person()
         );
         SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES

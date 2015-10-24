@@ -191,7 +191,7 @@ public class VertexOperatorTest extends ModelTestResources {
                 vertexA.getAdditionalTypes().isEmpty()
         );
         vertexA.addType(
-                modelTestScenarios.personType()
+                modelTestScenarios.person()
         );
         assertFalse(
                 vertexA.getAdditionalTypes().isEmpty()
@@ -204,7 +204,7 @@ public class VertexOperatorTest extends ModelTestResources {
                 vertexA.getAdditionalTypes().isEmpty()
         );
         vertexA.addType(
-                modelTestScenarios.personType()
+                modelTestScenarios.person()
         );
         vertexA.addType(
                 modelTestScenarios.computerScientistType()
@@ -218,7 +218,7 @@ public class VertexOperatorTest extends ModelTestResources {
     @Test
     public void can_remove_an_additional_type_to_vertex() {
         Identification personType = vertexA.addType(
-                modelTestScenarios.personType()
+                modelTestScenarios.person()
         );
         IdentificationPojo computerScientistType = modelTestScenarios.computerScientistType();
         vertexA.addType(

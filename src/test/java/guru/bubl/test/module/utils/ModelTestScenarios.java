@@ -16,17 +16,6 @@ import java.util.Map;
 
 public class ModelTestScenarios {
 
-    public IdentificationPojo personType() {
-        return new IdentificationPojo(
-                URI.create(
-                        "http://xmlns.com/foaf/0.1/Person"
-                ),
-                new FriendlyResourcePojo(
-                        "Person"
-                )
-        );
-    }
-
     public IdentificationPojo computerScientistType() {
         return new IdentificationPojo(
                 URI.create(
@@ -96,6 +85,28 @@ public class ModelTestScenarios {
         );
     }
 
+    public IdentificationPojo human() {
+        return new IdentificationPojo(
+                URI.create(
+                        "/human"
+                ),
+                new FriendlyResourcePojo(
+                        "Human"
+                )
+        );
+    }
+
+    public IdentificationPojo person() {
+        return new IdentificationPojo(
+                URI.create(
+                        "http://xmlns.com/foaf/0.1/Person"
+                ),
+                new FriendlyResourcePojo(
+                        "Person"
+                )
+        );
+    }
+
     public IdentificationPojo location() {
         FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
                 "Location"
@@ -108,17 +119,6 @@ public class ModelTestScenarios {
                         "http://rdf.freebase.com/rdf/m/01n7"
                 ),
                 friendlyResourcePojo
-        );
-    }
-
-    public IdentificationPojo person() {
-        return new IdentificationPojo(
-                URI.create(
-                        "http://xmlns.com/foaf/0.1/Person"
-                ),
-                new FriendlyResourcePojo(
-                        "Person"
-                )
         );
     }
 

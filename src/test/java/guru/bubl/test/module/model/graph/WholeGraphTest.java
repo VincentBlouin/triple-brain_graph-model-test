@@ -24,7 +24,7 @@ public class WholeGraphTest extends ModelTestResources {
         assertFalse(wholeGraph.getAllVertices().isEmpty());
         Set<Vertex> visitedVertices = new HashSet<Vertex>();
         Set<VertexInSubGraphOperator> vertices = wholeGraph.getAllVertices();
-        for(VertexInSubGraph vertex: vertices) {
+        for (VertexInSubGraph vertex : vertices) {
             if (visitedVertices.contains(vertex)) {
                 fail();
             }
@@ -70,13 +70,34 @@ public class WholeGraphTest extends ModelTestResources {
     }
 
     @Test
-    public void can_get_all_graph_elements(){
+    public void can_get_all_graph_elements() {
         createSchema().addProperty();
         assertThat(
                 wholeGraph.getAllGraphElements().size(),
                 is(8)
         );
     }
+
+    @Test
+    public void can_get_all_identifications() {
+        assertTrue(
+                wholeGraph.getAllIdentifications().isEmpty()
+        );
+        vertexA.addType(
+                modelTestScenarios.human()
+        );
+        vertexA.addGenericIdentification(
+                modelTestScenarios.person()
+        );
+        vertexA.addSameAs(
+                modelTestScenarios.timBernersLee()
+        );
+        assertThat(
+                wholeGraph.getAllIdentifications().size(),
+                is(3)
+        );
+    }
+
 
     private SchemaOperator createSchema() {
         return userGraph.schemaOperatorWithUri(
