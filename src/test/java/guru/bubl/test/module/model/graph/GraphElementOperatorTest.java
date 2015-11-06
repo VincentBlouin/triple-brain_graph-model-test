@@ -101,21 +101,6 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void a_graph_element_is_not_identified_to_itself_if_used_as_an_identification_for_another_element() {
-        assertTrue(vertexB.getIdentifications().isEmpty());
-        GraphElementOperator vertexAGraphElement = vertexA;
-        IdentificationPojo vertexBPojo = new IdentificationPojo(
-                vertexB.uri(),
-                new FriendlyResourcePojo(
-                        vertexB.uri(),
-                        vertexB.label()
-                )
-        );
-        vertexAGraphElement.addSameAs(vertexBPojo);
-        assertTrue(vertexB.getIdentifications().isEmpty());
-    }
-
-    @Test
     public void adding_identification_returns_identification_created_fields() {
         IdentificationPojo identification = vertexA.addSameAs(
                 modelTestScenarios.timBernersLee()
@@ -304,6 +289,34 @@ public class GraphElementOperatorTest extends ModelTestResources {
         assertThat(
                 identification.getNbReferences(),
                 is(1)
+        );
+    }
+
+    @Test
+    public void graph_element_becomes_identified_to_itself_if_used_as_identifier(){
+        IdentificationPojo identification = vertexA.addGenericIdentification(
+                identificationFromFriendlyResource(vertexB)
+        );
+        assertTrue(
+                vertexA.getIdentifications().containsKey(
+                        identification.getExternalResourceUri()
+                )
+        );
+        assertTrue(
+                vertexB.getIdentifications().containsKey(
+                        identification.getExternalResourceUri()
+                )
+        );
+    }
+
+    @Test
+    public void when_identified_to_a_graph_element_the_number_of_references_to_the_new_identification_is_2(){
+        IdentificationPojo identification = vertexA.addGenericIdentification(
+                identificationFromFriendlyResource(vertexB)
+        );
+        assertThat(
+                identification.getNbReferences(),
+                is(2)
         );
     }
 }
