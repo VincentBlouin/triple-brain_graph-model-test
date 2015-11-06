@@ -45,4 +45,72 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 is(2)
         );
     }
+
+    @Test
+    public void does_not_duplicate_identifications_when_re_adding() {
+        vertexB.addSameAs(
+                modelTestScenarios.possessionIdentification()
+        );
+        assertThat(
+                vertexB.getSameAs().size(),
+                is(1)
+        );
+        assertThat(
+                vertexB.getIdentifications().size(),
+                is(1)
+        );
+        wholeGraphAdminFactory.withWholeGraph(
+                wholeGraph
+        ).reAddIdentifications();
+        assertThat(
+                vertexB.getSameAs().size(),
+                is(1)
+        );
+        assertThat(
+                vertexB.getIdentifications().size(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void does_not_duplicate_identifications_when_re_adding_even_if_identification_is_a_graph_element() {
+        vertexB.addType(
+                identificationFromFriendlyResource(vertexA)
+        );
+        assertThat(
+                vertexB.getAdditionalTypes().size(),
+                is(1)
+        );
+        assertThat(
+                vertexB.getIdentifications().size(),
+                is(1)
+        );
+        assertThat(
+                vertexA.getGenericIdentifications().size(),
+                is(1)
+        );
+        assertThat(
+                vertexA.getIdentifications().size(),
+                is(1)
+        );
+        wholeGraphAdminFactory.withWholeGraph(
+                wholeGraph
+        ).reAddIdentifications();
+        assertThat(
+                vertexB.getAdditionalTypes().size(),
+                is(1)
+        );
+        assertThat(
+                vertexB.getIdentifications().size(),
+                is(1)
+        );
+        assertThat(
+                vertexA.getGenericIdentifications().size(),
+                is(1)
+        );
+        assertThat(
+                vertexA.getIdentifications().size(),
+                is(1)
+        );
+    }
 }
