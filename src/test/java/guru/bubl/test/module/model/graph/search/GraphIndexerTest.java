@@ -28,14 +28,14 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     public void can_remove_graph_element_from_index() {
         indexGraph();
         GraphSearch graphSearch = SolrGraphSearch.withCoreContainer(coreContainer);
-        List<VertexSearchResult> results = graphSearch.searchSchemasOwnVerticesAndPublicOnesForAutoCompletionByLabel(
+        List<VertexSearchResult> results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 "vertex azure",
                 user
         );
         assertThat(results.size(), is(1));
         graphIndexer.deleteGraphElement(vertexA);
         graphIndexer.commit();
-        results = graphSearch.searchSchemasOwnVerticesAndPublicOnesForAutoCompletionByLabel(
+        results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 "vertex azure",
                 user
         );
@@ -45,7 +45,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     @Test
     public void schemas_are_indexed_when_indexing_whole_graph(){
         GraphSearch graphSearch = SolrGraphSearch.withCoreContainer(coreContainer);
-        List<VertexSearchResult> results = graphSearch.searchSchemasOwnVerticesAndPublicOnesForAutoCompletionByLabel(
+        List<VertexSearchResult> results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 "schema1",
                 user
         );
@@ -54,7 +54,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         schema.label("schema1");
         graphIndexer.indexWholeGraph();
         graphIndexer.commit();
-        results = graphSearch.searchSchemasOwnVerticesAndPublicOnesForAutoCompletionByLabel(
+        results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 "schema1",
                 user
         );
@@ -64,14 +64,14 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     @Test
     public void vertices_are_indexed_when_indexing_whole_graph(){
         GraphSearch graphSearch = SolrGraphSearch.withCoreContainer(coreContainer);
-        List<VertexSearchResult> results = graphSearch.searchSchemasOwnVerticesAndPublicOnesForAutoCompletionByLabel(
+        List<VertexSearchResult> results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 "vertex azure",
                 user
         );
         assertTrue(results.isEmpty());
         graphIndexer.indexWholeGraph();
         graphIndexer.commit();
-        results = graphSearch.searchSchemasOwnVerticesAndPublicOnesForAutoCompletionByLabel(
+        results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 "vertex azure",
                 user
         );
