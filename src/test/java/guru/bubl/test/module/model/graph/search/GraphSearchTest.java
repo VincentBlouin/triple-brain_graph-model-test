@@ -180,7 +180,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     @Test
     public void can_search_relations() {
         indexGraph();
-        List<GraphElementSearchResult> results = graphSearch.searchRelationsPropertiesOrSchemasForAutoCompletionByLabel(
+        List<GraphElementSearchResult> results = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
                 "between vert",
                 user
         );
@@ -190,7 +190,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     @Test
     public void relation_source_and_destination_vertex_label_and_uri_are_included_in_result() {
         indexGraph();
-        List<GraphElementSearchResult> relations = graphSearch.searchRelationsPropertiesOrSchemasForAutoCompletionByLabel(
+        List<GraphElementSearchResult> relations = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
                 "between vertex A and B",
                 user
         );
@@ -225,7 +225,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void schemas_are_included_in_relations_search() {
-        List<GraphElementSearchResult> results = graphSearch.searchRelationsPropertiesOrSchemasForAutoCompletionByLabel(
+        List<GraphElementSearchResult> results = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
                 "schema1",
                 user
         );
@@ -238,7 +238,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 )
         );
         graphIndexer.commit();
-        results = graphSearch.searchRelationsPropertiesOrSchemasForAutoCompletionByLabel(
+        results = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
                 "schema1",
                 user
         );
@@ -327,7 +327,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         );
         graphIndexer.commit();
         assertTrue(
-                graphSearch.searchRelationsPropertiesOrSchemasForAutoCompletionByLabel(
+                graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
                         "prop",
                         userGraph.user()
                 ).isEmpty()
@@ -343,7 +343,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         );
         graphIndexer.commit();
         assertThat(
-                graphSearch.searchRelationsPropertiesOrSchemasForAutoCompletionByLabel(
+                graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
                         "prop1",
                         userGraph.user()
                 ).size(),
@@ -357,7 +357,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         schema.label("schema1");
         GraphElementOperator property1 = schema.addProperty();
         property1.label("prop1");
-        PropertySearchResult searchResult = (PropertySearchResult) graphSearch.searchRelationsPropertiesOrSchemasForAutoCompletionByLabel(
+        PropertySearchResult searchResult = (PropertySearchResult) graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
                 "prop1",
                 userGraph.user()
         ).get(0);
@@ -399,7 +399,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 )
         );
         graphIndexer.commit();
-        List<GraphElementSearchResult> searchResults = graphSearch.searchRelationsPropertiesOrSchemasForAutoCompletionByLabel(
+        List<GraphElementSearchResult> searchResults = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
                 "prop",
                 user2
         );
@@ -862,5 +862,31 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 is("identifier of vertex Bareau")
         );
     }
+    @Test
+    public void can_get_detail_search_result_of_an_identifier(){
+        vertexB.comment("description of vertex b");
+        IdentificationPojo vertexBAsIdentifier = identificationFromFriendlyResource(vertexB);
+        vertexBAsIdentifier.setLabel(
+                "identifier of vertex Bareau"
+        );
+        vertexA.addGenericIdentification(vertexBAsIdentifier);
+        IdentificationSearchResult identificationSearchResult = (IdentificationSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "identifier",
+                user
+        ).iterator().next();
+        GraphElementSearchResult searchResult = graphSearch.getDetails(
+                identificationSearchResult.getGraphElement().uri(),
+                user
+        );
+        assertThat(
+                searchResult.getGraphElement().comment(),
+                is("description of vertex b")
+        );
+    }
+    @Test
+    public void identifiers_are_included_in_searching_relations_for_identification(){
+//        searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel
+    }
+
 
 }

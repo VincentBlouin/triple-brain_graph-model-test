@@ -81,14 +81,14 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     @Test
     public void edges_are_indexed_when_indexing_whole_graph(){
         GraphSearch graphSearch = SolrGraphSearch.withCoreContainer(coreContainer);
-        List<GraphElementSearchResult> results = graphSearch.searchRelationsPropertiesOrSchemasForAutoCompletionByLabel(
+        List<GraphElementSearchResult> results = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
                 "between vert",
                 user
         );
         assertTrue(results.isEmpty());
         graphIndexer.indexWholeGraph();
         graphIndexer.commit();
-        results = graphSearch.searchRelationsPropertiesOrSchemasForAutoCompletionByLabel(
+        results = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
                 "between vert",
                 user
         );
