@@ -863,6 +863,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 is("identifier of vertex Bareau")
         );
     }
+
     @Test
     public void can_get_detail_search_result_of_an_identifier(){
         vertexB.comment("description of vertex b");

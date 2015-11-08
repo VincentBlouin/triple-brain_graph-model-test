@@ -17,6 +17,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-       GraphSearchTest.class
+       GraphElementOperatorTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}

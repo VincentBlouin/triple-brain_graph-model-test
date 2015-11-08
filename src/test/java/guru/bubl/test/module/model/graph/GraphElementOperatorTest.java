@@ -7,7 +7,9 @@ package guru.bubl.test.module.model.graph;
 import guru.bubl.module.model.Image;
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.GraphElementOperator;
+import guru.bubl.module.model.graph.Identification;
 import guru.bubl.module.model.graph.IdentificationPojo;
+import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 import org.parboiled.common.StringUtils;
@@ -317,6 +319,88 @@ public class GraphElementOperatorTest extends ModelTestResources {
         assertThat(
                 identification.getNbReferences(),
                 is(2)
+        );
+    }
+
+    @Test
+    public void can_identify_to_an_identification_where_the_external_uri_is_the_identification_uri(){
+        IdentificationPojo vertexBAsIdentification = vertexA.addGenericIdentification(
+                identificationFromFriendlyResource(vertexB)
+        );
+
+        vertexBAsIdentification.setExternalResourceUri(vertexBAsIdentification.uri());
+        vertexBAsIdentification.setUri(null);
+        assertFalse(
+                vertexC.getGenericIdentifications().containsKey(
+                        vertexB.uri()
+                )
+        );
+        vertexC.addGenericIdentification(
+                vertexBAsIdentification
+        );
+        assertTrue(
+                vertexC.getGenericIdentifications().containsKey(
+                        vertexB.uri()
+                )
+        );
+    }
+
+    @Test
+    public void when_identifying_to_an_identification_the_uri_and_external_uri_are_set_correctly(){
+        IdentificationPojo vertexBAsIdentification = vertexA.addGenericIdentification(
+                identificationFromFriendlyResource(vertexB)
+        );
+        URI vertexBAsAnIdentificationUri =  vertexBAsIdentification.uri();
+        vertexBAsIdentification.setExternalResourceUri(vertexBAsAnIdentificationUri);
+        vertexBAsIdentification.setUri(null);
+        vertexC.addGenericIdentification(
+                vertexBAsIdentification
+        );
+        IdentificationPojo identificationFromIdentification = vertexC.getGenericIdentifications().values().iterator().next();
+        assertThat(
+                identificationFromIdentification.uri(),
+                is(vertexBAsAnIdentificationUri)
+        );
+        assertThat(
+                identificationFromIdentification.getExternalResourceUri(),
+                is(vertexB.uri())
+        );
+    }
+
+    @Test
+    public void an_identification_does_identify_to_itself(){
+        IdentificationPojo vertexBAsIdentification = vertexA.addGenericIdentification(
+                identificationFromFriendlyResource(vertexB)
+        );
+        URI vertexBAsAnIdentificationUri =  vertexBAsIdentification.uri();
+        vertexBAsIdentification.setExternalResourceUri(vertexBAsAnIdentificationUri);
+        vertexBAsIdentification.setUri(null);
+        Identification createdIdentification = vertexC.addGenericIdentification(
+                vertexBAsIdentification
+        );
+        Set<GraphElementSearchResult> relatedIdentifications = identifiedTo.getForIdentificationAndUser(
+                createdIdentification,
+                user
+        );
+        assertThat(
+                relatedIdentifications.size(),
+                is(3)
+        );
+    }
+    @Test
+    public void when_identifying_to_an_identification_the_number_of_references_increases_by_1(){
+        IdentificationPojo vertexBAsIdentification = vertexA.addGenericIdentification(
+                identificationFromFriendlyResource(vertexB)
+        );
+        URI vertexBAsAnIdentificationUri =  vertexBAsIdentification.uri();
+        vertexBAsIdentification.setExternalResourceUri(vertexBAsAnIdentificationUri);
+        vertexBAsIdentification.setUri(null);
+        Identification createdIdentification = vertexC.addGenericIdentification(
+                vertexBAsIdentification
+        );
+        assertThat(
+                createdIdentification.getNbReferences(),
+                is(3)
         );
     }
 }
