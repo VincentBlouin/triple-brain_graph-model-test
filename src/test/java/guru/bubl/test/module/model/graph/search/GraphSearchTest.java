@@ -8,6 +8,7 @@ import com.google.common.collect.Sets;
 import guru.bubl.module.model.Image;
 import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.search.*;
 import guru.bubl.test.module.utils.ModelTestScenarios;
@@ -885,7 +886,22 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
     @Test
     public void identifiers_are_included_in_searching_relations_for_identification(){
-//        searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel
+        IdentificationPojo edgeBetweenAAndBAsAnIdentification = identificationFromFriendlyResource(
+                vertexA.getEdgeThatLinksToDestinationVertex(vertexB)
+        );
+        edgeBetweenAAndBAsAnIdentification.setLabel("identifier");
+        vertexB.getEdgeThatLinksToDestinationVertex(vertexC).addGenericIdentification(
+                edgeBetweenAAndBAsAnIdentification
+        );
+
+        GraphElementSearchResult result = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
+                "identifier",
+                user
+        ).iterator().next();
+        assertThat(
+                result.getType(),
+                is("identification")
+        );
     }
 
 
