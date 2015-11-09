@@ -825,7 +825,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-    public void elements_identified_to_an_identification_are_included_in_result() {
+    public void identification_search_result_have_number_of_references() {
         IdentificationPojo vertexBAsIdentifier = identificationFromFriendlyResource(vertexB);
         vertexBAsIdentifier.setLabel(
                 "identifier of vertex Bareau"
@@ -838,13 +838,8 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 user
         ).iterator().next();
         assertThat(
-                identificationSearchResult.getIdentifiedTo().size(),
+                identificationSearchResult.getNbReferences(),
                 is(2)
-        );
-        GraphElementPojo vertexAAsIdentifiedTo = identificationSearchResult.getIdentifiedTo().get(vertexA.uri());
-        assertThat(
-                vertexAAsIdentifiedTo.label(),
-                is("vertex Azure")
         );
     }
     @Test
