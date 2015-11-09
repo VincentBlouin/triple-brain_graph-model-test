@@ -15,6 +15,7 @@ import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeFactory;
 import guru.bubl.module.model.graph.edge.EdgePojo;
+import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
@@ -230,4 +231,11 @@ public class ModelTestResources {
                 is(1)
         );
     }
+
+    protected SchemaOperator createSchema() {
+        return userGraph.schemaOperatorWithUri(
+                userGraph.createSchema().uri()
+        );
+    }
+
 }

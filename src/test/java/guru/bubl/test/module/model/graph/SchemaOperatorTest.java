@@ -103,9 +103,4 @@ public class SchemaOperatorTest extends ModelTestResources {
                 property
         );
     }
-    private SchemaOperator createSchema() {
-        return userGraph.schemaOperatorWithUri(
-                userGraph.createSchema().uri()
-        );
-    }
 }

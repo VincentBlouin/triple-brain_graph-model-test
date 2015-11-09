@@ -97,11 +97,4 @@ public class WholeGraphTest extends ModelTestResources {
                 is(3)
         );
     }
-
-
-    private SchemaOperator createSchema() {
-        return userGraph.schemaOperatorWithUri(
-                userGraph.createSchema().uri()
-        );
-    }
 }

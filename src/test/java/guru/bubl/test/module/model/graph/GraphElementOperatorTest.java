@@ -9,6 +9,7 @@ import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.GraphElementOperator;
 import guru.bubl.module.model.graph.Identification;
 import guru.bubl.module.model.graph.IdentificationPojo;
+import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
@@ -387,6 +388,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 is(3)
         );
     }
+
     @Test
     public void when_identifying_to_an_identification_the_number_of_references_increases_by_1(){
         IdentificationPojo vertexBAsIdentification = vertexA.addGenericIdentification(
@@ -400,6 +402,44 @@ public class GraphElementOperatorTest extends ModelTestResources {
         );
         assertThat(
                 createdIdentification.getNbReferences(),
+                is(3)
+        );
+    }
+
+    @Test
+    public void when_identifying_to_a_schema_the_number_of_references_for_first_identification_is_2_and_the_next_increase_by_1(){
+        SchemaOperator schema = createSchema();
+        IdentificationPojo schemaAsIdentification = vertexA.addGenericIdentification(
+                identificationFromFriendlyResource(schema)
+        );
+        assertThat(
+                schemaAsIdentification.getNbReferences(),
+                is(2)
+        );
+        schemaAsIdentification = vertexB.addGenericIdentification(
+                identificationFromFriendlyResource(schema)
+        );
+        assertThat(
+                schemaAsIdentification.getNbReferences(),
+                is(3)
+        );
+    }
+
+    @Test
+    public void when_identifying_to_a_schema_property_the_number_of_references_increases_by_1(){
+        GraphElementOperator property = createSchema().addProperty();
+        IdentificationPojo propertyAsIdentification = vertexA.addGenericIdentification(
+                identificationFromFriendlyResource(property)
+        );
+        assertThat(
+                propertyAsIdentification.getNbReferences(),
+                is(2)
+        );
+        propertyAsIdentification = vertexB.addGenericIdentification(
+                identificationFromFriendlyResource(property)
+        );
+        assertThat(
+                propertyAsIdentification.getNbReferences(),
                 is(3)
         );
     }
