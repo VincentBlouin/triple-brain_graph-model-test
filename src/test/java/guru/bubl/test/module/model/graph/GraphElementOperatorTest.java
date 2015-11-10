@@ -9,6 +9,7 @@ import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.GraphElementOperator;
 import guru.bubl.module.model.graph.Identification;
 import guru.bubl.module.model.graph.IdentificationPojo;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.test.module.utils.ModelTestResources;
@@ -441,6 +442,45 @@ public class GraphElementOperatorTest extends ModelTestResources {
         assertThat(
                 propertyAsIdentification.getNbReferences(),
                 is(3)
+        );
+    }
+
+    @Test
+    public void identifying_to_a_graph_element_also_identifies_to_its_identifiers(){
+        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        edgeBetweenAAndB.addSameAs(
+                modelTestScenarios.possessionIdentification()
+        );
+        EdgeOperator edgeBetweenBAndC = vertexB.getEdgeThatLinksToDestinationVertex(
+                vertexC
+        );
+        edgeBetweenBAndC.addSameAs(
+                identificationFromFriendlyResource(edgeBetweenAAndB)
+        );
+        assertTrue(
+                edgeBetweenBAndC.getIdentifications().containsKey(edgeBetweenAAndB.uri())
+        );
+        assertTrue(
+                edgeBetweenBAndC.getIdentifications().containsKey(
+                        modelTestScenarios.possessionIdentification().getExternalResourceUri()
+                )
+        );
+        assertThat(
+                edgeBetweenBAndC.getIdentifications().size(),
+                is(2)
+        );
+    }
+
+    @Test
+    public void when_identifying_to_graph_element_the_relation_type_is_correct(){
+        assertFalse(
+                vertexB.getSameAs().containsKey(vertexA.uri())
+        );
+        vertexB.addSameAs(
+                identificationFromFriendlyResource(vertexA)
+        );
+        assertTrue(
+                vertexB.getSameAs().containsKey(vertexA.uri())
         );
     }
 }
