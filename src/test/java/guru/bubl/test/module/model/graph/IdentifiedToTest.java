@@ -106,7 +106,7 @@ public class IdentifiedToTest extends ModelTestResources {
         Identification tshirtIdentification = modelTestScenarios.tShirt();
         tshirtIdentification = anotherVertexRepresentingATshirt.addGenericIdentification(
                 tshirtIdentification
-        );
+        ).values().iterator().next();
         assertFalse(
                 identifiedTo.getForIdentificationAndUser(
                         tshirtIdentification,
@@ -197,7 +197,7 @@ public class IdentifiedToTest extends ModelTestResources {
         );
         Identification otherUserIdentification = otherUserResource.addGenericIdentification(
                 modelTestScenarios.tShirt()
-        );
+        ).values().iterator().next();
         otherUserResource.removeIdentification(
                 otherUserIdentification
         );

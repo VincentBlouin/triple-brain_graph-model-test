@@ -200,10 +200,10 @@ public class ModelTestResources {
     protected void testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(GraphElementOperator graphElement){
         IdentificationPojo computerScientist = graphElement.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
-        );
+        ).values().iterator().next();
         IdentificationPojo personIdentification = graphElement.addGenericIdentification(
                 modelTestScenarios.person()
-        );
+        ).values().iterator().next();
         vertexB.addGenericIdentification(
                 modelTestScenarios.person()
         );

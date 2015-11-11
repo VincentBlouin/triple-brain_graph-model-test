@@ -219,7 +219,7 @@ public class VertexOperatorTest extends ModelTestResources {
     public void can_remove_an_additional_type_to_vertex() {
         Identification personType = vertexA.addType(
                 modelTestScenarios.person()
-        );
+        ).values().iterator().next();
         IdentificationPojo computerScientistType = modelTestScenarios.computerScientistType();
         vertexA.addType(
                 computerScientistType
@@ -368,7 +368,7 @@ public class VertexOperatorTest extends ModelTestResources {
     public void can_get_empty_list_after_removing_last_same_as() {
         Identification timBernersLee = vertexA.addSameAs(
                 modelTestScenarios.timBernersLee()
-        );
+        ).values().iterator().next();
         assertFalse(vertexA.getSameAs().isEmpty());
         vertexA.removeIdentification(
                 timBernersLee
@@ -400,7 +400,7 @@ public class VertexOperatorTest extends ModelTestResources {
     public void can_assign_the_same_identification_to_2_vertices() {
         Identification timBernersLee = vertexA.addSameAs(
                 modelTestScenarios.timBernersLee()
-        );
+        ).values().iterator().next();
         vertexB.addSameAs(
                 modelTestScenarios.timBernersLee()
         );
@@ -439,7 +439,7 @@ public class VertexOperatorTest extends ModelTestResources {
         ));
         Identification ExtraTerrestrial = vertexA.addGenericIdentification(
                 modelTestScenarios.extraterrestrial()
-        );
+        ).values().iterator().next();
         assertTrue(vertexA.getGenericIdentifications().containsKey(
                 ExtraTerrestrial.getExternalResourceUri()
         ));

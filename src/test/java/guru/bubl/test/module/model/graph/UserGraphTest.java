@@ -5,8 +5,10 @@
 package guru.bubl.test.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
-import guru.bubl.module.model.center_graph_element.CenterGraphElement;
-import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
+import guru.bubl.module.common_utils.Uris;
+import guru.bubl.module.model.FriendlyResource;
+import guru.bubl.module.model.FriendlyResourceFactory;
+import guru.bubl.module.model.Image;
 import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
@@ -15,19 +17,15 @@ import guru.bubl.module.model.graph.exceptions.NonExistingResourceException;
 import guru.bubl.module.model.graph.schema.Schema;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.schema.SchemaPojo;
-import guru.bubl.test.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.*;
+import guru.bubl.module.model.suggestion.Suggestion;
+import guru.bubl.module.model.suggestion.SuggestionOrigin;
+import guru.bubl.module.model.test.SubGraphOperator;
+import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.Is;
 import org.junit.Ignore;
 import org.junit.Test;
-import guru.bubl.module.common_utils.Uris;
-import guru.bubl.module.model.FriendlyResource;
-import guru.bubl.module.model.FriendlyResourceFactory;
-import guru.bubl.module.model.Image;
-import guru.bubl.module.model.suggestion.Suggestion;
-import guru.bubl.module.model.suggestion.SuggestionOrigin;
-import guru.bubl.module.model.test.SubGraphOperator;
 
 import javax.inject.Inject;
 import java.net.URI;
@@ -685,7 +683,7 @@ public class UserGraphTest extends ModelTestResources {
         );
         IdentificationPojo createdComputerScientistType = schemaOperator.addType(
                 modelTestScenarios.computerScientistType()
-        );
+        ).values().iterator().next();
         SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
                 schemaOperator.uri()
         );
@@ -720,7 +718,7 @@ public class UserGraphTest extends ModelTestResources {
         GraphElementOperator createdProperty = schemaOperator.addProperty();
         IdentificationPojo createdComputerScientistType = createdProperty.addType(
                 modelTestScenarios.computerScientistType()
-        );
+        ).values().iterator().next();
         SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
                 schemaOperator.uri()
         );

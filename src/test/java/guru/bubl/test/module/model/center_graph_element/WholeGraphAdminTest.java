@@ -25,7 +25,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
         );
         IdentificationPojo identificationPojo = vertexA.addGenericIdentification(
                 modelTestScenarios.possessionIdentification()
-        );
+        ).values().iterator().next();
         identificationFactory.withUri(
                 identificationPojo.uri()
         ).setNbReferences(5);
