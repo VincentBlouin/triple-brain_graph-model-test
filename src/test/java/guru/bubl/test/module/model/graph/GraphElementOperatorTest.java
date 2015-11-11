@@ -500,6 +500,45 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    public void new_identifications_from_identifying_to_a_graph_element_that_has_multiple_identifiers_increments_their_number_of_references(){
+        IdentificationPojo personIdentification = vertexA.addGenericIdentification(
+                modelTestScenarios.person()
+        ).values().iterator().next();
+        assertThat(
+                personIdentification.getNbReferences(),
+                is(1)
+        );
+        personIdentification = vertexB.addSameAs(
+                identificationFromFriendlyResource(vertexA)
+        ).get(personIdentification.getExternalResourceUri());
+        assertThat(
+                personIdentification.getNbReferences(),
+                is(2)
+        );
+    }
+
+    @Test
+    public void identifying_to_a_graph_element_that_has_another_identification_that_shares_the_other_graph_element_does_not_increment_the_number_of_references(){
+        vertexA.addGenericIdentification(
+                modelTestScenarios.person()
+        ).values().iterator().next();
+        IdentificationPojo personIdentification = vertexB.addGenericIdentification(
+                modelTestScenarios.person()
+        ).values().iterator().next();
+        assertThat(
+                personIdentification.getNbReferences(),
+                is(2)
+        );
+        personIdentification = vertexB.addSameAs(
+                identificationFromFriendlyResource(vertexA)
+        ).get(personIdentification.getExternalResourceUri());
+        assertThat(
+                personIdentification.getNbReferences(),
+                is(2)
+        );
+    }
+
+    @Test
     public void when_identifying_to_graph_element_the_relation_type_is_correct() {
         assertFalse(
                 vertexB.getSameAs().containsKey(vertexA.uri())
