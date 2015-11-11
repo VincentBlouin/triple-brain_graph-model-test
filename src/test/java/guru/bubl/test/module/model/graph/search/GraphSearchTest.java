@@ -900,5 +900,23 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         );
     }
 
+    @Test
+    public void identifiers_search_result_have_their_external_uri(){
+        IdentificationPojo vertexBAsIdentifier = identificationFromFriendlyResource(vertexB);
+        vertexBAsIdentifier.setLabel(
+                "identifier of vertex Bareau"
+        );
+        vertexA.addGenericIdentification(
+                vertexBAsIdentifier
+        );
+        IdentificationSearchResult identificationSearchResult = (IdentificationSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "identifier",
+                user
+        ).iterator().next();
+        assertThat(
+                identificationSearchResult.getExternalUri(),
+                is(vertexB.uri())
+        );
+    }
 
 }
