@@ -17,7 +17,10 @@ public class GraphFactoryTest extends ModelTestResources {
 
     @Test
     public void creating_a_user_graph_creates_one_bubble_labeled_me(){
-        User user = User.withEmail("a@example.com");
+        User user = User.withEmailAndUsername(
+                "a@example.com",
+                "a"
+        );
         UserGraph userGraph = graphFactory.createForUser(user);
         assertThat(
                 userGraph.defaultVertex().label(),
