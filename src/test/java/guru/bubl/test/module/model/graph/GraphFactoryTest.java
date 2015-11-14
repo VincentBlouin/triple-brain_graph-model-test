@@ -16,19 +16,6 @@ import static org.junit.Assert.assertThat;
 public class GraphFactoryTest extends ModelTestResources {
 
     @Test
-    public void creating_a_user_graph_creates_one_bubble_labeled_me(){
-        User user = User.withEmailAndUsername(
-                "a@example.com",
-                "a"
-        );
-        UserGraph userGraph = graphFactory.createForUser(user);
-        assertThat(
-                userGraph.defaultVertex().label(),
-                is("me")
-        );
-    }
-
-    @Test
     public void the_default_created_bubble_has_1_center_bubble_visit(){
         User user = User.withEmail("a@example.com");
         graphFactory.createForUser(user);
