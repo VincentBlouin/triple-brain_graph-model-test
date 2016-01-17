@@ -107,6 +107,17 @@ public class ModelTestScenarios {
         );
     }
 
+    public IdentificationPojo personFromFreebase() {
+        return new IdentificationPojo(
+                URI.create(
+                        "http://rdf.freebase.com/rdf/people/person"
+                ),
+                new FriendlyResourcePojo(
+                        "Person"
+                )
+        );
+    }
+
     public IdentificationPojo location() {
         FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
                 "Location"
@@ -199,6 +210,21 @@ public class ModelTestScenarios {
                 new FriendlyResourcePojo(
                         URI.create("http://rdf.freebase.com/rdf/type/datetime"),
                         "Date"
+                ),
+                Suggestion.SUGGESTION_IDENTIFICATION_PREFIX + "http://rdf.freebase.com/rdf/time/event",
+                user
+        );
+    }
+
+    public SuggestionPojo venueSuggestionFromEventIdentification(User user) {
+        return SuggestionPojo.forSameAsTypeAndOrigin(
+                new FriendlyResourcePojo(
+                        URI.create("https://www.wikidata.org/wiki/Q17350442"),
+                        "venue"
+                ),
+                new FriendlyResourcePojo(
+                        URI.create("https://www.wikidata.org/wiki/Q13226383"),
+                        "Facility"
                 ),
                 Suggestion.SUGGESTION_IDENTIFICATION_PREFIX + "http://rdf.freebase.com/rdf/time/event",
                 user
