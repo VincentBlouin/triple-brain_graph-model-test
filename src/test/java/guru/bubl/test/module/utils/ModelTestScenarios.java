@@ -179,6 +179,17 @@ public class ModelTestScenarios {
         );
     }
 
+    public IdentificationPojo startDateIdentification() {
+        return new IdentificationPojo(
+                URI.create(
+                        "http://rdf.freebase.com/rdf/time/event/start_date"
+                ),
+                new FriendlyResourcePojo(
+                        "Start Date"
+                )
+        );
+    }
+
     public SuggestionPojo startDateSuggestionFromEventIdentification(User user) {
         return SuggestionPojo.forSameAsTypeAndOrigin(
                 new FriendlyResourcePojo(
