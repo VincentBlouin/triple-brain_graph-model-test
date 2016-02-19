@@ -4,18 +4,15 @@
 
 package guru.bubl.test.module.model;
 
-import guru.bubl.module.model.graph.Identification;
-import guru.bubl.test.module.model.center_graph_element.CenterGraphElementOperatorTest;
-import guru.bubl.test.module.model.center_graph_element.WholeGraphAdminTest;
-import guru.bubl.test.module.model.graph.*;
+import guru.bubl.module.model.IdentifiedTo;
+import guru.bubl.test.module.model.graph.IdentifiedToTest;
 import guru.bubl.test.module.model.graph.search.GraphSearchTest;
 import guru.bubl.test.module.utils.ModelTestRunner;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-@Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-       GraphSearchTest.class
+       IdentifiedToTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}

@@ -8,7 +8,6 @@ import com.google.common.collect.Sets;
 import guru.bubl.module.model.Image;
 import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.search.*;
 import guru.bubl.test.module.utils.ModelTestScenarios;
@@ -181,7 +180,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     @Test
     public void can_search_relations() {
         indexGraph();
-        List<GraphElementSearchResult> results = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
+        List<GraphElementSearchResult> results = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
                 "between vert",
                 user
         );
@@ -191,7 +190,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     @Test
     public void relation_source_and_destination_vertex_label_and_uri_are_included_in_result() {
         indexGraph();
-        List<GraphElementSearchResult> relations = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
+        List<GraphElementSearchResult> relations = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
                 "between vertex A and B",
                 user
         );
@@ -226,7 +225,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void schemas_are_included_in_relations_search() {
-        List<GraphElementSearchResult> results = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
+        List<GraphElementSearchResult> results = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
                 "schema1",
                 user
         );
@@ -239,7 +238,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 )
         );
         graphIndexer.commit();
-        results = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
+        results = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
                 "schema1",
                 user
         );
@@ -328,7 +327,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         );
         graphIndexer.commit();
         assertTrue(
-                graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
+                graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
                         "prop",
                         userGraph.user()
                 ).isEmpty()
@@ -344,7 +343,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         );
         graphIndexer.commit();
         assertThat(
-                graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
+                graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
                         "prop1",
                         userGraph.user()
                 ).size(),
@@ -358,7 +357,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         schema.label("schema1");
         GraphElementOperator property1 = schema.addProperty();
         property1.label("prop1");
-        PropertySearchResult searchResult = (PropertySearchResult) graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
+        PropertySearchResult searchResult = (PropertySearchResult) graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
                 "prop1",
                 userGraph.user()
         ).get(0);
@@ -400,7 +399,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 )
         );
         graphIndexer.commit();
-        List<GraphElementSearchResult> searchResults = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
+        List<GraphElementSearchResult> searchResults = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
                 "prop",
                 user2
         );
@@ -802,121 +801,53 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-    public void identifications_to_graph_elements_are_included_in_search_results() {
-        List<GraphElementSearchResult> results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+    public void the_number_of_references_to_an_element_is_included() {
+        IdentificationPojo vertexBAsIdentifier = identificationFromFriendlyResource(vertexB);
+        vertexBAsIdentifier.setLabel(
+                "some identifier"
+        );
+        vertexA.addGenericIdentification(vertexBAsIdentifier);
+        VertexSearchResult vertexSearchResult = (VertexSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 "vertex Bareau",
                 user
-        );
+        ).iterator().next();
         assertThat(
-                results.size(),
-                is(1)
-        );
-        vertexA.addGenericIdentification(
-                identificationFromFriendlyResource(vertexB)
-        );
-        results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "vertex Bareau",
-                user
-        );
-        assertThat(
-                results.size(),
+                vertexSearchResult.getNbReferences(),
                 is(2)
         );
     }
 
     @Test
-    public void identification_search_result_have_number_of_references() {
+    public void related_elements_do_not_include_the_identifier() {
         IdentificationPojo vertexBAsIdentifier = identificationFromFriendlyResource(vertexB);
         vertexBAsIdentifier.setLabel(
-                "identifier of vertex Bareau"
+                "some identifier"
         );
-        vertexA.addGenericIdentification(
-                vertexBAsIdentifier
-        );
-        IdentificationSearchResult identificationSearchResult = (IdentificationSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "identifier",
+        vertexA.addGenericIdentification(vertexBAsIdentifier);
+        VertexSearchResult vertexSearchResult = (VertexSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "vertex Bareau",
                 user
         ).iterator().next();
         assertThat(
-                identificationSearchResult.getNbReferences(),
+                vertexSearchResult.getProperties().size(),
                 is(2)
         );
     }
+
     @Test
-    public void identification_result_as_the_right_label() {
+    public void the_identifier_external_resource_uri_has_to_be_the_element_for_it_to_have_the_nb_references() {
         IdentificationPojo vertexBAsIdentifier = identificationFromFriendlyResource(vertexB);
         vertexBAsIdentifier.setLabel(
-                "identifier of vertex Bareau"
+                "some identifier"
         );
         vertexA.addGenericIdentification(vertexBAsIdentifier);
-        IdentificationSearchResult identificationSearchResult = (IdentificationSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "identifier",
+        VertexSearchResult vertexSearchResult = (VertexSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "vertex Azure",
                 user
         ).iterator().next();
         assertThat(
-                identificationSearchResult.getGraphElement().label(),
-                is("identifier of vertex Bareau")
+                vertexSearchResult.getNbReferences(),
+                is(0)
         );
     }
-
-    @Test
-    public void can_get_detail_search_result_of_an_identifier(){
-        vertexB.comment("description of vertex b");
-        IdentificationPojo vertexBAsIdentifier = identificationFromFriendlyResource(vertexB);
-        vertexBAsIdentifier.setLabel(
-                "identifier of vertex Bareau"
-        );
-        vertexA.addGenericIdentification(vertexBAsIdentifier);
-        IdentificationSearchResult identificationSearchResult = (IdentificationSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "identifier",
-                user
-        ).iterator().next();
-        GraphElementSearchResult searchResult = graphSearch.getDetails(
-                identificationSearchResult.getGraphElement().uri(),
-                user
-        );
-        assertThat(
-                searchResult.getGraphElement().comment(),
-                is("description of vertex b")
-        );
-    }
-    @Test
-    public void identifiers_are_included_in_searching_relations_for_identification(){
-        IdentificationPojo edgeBetweenAAndBAsAnIdentification = identificationFromFriendlyResource(
-                vertexA.getEdgeThatLinksToDestinationVertex(vertexB)
-        );
-        edgeBetweenAAndBAsAnIdentification.setLabel("identifier");
-        vertexB.getEdgeThatLinksToDestinationVertex(vertexC).addGenericIdentification(
-                edgeBetweenAAndBAsAnIdentification
-        );
-
-        GraphElementSearchResult result = graphSearch.searchRelationsPropertiesSchemasOrIdentifiersForAutoCompletionByLabel(
-                "identifier",
-                user
-        ).iterator().next();
-        assertThat(
-                result.getType(),
-                is("identification")
-        );
-    }
-
-    @Test
-    public void identifiers_search_result_have_their_external_uri(){
-        IdentificationPojo vertexBAsIdentifier = identificationFromFriendlyResource(vertexB);
-        vertexBAsIdentifier.setLabel(
-                "identifier of vertex Bareau"
-        );
-        vertexA.addGenericIdentification(
-                vertexBAsIdentifier
-        );
-        IdentificationSearchResult identificationSearchResult = (IdentificationSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "identifier",
-                user
-        ).iterator().next();
-        assertThat(
-                identificationSearchResult.getExternalUri(),
-                is(vertexB.uri())
-        );
-    }
-
 }
