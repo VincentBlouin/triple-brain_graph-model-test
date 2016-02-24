@@ -7,6 +7,7 @@ package guru.bubl.test.module.model.center_graph_element;
 import com.google.inject.Inject;
 import guru.bubl.module.model.admin.WholeGraphAdminFactory;
 import guru.bubl.module.model.graph.IdentificationPojo;
+import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 
@@ -75,7 +76,9 @@ public class WholeGraphAdminTest extends ModelTestResources {
     @Test
     public void does_not_duplicate_identifications_when_re_adding_even_if_identification_is_a_graph_element() {
         vertexB.addType(
-                identificationFromFriendlyResource(vertexA)
+                TestScenarios.identificationFromFriendlyResource(
+                        vertexA
+                )
         );
         assertThat(
                 vertexB.getAdditionalTypes().size(),

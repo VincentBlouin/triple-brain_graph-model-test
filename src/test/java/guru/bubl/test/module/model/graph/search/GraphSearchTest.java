@@ -10,6 +10,7 @@ import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.search.*;
+import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestScenarios;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.test.module.utils.search.Neo4jSearchRelatedTest;
@@ -802,7 +803,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void the_number_of_references_to_an_element_is_included() {
-        IdentificationPojo vertexBAsIdentifier = identificationFromFriendlyResource(vertexB);
+        IdentificationPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
         vertexBAsIdentifier.setLabel(
                 "some identifier"
         );
@@ -819,7 +820,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void related_elements_do_not_include_the_identifier() {
-        IdentificationPojo vertexBAsIdentifier = identificationFromFriendlyResource(vertexB);
+        IdentificationPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
         vertexBAsIdentifier.setLabel(
                 "some identifier"
         );
@@ -836,7 +837,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void the_identifier_external_resource_uri_has_to_be_the_element_for_it_to_have_the_nb_references() {
-        IdentificationPojo vertexBAsIdentifier = identificationFromFriendlyResource(vertexB);
+        IdentificationPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
         vertexBAsIdentifier.setLabel(
                 "some identifier"
         );

@@ -10,11 +10,11 @@ import guru.bubl.module.model.graph.IdentificationFactory;
 import guru.bubl.module.model.graph.IdentificationPojo;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
-import guru.bubl.test.module.utils.ModelTestScenarios;
 import org.hamcrest.core.Is;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -384,7 +384,7 @@ public class VertexOperatorTest extends ModelTestResources {
                 )
         );
         vertexA.addSameAs(
-                identificationFromFriendlyResource(
+                TestScenarios.identificationFromFriendlyResource(
                         vertexB
                 )
         );

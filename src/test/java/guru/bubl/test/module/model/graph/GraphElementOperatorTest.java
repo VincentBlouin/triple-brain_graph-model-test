@@ -5,14 +5,13 @@
 package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.Image;
-import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.GraphElementOperator;
 import guru.bubl.module.model.graph.Identification;
 import guru.bubl.module.model.graph.IdentificationPojo;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
-import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
+import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 import org.parboiled.common.StringUtils;
@@ -34,26 +33,24 @@ public class GraphElementOperatorTest extends ModelTestResources {
         GraphElementOperator vertexAGraphElement = vertexA;
         try {
             vertexAGraphElement.addGenericIdentification(
-                    identificationFromFriendlyResource(
+                    TestScenarios.identificationFromFriendlyResource(
                             vertexA
-                    )
-            );
+                    ));
             fail();
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), is(errorMessage));
         }
         try {
             vertexAGraphElement.addSameAs(
-                    identificationFromFriendlyResource(
+                    TestScenarios.identificationFromFriendlyResource(
                             vertexA
-                    )
-            );
+                    ));
             fail();
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage(), is(errorMessage));
         }
         try {
-            vertexAGraphElement.addType(identificationFromFriendlyResource(
+            vertexAGraphElement.addType(TestScenarios.identificationFromFriendlyResource(
                     vertexA
             ));
             fail();
@@ -247,7 +244,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void on_creation_identifications_have_1_reference(){
+    public void on_creation_identifications_have_1_reference() {
         IdentificationPojo identification = vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
@@ -258,7 +255,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void adding_an_identification_increments_number_of_references(){
+    public void adding_an_identification_increments_number_of_references() {
         IdentificationPojo identification = vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
@@ -276,7 +273,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void removing_an_identification_decrements_number_of_references(){
+    public void removing_an_identification_decrements_number_of_references() {
         vertexA.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
         );
@@ -299,9 +296,11 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void graph_element_becomes_identified_to_itself_if_used_as_identifier(){
+    public void graph_element_becomes_identified_to_itself_if_used_as_identifier() {
         IdentificationPojo identification = vertexA.addGenericIdentification(
-                identificationFromFriendlyResource(vertexB)
+                TestScenarios.identificationFromFriendlyResource(
+                        vertexB
+                )
         ).values().iterator().next();
         assertTrue(
                 vertexA.getIdentifications().containsKey(
@@ -316,9 +315,11 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void when_identified_to_a_graph_element_the_number_of_references_to_the_new_identification_is_2(){
+    public void when_identified_to_a_graph_element_the_number_of_references_to_the_new_identification_is_2() {
         IdentificationPojo identification = vertexA.addGenericIdentification(
-                identificationFromFriendlyResource(vertexB)
+                TestScenarios.identificationFromFriendlyResource(
+                        vertexB
+                )
         ).values().iterator().next();
         assertThat(
                 identification.getNbReferences(),
@@ -327,9 +328,11 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void can_identify_to_an_identification_where_the_external_uri_is_the_identification_uri(){
+    public void can_identify_to_an_identification_where_the_external_uri_is_the_identification_uri() {
         IdentificationPojo vertexBAsIdentification = vertexA.addGenericIdentification(
-                identificationFromFriendlyResource(vertexB)
+                TestScenarios.identificationFromFriendlyResource(
+                        vertexB
+                )
         ).values().iterator().next();
 
         vertexBAsIdentification.setExternalResourceUri(vertexBAsIdentification.uri());
@@ -350,11 +353,13 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void when_identifying_to_an_identification_the_uri_and_external_uri_are_set_correctly(){
+    public void when_identifying_to_an_identification_the_uri_and_external_uri_are_set_correctly() {
         IdentificationPojo vertexBAsIdentification = vertexA.addGenericIdentification(
-                identificationFromFriendlyResource(vertexB)
+                TestScenarios.identificationFromFriendlyResource(
+                        vertexB
+                )
         ).values().iterator().next();
-        URI vertexBAsAnIdentificationUri =  vertexBAsIdentification.uri();
+        URI vertexBAsAnIdentificationUri = vertexBAsIdentification.uri();
         vertexBAsIdentification.setExternalResourceUri(vertexBAsAnIdentificationUri);
         vertexBAsIdentification.setUri(null);
         vertexC.addGenericIdentification(
@@ -372,11 +377,13 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void an_identification_does_identify_to_itself(){
+    public void an_identification_does_identify_to_itself() {
         IdentificationPojo vertexBAsIdentification = vertexA.addGenericIdentification(
-                identificationFromFriendlyResource(vertexB)
+                TestScenarios.identificationFromFriendlyResource(
+                        vertexB
+                )
         ).values().iterator().next();
-        URI vertexBAsAnIdentificationUri =  vertexBAsIdentification.uri();
+        URI vertexBAsAnIdentificationUri = vertexBAsIdentification.uri();
         vertexBAsIdentification.setExternalResourceUri(vertexBAsAnIdentificationUri);
         vertexBAsIdentification.setUri(null);
         Identification createdIdentification = vertexC.addGenericIdentification(
@@ -393,11 +400,13 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void when_identifying_to_an_identification_the_number_of_references_increases_by_1(){
+    public void when_identifying_to_an_identification_the_number_of_references_increases_by_1() {
         IdentificationPojo vertexBAsIdentification = vertexA.addGenericIdentification(
-                identificationFromFriendlyResource(vertexB)
+                TestScenarios.identificationFromFriendlyResource(
+                        vertexB
+                )
         ).values().iterator().next();
-        URI vertexBAsAnIdentificationUri =  vertexBAsIdentification.uri();
+        URI vertexBAsAnIdentificationUri = vertexBAsIdentification.uri();
         vertexBAsIdentification.setExternalResourceUri(vertexBAsAnIdentificationUri);
         vertexBAsIdentification.setUri(null);
         Identification createdIdentification = vertexC.addGenericIdentification(
@@ -410,17 +419,21 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void when_identifying_to_a_schema_the_number_of_references_for_first_identification_is_2_and_the_next_increase_by_1(){
+    public void when_identifying_to_a_schema_the_number_of_references_for_first_identification_is_2_and_the_next_increase_by_1() {
         SchemaOperator schema = createSchema();
         IdentificationPojo schemaAsIdentification = vertexA.addGenericIdentification(
-                identificationFromFriendlyResource(schema)
+                TestScenarios.identificationFromFriendlyResource(
+                        schema
+                )
         ).values().iterator().next();
         assertThat(
                 schemaAsIdentification.getNbReferences(),
                 is(2)
         );
         schemaAsIdentification = vertexB.addGenericIdentification(
-                identificationFromFriendlyResource(schema)
+                TestScenarios.identificationFromFriendlyResource(
+                        schema
+                )
         ).values().iterator().next();
         assertThat(
                 schemaAsIdentification.getNbReferences(),
@@ -429,17 +442,21 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void when_identifying_to_a_schema_property_the_number_of_references_increases_by_1(){
+    public void when_identifying_to_a_schema_property_the_number_of_references_increases_by_1() {
         GraphElementOperator property = createSchema().addProperty();
         IdentificationPojo propertyAsIdentification = vertexA.addGenericIdentification(
-                identificationFromFriendlyResource(property)
+                TestScenarios.identificationFromFriendlyResource(
+                        property
+                )
         ).values().iterator().next();
         assertThat(
                 propertyAsIdentification.getNbReferences(),
                 is(2)
         );
         propertyAsIdentification = vertexB.addGenericIdentification(
-                identificationFromFriendlyResource(property)
+                TestScenarios.identificationFromFriendlyResource(
+                        property
+                )
         ).values().iterator().next();
         assertThat(
                 propertyAsIdentification.getNbReferences(),
@@ -448,7 +465,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void identifying_to_a_graph_element_also_identifies_to_its_identifiers(){
+    public void identifying_to_a_graph_element_also_identifies_to_its_identifiers() {
         EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         edgeBetweenAAndB.addSameAs(
                 modelTestScenarios.possessionIdentification()
@@ -457,7 +474,9 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 vertexC
         );
         edgeBetweenBAndC.addSameAs(
-                identificationFromFriendlyResource(edgeBetweenAAndB)
+                TestScenarios.identificationFromFriendlyResource(
+                        edgeBetweenAAndB
+                )
         );
         assertTrue(
                 edgeBetweenBAndC.getIdentifications().containsKey(edgeBetweenAAndB.uri())
@@ -474,7 +493,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void identifying_to_a_graph_element_that_has_multiple_identifiers_returns_them_all(){
+    public void identifying_to_a_graph_element_that_has_multiple_identifiers_returns_them_all() {
         EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         edgeBetweenAAndB.addSameAs(
                 modelTestScenarios.possessionIdentification()
@@ -483,7 +502,9 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 vertexC
         );
         Map<URI, IdentificationPojo> returnedIdentifiers = edgeBetweenBAndC.addSameAs(
-                identificationFromFriendlyResource(edgeBetweenAAndB)
+                TestScenarios.identificationFromFriendlyResource(
+                        edgeBetweenAAndB
+                )
         );
         assertTrue(
                 returnedIdentifiers.containsKey(edgeBetweenAAndB.uri())
@@ -500,7 +521,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void new_identifications_from_identifying_to_a_graph_element_that_has_multiple_identifiers_increments_their_number_of_references(){
+    public void new_identifications_from_identifying_to_a_graph_element_that_has_multiple_identifiers_increments_their_number_of_references() {
         IdentificationPojo personIdentification = vertexA.addGenericIdentification(
                 modelTestScenarios.person()
         ).values().iterator().next();
@@ -509,7 +530,9 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 is(1)
         );
         personIdentification = vertexB.addSameAs(
-                identificationFromFriendlyResource(vertexA)
+                TestScenarios.identificationFromFriendlyResource(
+                        vertexA
+                )
         ).get(personIdentification.getExternalResourceUri());
         assertThat(
                 personIdentification.getNbReferences(),
@@ -518,7 +541,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void identifying_to_a_graph_element_that_has_another_identification_that_shares_the_other_graph_element_does_not_increment_the_number_of_references(){
+    public void identifying_to_a_graph_element_that_has_another_identification_that_shares_the_other_graph_element_does_not_increment_the_number_of_references() {
         vertexA.addGenericIdentification(
                 modelTestScenarios.person()
         ).values().iterator().next();
@@ -530,7 +553,9 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 is(2)
         );
         personIdentification = vertexB.addSameAs(
-                identificationFromFriendlyResource(vertexA)
+                TestScenarios.identificationFromFriendlyResource(
+                        vertexA
+                )
         ).get(personIdentification.getExternalResourceUri());
         assertThat(
                 personIdentification.getNbReferences(),
@@ -544,7 +569,9 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 vertexB.getSameAs().containsKey(vertexA.uri())
         );
         vertexB.addSameAs(
-                identificationFromFriendlyResource(vertexA)
+                TestScenarios.identificationFromFriendlyResource(
+                        vertexA
+                )
         );
         assertTrue(
                 vertexB.getSameAs().containsKey(vertexA.uri())

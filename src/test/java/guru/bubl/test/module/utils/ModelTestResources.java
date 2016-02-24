@@ -190,13 +190,6 @@ public class ModelTestResources {
         return wholeGraph.getAllEdges().size();
     }
 
-    protected IdentificationPojo identificationFromFriendlyResource(FriendlyResourceOperator resource){
-        return new IdentificationPojo(
-                resource.uri(),
-                new FriendlyResourcePojo(resource)
-        );
-    }
-
     protected void testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(GraphElementOperator graphElement){
         IdentificationPojo computerScientist = graphElement.addGenericIdentification(
                 modelTestScenarios.computerScientistType()
