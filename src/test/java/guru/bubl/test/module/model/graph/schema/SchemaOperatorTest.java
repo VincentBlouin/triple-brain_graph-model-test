@@ -2,7 +2,7 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package guru.bubl.test.module.model.graph;
+package guru.bubl.test.module.model.graph.schema;
 
 import guru.bubl.module.model.graph.GraphElement;
 import guru.bubl.module.model.graph.GraphElementOperator;
