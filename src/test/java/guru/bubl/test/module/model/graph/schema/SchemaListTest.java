@@ -4,6 +4,7 @@
 
 package guru.bubl.test.module.model.graph.schema;
 
+import guru.bubl.module.model.graph.GraphElementOperator;
 import guru.bubl.module.model.graph.schema.SchemaList;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.schema.SchemaPojo;
@@ -62,11 +63,13 @@ public class SchemaListTest extends ModelTestResources {
     }
 
     @Test
-    public void properties_are_not_included() {
-        createSchema().addProperty();
+    public void properties_label_are_included() {
+        GraphElementOperator property = createSchema().addProperty();
+        property.label("a property");
         SchemaPojo someSchema = schemaList.get().iterator().next();
-        assertFalse(
-                someSchema.hasProperties()
+        assertThat(
+                someSchema.getProperties().values().iterator().next().label(),
+                is("a property")
         );
     }
 }
