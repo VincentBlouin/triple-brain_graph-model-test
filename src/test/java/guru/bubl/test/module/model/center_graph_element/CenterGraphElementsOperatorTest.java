@@ -19,7 +19,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         assertThat(
                 centerGraphElementsOperatorFactory.forUser(
                         user
-                ).get().size(),
+                ).getPublicAndPrivate().size(),
                 is(
                         1
                 )
@@ -27,7 +27,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         assertThat(
                 centerGraphElementsOperatorFactory.forUser(
                         anotherUser
-                ).get().size(),
+                ).getPublicAndPrivate().size(),
                 is(
                         1
                 )
@@ -38,7 +38,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         assertThat(
                 centerGraphElementsOperatorFactory.forUser(
                         user
-                ).get().size(),
+                ).getPublicAndPrivate().size(),
                 is(
                         2
                 )
@@ -46,9 +46,51 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         assertThat(
                 centerGraphElementsOperatorFactory.forUser(
                         anotherUser
-                ).get().size(),
+                ).getPublicAndPrivate().size(),
                 is(
                         1
+                )
+        );
+    }
+
+    @Test
+    public void can_get_only_public_bubbles(){
+        assertThat(
+                centerGraphElementsOperatorFactory.forUser(
+                        user
+                ).getPublicOnly().size(),
+                is(
+                        0
+                )
+        );
+        vertexA.makePublic();
+        assertThat(
+                centerGraphElementsOperatorFactory.forUser(
+                        user
+                ).getPublicOnly().size(),
+                is(
+                        1
+                )
+        );
+    }
+
+    @Test
+    public void does_not_return_public_bubble_if_not_a_center_bubble(){
+        assertThat(
+                centerGraphElementsOperatorFactory.forUser(
+                        user
+                ).getPublicOnly().size(),
+                is(
+                        0
+                )
+        );
+        vertexB.makePublic();
+        assertThat(
+                centerGraphElementsOperatorFactory.forUser(
+                        user
+                ).getPublicOnly().size(),
+                is(
+                        0
                 )
         );
     }

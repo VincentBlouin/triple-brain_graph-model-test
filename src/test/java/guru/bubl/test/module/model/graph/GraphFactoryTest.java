@@ -21,7 +21,7 @@ public class GraphFactoryTest extends ModelTestResources {
         graphFactory.createForUser(user);
         CenterGraphElementPojo centerGraphElement = centerGraphElementsOperatorFactory.forUser(
                 user
-        ).get().iterator().next();
+        ).getPublicAndPrivate().iterator().next();
         assertThat(
                 centerGraphElement.getNumberOfVisits(),
                 is(1)
