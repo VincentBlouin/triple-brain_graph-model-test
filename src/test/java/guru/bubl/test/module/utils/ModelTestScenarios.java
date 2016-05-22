@@ -6,7 +6,7 @@ package guru.bubl.test.module.utils;
 
 import guru.bubl.module.model.User;
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
-import guru.bubl.module.model.graph.IdentificationPojo;
+import guru.bubl.module.model.graph.identification.IdentificationPojo;
 import guru.bubl.module.model.suggestion.Suggestion;
 import guru.bubl.module.model.suggestion.SuggestionPojo;
 

@@ -2,10 +2,10 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package guru.bubl.test.module.model.graph;
+package guru.bubl.test.module.model.graph.identification;
 
-import guru.bubl.module.model.graph.IdentificationOperator;
-import guru.bubl.module.model.graph.IdentificationPojo;
+import guru.bubl.module.model.graph.identification.IdentificationOperator;
+import guru.bubl.module.model.graph.identification.IdentificationPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 

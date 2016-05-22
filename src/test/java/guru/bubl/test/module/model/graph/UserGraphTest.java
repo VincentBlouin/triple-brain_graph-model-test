@@ -14,10 +14,14 @@ import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
 import guru.bubl.module.model.graph.exceptions.NonExistingResourceException;
+import guru.bubl.module.model.graph.identification.IdentificationPojo;
 import guru.bubl.module.model.graph.schema.Schema;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.schema.SchemaPojo;
+import guru.bubl.module.model.graph.subgraph.SubGraph;
+import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.vertex.*;
+import guru.bubl.module.model.search.VertexSearchResult;
 import guru.bubl.module.model.suggestion.Suggestion;
 import guru.bubl.module.model.suggestion.SuggestionOrigin;
 import guru.bubl.module.model.test.SubGraphOperator;
@@ -223,7 +227,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-    public void has_number_of_references_to_an_identification(){
+    public void has_number_of_references_to_an_identification() {
         vertexA.addGenericIdentification(
                 modelTestScenarios.person()
         );
@@ -649,13 +653,6 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-    @Ignore("to implement later, not a priority")
-    public void can_get_rdf_xml_representation_of_graph() {
-        assertThat(userGraph.toRdfXml(), is(not(nullValue())));
-    }
-
-
-    @Test
     public void can_create_new_vertex_out_of_nothing() {
         Vertex vertex = userGraph.createVertex();
         SubGraphOperator subGraph = wholeGraph();
@@ -765,7 +762,7 @@ public class UserGraphTest extends ModelTestResources {
                 1,
                 vertexA.uri()
         );
-        assertThat(
+    ;    assertThat(
                 subGraph.edgeWithIdentifier(
                         edge.uri()
                 ).sourceVertex(),
@@ -775,7 +772,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Override
     public VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
-        return (VertexInSubGraphPojo) userGraph.graphWithAnyVertexAndDepth(
+        return userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         ).vertexWithIdentifier(vertex.uri());
     }

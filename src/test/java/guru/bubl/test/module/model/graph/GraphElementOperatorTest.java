@@ -6,8 +6,8 @@ package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.Image;
 import guru.bubl.module.model.graph.GraphElementOperator;
-import guru.bubl.module.model.graph.Identification;
-import guru.bubl.module.model.graph.IdentificationPojo;
+import guru.bubl.module.model.graph.identification.Identification;
+import guru.bubl.module.model.graph.identification.IdentificationPojo;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;

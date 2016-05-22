@@ -5,9 +5,9 @@
 package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
-import guru.bubl.module.model.graph.Identification;
-import guru.bubl.module.model.graph.IdentificationFactory;
-import guru.bubl.module.model.graph.IdentificationPojo;
+import guru.bubl.module.model.graph.identification.Identification;
+import guru.bubl.module.model.graph.identification.IdentificationFactory;
+import guru.bubl.module.model.graph.identification.IdentificationPojo;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
@@ -747,6 +747,61 @@ public class VertexOperatorTest extends ModelTestResources {
         assertThat(
                 vertexC.getNumberOfConnectedEdges(),
                 is(numberOfEdgesForVertexC + 1)
+        );
+    }
+
+    @Test
+    public void clone_does_not_have_the_same_uri(){
+        Vertex vertexAClone = vertexA.cloneForUser(
+                user
+        );
+        assertThat(
+                vertexAClone.uri(),
+                not(vertexA.uri())
+        );
+    }
+
+    @Test
+    public void clone_has_same_label_and_comment(){
+        vertexA.comment(
+                "vertex A comment"
+        );
+        VertexOperator vertexAClone = vertexA.cloneForUser(
+                user
+        );
+        assertThat(
+                vertexAClone.label(),
+                is("vertex A")
+        );
+        assertThat(
+                vertexAClone.comment(),
+                is("vertex A comment")
+        );
+    }
+
+    @Test
+    public void clone_is_identified_to_original_vertex(){
+        VertexOperator vertexAClone = vertexA.cloneForUser(
+                user
+        );
+        vertexAClone.getIdentifications().containsKey(
+                vertexA.uri()
+        );
+    }
+
+    @Test
+    public void clone_identification_to_original_vertex_has_the_original_vertex_label(){
+        VertexOperator vertexAClone = vertexA.cloneForUser(
+                user
+        );
+        Identification identification = identificationFactory.withUri(
+                vertexAClone.getIdentifications().get(
+                        vertexA.uri()
+                ).uri()
+        );
+        assertThat(
+                identification.label(),
+                is("vertex A")
         );
     }
 

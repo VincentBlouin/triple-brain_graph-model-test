@@ -4,7 +4,6 @@
 
 package guru.bubl.test.module.model.graph;
 
-import guru.bubl.module.model.graph.IdentificationPojo;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.test.module.utils.ModelTestResources;

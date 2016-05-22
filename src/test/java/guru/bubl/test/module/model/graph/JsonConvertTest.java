@@ -4,7 +4,7 @@
 
 package guru.bubl.test.module.model.graph;
 
-import guru.bubl.module.model.graph.SubGraphPojo;
+import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.codehaus.jettison.json.JSONObject;

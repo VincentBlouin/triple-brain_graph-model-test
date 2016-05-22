@@ -6,8 +6,8 @@ package learning;
 
 import com.google.gson.Gson;
 import guru.bubl.test.module.utils.AdaptableGraphComponentTest;
-import guru.bubl.module.model.graph.IdentificationPojo;
-import guru.bubl.module.model.graph.SubGraph;
+import guru.bubl.module.model.graph.identification.IdentificationPojo;
+import guru.bubl.module.model.graph.subgraph.SubGraph;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Test;

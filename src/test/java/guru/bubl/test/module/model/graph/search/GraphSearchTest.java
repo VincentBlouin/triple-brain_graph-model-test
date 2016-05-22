@@ -8,6 +8,7 @@ import com.google.common.collect.Sets;
 import guru.bubl.module.model.Image;
 import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.identification.IdentificationPojo;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.search.*;
 import guru.bubl.module.model.test.scenarios.TestScenarios;

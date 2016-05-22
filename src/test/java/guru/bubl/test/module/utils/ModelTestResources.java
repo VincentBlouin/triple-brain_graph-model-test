@@ -4,18 +4,23 @@
 
 package guru.bubl.test.module.utils;
 
-import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.FriendlyResourceFactory;
 import guru.bubl.module.model.IdentifiedTo;
 import guru.bubl.module.model.User;
-import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperatorFactory;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementsOperatorFactory;
 import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeFactory;
 import guru.bubl.module.model.graph.edge.EdgePojo;
+import guru.bubl.module.model.graph.GraphFactory;
+import guru.bubl.module.model.graph.subgraph.SubGraphForker;
+import guru.bubl.module.model.graph.subgraph.SubGraphForkerFactory;
+import guru.bubl.module.model.graph.subgraph.UserGraph;
+import guru.bubl.module.model.graph.identification.IdentificationFactory;
+import guru.bubl.module.model.graph.identification.IdentificationPojo;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
+import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
@@ -98,6 +103,9 @@ public class ModelTestResources {
     @Inject
     protected IdentificationFactory identificationFactory;
 
+    @Inject
+    SubGraphForkerFactory subGraphForkerFactory;
+
     protected VertexOperator vertexA;
     protected VertexOperator vertexB;
     protected VertexOperator vertexC;
@@ -107,6 +115,9 @@ public class ModelTestResources {
     protected static User anotherUser;
     protected static UserGraph anotherUserGraph;
     protected static VertexOperator vertexOfAnotherUser;
+
+    protected static SubGraphForker forker;
+    protected static SubGraphForker anotherUserForker;
 
     protected Transaction transaction;
 
@@ -119,10 +130,11 @@ public class ModelTestResources {
         user = User.withEmail(
                 "roger.lamothe@example.org"
         ).setUsername("roger_lamothe");
+        forker = subGraphForkerFactory.forUser(user);
         anotherUser = User.withEmail(
                 "colette.armande@example.org"
         ).setUsername("colette_armande");
-
+        anotherUserForker = subGraphForkerFactory.forUser(anotherUser);
         userGraph = neo4jUserGraphFactory.withUser(user);
         VerticesCalledABAndC verticesCalledABAndC = testScenarios.makeGraphHave3VerticesABCWhereAIsDefaultCenterVertexAndAPointsToBAndBPointsToC(
                 userGraph
