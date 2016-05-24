@@ -218,4 +218,47 @@ public class SubGraphForkerTest extends ModelTestResources {
                 identifiedToHuman.isEmpty()
         );
     }
+
+    @Test
+    public void vertices_are_not_forked_more_than_once() {
+        vertexA.makePublic();
+        vertexB.makePublic();
+        vertexC.makePublic();
+        anotherUserForker.fork(
+                userGraph.graphWithDepthAndCenterVertexId(
+                        1,
+                        vertexB.uri()
+                )
+        );
+        IdentificationPojo vertexAIdentifier = TestScenarios.identificationFromFriendlyResource(
+                vertexA
+        );
+        assertThat(
+                identifiedTo.getForIdentificationAndUser(
+                        vertexAIdentifier,
+                        anotherUser
+                ).size(),
+                is(1)
+        );
+        IdentificationPojo vertexBIdentifier = TestScenarios.identificationFromFriendlyResource(
+                vertexB
+        );
+        assertThat(
+                identifiedTo.getForIdentificationAndUser(
+                        vertexBIdentifier,
+                        anotherUser
+                ).size(),
+                is(1)
+        );
+        IdentificationPojo vertexCIdentifier = TestScenarios.identificationFromFriendlyResource(
+                vertexC
+        );
+        assertThat(
+                identifiedTo.getForIdentificationAndUser(
+                        vertexCIdentifier,
+                        anotherUser
+                ).size(),
+                is(1)
+        );
+    }
 }

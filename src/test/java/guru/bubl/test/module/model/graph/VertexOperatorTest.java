@@ -752,7 +752,7 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void clone_does_not_have_the_same_uri(){
-        Vertex vertexAClone = vertexA.cloneForUser(
+        Vertex vertexAClone = vertexA.forkForUser(
                 user
         );
         assertThat(
@@ -766,7 +766,7 @@ public class VertexOperatorTest extends ModelTestResources {
         vertexA.comment(
                 "vertex A comment"
         );
-        VertexOperator vertexAClone = vertexA.cloneForUser(
+        VertexOperator vertexAClone = vertexA.forkForUser(
                 user
         );
         assertThat(
@@ -781,7 +781,7 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void clone_is_identified_to_original_vertex(){
-        VertexOperator vertexAClone = vertexA.cloneForUser(
+        VertexOperator vertexAClone = vertexA.forkForUser(
                 user
         );
         vertexAClone.getIdentifications().containsKey(
@@ -791,7 +791,7 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void clone_identification_to_original_vertex_has_the_original_vertex_label(){
-        VertexOperator vertexAClone = vertexA.cloneForUser(
+        VertexOperator vertexAClone = vertexA.forkForUser(
                 user
         );
         Identification identification = identificationFactory.withUri(

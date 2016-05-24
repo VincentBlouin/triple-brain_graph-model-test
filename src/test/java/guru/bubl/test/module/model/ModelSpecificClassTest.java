@@ -13,6 +13,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-       VertexOperatorTest.class
+       SubGraphForkerTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}
