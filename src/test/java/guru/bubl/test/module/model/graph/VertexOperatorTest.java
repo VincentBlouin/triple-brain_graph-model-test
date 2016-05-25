@@ -751,9 +751,10 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void clone_does_not_have_the_same_uri(){
-        Vertex vertexAClone = vertexA.forkForUser(
-                user
+    public void fork_does_not_have_the_same_uri(){
+        Vertex vertexAClone = vertexA.forkForUserUsingCache(
+                user,
+                vertexA
         );
         assertThat(
                 vertexAClone.uri(),
@@ -762,12 +763,13 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void clone_has_same_label_and_comment(){
+    public void fork_has_same_label_and_comment(){
         vertexA.comment(
                 "vertex A comment"
         );
-        VertexOperator vertexAClone = vertexA.forkForUser(
-                user
+        VertexOperator vertexAClone = vertexA.forkForUserUsingCache(
+                user,
+                vertexA
         );
         assertThat(
                 vertexAClone.label(),
@@ -780,9 +782,10 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void clone_is_identified_to_original_vertex(){
-        VertexOperator vertexAClone = vertexA.forkForUser(
-                user
+    public void fork_is_identified_to_original_vertex(){
+        VertexOperator vertexAClone = vertexA.forkForUserUsingCache(
+                user,
+                vertexA
         );
         vertexAClone.getIdentifications().containsKey(
                 vertexA.uri()
@@ -790,9 +793,10 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void clone_identification_to_original_vertex_has_the_original_vertex_label(){
-        VertexOperator vertexAClone = vertexA.forkForUser(
-                user
+    public void fork_identification_to_original_vertex_has_the_original_vertex_label(){
+        VertexOperator vertexAClone = vertexA.forkForUserUsingCache(
+                user,
+                vertexA
         );
         Identification identification = identificationFactory.withUri(
                 vertexAClone.getIdentifications().get(

@@ -11,6 +11,7 @@ import guru.bubl.module.model.graph.identification.IdentificationPojo;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.subgraph.SubGraphForker;
 import guru.bubl.module.model.graph.subgraph.SubGraphForkerFactory;
+import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.search.VertexSearchResult;
@@ -260,5 +261,60 @@ public class SubGraphForkerTest extends ModelTestResources {
                 ).size(),
                 is(1)
         );
+    }
+
+    @Test
+    public void sub_graph_with_depth_includes_all_elements() {
+        makeAnotherUserHave3LinearPublicVertices();
+        Integer numberOfVerticesBefore = numberOfVertices();
+        Integer numberOfEdgesBefore = numberOfEdges();
+        forker.fork(
+                anotherUserGraph.graphWithDepthAndCenterVertexId(
+                        2,
+                        vertexOfAnotherUser.uri()
+                )
+        );
+        assertThat(
+                numberOfVertices(),
+                is(numberOfVerticesBefore + 3)
+        );
+        assertThat(
+                numberOfEdges(),
+                is(numberOfEdgesBefore + 2)
+        );
+    }
+
+    @Test
+    public void forked_vertices_have_the_right_number_of_connected_edges() {
+        makeAnotherUserHave3LinearPublicVertices();
+        IdentificationPojo vertexOfAnotherUserAsIdentifier = TestScenarios.identificationFromFriendlyResource(
+                vertexOfAnotherUser
+        );
+        forker.fork(
+                anotherUserGraph.graphWithDepthAndCenterVertexId(
+                        2,
+                        vertexOfAnotherUser.uri()
+                )
+        );
+        VertexOperator forkedVertexOfAnotherUser = userGraph.vertexWithUri(
+                identifiedTo.getForIdentificationAndUser(
+                        vertexOfAnotherUserAsIdentifier,
+                        user
+                ).iterator().next().getGraphElement().uri()
+        );
+        assertThat(
+                forkedVertexOfAnotherUser.getNumberOfConnectedEdges(),
+                is(1)
+        );
+    }
+
+    private void makeAnotherUserHave3LinearPublicVertices() {
+        vertexOfAnotherUser.makePublic();
+        VertexOperator another2 = vertexOfAnotherUser.addVertexAndRelation().destinationVertex();
+        another2.label("another2");
+        another2.makePublic();
+        VertexOperator another3 = another2.addVertexAndRelation().destinationVertex();
+        another3.label("another3");
+        another3.makePublic();
     }
 }
