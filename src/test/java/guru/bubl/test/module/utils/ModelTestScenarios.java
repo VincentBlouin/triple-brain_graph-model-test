@@ -160,7 +160,7 @@ public class ModelTestScenarios {
     }
 
     public SuggestionPojo nameSuggestionFromPersonIdentification(User user) {
-        return SuggestionPojo.forSameAsTypeAndOrigin(
+        return SuggestionPojo.forSameAsTypeOriginAndOwner(
                 new FriendlyResourcePojo(
                         URI.create("http://xmlns.com/foaf/0.1/name"),
                         "Name"
@@ -176,7 +176,7 @@ public class ModelTestScenarios {
 
     public SuggestionPojo nameSuggestionFromSymbolIdentification(User user) {
         String symbolUri = "http://rdf.freebase.com/rdf/m/09ddf";
-        return SuggestionPojo.forSameAsTypeAndOrigin(
+        return SuggestionPojo.forSameAsTypeOriginAndOwner(
                 new FriendlyResourcePojo(
                         URI.create("http://xmlns.com/foaf/0.1/name"),
                         "Name"
@@ -202,7 +202,7 @@ public class ModelTestScenarios {
     }
 
     public SuggestionPojo startDateSuggestionFromEventIdentification(User user) {
-        return SuggestionPojo.forSameAsTypeAndOrigin(
+        return SuggestionPojo.forSameAsTypeOriginAndOwner(
                 new FriendlyResourcePojo(
                         URI.create("http://rdf.freebase.com/rdf/time/event/start_date"),
                         "Start date"
@@ -217,7 +217,7 @@ public class ModelTestScenarios {
     }
 
     public SuggestionPojo venueSuggestionFromEventIdentification(User user) {
-        return SuggestionPojo.forSameAsTypeAndOrigin(
+        return SuggestionPojo.forSameAsTypeOriginAndOwner(
                 new FriendlyResourcePojo(
                         URI.create("https://www.wikidata.org/wiki/Q17350442"),
                         "venue"
@@ -239,7 +239,7 @@ public class ModelTestScenarios {
         sameAs.setComment(
                 "A person is a human being (man, woman or child) known to have actually existed. Living persons, celebrities and politicians are persons, as are deceased persons.\n\nNote: A person topic is distinct from a user in Metaweb. Users have profiles that can only be edited by the users themselves. A person topic can be edited by anyone and is intended as a factual representation of details about a person.\n\nFor more information, please see the Freebase wiki page on person."
         );
-        return SuggestionPojo.forSameAsTypeAndOrigin(
+        return SuggestionPojo.forSameAsTypeOriginAndOwner(
                 new FriendlyResourcePojo(
                         URI.create("http://rdf.freebase.com/rdf/time/event/people_involved"),
                         "People involved"

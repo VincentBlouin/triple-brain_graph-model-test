@@ -5,6 +5,7 @@
 package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
+import guru.bubl.module.model.graph.Triple;
 import guru.bubl.module.model.graph.identification.Identification;
 import guru.bubl.module.model.graph.identification.IdentificationFactory;
 import guru.bubl.module.model.graph.identification.IdentificationPojo;
@@ -125,7 +126,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void removing_a_vertex_decrements_number_of_references_to_its_identification(){
+    public void removing_a_vertex_decrements_number_of_references_to_its_identification() {
         testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(
                 vertexA
         );
@@ -350,6 +351,45 @@ public class VertexOperatorTest extends ModelTestResources {
                 hasTypeWithExternalUri(
                         newVertex,
                         nameSuggestion.getType().uri()
+                )
+        );
+    }
+
+    @Test
+    public void vertex_from_suggestion_from_comparison_has_type_label() {
+        SuggestionPojo suggestion = testScenarios.suggestionFromComparisonForUserAndTriple(
+                anotherUser,
+                Triple.fromEdgeSourceAndDestination(
+                        vertexA.getEdgeThatLinksToDestinationVertex(vertexB),
+                        vertexOfAnotherUser,
+                        vertexB
+                )
+        );
+        Vertex newVertex = vertexOfAnotherUser.acceptSuggestion(
+                suggestion
+        ).destinationVertex();
+        assertThat(
+                newVertex.label(),
+                is("vertex B")
+        );
+    }
+
+    @Test
+    public void vertex_from_suggestion_from_comparison_is_not_identified_to_suggestion_same_as() {
+        SuggestionPojo suggestion = testScenarios.suggestionFromComparisonForUserAndTriple(
+                anotherUser,
+                Triple.fromEdgeSourceAndDestination(
+                        vertexA.getEdgeThatLinksToDestinationVertex(vertexB),
+                        vertexOfAnotherUser,
+                        vertexB
+                )
+        );
+        VertexOperator newVertex = vertexOfAnotherUser.acceptSuggestion(
+                suggestion
+        ).destinationVertex();
+        assertFalse(
+                newVertex.getIdentifications().containsKey(
+                        suggestion.getSameAs().uri()
                 )
         );
     }
@@ -751,7 +791,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void fork_does_not_have_the_same_uri(){
+    public void fork_does_not_have_the_same_uri() {
         Vertex vertexAClone = vertexA.forkForUserUsingCache(
                 user,
                 vertexA
@@ -763,7 +803,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void fork_has_same_label_and_comment(){
+    public void fork_has_same_label_and_comment() {
         vertexA.comment(
                 "vertex A comment"
         );
@@ -782,7 +822,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void fork_is_identified_to_original_vertex(){
+    public void fork_is_identified_to_original_vertex() {
         VertexOperator vertexAClone = vertexA.forkForUserUsingCache(
                 user,
                 vertexA
@@ -793,7 +833,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void fork_identification_to_original_vertex_has_the_original_vertex_label(){
+    public void fork_identification_to_original_vertex_has_the_original_vertex_label() {
         VertexOperator vertexAClone = vertexA.forkForUserUsingCache(
                 user,
                 vertexA
