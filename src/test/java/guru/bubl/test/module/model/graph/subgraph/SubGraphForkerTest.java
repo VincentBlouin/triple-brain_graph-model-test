@@ -121,7 +121,10 @@ public class SubGraphForkerTest extends ModelTestResources {
     @Test
     public void edges_are_included() {
         vertexOfAnotherUser.makePublic();
-        vertexOfAnotherUser.addVertexAndRelation().destinationVertex().makePublic();
+        VertexOperator newVertex = vertexFactory.withUri(
+                vertexOfAnotherUser.addVertexAndRelation().destinationVertex().uri()
+        );
+        newVertex.makePublic();
         SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
                 1,
                 vertexOfAnotherUser.uri()
@@ -138,7 +141,9 @@ public class SubGraphForkerTest extends ModelTestResources {
 
     @Test
     public void edges_between_any_private_vertex_are_not_forked() {
-        VertexOperator destinationVertex = vertexOfAnotherUser.addVertexAndRelation().destinationVertex();
+        VertexOperator destinationVertex = vertexFactory.withUri(
+                vertexOfAnotherUser.addVertexAndRelation().destinationVertex().uri()
+        );
         vertexOfAnotherUser.makePrivate();
         destinationVertex.makePublic();
         SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
@@ -310,10 +315,14 @@ public class SubGraphForkerTest extends ModelTestResources {
 
     private void makeAnotherUserHave3LinearPublicVertices() {
         vertexOfAnotherUser.makePublic();
-        VertexOperator another2 = vertexOfAnotherUser.addVertexAndRelation().destinationVertex();
+        VertexOperator another2 = vertexFactory.withUri(
+                vertexOfAnotherUser.addVertexAndRelation().destinationVertex().uri()
+        );
         another2.label("another2");
         another2.makePublic();
-        VertexOperator another3 = another2.addVertexAndRelation().destinationVertex();
+        VertexOperator another3 = vertexFactory.withUri(
+                another2.addVertexAndRelation().destinationVertex().uri()
+        );
         another3.label("another3");
         another3.makePublic();
     }

@@ -6,6 +6,7 @@ package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.vertex.VertexFactory;
 import guru.bubl.test.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
@@ -24,9 +25,12 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void can_add_relation() {
-        VertexOperator vertexD = vertexA.addVertexAndRelation().destinationVertex();
-        VertexOperator vertexE = vertexD.addVertexAndRelation().destinationVertex();
-
+        VertexOperator vertexD = vertexFactory.withUri(
+                vertexA.addVertexAndRelation().destinationVertex().uri()
+        );
+        VertexOperator vertexE = vertexFactory.withUri(
+                vertexD.addVertexAndRelation().destinationVertex().uri()
+        );
         Integer numberOfEdgesAndVertices = wholeGraphAroundDefaultCenterVertex().numberOfEdgesAndVertices();
         EdgeOperator newEdge = vertexE.addRelationToVertex(vertexA);
 
@@ -42,7 +46,9 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void can_update_label() {
-        EdgeOperator edge = vertexA.addVertexAndRelation();
+        EdgeOperator edge = edgeFactory.withUri(
+                vertexA.addVertexAndRelation().uri()
+        );
         edge.label("likes");
         assertThat(edge.label(), is("likes"));
     }
@@ -110,7 +116,9 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void can_add_same_as() {
-        EdgeOperator newEdge = vertexA.addVertexAndRelation();
+        EdgeOperator newEdge = edgeFactory.withUri(
+                vertexA.addVertexAndRelation().uri()
+        );
         assertTrue(newEdge.getSameAs().isEmpty());
         newEdge.addSameAs(
                 modelTestScenarios.creatorPredicate()

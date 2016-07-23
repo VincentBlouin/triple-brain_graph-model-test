@@ -47,7 +47,9 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void can_update_label() {
-        EdgeOperator newEdge = vertexA.addVertexAndRelation();
+        EdgeOperator newEdge = edgeFactory.withUri(
+                vertexA.addVertexAndRelation().uri()
+        );
         VertexOperator vertex = newEdge.destinationVertex();
         vertex.label("Ju-Ji-Tsu");
         assertThat(vertex.label(), is("Ju-Ji-Tsu"));
@@ -396,7 +398,9 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void can_add_same_as() {
-        EdgeOperator newEdge = vertexA.addVertexAndRelation();
+        EdgeOperator newEdge = edgeFactory.withUri(
+                vertexA.addVertexAndRelation().uri()
+        );
         VertexOperator newVertex = newEdge.destinationVertex();
         newVertex.label("Tim Berners Lee");
         assertTrue(newVertex.getSameAs().isEmpty());
@@ -458,7 +462,9 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void can_get_same_as() {
-        EdgeOperator newEdge = vertexA.addVertexAndRelation();
+        EdgeOperator newEdge = edgeFactory.withUri(
+                vertexA.addVertexAndRelation().uri()
+        );
         VertexOperator newVertex = newEdge.destinationVertex();
         newVertex.label("Tim Berners Lee");
         assertTrue(newVertex.getSameAs().isEmpty());
@@ -517,7 +523,9 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void a_vertex_is_private_by_default() {
-        Vertex newVertex = vertexA.addVertexAndRelation().destinationVertex();
+        VertexOperator newVertex = vertexFactory.withUri(
+                vertexA.addVertexAndRelation().destinationVertex().uri()
+        );
         assertFalse(newVertex.isPublic());
     }
 

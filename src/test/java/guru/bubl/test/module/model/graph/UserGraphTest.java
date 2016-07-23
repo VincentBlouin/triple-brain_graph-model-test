@@ -28,6 +28,7 @@ import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.Is;
+import org.joda.time.DateTime;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -762,11 +763,44 @@ public class UserGraphTest extends ModelTestResources {
                 1,
                 vertexA.uri()
         );
-    ;    assertThat(
+        assertThat(
                 subGraph.edgeWithIdentifier(
                         edge.uri()
                 ).sourceVertex(),
                 is(vertexA)
+        );
+    }
+
+    @Test
+    public void sort_and_move_date_are_included() {
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterVertexId(
+                1,
+                vertexB.uri()
+        );
+        VertexInSubGraphPojo vertexCInSubGraph = subGraph.vertexWithIdentifier(vertexC.uri());
+        assertThat(
+                vertexCInSubGraph.getGraphElement().getSortDate(),
+                is(nullValue())
+        );
+        assertThat(
+                vertexCInSubGraph.getGraphElement().getMoveDate(),
+                is(nullValue())
+        );
+        Date sortDate = new DateTime().minusMillis(10).toDate();
+        Date moveDate = new Date();
+        vertexC.setSortDate(sortDate, moveDate);
+        subGraph = userGraph.graphWithDepthAndCenterVertexId(
+                1,
+                vertexB.uri()
+        );
+        vertexCInSubGraph = subGraph.vertexWithIdentifier(vertexC.uri());
+        assertThat(
+                vertexCInSubGraph.getGraphElement().getSortDate(),
+                is(sortDate)
+        );
+        assertThat(
+                vertexCInSubGraph.getGraphElement().getMoveDate(),
+                is(moveDate)
         );
     }
 

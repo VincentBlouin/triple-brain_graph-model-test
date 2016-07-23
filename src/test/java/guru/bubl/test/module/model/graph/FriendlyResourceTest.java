@@ -44,8 +44,8 @@ public class FriendlyResourceTest extends ModelTestResources {
                 null,
                 new HashSet<Image>(),
                 "",
-                new Date(),
-                new Date()
+                new Date().getTime(),
+                new Date().getTime()
         );
         FriendlyResource friendlyResource = friendlyResourceFactory.createOrLoadUsingPojo(
                 friendlyResourcePojo
@@ -62,8 +62,8 @@ public class FriendlyResourceTest extends ModelTestResources {
                 "",
                 new HashSet<Image>(),
                 null,
-                new Date(),
-                new Date()
+                new Date().getTime(),
+                new Date().getTime()
         );
         FriendlyResource friendlyResource = friendlyResourceFactory.createOrLoadUsingPojo(
                 friendlyResourcePojo

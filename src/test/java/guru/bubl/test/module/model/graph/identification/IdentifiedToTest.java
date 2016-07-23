@@ -223,7 +223,9 @@ public class IdentifiedToTest extends ModelTestResources {
         assertTrue(
                 searchResult.getProperties().isEmpty()
         );
-        EdgeOperator newEdge = vertex.addVertexAndRelation();
+        EdgeOperator newEdge = edgeFactory.withUri(
+                vertex.addVertexAndRelation().uri()
+        );
         searchResult = (VertexSearchResult) identifiedTo.getForIdentificationAndUser(
                 new ModelTestScenarios().event(),
                 someUser
