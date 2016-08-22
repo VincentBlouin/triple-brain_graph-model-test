@@ -24,7 +24,7 @@ public class ModelTestRunner {
     public static void realBeforeClass() {
         injector = Guice.createInjector(
                 Neo4jModule.forTestingUsingEmbedded(),
-                new ModelModule(),
+                ModelModule.forTesting(),
                 new AbstractModule() {
                     @Override
                     protected void configure() {
