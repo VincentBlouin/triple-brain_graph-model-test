@@ -799,6 +799,71 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+    public void adding_a_relation_to_existing_vertices_doest_not_increment_nb_public_neighbors_if_both_are_private() {
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+        vertexC.addRelationToVertex(vertexA);
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void adding_a_relation_to_existing_vertices_increments_nb_public_neighbors_to_source_if_destination_is_public() {
+        vertexA.makePublic();
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+        vertexC.addRelationToVertex(vertexA);
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(1)
+        );
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void adding_a_relation_to_existing_vertices_increments_nb_public_neighbors_to_destination_if_source_is_public() {
+        vertexC.makePublic();
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+        vertexC.addRelationToVertex(vertexA);
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(1)
+        );
+    }
+
+    @Test
     public void fork_does_not_have_the_same_uri() {
         Vertex vertexAClone = vertexA.forkForUserUsingCache(
                 user,
