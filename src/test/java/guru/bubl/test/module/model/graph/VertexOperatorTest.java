@@ -857,6 +857,111 @@ public class VertexOperatorTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void making_vertex_public_increments_the_number_of_public_neighbor_vertices_set_to_neighbors() {
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(0)
+        );
+        vertexB.makePublic();
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(1)
+        );
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void making_vertex_private_increments_the_number_of_public_neighbor_vertices_set_to_neighbors() {
+        vertexB.makePublic();
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(1)
+        );
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(1)
+        );
+        vertexB.makePrivate();
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void new_child_vertex_nb_public_neighbors_is_set_to_1_when_parent_is_public() {
+        VertexOperator newVertex = vertexFactory.withUri(
+                vertexA.addVertexAndRelation().destinationVertex().uri()
+        );
+        assertThat(
+                newVertex.getNbPublicNeighbors(),
+                is(0)
+        );
+        vertexA.makePublic();
+        VertexOperator anotherNewVertex = vertexFactory.withUri(
+                vertexA.addVertexAndRelation().destinationVertex().uri()
+        );
+        assertThat(
+                anotherNewVertex.getNbPublicNeighbors(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void if_removed_vertex_is_public_it_decrements_nb_public_neighbors_to_neighbors() {
+        vertexB.makePublic();
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(1)
+        );
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(1)
+        );
+        vertexB.remove();
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void if_removed_vertex_is_private_it_does_not_decrements_nb_public_neighbors_to_neighbors() {
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(0)
+        );
+        vertexB.remove();
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(0)
+        );
+    }
+
     private Set<Edge> edgeBetweenBAndCInSet() {
 
         Set<Edge> edges = new HashSet<>();

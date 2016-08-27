@@ -804,6 +804,29 @@ public class UserGraphTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void nb_public_neighbors_is_included() {
+        vertexB.makePublic();
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterVertexId(
+                1,
+                vertexB.uri()
+        );
+        VertexInSubGraphPojo vertexAPojo = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        assertThat(
+                vertexAPojo.getNbPublicNeighbors(),
+                is(1)
+        );
+        VertexInSubGraphPojo vertexBPojo = subGraph.vertexWithIdentifier(
+                vertexB.uri()
+        );
+        assertThat(
+                vertexBPojo.getNbPublicNeighbors(),
+                is(0)
+        );
+    }
+
     @Override
     public VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
         return userGraph.graphWithAnyVertexAndDepth(

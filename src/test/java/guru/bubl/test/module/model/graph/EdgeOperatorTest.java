@@ -108,7 +108,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void removing_an_edge_decrements_number_of_references_to_its_identification(){
+    public void removing_an_edge_decrements_number_of_references_to_its_identification() {
         testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(
                 vertexA.getEdgeThatLinksToDestinationVertex(vertexB)
         );
@@ -154,7 +154,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void an_edge_is_private_at_creation_if_both_end_vertices_are_private(){
+    public void an_edge_is_private_at_creation_if_both_end_vertices_are_private() {
         Edge edge = vertexA.addVertexAndRelation();
         assertFalse(
                 edge.isPublic()
@@ -162,7 +162,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void an_edge_is_private_at_creation_if_one_of_the_end_vertices_is_private(){
+    public void an_edge_is_private_at_creation_if_one_of_the_end_vertices_is_private() {
         vertexA.makePublic();
         Edge edge = vertexA.addVertexAndRelation();
         assertFalse(
@@ -171,7 +171,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void an_edge_is_public_at_creation_if_both_end_vertices_are_public(){
+    public void an_edge_is_public_at_creation_if_both_end_vertices_are_public() {
         vertexA.makePublic();
         vertexC.makePublic();
         Edge edge = vertexA.addRelationToVertex(vertexC);
@@ -181,7 +181,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void can_change_source_vertex(){
+    public void can_change_source_vertex() {
         EdgeOperator edge = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         assertThat(
                 edge.sourceVertex(),
@@ -195,7 +195,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void changing_source_vertex_increments_number_of_connected_vertices_for_new_source_vertex(){
+    public void changing_source_vertex_increments_number_of_connected_vertices_for_new_source_vertex() {
         EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
         assertThat(
                 vertexA.getNumberOfConnectedEdges(),
@@ -209,7 +209,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void changing_source_vertex_decrements_number_of_connected_vertices_for_previous_source_vertex(){
+    public void changing_source_vertex_decrements_number_of_connected_vertices_for_previous_source_vertex() {
         EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
         assertThat(
                 vertexB.getNumberOfConnectedEdges(),
@@ -219,6 +219,185 @@ public class EdgeOperatorTest extends ModelTestResources {
         assertThat(
                 vertexB.getNumberOfConnectedEdges(),
                 is(1)
+        );
+    }
+
+    @Test
+    public void can_change_destination_vertex() {
+        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        assertThat(
+                edgeBetweenAAndB.destinationVertex(),
+                is(vertexB)
+        );
+        edgeBetweenAAndB.changeDestinationVertex(vertexC);
+        assertThat(
+                edgeBetweenAAndB.destinationVertex(),
+                is(vertexC)
+        );
+    }
+
+    @Test
+    public void kept_vertex_nb_public_neighbors_is_unchanged_when_previous_and_new_end_are_private() {
+        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+        edgeBetweenAAndB.changeDestinationVertex(vertexC);
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void kept_vertex_nb_public_neighbors_is_unchanged_when_previous_and_new_end_are_public() {
+        vertexB.makePublic();
+        vertexA.makePublic();
+        vertexC.makePublic();
+        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(1)
+        );
+        edgeBetweenAAndB.changeDestinationVertex(vertexC);
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(1)
+        );
+    }
+
+
+    @Test
+    public void kept_vertex_nb_public_neighbors_increments_when_previous_end_is_private_and_new_is_public() {
+        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+        vertexC.makePublic();
+        edgeBetweenAAndB.changeDestinationVertex(vertexC);
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void kept_vertex_nb_public_neighbors_decrements_when_previous_end_is_public_and_new_is_private() {
+        vertexB.makePublic();
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(1)
+        );
+        vertexC.makePrivate();
+        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        edgeBetweenAAndB.changeDestinationVertex(vertexC);
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void previous_vertex_nb_public_neighbors_decrements_when_kept_vertex_is_public() {
+        vertexA.makePublic();
+        assertThat(
+                vertexB.getNbPublicNeighbors(),
+                is(1)
+        );
+        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        edgeBetweenAAndB.changeDestinationVertex(vertexC);
+        assertThat(
+                vertexB.getNbPublicNeighbors(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void new_vertex_nb_public_neighbors_increments_when_kept_vertex_is_public() {
+        vertexA.makePublic();
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(0)
+        );
+        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        edgeBetweenAAndB.changeDestinationVertex(vertexC);
+        assertThat(
+                vertexC.getNbPublicNeighbors(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void decrements_nb_public_neighbors_to_destination_if_source_is_public() {
+        vertexA.makePublic();
+        assertThat(
+                vertexB.getNbPublicNeighbors(),
+                is(1)
+        );
+        vertexA.getEdgeThatLinksToDestinationVertex(vertexB).remove();
+        assertThat(
+                vertexB.getNbPublicNeighbors(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void decrements_nb_public_neighbors_to_source_if_destination_is_public() {
+        vertexB.makePublic();
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(1)
+        );
+        vertexA.getEdgeThatLinksToDestinationVertex(vertexB).remove();
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void does_not_decrement_nb_public_neighbors_if_both_are_private() {
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexB.getNbPublicNeighbors(),
+                is(0)
+        );
+        vertexA.getEdgeThatLinksToDestinationVertex(vertexB).remove();
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexB.getNbPublicNeighbors(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void decrements_nb_public_neighbors_if_both_are_public() {
+        vertexA.makePublic();
+        vertexB.makePublic();
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(1)
+        );
+        assertThat(
+                vertexB.getNbPublicNeighbors(),
+                is(1)
+        );
+        vertexA.getEdgeThatLinksToDestinationVertex(vertexB).remove();
+        assertThat(
+                vertexA.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexB.getNbPublicNeighbors(),
+                is(0)
         );
     }
 }
