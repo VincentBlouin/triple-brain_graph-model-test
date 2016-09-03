@@ -545,6 +545,17 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+    public void can_make_private_vertex_with_no_relations() {
+        VertexOperator noRelationsVertex = vertexFactory.withUri(
+                userGraph.createVertex().uri()
+        );
+        noRelationsVertex.makePublic();
+        assertTrue(noRelationsVertex.isPublic());
+        noRelationsVertex.makePrivate();
+        assertFalse(noRelationsVertex.isPublic());
+    }
+
+    @Test
     public void making_a_vertex_public_makes_all_its_edges_public_where_the_other_end_vertex_is_also_public() {
         vertexA.makePublic();
         vertexC.makePrivate();
