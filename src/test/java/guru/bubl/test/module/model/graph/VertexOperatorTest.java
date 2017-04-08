@@ -188,62 +188,6 @@ public class VertexOperatorTest extends ModelTestResources {
         );
     }
 
-    @Test
-    public void can_add_an_additional_type_to_vertex() {
-        assertTrue(
-                vertexA.getAdditionalTypes().isEmpty()
-        );
-        vertexA.addType(
-                modelTestScenarios.person()
-        );
-        assertFalse(
-                vertexA.getAdditionalTypes().isEmpty()
-        );
-    }
-
-    @Test
-    public void can_add_multiple_additional_types_to_a_vertex() {
-        assertTrue(
-                vertexA.getAdditionalTypes().isEmpty()
-        );
-        vertexA.addType(
-                modelTestScenarios.person()
-        );
-        vertexA.addType(
-                modelTestScenarios.computerScientistType()
-        );
-        assertThat(
-                vertexA.getAdditionalTypes().size(),
-                is(2)
-        );
-    }
-
-    @Test
-    public void can_remove_an_additional_type_to_vertex() {
-        Identification personType = vertexA.addType(
-                modelTestScenarios.person()
-        ).values().iterator().next();
-        IdentificationPojo computerScientistType = modelTestScenarios.computerScientistType();
-        vertexA.addType(
-                computerScientistType
-        );
-        assertThat(
-                vertexA.getAdditionalTypes().size(),
-                is(2)
-        );
-        vertexA.removeIdentification(personType);
-        assertThat(
-                vertexA.getAdditionalTypes().size(),
-                is(1)
-        );
-        Identification remainingType = vertexA.getAdditionalTypes().values().iterator().next();
-        assertThat(
-                remainingType.getExternalResourceUri(),
-                is(
-                        computerScientistType.getExternalResourceUri()
-                )
-        );
-    }
 
     @Test
     public void can_add_suggestions_to_a_vertex() {
@@ -329,7 +273,7 @@ public class VertexOperatorTest extends ModelTestResources {
                 user()
         );
         Edge edge = vertexA.acceptSuggestion(nameSuggestion);
-        Identification identification = edge.getSameAs().values().iterator().next();
+        Identification identification = edge.getIdentifications().values().iterator().next();
         assertThat(
                 identification.getExternalResourceUri(),
                 Is.is(nameSuggestion.getSameAs().uri())
@@ -342,7 +286,7 @@ public class VertexOperatorTest extends ModelTestResources {
                 user()
         );
         Vertex newVertex = vertexA.acceptSuggestion(nameSuggestion).destinationVertex();
-        assertThat(newVertex.getAdditionalTypes().size(), is(2));
+        assertThat(newVertex.getIdentifications().size(), is(2));
         assertTrue(
                 hasTypeWithExternalUri(
                         newVertex,
@@ -397,27 +341,15 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void can_add_same_as() {
-        EdgeOperator newEdge = edgeFactory.withUri(
-                vertexA.addVertexAndRelation().uri()
-        );
-        VertexOperator newVertex = newEdge.destinationVertex();
-        newVertex.label("Tim Berners Lee");
-        assertTrue(newVertex.getSameAs().isEmpty());
-        newVertex.addSameAs(modelTestScenarios.timBernersLee());
-        assertFalse(newVertex.getSameAs().isEmpty());
-    }
-
-    @Test
     public void can_get_empty_list_after_removing_last_same_as() {
-        Identification timBernersLee = vertexA.addSameAs(
+        Identification timBernersLee = vertexA.addMeta(
                 modelTestScenarios.timBernersLee()
         ).values().iterator().next();
-        assertFalse(vertexA.getSameAs().isEmpty());
+        assertFalse(vertexA.getIdentifications().isEmpty());
         vertexA.removeIdentification(
                 timBernersLee
         );
-        assertTrue(vertexA.getSameAs().isEmpty());
+        assertTrue(vertexA.getIdentifications().isEmpty());
     }
 
     @Test
@@ -427,7 +359,7 @@ public class VertexOperatorTest extends ModelTestResources {
                         vertexB.uri()
                 )
         );
-        vertexA.addSameAs(
+        vertexA.addMeta(
                 TestScenarios.identificationFromFriendlyResource(
                         vertexB
                 )
@@ -442,19 +374,19 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void can_assign_the_same_identification_to_2_vertices() {
-        Identification timBernersLee = vertexA.addSameAs(
+        Identification timBernersLee = vertexA.addMeta(
                 modelTestScenarios.timBernersLee()
         ).values().iterator().next();
-        vertexB.addSameAs(
+        vertexB.addMeta(
                 modelTestScenarios.timBernersLee()
         );
         assertTrue(
-                vertexA.getSameAs().containsKey(
+                vertexA.getIdentifications().containsKey(
                         timBernersLee.getExternalResourceUri()
                 )
         );
         assertTrue(
-                vertexB.getSameAs().containsKey(
+                vertexB.getIdentifications().containsKey(
                         timBernersLee.getExternalResourceUri()
                 )
         );
@@ -467,9 +399,9 @@ public class VertexOperatorTest extends ModelTestResources {
         );
         VertexOperator newVertex = newEdge.destinationVertex();
         newVertex.label("Tim Berners Lee");
-        assertTrue(newVertex.getSameAs().isEmpty());
-        newVertex.addSameAs(modelTestScenarios.timBernersLee());
-        Identification sameAs = newVertex.getSameAs().values().iterator().next();
+        assertTrue(newVertex.getIdentifications().isEmpty());
+        newVertex.addMeta(modelTestScenarios.timBernersLee());
+        Identification sameAs = newVertex.getIdentifications().values().iterator().next();
         assertThat(
                 sameAs.getExternalResourceUri(),
                 is(
@@ -480,13 +412,13 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void can_add_generic_identification() {
-        assertFalse(vertexA.getGenericIdentifications().containsKey(
+        assertFalse(vertexA.getIdentifications().containsKey(
                 modelTestScenarios.extraterrestrial().getExternalResourceUri()
         ));
-        Identification ExtraTerrestrial = vertexA.addGenericIdentification(
+        Identification ExtraTerrestrial = vertexA.addMeta(
                 modelTestScenarios.extraterrestrial()
         ).values().iterator().next();
-        assertTrue(vertexA.getGenericIdentifications().containsKey(
+        assertTrue(vertexA.getIdentifications().containsKey(
                 ExtraTerrestrial.getExternalResourceUri()
         ));
     }
@@ -1057,7 +989,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     private Boolean hasTypeWithExternalUri(Vertex vertex, URI externalUri) {
-        for (Identification identification : vertex.getAdditionalTypes().values()) {
+        for (Identification identification : vertex.getIdentifications().values()) {
             if (identification.getExternalResourceUri().equals(externalUri)) {
                 return true;
             }

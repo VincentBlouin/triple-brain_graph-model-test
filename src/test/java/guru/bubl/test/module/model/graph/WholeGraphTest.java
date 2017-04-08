@@ -83,13 +83,13 @@ public class WholeGraphTest extends ModelTestResources {
         assertTrue(
                 wholeGraph.getAllIdentifications().isEmpty()
         );
-        vertexA.addType(
+        vertexA.addMeta(
                 modelTestScenarios.human()
         );
-        vertexA.addGenericIdentification(
+        vertexA.addMeta(
                 modelTestScenarios.person()
         );
-        vertexA.addSameAs(
+        vertexA.addMeta(
                 modelTestScenarios.timBernersLee()
         );
         assertThat(

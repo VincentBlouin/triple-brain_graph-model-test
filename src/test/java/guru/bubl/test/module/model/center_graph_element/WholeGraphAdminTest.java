@@ -21,10 +21,10 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
     @Test
     public void can_refresh_identifications_number_of_references() {
-        vertexB.addSameAs(
+        vertexB.addMeta(
                 modelTestScenarios.possessionIdentification()
         );
-        IdentificationPojo identificationPojo = vertexA.addGenericIdentification(
+        IdentificationPojo identificationPojo = vertexA.addMeta(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
         identificationFactory.withUri(
@@ -49,11 +49,11 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
     @Test
     public void does_not_duplicate_identifications_when_re_adding() {
-        vertexB.addSameAs(
+        vertexB.addMeta(
                 modelTestScenarios.possessionIdentification()
         );
         assertThat(
-                vertexB.getSameAs().size(),
+                vertexB.getIdentifications().size(),
                 is(1)
         );
         assertThat(
@@ -64,7 +64,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 wholeGraph
         ).reAddIdentifications();
         assertThat(
-                vertexB.getSameAs().size(),
+                vertexB.getIdentifications().size(),
                 is(1)
         );
         assertThat(
@@ -75,13 +75,13 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
     @Test
     public void does_not_duplicate_identifications_when_re_adding_even_if_identification_is_a_graph_element() {
-        vertexB.addType(
+        vertexB.addMeta(
                 TestScenarios.identificationFromFriendlyResource(
                         vertexA
                 )
         );
         assertThat(
-                vertexB.getAdditionalTypes().size(),
+                vertexB.getIdentifications().size(),
                 is(1)
         );
         assertThat(
@@ -89,7 +89,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 is(1)
         );
         assertThat(
-                vertexA.getGenericIdentifications().size(),
+                vertexA.getIdentifications().size(),
                 is(1)
         );
         assertThat(
@@ -100,7 +100,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 wholeGraph
         ).reAddIdentifications();
         assertThat(
-                vertexB.getAdditionalTypes().size(),
+                vertexB.getIdentifications().size(),
                 is(1)
         );
         assertThat(
@@ -108,7 +108,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 is(1)
         );
         assertThat(
-                vertexA.getGenericIdentifications().size(),
+                vertexA.getIdentifications().size(),
                 is(1)
         );
         assertThat(

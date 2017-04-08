@@ -115,15 +115,15 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void can_add_same_as() {
+    public void can_add_meta() {
         EdgeOperator newEdge = edgeFactory.withUri(
                 vertexA.addVertexAndRelation().uri()
         );
-        assertTrue(newEdge.getSameAs().isEmpty());
-        newEdge.addSameAs(
+        assertTrue(newEdge.getIdentifications().isEmpty());
+        newEdge.addMeta(
                 modelTestScenarios.creatorPredicate()
         );
-        assertFalse(newEdge.getSameAs().isEmpty());
+        assertFalse(newEdge.getIdentifications().isEmpty());
     }
 
     @Test

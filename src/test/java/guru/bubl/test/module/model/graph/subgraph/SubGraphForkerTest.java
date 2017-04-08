@@ -200,7 +200,7 @@ public class SubGraphForkerTest extends ModelTestResources {
     @Test
     public void identifications_are_included() {
         vertexOfAnotherUser.makePublic();
-        IdentificationPojo identifier = vertexOfAnotherUser.addGenericIdentification(
+        IdentificationPojo identifier = vertexOfAnotherUser.addMeta(
                 modelTestScenarios.human()
         ).values().iterator().next();
         Set<GraphElementSearchResult> identifiedToHuman = identifiedTo.getForIdentificationAndUser(

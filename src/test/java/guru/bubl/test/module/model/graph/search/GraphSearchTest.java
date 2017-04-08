@@ -508,7 +508,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 vertex.getIdentifications().size(),
                 is(0)
         );
-        vertexA.addGenericIdentification(
+        vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
         );
         indexGraph();
@@ -538,7 +538,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void elements_with_no_identifications_dont_have_identifications() {
-        vertexB.addGenericIdentification(
+        vertexB.addMeta(
                 new ModelTestScenarios().computerScientistType()
         );
         GraphElementSearchResult searchResult = graphSearch.getDetails(
@@ -616,7 +616,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                         URI.create("/large_1")
                 )
         ));
-        vertexA.addGenericIdentification(
+        vertexA.addMeta(
                 identification
         );
         GraphElementSearchResult searchResult = graphSearch.getDetails(
@@ -808,7 +808,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         vertexBAsIdentifier.setLabel(
                 "some identifier"
         );
-        vertexA.addGenericIdentification(vertexBAsIdentifier);
+        vertexA.addMeta(vertexBAsIdentifier);
         VertexSearchResult vertexSearchResult = (VertexSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 "vertex Bareau",
                 user
@@ -825,7 +825,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         vertexBAsIdentifier.setLabel(
                 "some identifier"
         );
-        vertexA.addGenericIdentification(vertexBAsIdentifier);
+        vertexA.addMeta(vertexBAsIdentifier);
         VertexSearchResult vertexSearchResult = (VertexSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 "vertex Bareau",
                 user
@@ -842,7 +842,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         vertexBAsIdentifier.setLabel(
                 "some identifier"
         );
-        vertexA.addGenericIdentification(vertexBAsIdentifier);
+        vertexA.addMeta(vertexBAsIdentifier);
         VertexSearchResult vertexSearchResult = (VertexSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 "vertex Azure",
                 user

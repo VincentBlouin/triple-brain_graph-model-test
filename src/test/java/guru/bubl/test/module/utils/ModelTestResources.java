@@ -203,13 +203,13 @@ public class ModelTestResources {
     }
 
     protected void testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(GraphElementOperator graphElement){
-        IdentificationPojo computerScientist = graphElement.addGenericIdentification(
+        IdentificationPojo computerScientist = graphElement.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
-        IdentificationPojo personIdentification = graphElement.addGenericIdentification(
+        IdentificationPojo personIdentification = graphElement.addMeta(
                 modelTestScenarios.person()
         ).values().iterator().next();
-        vertexB.addGenericIdentification(
+        vertexB.addMeta(
                 modelTestScenarios.person()
         );
         computerScientist = graphElement.getIdentifications().get(computerScientist.getExternalResourceUri());

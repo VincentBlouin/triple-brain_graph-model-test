@@ -42,7 +42,7 @@ public class IdentifiedToTest extends ModelTestResources {
         VertexOperator aVertexRepresentingATshirt = testScenarios.createAVertex(
                 someUser
         );
-        aVertexRepresentingATshirt.addGenericIdentification(
+        aVertexRepresentingATshirt.addMeta(
                 modelTestScenarios.tShirt()
         );
         assertTrue(
@@ -67,13 +67,13 @@ public class IdentifiedToTest extends ModelTestResources {
         VertexOperator aVertexRepresentingATshirt = testScenarios.createAVertex(
                 someUser
         );
-        aVertexRepresentingATshirt.addGenericIdentification(
+        aVertexRepresentingATshirt.addMeta(
                 modelTestScenarios.tShirt()
         );
         VertexOperator anotherVertexRepresentingATshirt = testScenarios.createAVertex(
                 someUser
         );
-        anotherVertexRepresentingATshirt.addGenericIdentification(
+        anotherVertexRepresentingATshirt.addMeta(
                 modelTestScenarios.tShirt()
         );
         assertTrue(
@@ -102,7 +102,7 @@ public class IdentifiedToTest extends ModelTestResources {
                 someUser
         );
         Identification tshirtIdentification = modelTestScenarios.tShirt();
-        tshirtIdentification = anotherVertexRepresentingATshirt.addGenericIdentification(
+        tshirtIdentification = anotherVertexRepresentingATshirt.addMeta(
                 tshirtIdentification
         ).values().iterator().next();
         assertFalse(
@@ -127,7 +127,7 @@ public class IdentifiedToTest extends ModelTestResources {
         VertexOperator user1Resource = testScenarios.createAVertex(
                 someUser
         );
-        user1Resource.addSameAs(
+        user1Resource.addMeta(
                 modelTestScenarios.tShirt()
         );
         assertFalse(
@@ -149,7 +149,7 @@ public class IdentifiedToTest extends ModelTestResources {
         VertexOperator user1Resource = testScenarios.createAVertex(
                 someUser
         );
-        user1Resource.addType(
+        user1Resource.addMeta(
                 modelTestScenarios.tShirt()
         );
         User otherUser = User.withEmailAndUsername("c", "d");
@@ -157,7 +157,7 @@ public class IdentifiedToTest extends ModelTestResources {
                 otherUser
         );
 
-        otherUserResource.addType(
+        otherUserResource.addMeta(
                 modelTestScenarios.tShirt()
         );
         assertTrue(
@@ -186,14 +186,14 @@ public class IdentifiedToTest extends ModelTestResources {
         VertexOperator user1Resource = testScenarios.createAVertex(
                 someUser
         );
-        user1Resource.addGenericIdentification(
+        user1Resource.addMeta(
                 modelTestScenarios.tShirt()
         );
         User otherUser = User.withEmailAndUsername("c", "d");
         VertexOperator otherUserResource = testScenarios.createAVertex(
                 otherUser
         );
-        Identification otherUserIdentification = otherUserResource.addGenericIdentification(
+        Identification otherUserIdentification = otherUserResource.addMeta(
                 modelTestScenarios.tShirt()
         ).values().iterator().next();
         otherUserResource.removeIdentification(
@@ -213,7 +213,7 @@ public class IdentifiedToTest extends ModelTestResources {
         VertexOperator vertex = testScenarios.createAVertex(
                 someUser
         );
-        vertex.addGenericIdentification(
+        vertex.addMeta(
                 new ModelTestScenarios().event()
         );
         VertexSearchResult searchResult = (VertexSearchResult) identifiedTo.getForIdentificationAndUser(

@@ -16,7 +16,7 @@ public class IdentificationOperatorTest extends ModelTestResources {
 
     @Test
     public void can_set_number_of_references(){
-        IdentificationPojo identificationPojo = vertexA.addGenericIdentification(
+        IdentificationPojo identificationPojo = vertexA.addMeta(
                 modelTestScenarios.tShirt()
         ).values().iterator().next();
         IdentificationOperator identificationOperator = identificationFactory.withUri(

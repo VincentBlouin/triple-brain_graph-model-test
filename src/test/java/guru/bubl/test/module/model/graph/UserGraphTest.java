@@ -116,7 +116,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void elements_with_no_identifications_dont_have_identifications() {
-        vertexA.addGenericIdentification(
+        vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
         );
         SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
@@ -149,7 +149,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void schemas_with_no_identifications_dont_have_identifications() {
-        vertexA.addGenericIdentification(
+        vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
         );
         SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
@@ -162,7 +162,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void has_generic_identifications() {
-        vertexA.addGenericIdentification(
+        vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
         );
         SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
@@ -172,50 +172,16 @@ public class UserGraphTest extends ModelTestResources {
                 vertexA.uri()
         );
         assertTrue(
-                vertexAInSubGraph.getGenericIdentifications().values().iterator().hasNext()
+                vertexAInSubGraph.getIdentifications().values().iterator().hasNext()
         );
-    }
-
-    @Test
-    public void has_same_as() {
-        vertexA.addSameAs(
-                modelTestScenarios.computerScientistType()
-        );
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
-        );
-        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
-                vertexA.uri()
-        );
-        assertTrue(
-                vertexAInSubGraph.getSameAs().values().iterator().hasNext()
-        );
-    }
-
-    @Test
-    public void has_types() {
-        vertexA.addType(
-                modelTestScenarios.person()
-        );
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
-        );
-        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
-                vertexA.uri()
-        );
-        assertTrue(
-                vertexAInSubGraph.getAdditionalTypes().entrySet().iterator().hasNext()
-        );
-        FriendlyResource additionalType = vertexAInSubGraph.getAdditionalTypes().values().iterator().next();
-        assertThat(additionalType.label(), is("Person"));
     }
 
     @Test
     public void can_return_multiple_identifications_for_one_graph_element() {
-        vertexA.addGenericIdentification(
+        vertexA.addMeta(
                 modelTestScenarios.person()
         );
-        vertexA.addGenericIdentification(
+        vertexA.addMeta(
                 modelTestScenarios.timBernersLee()
         );
         SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
@@ -229,7 +195,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void has_number_of_references_to_an_identification() {
-        vertexA.addGenericIdentification(
+        vertexA.addMeta(
                 modelTestScenarios.person()
         );
         SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
@@ -480,7 +446,7 @@ public class UserGraphTest extends ModelTestResources {
         identification.setImages(
                 images
         );
-        vertexA.addGenericIdentification(
+        vertexA.addMeta(
                 identification
         );
 
@@ -490,7 +456,7 @@ public class UserGraphTest extends ModelTestResources {
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
                 vertexA.uri()
         );
-        FriendlyResource identificationInSubGraph = vertexAInSubGraph.getGenericIdentifications().values().iterator().next();
+        FriendlyResource identificationInSubGraph = vertexAInSubGraph.getIdentifications().values().iterator().next();
         assertThat(
                 identificationInSubGraph.images().size(),
                 is(2)
@@ -679,7 +645,7 @@ public class UserGraphTest extends ModelTestResources {
         SchemaOperator schemaOperator = userGraph.schemaOperatorWithUri(
                 userGraph.createSchema().uri()
         );
-        IdentificationPojo createdComputerScientistType = schemaOperator.addType(
+        IdentificationPojo createdComputerScientistType = schemaOperator.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
@@ -714,7 +680,7 @@ public class UserGraphTest extends ModelTestResources {
                 userGraph.createSchema().uri()
         );
         GraphElementOperator createdProperty = schemaOperator.addProperty();
-        IdentificationPojo createdComputerScientistType = createdProperty.addType(
+        IdentificationPojo createdComputerScientistType = createdProperty.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(

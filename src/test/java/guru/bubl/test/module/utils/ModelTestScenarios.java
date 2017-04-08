@@ -16,6 +16,10 @@ import java.util.Map;
 
 public class ModelTestScenarios {
 
+    public static URI SAME_AS = URI.create("same-as");
+    public static URI TYPE = URI.create("type");
+    public static URI GENERIC = URI.create("generic");
+
     public IdentificationPojo computerScientistType() {
         return new IdentificationPojo(
                 URI.create(

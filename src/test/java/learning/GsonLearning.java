@@ -25,7 +25,7 @@ public class GsonLearning extends AdaptableGraphComponentTest {
     public void can_convert_vertex()throws Exception{
         Gson gson = new Gson();
         IdentificationPojo timBernersLeePojo = modelTestScenarios.timBernersLee();
-        vertexB.addSameAs(
+        vertexB.addMeta(
                 timBernersLeePojo
         );
         SubGraph graph = userGraph.graphWithDepthAndCenterVertexId(
