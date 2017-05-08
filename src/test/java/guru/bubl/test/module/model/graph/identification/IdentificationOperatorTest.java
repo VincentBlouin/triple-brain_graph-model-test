@@ -5,7 +5,7 @@
 package guru.bubl.test.module.model.graph.identification;
 
 import guru.bubl.module.model.graph.identification.IdentificationOperator;
-import guru.bubl.module.model.graph.identification.IdentificationPojo;
+import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class IdentificationOperatorTest extends ModelTestResources {
 
     @Test
     public void can_set_number_of_references(){
-        IdentificationPojo identificationPojo = vertexA.addMeta(
+        IdentifierPojo identificationPojo = vertexA.addMeta(
                 modelTestScenarios.tShirt()
         ).values().iterator().next();
         IdentificationOperator identificationOperator = identificationFactory.withUri(

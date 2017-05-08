@@ -6,7 +6,7 @@ package guru.bubl.test.module.model.center_graph_element;
 
 import com.google.inject.Inject;
 import guru.bubl.module.model.admin.WholeGraphAdminFactory;
-import guru.bubl.module.model.graph.identification.IdentificationPojo;
+import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
         vertexB.addMeta(
                 modelTestScenarios.possessionIdentification()
         );
-        IdentificationPojo identificationPojo = vertexA.addMeta(
+        IdentifierPojo identificationPojo = vertexA.addMeta(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
         identificationFactory.withUri(

@@ -4,20 +4,13 @@
 
 package guru.bubl.test.module.model.graph.subgraph;
 
-import com.google.inject.Inject;
-import guru.bubl.module.model.graph.edge.EdgeOperator;
-import guru.bubl.module.model.graph.identification.Identification;
-import guru.bubl.module.model.graph.identification.IdentificationPojo;
+import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
-import guru.bubl.module.model.graph.subgraph.SubGraphForker;
-import guru.bubl.module.model.graph.subgraph.SubGraphForkerFactory;
-import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.search.VertexSearchResult;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
-import guru.bubl.test.module.utils.ModelTestScenarios;
 import org.junit.Test;
 
 import java.util.List;
@@ -34,7 +27,7 @@ public class SubGraphForkerTest extends ModelTestResources {
     public void can_integrate_subgraph() {
         vertexA.label("ananas");
         vertexA.makePublic();
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
+        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
                 1,
                 vertexB.uri()
         );
@@ -53,7 +46,7 @@ public class SubGraphForkerTest extends ModelTestResources {
         );
         assertThat(
                 results.size(),
-                is(1)
+                is(2)
         );
     }
 
@@ -62,7 +55,7 @@ public class SubGraphForkerTest extends ModelTestResources {
         vertexOfAnotherUser.makePublic();
         Integer numberOfVertices = numberOfVertices();
         forker.fork(
-                anotherUserGraph.graphWithDepthAndCenterVertexId(
+                anotherUserGraph.graphWithDepthAndCenterBubbleUri(
                         0,
                         vertexOfAnotherUser.uri()
                 )
@@ -77,7 +70,7 @@ public class SubGraphForkerTest extends ModelTestResources {
     public void cannot_fork_a_vertex_that_is_not_public() {
         vertexA.label("ananas");
         vertexB.label("ananas2");
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
+        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
                 1,
                 vertexB.uri()
         );
@@ -100,11 +93,11 @@ public class SubGraphForkerTest extends ModelTestResources {
         );
         assertThat(
                 results.size(),
-                is(1)
+                is(2)
         );
         vertexB.makePublic();
         anotherUserForker.fork(
-                userGraph.graphWithDepthAndCenterVertexId(
+                userGraph.graphWithDepthAndCenterBubbleUri(
                         0,
                         vertexB.uri()
                 )
@@ -114,7 +107,7 @@ public class SubGraphForkerTest extends ModelTestResources {
         );
         assertThat(
                 results.size(),
-                is(2)
+                is(4)
         );
     }
 
@@ -125,7 +118,7 @@ public class SubGraphForkerTest extends ModelTestResources {
                 vertexOfAnotherUser.addVertexAndRelation().destinationVertex().uri()
         );
         newVertex.makePublic();
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
+        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
                 1,
                 vertexOfAnotherUser.uri()
         );
@@ -146,7 +139,7 @@ public class SubGraphForkerTest extends ModelTestResources {
         );
         vertexOfAnotherUser.makePrivate();
         destinationVertex.makePublic();
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterVertexId(
+        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
                 1,
                 vertexOfAnotherUser.uri()
         );
@@ -172,7 +165,7 @@ public class SubGraphForkerTest extends ModelTestResources {
     @Test
     public void fork_is_identified_to_original() {
         vertexOfAnotherUser.makePublic();
-        IdentificationPojo originalVertexAsIdentifier = TestScenarios.identificationFromFriendlyResource(
+        IdentifierPojo originalVertexAsIdentifier = TestScenarios.identificationFromFriendlyResource(
                 vertexOfAnotherUser
         );
         Set<GraphElementSearchResult> identifiedToOriginal = identifiedTo.getForIdentificationAndUser(
@@ -183,7 +176,7 @@ public class SubGraphForkerTest extends ModelTestResources {
                 identifiedToOriginal.isEmpty()
         );
         forker.fork(
-                anotherUserGraph.graphWithDepthAndCenterVertexId(
+                anotherUserGraph.graphWithDepthAndCenterBubbleUri(
                         0,
                         vertexOfAnotherUser.uri()
                 )
@@ -200,7 +193,7 @@ public class SubGraphForkerTest extends ModelTestResources {
     @Test
     public void identifications_are_included() {
         vertexOfAnotherUser.makePublic();
-        IdentificationPojo identifier = vertexOfAnotherUser.addMeta(
+        IdentifierPojo identifier = vertexOfAnotherUser.addMeta(
                 modelTestScenarios.human()
         ).values().iterator().next();
         Set<GraphElementSearchResult> identifiedToHuman = identifiedTo.getForIdentificationAndUser(
@@ -211,7 +204,7 @@ public class SubGraphForkerTest extends ModelTestResources {
                 identifiedToHuman.isEmpty()
         );
         forker.fork(
-                anotherUserGraph.graphWithDepthAndCenterVertexId(
+                anotherUserGraph.graphWithDepthAndCenterBubbleUri(
                         0,
                         vertexOfAnotherUser.uri()
                 )
@@ -231,12 +224,12 @@ public class SubGraphForkerTest extends ModelTestResources {
         vertexB.makePublic();
         vertexC.makePublic();
         anotherUserForker.fork(
-                userGraph.graphWithDepthAndCenterVertexId(
+                userGraph.graphWithDepthAndCenterBubbleUri(
                         1,
                         vertexB.uri()
                 )
         );
-        IdentificationPojo vertexAIdentifier = TestScenarios.identificationFromFriendlyResource(
+        IdentifierPojo vertexAIdentifier = TestScenarios.identificationFromFriendlyResource(
                 vertexA
         );
         assertThat(
@@ -246,7 +239,7 @@ public class SubGraphForkerTest extends ModelTestResources {
                 ).size(),
                 is(1)
         );
-        IdentificationPojo vertexBIdentifier = TestScenarios.identificationFromFriendlyResource(
+        IdentifierPojo vertexBIdentifier = TestScenarios.identificationFromFriendlyResource(
                 vertexB
         );
         assertThat(
@@ -256,7 +249,7 @@ public class SubGraphForkerTest extends ModelTestResources {
                 ).size(),
                 is(1)
         );
-        IdentificationPojo vertexCIdentifier = TestScenarios.identificationFromFriendlyResource(
+        IdentifierPojo vertexCIdentifier = TestScenarios.identificationFromFriendlyResource(
                 vertexC
         );
         assertThat(
@@ -274,7 +267,7 @@ public class SubGraphForkerTest extends ModelTestResources {
         Integer numberOfVerticesBefore = numberOfVertices();
         Integer numberOfEdgesBefore = numberOfEdges();
         forker.fork(
-                anotherUserGraph.graphWithDepthAndCenterVertexId(
+                anotherUserGraph.graphWithDepthAndCenterBubbleUri(
                         2,
                         vertexOfAnotherUser.uri()
                 )
@@ -292,11 +285,11 @@ public class SubGraphForkerTest extends ModelTestResources {
     @Test
     public void forked_vertices_have_the_right_number_of_connected_edges() {
         makeAnotherUserHave3LinearPublicVertices();
-        IdentificationPojo vertexOfAnotherUserAsIdentifier = TestScenarios.identificationFromFriendlyResource(
+        IdentifierPojo vertexOfAnotherUserAsIdentifier = TestScenarios.identificationFromFriendlyResource(
                 vertexOfAnotherUser
         );
         forker.fork(
-                anotherUserGraph.graphWithDepthAndCenterVertexId(
+                anotherUserGraph.graphWithDepthAndCenterBubbleUri(
                         2,
                         vertexOfAnotherUser.uri()
                 )

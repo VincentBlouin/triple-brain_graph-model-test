@@ -18,7 +18,7 @@ import guru.bubl.module.model.graph.subgraph.SubGraphForker;
 import guru.bubl.module.model.graph.subgraph.SubGraphForkerFactory;
 import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.identification.IdentificationFactory;
-import guru.bubl.module.model.graph.identification.IdentificationPojo;
+import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.vertex.Vertex;
@@ -203,10 +203,10 @@ public class ModelTestResources {
     }
 
     protected void testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(GraphElementOperator graphElement){
-        IdentificationPojo computerScientist = graphElement.addMeta(
+        IdentifierPojo computerScientist = graphElement.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
-        IdentificationPojo personIdentification = graphElement.addMeta(
+        IdentifierPojo personIdentification = graphElement.addMeta(
                 modelTestScenarios.person()
         ).values().iterator().next();
         vertexB.addMeta(

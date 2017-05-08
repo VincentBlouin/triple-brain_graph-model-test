@@ -6,7 +6,7 @@ package guru.bubl.test.module.model.graph.identification;
 
 import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.User;
-import guru.bubl.module.model.graph.identification.Identification;
+import guru.bubl.module.model.graph.identification.Identifier;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.search.VertexSearchResult;
@@ -101,7 +101,7 @@ public class IdentifiedToTest extends ModelTestResources {
         VertexOperator anotherVertexRepresentingATshirt = testScenarios.createAVertex(
                 someUser
         );
-        Identification tshirtIdentification = modelTestScenarios.tShirt();
+        Identifier tshirtIdentification = modelTestScenarios.tShirt();
         tshirtIdentification = anotherVertexRepresentingATshirt.addMeta(
                 tshirtIdentification
         ).values().iterator().next();
@@ -193,7 +193,7 @@ public class IdentifiedToTest extends ModelTestResources {
         VertexOperator otherUserResource = testScenarios.createAVertex(
                 otherUser
         );
-        Identification otherUserIdentification = otherUserResource.addMeta(
+        Identifier otherUserIdentification = otherUserResource.addMeta(
                 modelTestScenarios.tShirt()
         ).values().iterator().next();
         otherUserResource.removeIdentification(

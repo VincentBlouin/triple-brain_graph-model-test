@@ -8,7 +8,7 @@ import com.google.common.collect.Sets;
 import guru.bubl.module.model.Image;
 import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.identification.IdentificationPojo;
+import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.search.*;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -127,6 +128,29 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 user
         );
         assertTrue(privateSearchResult.isEmpty());
+    }
+
+    @Test
+    public void cannot_search_for_the_identifiers_of_another_user() {
+        vertexA.addMeta(
+                modelTestScenarios.computerScientistType()
+        );
+        List<GraphElementSearchResult> searchResults = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "Computer ",
+                user
+        );
+        assertThat(
+                searchResults.size(),
+                is(1)
+        );
+        searchResults = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "Computer ",
+                user2
+        );
+        assertThat(
+                searchResults.size(),
+                is(0)
+        );
     }
 
     @Test
@@ -498,7 +522,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
 
     @Test
-    public void search_results_dont_have_identifications() {
+    public void search_results_have_identifiers() {
         indexGraph();
         GraphElement vertex = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 vertexA.label(),
@@ -518,7 +542,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         ).get(0).getGraphElementSearchResult().getGraphElement();
         assertThat(
                 vertex.getIdentifications().size(),
-                is(0)
+                is(1)
         );
     }
 
@@ -608,7 +632,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void more_details_contains_identification_image_if_has_none() {
-        IdentificationPojo identification = modelTestScenarios.computerScientistType();
+        IdentifierPojo identification = modelTestScenarios.computerScientistType();
         String identificationImage = UUID.randomUUID().toString();
         identification.setImages(Sets.newHashSet(
                 Image.withBase64ForSmallAndUriForBigger(
@@ -803,8 +827,8 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-    public void the_number_of_references_to_an_element_is_included() {
-        IdentificationPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
+    public void identifiers_are_included() {
+        IdentifierPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
         vertexBAsIdentifier.setLabel(
                 "some identifier"
         );
@@ -814,14 +838,14 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 user
         ).iterator().next();
         assertThat(
-                vertexSearchResult.getNbReferences(),
-                is(2)
+                vertexSearchResult.getGraphElement().getIdentifications().size(),
+                is(1)
         );
     }
 
     @Test
     public void related_elements_do_not_include_the_identifier() {
-        IdentificationPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
+        IdentifierPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
         vertexBAsIdentifier.setLabel(
                 "some identifier"
         );
@@ -837,19 +861,50 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-    public void the_identifier_external_resource_uri_has_to_be_the_element_for_it_to_have_the_nb_references() {
-        IdentificationPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
+    public void can_search_for_identifiers() {
+        IdentifierPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
         vertexBAsIdentifier.setLabel(
                 "some identifier"
         );
         vertexA.addMeta(vertexBAsIdentifier);
-        VertexSearchResult vertexSearchResult = (VertexSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "vertex Azure",
+        List<GraphElementSearchResult> searchResults = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "some identifier",
+                user
+        );
+        assertThat(
+                searchResults.size(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void identifiers_have_their_external_uri() {
+        IdentifierPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
+        vertexBAsIdentifier.setLabel(
+                "some identifier"
+        );
+        vertexA.addMeta(vertexBAsIdentifier);
+        IdentifierSearchResult searchResult = (IdentifierSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "some identifier",
                 user
         ).iterator().next();
         assertThat(
-                vertexSearchResult.getNbReferences(),
-                is(0)
+                searchResult.getIdentifierPojo().getExternalResourceUri(),
+                is(vertexBAsIdentifier.getExternalResourceUri())
+        );
+    }
+    @Test
+    public void search_elements_have_the_number_of_times_they_were_centered() {
+        centerGraphElementOperatorFactory.usingGraphElement(
+                vertexC
+        ).incrementNumberOfVisits();
+        VertexSearchResult vertexSearchResult = (VertexSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "vertex Cadeau",
+                user
+        ).iterator().next();
+        assertThat(
+                vertexSearchResult.getNbVisits(),
+                is(1)
         );
     }
 }
