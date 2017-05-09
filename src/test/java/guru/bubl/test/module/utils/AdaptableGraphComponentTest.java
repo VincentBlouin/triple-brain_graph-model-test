@@ -12,6 +12,7 @@ import guru.bubl.module.model.graph.GraphFactory;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
+import guru.bubl.module.model.meta.IdentifiedTo;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

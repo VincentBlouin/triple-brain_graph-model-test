@@ -5,7 +5,7 @@
 package guru.bubl.test.module.utils;
 
 import guru.bubl.module.model.FriendlyResourceFactory;
-import guru.bubl.module.model.IdentifiedTo;
+import guru.bubl.module.model.meta.IdentifiedTo;
 import guru.bubl.module.model.User;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperatorFactory;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementsOperatorFactory;
@@ -24,6 +24,8 @@ import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
+import guru.bubl.module.model.meta.UserMetasOperator;
+import guru.bubl.module.model.meta.UserMetasOperatorFactory;
 import guru.bubl.module.model.suggestion.SuggestionPojo;
 import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
@@ -48,6 +50,9 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class ModelTestResources {
+
+    @Inject
+    public UserMetasOperatorFactory userMetasOperatorFactory;
 
     @Inject
     public CenterGraphElementOperatorFactory centerGraphElementOperatorFactory;

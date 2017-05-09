@@ -2,7 +2,7 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package guru.bubl.test.module.model.graph.identification;
+package guru.bubl.test.module.model.graph.meta;
 
 import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.User;

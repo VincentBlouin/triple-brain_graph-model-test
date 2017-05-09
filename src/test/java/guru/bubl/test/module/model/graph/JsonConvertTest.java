@@ -12,9 +12,9 @@ import org.junit.Test;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
-import guru.bubl.module.model.json.graph.EdgeJson;
-import guru.bubl.module.model.json.graph.SubGraphJson;
-import guru.bubl.module.model.json.graph.VertexInSubGraphJson;
+import guru.bubl.module.model.graph.edge.EdgeJson;
+import guru.bubl.module.model.graph.SubGraphJson;
+import guru.bubl.module.model.graph.vertex.VertexInSubGraphJson;
 
 import java.util.HashSet;
 import java.util.Set;
