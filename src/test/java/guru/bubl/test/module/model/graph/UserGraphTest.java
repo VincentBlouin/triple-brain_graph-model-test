@@ -885,6 +885,22 @@ public class UserGraphTest extends ModelTestResources {
         assertFalse(subGraph.containsVertex(vertexA));
     }
 
+    @Test
+    @Ignore
+    public void can_get_meta_center_from_user_graph() {
+        IdentifierPojo human = vertexB.addMeta(
+                modelTestScenarios.human()
+        ).values().iterator().next();
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                human.uri()
+        );
+        human = subGraph.getCenterMeta();
+        assertThat(
+                human.label(),
+                is("Human")
+        );
+    }
     @Override
     public VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
         return userGraph.graphWithAnyVertexAndDepth(
