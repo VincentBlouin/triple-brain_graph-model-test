@@ -5,7 +5,9 @@
 package guru.bubl.test.module.model.center_graph_element;
 
 import com.google.inject.Inject;
+import guru.bubl.module.model.WholeGraph;
 import guru.bubl.module.model.admin.WholeGraphAdminFactory;
+import guru.bubl.module.model.graph.identification.IdentificationOperator;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
@@ -18,6 +20,9 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
     @Inject
     WholeGraphAdminFactory wholeGraphAdminFactory;
+
+    @Inject
+    protected WholeGraph wholeGraph;
 
     @Test
     public void can_refresh_identifications_number_of_references() {
@@ -44,6 +49,56 @@ public class WholeGraphAdminTest extends ModelTestResources {
                         identificationPojo.uri()
                 ).getNbReferences(),
                 is(2)
+        );
+    }
+
+    @Test
+    public void sets_number_of_reference_to_zero_for_meta_having_zero_references() {
+        IdentifierPojo meta = vertexB.addMeta(
+                modelTestScenarios.possessionIdentification()
+        ).values().iterator().next();
+        wholeGraphAdminFactory.withWholeGraph(
+                wholeGraph
+        ).refreshNumberOfReferencesToAllIdentifications();
+        IdentificationOperator metaOperator = identificationFactory.withUri(meta.uri());
+        assertThat(
+                metaOperator.getNbReferences(),
+                is(1)
+        );
+        vertexB.removeIdentification(meta);
+        metaOperator.setNbReferences(1);
+        wholeGraphAdminFactory.withWholeGraph(
+                wholeGraph
+        ).refreshNumberOfReferencesToAllIdentifications();
+        assertThat(
+                metaOperator.getNbReferences(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void can_remove_metas_having_zero_references() {
+        IdentifierPojo possessionMeta = vertexB.addMeta(
+                modelTestScenarios.possessionIdentification()
+        ).values().iterator().next();
+        vertexB.addMeta(
+                modelTestScenarios.creatorPredicate()
+        ).values().iterator().next();
+        assertThat(
+                wholeGraph.getAllIdentifications().size(),
+                is(2)
+        );
+        vertexB.removeIdentification(possessionMeta);
+        assertThat(
+                wholeGraph.getAllIdentifications().size(),
+                is(2)
+        );
+        wholeGraphAdminFactory.withWholeGraph(
+                wholeGraph
+        ).removeMetasHavingZeroReferences();
+        assertThat(
+                wholeGraph.getAllIdentifications().size(),
+                is(1)
         );
     }
 
