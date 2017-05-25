@@ -6,6 +6,7 @@ package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.Image;
 import guru.bubl.module.model.graph.GraphElementOperator;
+import guru.bubl.module.model.graph.identification.IdentificationOperator;
 import guru.bubl.module.model.graph.identification.Identifier;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
@@ -249,6 +250,25 @@ public class GraphElementOperatorTest extends ModelTestResources {
         assertThat(
                 identification.getNbReferences(),
                 is(1)
+        );
+    }
+
+    @Test
+    public void removing_a_vertex_decrements_number_of_metas_related_to_the_connected_edges() {
+        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        IdentificationOperator metaOperator = identificationFactory.withUri(
+                edgeBetweenAAndB.addMeta(
+                        modelTestScenarios.creatorPredicate()
+                ).values().iterator().next().uri()
+        );
+        assertThat(
+                metaOperator.getNbReferences(),
+                is(1)
+        );
+        vertexA.remove();
+        assertThat(
+                metaOperator.getNbReferences(),
+                is(0)
         );
     }
 
