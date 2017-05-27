@@ -4,6 +4,7 @@
 
 package guru.bubl.test.module.model.center_graph_element;
 
+import guru.bubl.module.model.graph.GraphElementType;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 
@@ -32,9 +33,9 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
                         1
                 )
         );
-        centerGraphElementOperatorFactory.usingGraphElement(
+        centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexC
-        ).incrementNumberOfVisits();
+        ).updateLastCenterDate();
         assertThat(
                 centerGraphElementsOperatorFactory.forUser(
                         user
@@ -58,7 +59,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         assertThat(
                 centerGraphElementsOperatorFactory.forUser(
                         user
-                ).getPublicOnly().size(),
+                ).getPublicOnlyOfType().size(),
                 is(
                         0
                 )
@@ -67,7 +68,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         assertThat(
                 centerGraphElementsOperatorFactory.forUser(
                         user
-                ).getPublicOnly().size(),
+                ).getPublicOnlyOfType().size(),
                 is(
                         1
                 )
@@ -79,7 +80,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         assertThat(
                 centerGraphElementsOperatorFactory.forUser(
                         user
-                ).getPublicOnly().size(),
+                ).getPublicOnlyOfType().size(),
                 is(
                         0
                 )
@@ -88,7 +89,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         assertThat(
                 centerGraphElementsOperatorFactory.forUser(
                         user
-                ).getPublicOnly().size(),
+                ).getPublicOnlyOfType().size(),
                 is(
                         0
                 )

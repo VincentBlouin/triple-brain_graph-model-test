@@ -895,7 +895,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
     @Test
     public void search_elements_have_the_number_of_times_they_were_centered() {
-        centerGraphElementOperatorFactory.usingGraphElement(
+        centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexC
         ).incrementNumberOfVisits();
         VertexSearchResult vertexSearchResult = (VertexSearchResult) graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(

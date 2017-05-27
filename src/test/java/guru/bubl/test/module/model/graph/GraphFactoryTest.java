@@ -6,6 +6,7 @@ package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.User;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
+import guru.bubl.module.model.graph.GraphElementType;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.Matchers;
 import org.junit.Test;
