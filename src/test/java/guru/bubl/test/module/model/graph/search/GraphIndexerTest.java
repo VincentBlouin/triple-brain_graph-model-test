@@ -4,134 +4,201 @@
 
 package guru.bubl.test.module.model.graph.search;
 
+import com.google.inject.Inject;
+import guru.bubl.module.model.graph.GraphElementOperator;
+import guru.bubl.module.model.graph.GraphElementPojo;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.schema.SchemaOperator;
+import guru.bubl.module.model.graph.schema.SchemaPojo;
+import guru.bubl.module.model.search.GraphElementSearchResult;
+import guru.bubl.module.model.search.GraphIndexer;
 import guru.bubl.test.module.utils.search.Neo4jSearchRelatedTest;
-import org.junit.Ignore;
+import org.junit.Test;
 
-@Ignore
+import java.util.List;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
+
 public class GraphIndexerTest extends Neo4jSearchRelatedTest {
-/*
+
+    @Inject
+    GraphIndexer graphIndexer;
+
     @Test
-    public void can_index_vertex() throws Exception {
-        SolrDocumentList documentList = queryVertex(vertexA);
-        assertThat(documentList.size(), is(0));
+    public void index_vertex_sets_its_private_surround_graph() {
+        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                vertexB.label(),
+                user
+        ).iterator().next();
+        assertTrue(
+                vertexSearchResult.getContext().isEmpty()
+        );
+        graphIndexer.indexVertex(vertexB);
+        vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                vertexB.label(),
+                user
+        ).iterator().next();
+        assertFalse(
+                vertexSearchResult.getContext().isEmpty()
+        );
+    }
+
+    @Test
+    public void surround_graph_does_not_include_all_vertices() {
         graphIndexer.indexVertex(vertexA);
-        graphIndexer.commit();
-        documentList = queryVertex(vertexA);
-        assertThat(documentList.size(), is(1));
+        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                vertexA.label(),
+                user
+        ).iterator().next();
         assertThat(
-                labelOfGraphElementSearchResult(documentList.get(0)),
-                is("vertex Azure")
+                vertexSearchResult.getContext().size(),
+                is(1)
         );
     }
 
     @Test
-    public void can_remove_graph_element_from_index() {
-        indexGraph();
-        GraphSearch graphSearch = SolrGraphSearch.withCoreContainer(coreContainer);
-        List<VertexSearchResult> results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "vertex azure",
-                user
+    public void index_vertex_sets_its_public_surround_graph() {
+        vertexB.makePublic();
+        vertexA.makePublic();
+        graphIndexer.indexVertex(vertexB);
+        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                vertexB.label(),
+                anotherUser
+        ).iterator().next();
+        assertThat(
+                vertexSearchResult.getContext().size(),
+                is(1)
         );
-        assertThat(results.size(), is(1));
-        graphIndexer.deleteGraphElement(vertexA);
-        graphIndexer.commit();
-        results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "vertex azure",
-                user
-        );
-        assertThat(results.size(), is(0));
-    }
-
-    @Test
-    public void schemas_are_indexed_when_indexing_whole_graph(){
-        GraphSearch graphSearch = SolrGraphSearch.withCoreContainer(coreContainer);
-        List<VertexSearchResult> results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "schema1",
-                user
-        );
-        assertTrue(results.isEmpty());
-        SchemaOperator schema = createSchema(user);
-        schema.label("schema1");
-        graphIndexer.indexWholeGraph();
-        graphIndexer.commit();
-        results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "schema1",
-                user
-        );
-        assertThat(results.size(), is(1));
-    }
-
-    @Test
-    public void vertices_are_indexed_when_indexing_whole_graph(){
-        GraphSearch graphSearch = SolrGraphSearch.withCoreContainer(coreContainer);
-        List<VertexSearchResult> results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "vertex azure",
-                user
-        );
-        assertTrue(results.isEmpty());
-        graphIndexer.indexWholeGraph();
-        graphIndexer.commit();
-        results = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "vertex azure",
-                user
-        );
-        assertFalse(results.isEmpty());
-    }
-
-    @Test
-    public void edges_are_indexed_when_indexing_whole_graph(){
-        GraphSearch graphSearch = SolrGraphSearch.withCoreContainer(coreContainer);
-        List<GraphElementSearchResult> results = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
-                "between vert",
-                user
-        );
-        assertTrue(results.isEmpty());
-        graphIndexer.indexWholeGraph();
-        graphIndexer.commit();
-        results = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
-                "between vert",
-                user
-        );
-        assertFalse(results.isEmpty());
-    }
-
-    @Test
-    @Ignore(
-            "todo when lucene4 be integrated in noe4j " +
-                    "for now it conflicts with solr " +
-                    "when I upgrade solr to version 4"
-    )
-    public void indexing_graph_element_doesnt_erase_vertex_specific_fields() {
-        indexGraph();
-        GraphSearch graphSearch = SolrGraphSearch.withCoreContainer(coreContainer);
-        List<VertexSearchResult> vertexASearchResults = graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
-                "vertex Azure",
-                user
+        vertexC.makePublic();
+        graphIndexer.indexVertex(vertexB);
+        vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                vertexB.label(),
+                anotherUser
+        ).iterator().next();
+        assertFalse(
+                vertexSearchResult.getContext().isEmpty()
         );
         assertThat(
-                vertexASearchResults.size(), is(1)
+                vertexSearchResult.getContext().size(),
+                is(2)
         );
-        //todo uncomment when lucene4 be integrated in noe4j for now it conflicts with solr when I upgrade solr to version 4
-//        graphIndexer().updateGraphElementIndex(vertexA, user);
-        vertexASearchResults = graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
-                "vertex Azure",
+    }
+
+    @Test
+    public void context_does_not_include_self_vertex() {
+        graphIndexer.indexVertex(vertexB);
+        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                vertexB.label(),
                 user
-        );
-        assertThat(
-                vertexASearchResults.size(), is(1)
-        );
-    }
-
-    private String labelOfGraphElementSearchResult(SolrDocument solrDocument) {
-        return (String) solrDocument.getFieldValue("label");
-    }
-
-    private SolrDocumentList queryVertex(Vertex vertex) throws Exception {
-        return resultsOfSearchQuery(
-                new SolrQuery().setQuery(
-                        "uri:" + encodeURL(vertex.uri().toString())
+        ).iterator().next();
+        assertFalse(
+                vertexSearchResult.getContext().containsKey(
+                        vertexB.uri()
                 )
         );
     }
-    */
+
+    @Test
+    public void index_schema_sets_the_properties_as_context() {
+        SchemaOperator schema = createSchema(userGraph.user());
+        schema.label("schema1");
+        graphIndexer.indexSchema(userGraph.schemaPojoWithUri(
+                schema.uri()
+        ));
+        GraphElementSearchResult searchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "schema",
+                user
+        ).iterator().next();
+        assertTrue(
+                searchResult.getContext().isEmpty()
+        );
+        schema.addProperty();
+        schema.addProperty();
+        graphIndexer.indexSchema(userGraph.schemaPojoWithUri(
+                schema.uri()
+        ));
+        searchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "schema",
+                user
+        ).iterator().next();
+        assertFalse(
+                searchResult.getContext().isEmpty()
+        );
+    }
+
+    @Test
+    public void index_relation_sets_source_and_destination_vertex_as_context() {
+        EdgeOperator edgeAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        GraphElementSearchResult searchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
+                edgeAAndB.label(),
+                user
+        ).iterator().next();
+        assertTrue(
+                searchResult.getContext().isEmpty()
+        );
+        graphIndexer.indexRelation(edgeAAndB);
+        searchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
+                edgeAAndB.label(),
+                user
+        ).iterator().next();
+        assertTrue(
+                searchResult.getContext().containsValue(
+                        vertexA.label()
+                )
+        );
+        assertTrue(
+                searchResult.getContext().containsValue(
+                        vertexB.label()
+                )
+        );
+    }
+
+    @Test
+    public void public_context_of_relation_is_empty_if_relation_is_private() {
+        vertexA.makePublic();
+        vertexB.makePublic();
+        EdgeOperator edgeAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        graphIndexer.indexRelation(edgeAAndB);
+        GraphElementSearchResult searchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
+                edgeAAndB.label(),
+                anotherUser
+        ).iterator().next();
+        assertFalse(
+                searchResult.getContext().isEmpty()
+        );
+        vertexA.makePrivate();
+        graphIndexer.indexRelation(edgeAAndB);
+
+        List<GraphElementSearchResult> graphElementSearchResults = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
+                edgeAAndB.label(),
+                anotherUser
+        );
+        assertTrue(
+                graphElementSearchResults.isEmpty()
+        );
+    }
+
+    @Test
+    public void index_property_sets_schema_as_context() {
+        SchemaOperator schema = createSchema(userGraph.user());
+        schema.label("schema1");
+        GraphElementOperator property = schema.addProperty();
+        property.label("a property");
+        SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
+                schema.uri()
+        );
+        GraphElementPojo propertyPojo = schemaPojo.getProperties().values().iterator().next();
+        graphIndexer.indexProperty(propertyPojo, schemaPojo);
+        GraphElementSearchResult graphElementSearchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
+                "a property",
+                user
+        ).iterator().next();
+        assertTrue(
+                graphElementSearchResult.getContext().containsValue(
+                        "schema1"
+                )
+        );
+    }
+
 }

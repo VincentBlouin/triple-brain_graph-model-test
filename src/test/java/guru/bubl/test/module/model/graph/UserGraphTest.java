@@ -46,13 +46,10 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
 
 public class UserGraphTest extends ModelTestResources {
-    public static final int DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES = 10;
+    private static final int DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES = 10;
 
     @Inject
     protected VertexFactory vertexFactory;
-
-    @Inject
-    protected FriendlyResourceFactory friendlyResourceFactory;
 
     @Test
     public void can_get_graph_with_default_center_vertex() {
@@ -884,7 +881,6 @@ public class UserGraphTest extends ModelTestResources {
         assertTrue(subGraph.containsVertex(vertexB));
         assertFalse(subGraph.containsVertex(vertexA));
     }
-
     @Test
     @Ignore
     public void can_get_meta_center_from_user_graph() {

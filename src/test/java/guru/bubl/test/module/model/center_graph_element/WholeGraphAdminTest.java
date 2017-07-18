@@ -6,7 +6,7 @@ package guru.bubl.test.module.model.center_graph_element;
 
 import com.google.inject.Inject;
 import guru.bubl.module.model.WholeGraph;
-import guru.bubl.module.model.admin.WholeGraphAdminFactory;
+import guru.bubl.module.model.admin.WholeGraphAdmin;
 import guru.bubl.module.model.graph.identification.IdentificationOperator;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
@@ -19,7 +19,7 @@ import static org.junit.Assert.assertThat;
 public class WholeGraphAdminTest extends ModelTestResources {
 
     @Inject
-    WholeGraphAdminFactory wholeGraphAdminFactory;
+    WholeGraphAdmin wholeGraphAdmin;
 
     @Inject
     protected WholeGraph wholeGraph;
@@ -41,9 +41,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 ).getNbReferences(),
                 is(5)
         );
-        wholeGraphAdminFactory.withWholeGraph(
-                wholeGraph
-        ).refreshNumberOfReferencesToAllIdentifications();
+        wholeGraphAdmin.refreshNumberOfReferencesToAllIdentifications();
         assertThat(
                 identificationFactory.withUri(
                         identificationPojo.uri()
@@ -57,9 +55,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
         IdentifierPojo meta = vertexB.addMeta(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
-        wholeGraphAdminFactory.withWholeGraph(
-                wholeGraph
-        ).refreshNumberOfReferencesToAllIdentifications();
+        wholeGraphAdmin.refreshNumberOfReferencesToAllIdentifications();
         IdentificationOperator metaOperator = identificationFactory.withUri(meta.uri());
         assertThat(
                 metaOperator.getNbReferences(),
@@ -67,9 +63,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
         );
         vertexB.removeIdentification(meta);
         metaOperator.setNbReferences(1);
-        wholeGraphAdminFactory.withWholeGraph(
-                wholeGraph
-        ).refreshNumberOfReferencesToAllIdentifications();
+        wholeGraphAdmin.refreshNumberOfReferencesToAllIdentifications();
         assertThat(
                 metaOperator.getNbReferences(),
                 is(0)
@@ -93,9 +87,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 wholeGraph.getAllIdentifications().size(),
                 is(2)
         );
-        wholeGraphAdminFactory.withWholeGraph(
-                wholeGraph
-        ).removeMetasHavingZeroReferences();
+        wholeGraphAdmin.removeMetasHavingZeroReferences();
         assertThat(
                 wholeGraph.getAllIdentifications().size(),
                 is(1)
@@ -115,9 +107,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 vertexB.getIdentifications().size(),
                 is(1)
         );
-        wholeGraphAdminFactory.withWholeGraph(
-                wholeGraph
-        ).reAddIdentifications();
+        wholeGraphAdmin.reAddIdentifications();
         assertThat(
                 vertexB.getIdentifications().size(),
                 is(1)
@@ -151,9 +141,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 vertexA.getIdentifications().size(),
                 is(1)
         );
-        wholeGraphAdminFactory.withWholeGraph(
-                wholeGraph
-        ).reAddIdentifications();
+        wholeGraphAdmin.reAddIdentifications();
         assertThat(
                 vertexB.getIdentifications().size(),
                 is(1)

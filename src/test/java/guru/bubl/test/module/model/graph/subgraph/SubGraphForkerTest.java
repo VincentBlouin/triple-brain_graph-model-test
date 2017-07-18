@@ -4,17 +4,28 @@
 
 package guru.bubl.test.module.model.graph.subgraph;
 
+import guru.bubl.module.model.User;
+import guru.bubl.module.model.graph.GraphElementType;
+import guru.bubl.module.model.graph.identification.Identifier;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
-import guru.bubl.module.model.graph.vertex.VertexOperator;
+import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
+import guru.bubl.module.model.graph.vertex.*;
 import guru.bubl.module.model.search.GraphElementSearchResult;
-import guru.bubl.module.model.search.VertexSearchResult;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
+import guru.bubl.module.neo4j_graph_manipulator.graph.Neo4jFriendlyResource;
+import guru.bubl.module.neo4j_graph_manipulator.graph.Relationships;
+import guru.bubl.module.neo4j_graph_manipulator.graph.graph.identification.Neo4jIdentification;
+import guru.bubl.module.neo4j_graph_manipulator.graph.search.SearchResultGetter;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 
+import java.net.URI;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.Is.is;
@@ -31,7 +42,7 @@ public class SubGraphForkerTest extends ModelTestResources {
                 1,
                 vertexB.uri()
         );
-        List<VertexSearchResult> results = graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
+        List<GraphElementSearchResult> results = graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
                 "ananas", anotherUser
         );
         assertThat(
@@ -77,7 +88,7 @@ public class SubGraphForkerTest extends ModelTestResources {
         anotherUserForker.fork(
                 subGraph
         );
-        List<VertexSearchResult> results = graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
+        List<GraphElementSearchResult> results = graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
                 "ananas", anotherUser
         );
         assertThat(
@@ -165,28 +176,20 @@ public class SubGraphForkerTest extends ModelTestResources {
     @Test
     public void fork_is_identified_to_original() {
         vertexOfAnotherUser.makePublic();
-        IdentifierPojo originalVertexAsIdentifier = TestScenarios.identificationFromFriendlyResource(
-                vertexOfAnotherUser
-        );
-        Set<GraphElementSearchResult> identifiedToOriginal = identifiedTo.getForIdentificationAndUser(
-                originalVertexAsIdentifier,
-                user
-        );
-        assertTrue(
-                identifiedToOriginal.isEmpty()
-        );
-        forker.fork(
+        Vertex forkVertex = forker.fork(
                 anotherUserGraph.graphWithDepthAndCenterBubbleUri(
                         0,
                         vertexOfAnotherUser.uri()
                 )
-        );
-        identifiedToOriginal = identifiedTo.getForIdentificationAndUser(
-                originalVertexAsIdentifier,
-                user
-        );
-        assertFalse(
-                identifiedToOriginal.isEmpty()
+        ).values().iterator().next();
+        VertexInSubGraphPojo vertex = userGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                forkVertex.uri()
+        ).vertices().values().iterator().next();
+        assertTrue(
+                vertex.getIdentifications().containsKey(
+                        vertexOfAnotherUser.uri()
+                )
         );
     }
 
@@ -196,32 +199,30 @@ public class SubGraphForkerTest extends ModelTestResources {
         IdentifierPojo identifier = vertexOfAnotherUser.addMeta(
                 modelTestScenarios.human()
         ).values().iterator().next();
-        Set<GraphElementSearchResult> identifiedToHuman = identifiedTo.getForIdentificationAndUser(
-                identifier,
-                user
-        );
-        assertTrue(
-                identifiedToHuman.isEmpty()
-        );
-        forker.fork(
+        Vertex forkVertex = forker.fork(
                 anotherUserGraph.graphWithDepthAndCenterBubbleUri(
                         0,
                         vertexOfAnotherUser.uri()
                 )
-        );
-        identifiedToHuman = identifiedTo.getForIdentificationAndUser(
-                identifier,
-                user
-        );
-        assertFalse(
-                identifiedToHuman.isEmpty()
+        ).values().iterator().next();
+        VertexInSubGraphPojo vertex = userGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                forkVertex.uri()
+        ).vertices().values().iterator().next();
+        assertTrue(
+                vertex.getIdentifications().containsKey(
+                        identifier.getExternalResourceUri()
+                )
         );
     }
 
     @Test
     public void vertices_are_not_forked_more_than_once() {
+        vertexA.label("abracadaba");
         vertexA.makePublic();
+        vertexB.label("barbe");
         vertexB.makePublic();
+        vertexC.label("carcason");
         vertexC.makePublic();
         anotherUserForker.fork(
                 userGraph.graphWithDepthAndCenterBubbleUri(
@@ -229,33 +230,32 @@ public class SubGraphForkerTest extends ModelTestResources {
                         vertexB.uri()
                 )
         );
-        IdentifierPojo vertexAIdentifier = TestScenarios.identificationFromFriendlyResource(
-                vertexA
-        );
         assertThat(
-                identifiedTo.getForIdentificationAndUser(
-                        vertexAIdentifier,
-                        anotherUser
+                getOnlyVerticesInSearchResults(
+                        graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
+                                "barbe",
+                                anotherUser
+                        )
                 ).size(),
                 is(1)
         );
-        IdentifierPojo vertexBIdentifier = TestScenarios.identificationFromFriendlyResource(
-                vertexB
-        );
+
         assertThat(
-                identifiedTo.getForIdentificationAndUser(
-                        vertexBIdentifier,
-                        anotherUser
+                getOnlyVerticesInSearchResults(
+                        graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
+                                "abracadaba",
+                                anotherUser
+                        )
                 ).size(),
                 is(1)
         );
-        IdentifierPojo vertexCIdentifier = TestScenarios.identificationFromFriendlyResource(
-                vertexC
-        );
+
         assertThat(
-                identifiedTo.getForIdentificationAndUser(
-                        vertexCIdentifier,
-                        anotherUser
+                getOnlyVerticesInSearchResults(
+                        graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
+                                "carcason",
+                                anotherUser
+                        )
                 ).size(),
                 is(1)
         );
@@ -285,20 +285,14 @@ public class SubGraphForkerTest extends ModelTestResources {
     @Test
     public void forked_vertices_have_the_right_number_of_connected_edges() {
         makeAnotherUserHave3LinearPublicVertices();
-        IdentifierPojo vertexOfAnotherUserAsIdentifier = TestScenarios.identificationFromFriendlyResource(
-                vertexOfAnotherUser
-        );
-        forker.fork(
+        Vertex vertex = forker.fork(
                 anotherUserGraph.graphWithDepthAndCenterBubbleUri(
                         2,
                         vertexOfAnotherUser.uri()
                 )
-        );
+        ).get(vertexOfAnotherUser.uri());
         VertexOperator forkedVertexOfAnotherUser = userGraph.vertexWithUri(
-                identifiedTo.getForIdentificationAndUser(
-                        vertexOfAnotherUserAsIdentifier,
-                        user
-                ).iterator().next().getGraphElement().uri()
+                vertex.uri()
         );
         assertThat(
                 forkedVertexOfAnotherUser.getNumberOfConnectedEdges(),
@@ -318,5 +312,11 @@ public class SubGraphForkerTest extends ModelTestResources {
         );
         another3.label("another3");
         another3.makePublic();
+    }
+
+    private List<GraphElementSearchResult> getOnlyVerticesInSearchResults(List<GraphElementSearchResult> searchResults) {
+        return searchResults.stream().filter(
+                p -> p.getType() == GraphElementType.vertex
+        ).collect(Collectors.toList());
     }
 }

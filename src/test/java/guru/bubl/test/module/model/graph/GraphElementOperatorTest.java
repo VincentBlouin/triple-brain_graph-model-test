@@ -11,6 +11,7 @@ import guru.bubl.module.model.graph.identification.Identifier;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
+import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
@@ -366,12 +367,12 @@ public class GraphElementOperatorTest extends ModelTestResources {
         Identifier createdIdentification = vertexC.addMeta(
                 vertexBAsIdentification
         ).values().iterator().next();
-        Set<GraphElementSearchResult> relatedIdentifications = identifiedTo.getForIdentificationAndUser(
-                createdIdentification,
-                user
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                createdIdentification.uri()
         );
         assertThat(
-                relatedIdentifications.size(),
+                subGraph.vertices().size(),
                 is(3)
         );
     }

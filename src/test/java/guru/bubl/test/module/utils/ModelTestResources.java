@@ -5,26 +5,24 @@
 package guru.bubl.test.module.utils;
 
 import guru.bubl.module.model.FriendlyResourceFactory;
-import guru.bubl.module.model.meta.IdentifiedTo;
 import guru.bubl.module.model.User;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperatorFactory;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementsOperatorFactory;
-import guru.bubl.module.model.graph.*;
+import guru.bubl.module.model.graph.GraphElementOperator;
+import guru.bubl.module.model.graph.GraphFactory;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeFactory;
 import guru.bubl.module.model.graph.edge.EdgePojo;
-import guru.bubl.module.model.graph.GraphFactory;
-import guru.bubl.module.model.graph.subgraph.SubGraphForker;
-import guru.bubl.module.model.graph.subgraph.SubGraphForkerFactory;
-import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.identification.IdentificationFactory;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
+import guru.bubl.module.model.graph.subgraph.SubGraphForker;
+import guru.bubl.module.model.graph.subgraph.SubGraphForkerFactory;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
+import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
-import guru.bubl.module.model.meta.UserMetasOperator;
 import guru.bubl.module.model.meta.UserMetasOperatorFactory;
 import guru.bubl.module.model.suggestion.SuggestionPojo;
 import guru.bubl.module.model.test.SubGraphOperator;
@@ -52,19 +50,19 @@ import static org.junit.Assert.assertThat;
 public class ModelTestResources {
 
     @Inject
-    public UserMetasOperatorFactory userMetasOperatorFactory;
+    protected UserMetasOperatorFactory userMetasOperatorFactory;
 
     @Inject
-    public CenterGraphElementOperatorFactory centerGraphElementOperatorFactory;
+    protected CenterGraphElementOperatorFactory centerGraphElementOperatorFactory;
 
     @Inject
-    public CenterGraphElementsOperatorFactory centerGraphElementsOperatorFactory;
+    protected CenterGraphElementsOperatorFactory centerGraphElementsOperatorFactory;
 
     @Inject
-    public IdentifiedTo identifiedTo;
+    protected FriendlyResourceFactory friendlyResourceFactory;
 
     @Inject
-    public FriendlyResourceFactory friendlyResourceFactory;
+    protected Connection connection;
 
     @Inject
     protected GraphFactory graphMaker;
@@ -95,9 +93,6 @@ public class ModelTestResources {
 
     @Inject
     protected GraphFactory graphFactory;
-
-    @Inject
-    Connection connection;
 
     @Inject
     protected Neo4jGraphSearch graphSearch;

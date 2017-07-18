@@ -7,19 +7,17 @@ package guru.bubl.test.module.utils;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import guru.bubl.module.model.*;
+import guru.bubl.module.model.FriendlyResourceFactory;
+import guru.bubl.module.model.ModelModule;
+import guru.bubl.module.model.User;
+import guru.bubl.module.model.WholeGraph;
 import guru.bubl.module.model.graph.GraphFactory;
-import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
-import guru.bubl.module.model.graph.subgraph.UserGraph;
-import guru.bubl.module.model.graph.vertex.VertexFactory;
-import guru.bubl.module.model.meta.IdentifiedTo;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgePojo;
+import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
+import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.vertex.Vertex;
+import guru.bubl.module.model.graph.vertex.VertexFactory;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.suggestion.SuggestionPojo;
@@ -27,6 +25,10 @@ import guru.bubl.module.model.test.GraphComponentTest;
 import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.module.neo4j_graph_manipulator.graph.Neo4jModule;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 
 import javax.inject.Inject;
 import java.net.URI;
@@ -40,9 +42,6 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     protected VertexOperator vertexB;
     protected VertexOperator vertexC;
     protected VertexOperator vertexOfAnotherUser;
-
-    @Inject
-    IdentifiedTo identifiedTo;
 
     @Inject
     FriendlyResourceFactory friendlyResourceFactory;
