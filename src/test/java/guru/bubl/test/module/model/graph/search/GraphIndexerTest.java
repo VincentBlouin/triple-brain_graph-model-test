@@ -45,6 +45,54 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
+    public void limits_the_context_size_of_vertices() {
+        for(int i = 0; i < 5; i++){
+            vertexFactory.withUri(
+                    vertexB.addVertexAndRelation().destinationVertex().uri()
+            ).label("vertex " + i);
+        }
+        graphIndexer.indexVertex(vertexB);
+        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                vertexB.label(),
+                user
+        ).iterator().next();
+        assertThat(
+                vertexSearchResult.getContext().size(),
+                is(5)
+        );
+    }
+
+    @Test
+    public void filters_empty_label_from_context() {
+        for(int i = 0; i < 5; i++){
+            vertexB.addVertexAndRelation();
+        }
+        graphIndexer.indexVertex(vertexB);
+        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                vertexB.label(),
+                user
+        ).iterator().next();
+        assertThat(
+                vertexSearchResult.getContext().size(),
+                is(2)
+        );
+    }
+
+    @Test
+    public void context_can_have_quotes() {
+        vertexA.label("\"some\" label");
+        graphIndexer.indexVertex(vertexB);
+        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                vertexB.label(),
+                user
+        ).iterator().next();
+        assertThat(
+                vertexSearchResult.getContext().size(),
+                is(2)
+        );
+    }
+
+    @Test
     public void surround_graph_does_not_include_all_vertices() {
         graphIndexer.indexVertex(vertexA);
         GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
@@ -113,8 +161,8 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         assertTrue(
                 searchResult.getContext().isEmpty()
         );
-        schema.addProperty();
-        schema.addProperty();
+        schema.addProperty().label("property 1");
+        schema.addProperty().label("property 2");
         graphIndexer.indexSchema(userGraph.schemaPojoWithUri(
                 schema.uri()
         ));
@@ -200,5 +248,4 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
                 )
         );
     }
-
 }

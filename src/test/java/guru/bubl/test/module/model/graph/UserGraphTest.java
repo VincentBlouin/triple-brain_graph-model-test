@@ -897,6 +897,19 @@ public class UserGraphTest extends ModelTestResources {
                 is("Human")
         );
     }
+    @Test
+    public void does_not_fail_if_identifier_does_not_have_images() {
+        IdentifierPojo identifierPojo = modelTestScenarios.human();
+        identifierPojo.images();
+        vertexB.addMeta(
+                identifierPojo
+        ).values().iterator().next();
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                vertexB.uri()
+        );
+        assertTrue(true);
+    }
     @Override
     public VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
         return userGraph.graphWithAnyVertexAndDepth(
