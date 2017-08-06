@@ -4,6 +4,7 @@
 
 package guru.bubl.test.module.model.center_graph_element;
 
+import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
 import guru.bubl.module.model.graph.GraphElementType;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
@@ -93,6 +94,45 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
                 is(
                         0
                 )
+        );
+    }
+
+    @Test
+    public void includes_context(){
+        graphIndexer.indexVertex(
+                vertexA
+        );
+        CenterGraphElementPojo centerGraphElement = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate().iterator().next();
+        assertThat(
+                centerGraphElement.getContext().values().iterator().next(),
+                is("vertex B")
+        );
+    }
+
+    @Test
+    public void includes_public_context_only_if_fetching_plublic_only_centers(){
+        vertexA.makePublic();
+        vertexB.makePublic();
+        graphIndexer.indexVertex(
+                vertexA
+        );
+        CenterGraphElementPojo centerGraphElement = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicOnlyOfType().iterator().next();
+        assertFalse(
+                centerGraphElement.getContext().isEmpty()
+        );
+        vertexB.makePrivate();
+        graphIndexer.indexVertex(
+                vertexA
+        );
+        centerGraphElement = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicOnlyOfType().iterator().next();
+        assertTrue(
+                centerGraphElement.getContext().isEmpty()
         );
     }
 }
