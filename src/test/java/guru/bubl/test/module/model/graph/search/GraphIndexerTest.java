@@ -10,6 +10,8 @@ import guru.bubl.module.model.graph.GraphElementPojo;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.schema.SchemaPojo;
+import guru.bubl.module.model.graph.vertex.VertexFactory;
+import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.search.GraphIndexer;
 import guru.bubl.test.module.utils.search.Neo4jSearchRelatedTest;
@@ -24,6 +26,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
 
     @Inject
     GraphIndexer graphIndexer;
+
+    @Inject
+    VertexFactory vertexFactory;
 
     @Test
     public void index_vertex_sets_its_private_surround_graph() {
@@ -89,6 +94,43 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         assertThat(
                 vertexSearchResult.getContext().size(),
                 is(2)
+        );
+    }
+
+    @Test
+    public void context_prioritize_vertices_with_most_child(){
+        for(int i = 4; i <= 10; i++){
+            VertexOperator destinationVertex = vertexFactory.withUri(
+                    vertexB.addVertexAndRelation().destinationVertex().uri()
+            );
+            vertexFactory.withUri(
+                    destinationVertex.uri()
+            ).label("vertex " + i);
+            for(int j = 0; j <= i; j++){
+                destinationVertex.addVertexAndRelation();
+            }
+        }
+        graphIndexer.indexVertex(vertexB);
+        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                vertexB.label(),
+                user
+        ).iterator().next();
+        String[] context = vertexSearchResult.getContext().values().toArray(
+                new String[
+                        vertexSearchResult.getContext().values().size()
+                        ]
+        );
+        assertThat(
+                context[0],
+                is("vertex 10")
+        );
+        assertThat(
+                context[1],
+                is("vertex 9")
+        );
+        assertThat(
+                context[4],
+                is("vertex 6")
         );
     }
 
