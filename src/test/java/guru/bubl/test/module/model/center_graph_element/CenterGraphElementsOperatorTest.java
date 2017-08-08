@@ -5,14 +5,14 @@
 package guru.bubl.test.module.model.center_graph_element;
 
 import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
-import guru.bubl.module.model.graph.GraphElementType;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class CenterGraphElementsOperatorTest extends ModelTestResources {
 
@@ -133,6 +133,117 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         ).getPublicOnlyOfType().iterator().next();
         assertTrue(
                 centerGraphElement.getContext().isEmpty()
+        );
+    }
+
+    @Test
+    public void can_remove_centers(){
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        ).updateLastCenterDate();
+        Set<CenterGraphElementPojo> centers = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate();
+        assertFalse(
+                centerGraphElementsOperatorFactory.forUser(
+                        user
+                ).getPublicAndPrivate().isEmpty()
+        );
+        centerGraphElementsOperatorFactory.forUser(
+                user
+        ).removeCenterGraphElements(centers);
+        assertTrue(
+                centerGraphElementsOperatorFactory.forUser(
+                        user
+                ).getPublicAndPrivate().isEmpty()
+        );
+    }
+
+    @Test
+    public void removing_center_does_not_remove_all_centers(){
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        ).updateLastCenterDate();
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        ).updateLastCenterDate();
+        assertThat(
+                centerGraphElementsOperatorFactory.forUser(
+                        user
+                ).getPublicAndPrivate().size(),
+                is(2)
+        );
+        CenterGraphElementPojo centerGraphElementPojo = new CenterGraphElementPojo(
+                vertexB.uri()
+        );
+        Set<CenterGraphElementPojo> centers = new HashSet<>();
+        centers.add(
+                centerGraphElementPojo
+        );
+        centerGraphElementsOperatorFactory.forUser(
+                user
+        ).removeCenterGraphElements(centers);
+        centers = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate();
+        assertThat(
+                centers.size(),
+                is(1)
+        );
+        assertThat(
+                centers.iterator().next().getGraphElement().uri(),
+                is(vertexA.uri())
+        );
+    }
+
+    @Test
+    public void cannot_remove_centers_of_another_user(){
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        ).updateLastCenterDate();
+        Set<CenterGraphElementPojo> centers = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate();
+        assertThat(
+                centers.size(),
+                is(1)
+        );
+        centerGraphElementsOperatorFactory.forUser(
+                anotherUser
+        ).removeCenterGraphElements(centers);
+        centers = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate();
+        assertThat(
+                centers.size(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void can_remove_multiple_centers_at_once(){
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        ).updateLastCenterDate();
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        ).updateLastCenterDate();
+        Set<CenterGraphElementPojo> centers = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate();
+        assertThat(
+                centers.size(),
+                is(2)
+        );
+        centerGraphElementsOperatorFactory.forUser(
+                user
+        ).removeCenterGraphElements(centers);
+        centers = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate();
+        assertThat(
+                centers.size(),
+                is(0)
         );
     }
 }
