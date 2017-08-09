@@ -4,8 +4,12 @@
 
 package guru.bubl.test.module.model.center_graph_element;
 
+import guru.bubl.module.model.UserUris;
+import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
+import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -244,6 +248,29 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         assertThat(
                 centers.size(),
                 is(0)
+        );
+    }
+
+    @Test
+    public void returns_number_of_references_of_center_metas(){
+        IdentifierPojo meta = vertexA.addMeta(
+                modelTestScenarios.person()
+        ).values().iterator().next();
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                meta
+        ).updateLastCenterDate();
+        Set<CenterGraphElementPojo> centerGraphElements = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate();
+        CenterGraphElementPojo centerMeta = null;
+        for(CenterGraphElementPojo centerGraphElement: centerGraphElements){
+            if(UserUris.isUriOfAnIdentifier(centerGraphElement.getGraphElement().uri())){
+                centerMeta = centerGraphElement;
+            }
+        }
+        assertThat(
+                centerMeta.getNbReferences(),
+                is(1)
         );
     }
 }
