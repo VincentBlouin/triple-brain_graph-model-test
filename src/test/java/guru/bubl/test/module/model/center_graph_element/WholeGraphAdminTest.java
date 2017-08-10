@@ -9,12 +9,14 @@ import guru.bubl.module.model.WholeGraph;
 import guru.bubl.module.model.admin.WholeGraphAdmin;
 import guru.bubl.module.model.graph.identification.IdentificationOperator;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class WholeGraphAdminTest extends ModelTestResources {
 
@@ -157,6 +159,23 @@ public class WholeGraphAdminTest extends ModelTestResources {
         assertThat(
                 vertexA.getIdentifications().size(),
                 is(1)
+        );
+    }
+
+    @Test
+    public void index_all_includes_metas() {
+        vertexA.addMeta(
+                modelTestScenarios.person()
+        ).values().iterator().next();
+        wholeGraphAdmin.reindexAll();
+        GraphElementSearchResult graphElementSearchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
+                "Person",
+                user
+        ).iterator().next();
+        assertTrue(
+                graphElementSearchResult.getContext().values().iterator().next().equals(
+                        "vertex A"
+                )
         );
     }
 }
