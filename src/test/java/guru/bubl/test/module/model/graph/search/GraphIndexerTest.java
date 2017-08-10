@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 import guru.bubl.module.model.graph.GraphElementOperator;
 import guru.bubl.module.model.graph.GraphElementPojo;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.schema.SchemaPojo;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
@@ -287,6 +288,41 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         assertTrue(
                 graphElementSearchResult.getContext().containsValue(
                         "schema1"
+                )
+        );
+    }
+
+    @Test
+    public void meta_context_includes_label_of_surround_vertices(){
+        IdentifierPojo meta = vertexA.addMeta(
+                modelTestScenarios.person()
+        ).values().iterator().next();
+        graphIndexer.indexMeta(meta);
+        GraphElementSearchResult graphElementSearchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
+                "Person",
+                user
+        ).iterator().next();
+        assertTrue(
+                graphElementSearchResult.getContext().values().iterator().next().equals(
+                        "vertex Azure"
+                )
+        );
+    }
+
+    @Test
+    public void meta_related_to_relation_context_includes_label_of_surround_vertices(){
+        EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
+        IdentifierPojo meta = edge.addMeta(
+                modelTestScenarios.toDo()
+        ).values().iterator().next();
+        graphIndexer.indexMeta(meta);
+        GraphElementSearchResult graphElementSearchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
+                "To do",
+                user
+        ).iterator().next();
+        assertTrue(
+                graphElementSearchResult.getContext().values().iterator().next().equals(
+                        "vertex Cadeau"
                 )
         );
     }
