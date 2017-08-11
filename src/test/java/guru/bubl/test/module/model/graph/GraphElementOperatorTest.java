@@ -191,7 +191,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void can_remove_identifier_to_self() {
+    public void can_remove_self_identifier() {
         IdentifierPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(
                 vertexB
         );
