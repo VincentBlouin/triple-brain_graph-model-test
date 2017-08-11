@@ -11,6 +11,7 @@ import guru.bubl.module.model.graph.identification.Identifier;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
+import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
@@ -189,6 +190,34 @@ public class GraphElementOperatorTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void can_remove_identifier_to_self() {
+        IdentifierPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(
+                vertexB
+        );
+        IdentifierPojo createdVertexBAsIdentifier = vertexA.addMeta(
+                vertexBAsIdentifier
+        ).values().iterator().next();
+        SubGraphPojo subGraph = neo4jSubGraphExtractorFactory.withCenterVertexAndDepth(
+                createdVertexBAsIdentifier.uri(),
+                1
+        ).load();
+        assertTrue(
+                subGraph.vertices().containsKey(
+                        vertexB.uri()
+                )
+        );
+        vertexB.removeIdentification(createdVertexBAsIdentifier);
+        subGraph = neo4jSubGraphExtractorFactory.withCenterVertexAndDepth(
+                createdVertexBAsIdentifier.uri(),
+                1
+        ).load();
+        assertFalse(
+                subGraph.vertices().containsKey(
+                        vertexB.uri()
+                )
+        );
+    }
     @Test
     public void identifications_do_not_apply_for_all_elements() {
         vertexA.addMeta(
