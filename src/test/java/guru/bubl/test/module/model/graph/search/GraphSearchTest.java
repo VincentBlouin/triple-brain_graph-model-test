@@ -13,6 +13,8 @@ import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.schema.Schema;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.schema.SchemaPojo;
+import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
+import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.*;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestScenarios;
@@ -881,6 +883,32 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         assertThat(
                 vertexSearchResult.getNbVisits(),
                 is(1)
+        );
+    }
+
+    @Test
+    public void prioritizes_meta_over_other_types_of_bubbles() {
+        IdentifierPojo identifier = vertexB.addMeta(
+                modelTestScenarios.location()
+        ).values().iterator().next();
+        for(int i = 0; i < 5; i++){
+            VertexOperator locationVertex = vertexFactory.createForOwnerUsername(
+             user.username()
+            );
+            locationVertex.label("Location");
+            if(i % 2 == 0){
+                centerGraphElementOperatorFactory.usingFriendlyResource(
+                        locationVertex
+                ).incrementNumberOfVisits();
+            }
+        }
+        GraphElementSearchResult firstSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "Location",
+                user
+        ).iterator().next();
+        assertThat(
+                firstSearchResult.getGraphElement().uri(),
+                is(identifier.uri())
         );
     }
 }
