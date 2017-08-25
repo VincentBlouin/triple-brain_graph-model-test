@@ -178,4 +178,34 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 )
         );
     }
+
+    @Test
+    public void can_refresh_number_of_connected_edges() {
+        vertexB.setNumberOfConnectedEdges(8);
+        assertThat(
+                vertexB.getNumberOfConnectedEdges(),
+                is(8)
+        );
+        wholeGraphAdmin.refreshNumberOfConnectedEdges();
+        assertThat(
+                vertexB.getNumberOfConnectedEdges(),
+                is(2)
+        );
+    }
+
+    @Test
+    public void can_refresh_number_of_public_connected_edges() {
+        vertexB.makePublic();
+        vertexC.makePublic();
+        vertexB.setNumberOfPublicConnectedEdges(8);
+        assertThat(
+                vertexB.getNbPublicNeighbors(),
+                is(8)
+        );
+        wholeGraphAdmin.refreshNumberOfConnectedEdges();
+        assertThat(
+                vertexB.getNbPublicNeighbors(),
+                is(1)
+        );
+    }
 }
