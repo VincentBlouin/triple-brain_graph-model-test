@@ -174,6 +174,21 @@ public class ModelTestScenarios {
         );
     }
 
+    public IdentifierPojo book(){
+        FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
+                "Book"
+        );
+        friendlyResourcePojo.setComment(
+                "medium for a collection of words and/or pictures to represent knowledge or a fictional story, often manifested in bound paper and ink, or in e-books"
+        );
+        return new IdentifierPojo(
+                URI.create(
+                        "https://www.wikidata.org/wiki/Q571"
+                ),
+                friendlyResourcePojo
+        );
+    }
+
     public SuggestionPojo nameSuggestionFromPersonIdentification(User user) {
         return SuggestionPojo.forSameAsTypeOriginAndOwner(
                 new FriendlyResourcePojo(
