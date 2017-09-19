@@ -8,6 +8,8 @@ import guru.bubl.module.model.center_graph_element.CenterGraphElement;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
 import guru.bubl.module.model.graph.GraphElementType;
+import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.edge.EdgePojo;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
@@ -92,6 +94,29 @@ public class CenterGraphElementOperatorTest extends ModelTestResources {
         assertThat(
                 centerGraphElements.size(),
                 is(0)
+        );
+    }
+
+    @Test
+    public void can_get_center_elements_of_type_relation() {
+        Edge edgeBetweenBAndC = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
+        Set<CenterGraphElementPojo> centerGraphElements = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate();
+        assertThat(
+                centerGraphElements.size(),
+                is(1)
+        );
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                edgeBetweenBAndC
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElements = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate();
+        assertThat(
+                centerGraphElements.size(),
+                is(2)
         );
     }
 }
