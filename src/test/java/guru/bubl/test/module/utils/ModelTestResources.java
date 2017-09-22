@@ -143,8 +143,9 @@ public class ModelTestResources {
         vertexB = verticesCalledABAndC.vertexB();
         vertexC = verticesCalledABAndC.vertexC();
         anotherUserGraph = neo4jUserGraphFactory.withUser(anotherUser);
-        graphFactory.createForUser(anotherUserGraph.user());
-        vertexOfAnotherUser = anotherUserGraph.defaultVertex();
+        vertexOfAnotherUser = vertexFactory.withUri(
+                anotherUserGraph.createVertex().uri()
+        );
         vertexOfAnotherUser.label("vertex of another user");
     }
 

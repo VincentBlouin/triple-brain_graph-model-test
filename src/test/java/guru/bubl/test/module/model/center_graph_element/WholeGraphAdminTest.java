@@ -81,17 +81,17 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 modelTestScenarios.creatorPredicate()
         ).values().iterator().next();
         assertThat(
-                wholeGraph.getAllIdentifications().size(),
+                wholeGraph.getAllTags().size(),
                 is(2)
         );
         vertexB.removeIdentification(possessionMeta);
         assertThat(
-                wholeGraph.getAllIdentifications().size(),
+                wholeGraph.getAllTags().size(),
                 is(2)
         );
         wholeGraphAdmin.removeMetasHavingZeroReferences();
         assertThat(
-                wholeGraph.getAllIdentifications().size(),
+                wholeGraph.getAllTags().size(),
                 is(1)
         );
     }

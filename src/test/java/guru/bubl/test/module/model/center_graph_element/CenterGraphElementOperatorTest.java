@@ -29,21 +29,19 @@ public class CenterGraphElementOperatorTest extends ModelTestResources {
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
         );
+        centerGraphElementOperator.updateLastCenterDate();
         centerGraphElementOperator.incrementNumberOfVisits();
         CenterGraphElement centerGraphElement = centerGraphElementsOperatorFactory.forUser(
                 user
         ).getPublicAndPrivate().iterator().next();
-        assertThat(
-                centerGraphElement.getNumberOfVisits(),
-                is(2)
-        );
+        Integer nbCenterGraphElements = centerGraphElement.getNumberOfVisits();
         centerGraphElementOperator.incrementNumberOfVisits();
         centerGraphElement = centerGraphElementsOperatorFactory.forUser(
                 user
         ).getPublicAndPrivate().iterator().next();
         assertThat(
                 centerGraphElement.getNumberOfVisits(),
-                is(3)
+                is(nbCenterGraphElements + 1)
         );
     }
 
@@ -55,10 +53,7 @@ public class CenterGraphElementOperatorTest extends ModelTestResources {
         Set<CenterGraphElementPojo> centerGraphElements = centerGraphElementsOperatorFactory.forUser(
                 user
         ).getPublicAndPrivate();
-        assertThat(
-                centerGraphElements.size(),
-                is(1)
-        );
+        Integer nbCenterGraphElements = centerGraphElements.size();
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 meta
         );
@@ -68,7 +63,7 @@ public class CenterGraphElementOperatorTest extends ModelTestResources {
         ).getPublicAndPrivate();
         assertThat(
                 centerGraphElements.size(),
-                is(2)
+                is(nbCenterGraphElements + 1)
         );
     }
 
@@ -103,10 +98,7 @@ public class CenterGraphElementOperatorTest extends ModelTestResources {
         Set<CenterGraphElementPojo> centerGraphElements = centerGraphElementsOperatorFactory.forUser(
                 user
         ).getPublicAndPrivate();
-        assertThat(
-                centerGraphElements.size(),
-                is(1)
-        );
+        Integer nbCenterGraphElements = centerGraphElements.size();
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 edgeBetweenBAndC
         );
@@ -116,7 +108,7 @@ public class CenterGraphElementOperatorTest extends ModelTestResources {
         ).getPublicAndPrivate();
         assertThat(
                 centerGraphElements.size(),
-                is(2)
+                is(nbCenterGraphElements + 1)
         );
     }
 }

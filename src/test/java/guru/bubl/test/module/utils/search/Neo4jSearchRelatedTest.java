@@ -8,6 +8,7 @@ import guru.bubl.module.model.User;
 import guru.bubl.module.model.graph.GraphFactory;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
+import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
@@ -17,7 +18,7 @@ import org.junit.Before;
 
 import javax.inject.Inject;
 
-public class Neo4jSearchRelatedTest extends ModelTestResources{
+public class Neo4jSearchRelatedTest extends ModelTestResources {
 
     @Inject
     GraphFactory graphMaker;
@@ -35,7 +36,7 @@ public class Neo4jSearchRelatedTest extends ModelTestResources{
 
 
     @Before
-    public void beforeSearchRelatedTest() throws Exception{
+    public void beforeSearchRelatedTest() throws Exception {
         user = User.withEmail(
                 "test@2example.org"
         ).setUsername("test2");
@@ -44,24 +45,26 @@ public class Neo4jSearchRelatedTest extends ModelTestResources{
         ).setUsername("test");
         deleteAllDocs();
         makeGraphHave3SerialVerticesWithLongLabels();
-        vertexOfUser2 = graphMaker.createForUser(user2).defaultVertex();
+        vertexOfUser2 = graphMaker.loadForUser(user2).createVertex();
         pineApple = testScenarios.addPineAppleVertexToVertex(vertexC);
     }
 
     protected void makeGraphHave3SerialVerticesWithLongLabels() throws Exception {
+        UserGraph userGraph = graphMaker.loadForUser(user);
+        userGraph.createVertex();
         VerticesCalledABAndC vertexABAndC = testScenarios.makeGraphHave3SerialVerticesWithLongLabels(
-                graphMaker.createForUser(user)
+                userGraph
         );
         vertexA = vertexABAndC.vertexA();
         vertexB = vertexABAndC.vertexB();
         vertexC = vertexABAndC.vertexC();
     }
 
-    protected void deleteAllDocs()throws Exception{
+    protected void deleteAllDocs() throws Exception {
     }
 
 
-    protected void indexGraph(){
+    protected void indexGraph() {
         graphIndexer.indexVertex(vertexA);
         graphIndexer.indexVertex(vertexB);
         graphIndexer.indexVertex(vertexC);
@@ -73,9 +76,10 @@ public class Neo4jSearchRelatedTest extends ModelTestResources{
         );
     }
 
-    protected void indexVertex(VertexOperator vertex){
+    protected void indexVertex(VertexOperator vertex) {
 
     }
+
     protected SchemaOperator createSchema(User user) {
         return userGraph.schemaOperatorWithUri(
                 graphMaker.loadForUser(user).createSchema().uri()

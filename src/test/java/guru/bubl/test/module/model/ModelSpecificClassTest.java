@@ -4,13 +4,7 @@
 
 package guru.bubl.test.module.model;
 
-import guru.bubl.module.model.admin.WholeGraphAdmin;
-import guru.bubl.test.module.model.center_graph_element.CenterGraphElementOperatorTest;
-import guru.bubl.test.module.model.center_graph_element.CenterGraphElementsOperatorTest;
-import guru.bubl.test.module.model.center_graph_element.WholeGraphAdminTest;
-import guru.bubl.test.module.model.graph.GraphElementOperatorTest;
-import guru.bubl.test.module.model.graph.search.GraphIndexerTest;
-import guru.bubl.test.module.model.graph.search.GraphSearchTest;
+import guru.bubl.test.module.model.graph.WholeGraphTest;
 import guru.bubl.test.module.utils.ModelTestRunner;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -18,6 +12,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        CenterGraphElementOperatorTest.class
+        AllContentTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}

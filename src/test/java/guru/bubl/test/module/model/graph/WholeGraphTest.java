@@ -4,7 +4,11 @@
 
 package guru.bubl.test.module.model.graph;
 
-import guru.bubl.module.model.graph.schema.SchemaOperator;
+import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.identification.IdentificationOperator;
+import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.test.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
@@ -30,6 +34,24 @@ public class WholeGraphTest extends ModelTestResources {
             }
             visitedVertices.add(vertex);
         }
+    }
+
+
+    @Test
+    public void can_get_all_vertices_of_single_user() {
+        Vertex anotherUserVertex = neo4jUserGraphFactory.withUser(anotherUser).createVertex();
+        Vertex newUserVertex = neo4jUserGraphFactory.withUser(user).createVertex();
+        Set<VertexInSubGraphOperator> allUserVertices = wholeGraph.getAllVerticesOfUser(user);
+        assertTrue(
+                allUserVertices.contains(
+                        newUserVertex
+                )
+        );
+        assertFalse(
+                allUserVertices.contains(
+                        anotherUserVertex
+                )
+        );
     }
 
     @Test
@@ -58,6 +80,29 @@ public class WholeGraphTest extends ModelTestResources {
     }
 
     @Test
+    public void can_get_all_edges_of_single_user() {
+        VertexOperator anotherUserVertex = vertexFactory.withUri(
+                neo4jUserGraphFactory.withUser(anotherUser).createVertex().uri()
+        );
+        Edge anotherUserEdge = anotherUserVertex.addVertexAndRelation();
+        VertexOperator newUserVertex = vertexFactory.withUri(
+                neo4jUserGraphFactory.withUser(user).createVertex().uri()
+        );
+        Edge newUserEdge = newUserVertex.addVertexAndRelation();
+        Set<EdgeOperator> allUserEdges = wholeGraph.getAllEdgesOfUser(user);
+        assertTrue(
+                allUserEdges.contains(
+                        newUserEdge
+                )
+        );
+        assertFalse(
+                allUserEdges.contains(
+                        anotherUserEdge
+                )
+        );
+    }
+
+    @Test
     public void can_get_schemas() {
         createSchema();
         createSchema();
@@ -81,7 +126,7 @@ public class WholeGraphTest extends ModelTestResources {
     @Test
     public void can_get_all_identifications() {
         assertTrue(
-                wholeGraph.getAllIdentifications().isEmpty()
+                wholeGraph.getAllTags().isEmpty()
         );
         vertexA.addMeta(
                 modelTestScenarios.human()
@@ -93,8 +138,36 @@ public class WholeGraphTest extends ModelTestResources {
                 modelTestScenarios.timBernersLee()
         );
         assertThat(
-                wholeGraph.getAllIdentifications().size(),
+                wholeGraph.getAllTags().size(),
                 is(3)
         );
     }
+
+    @Test
+    public void can_get_all_tags_of_single_user() {
+        VertexOperator anotherUserVertex = vertexFactory.withUri(
+                neo4jUserGraphFactory.withUser(anotherUser).createVertex().uri()
+        );
+        IdentifierPojo anotherUserTag = anotherUserVertex.addMeta(
+                modelTestScenarios.book()
+        ).values().iterator().next();
+        VertexOperator newUserVertex = vertexFactory.withUri(
+                neo4jUserGraphFactory.withUser(user).createVertex().uri()
+        );
+        IdentifierPojo newUserTag = newUserVertex.addMeta(
+                modelTestScenarios.person()
+        ).values().iterator().next();
+        Set<IdentificationOperator> allUserTags = wholeGraph.getAllTagsOfUser(user);
+        assertTrue(
+                allUserTags.contains(
+                        newUserTag
+                )
+        );
+        assertFalse(
+                allUserTags.contains(
+                        anotherUserTag
+                )
+        );
+    }
+
 }

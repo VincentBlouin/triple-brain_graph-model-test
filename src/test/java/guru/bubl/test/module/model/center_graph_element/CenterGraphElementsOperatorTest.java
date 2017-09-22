@@ -22,22 +22,13 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
 
     @Test
     public void does_not_return_center_elements_of_another_user() {
-        assertThat(
-                centerGraphElementsOperatorFactory.forUser(
-                        user
-                ).getPublicAndPrivate().size(),
-                is(
-                        1
-                )
-        );
-        assertThat(
-                centerGraphElementsOperatorFactory.forUser(
-                        anotherUser
-                ).getPublicAndPrivate().size(),
-                is(
-                        1
-                )
-        );
+        Integer defaultUserNbCenters = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate().size();
+
+        Integer anotherUserNbCenters = centerGraphElementsOperatorFactory.forUser(
+                anotherUser
+        ).getPublicAndPrivate().size();
         centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexC
         ).updateLastCenterDate();
@@ -46,7 +37,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
                         user
                 ).getPublicAndPrivate().size(),
                 is(
-                        2
+                        defaultUserNbCenters + 1
                 )
         );
         assertThat(
@@ -54,28 +45,24 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
                         anotherUser
                 ).getPublicAndPrivate().size(),
                 is(
-                        1
+                        anotherUserNbCenters
                 )
         );
     }
 
     @Test
     public void can_get_only_public_bubbles(){
-        assertThat(
-                centerGraphElementsOperatorFactory.forUser(
-                        user
-                ).getPublicOnlyOfType().size(),
-                is(
-                        0
-                )
-        );
+        centerGraphElementOperatorFactory.usingFriendlyResource(vertexA).updateLastCenterDate();
+        Integer nbPublicCenters = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicOnlyOfType().size();
         vertexA.makePublic();
         assertThat(
                 centerGraphElementsOperatorFactory.forUser(
                         user
                 ).getPublicOnlyOfType().size(),
                 is(
-                        1
+                        nbPublicCenters + 1
                 )
         );
     }
@@ -103,6 +90,10 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
 
     @Test
     public void includes_context(){
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        centerGraphElementOperator.updateLastCenterDate();
         graphIndexer.indexVertex(
                 vertexA
         );
@@ -119,6 +110,9 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     public void includes_public_context_only_if_fetching_plublic_only_centers(){
         vertexA.makePublic();
         vertexB.makePublic();
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        ).updateLastCenterDate();
         graphIndexer.indexVertex(
                 vertexA
         );
