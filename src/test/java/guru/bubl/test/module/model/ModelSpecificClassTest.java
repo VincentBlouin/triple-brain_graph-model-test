@@ -4,6 +4,7 @@
 
 package guru.bubl.test.module.model;
 
+import guru.bubl.test.module.model.graph.UserGraphTest;
 import guru.bubl.test.module.model.graph.WholeGraphTest;
 import guru.bubl.test.module.utils.ModelTestRunner;
 import org.junit.Ignore;
@@ -12,6 +13,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        AllContentTest.class
+        UserGraphTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}

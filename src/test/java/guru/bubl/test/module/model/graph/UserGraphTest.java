@@ -843,7 +843,6 @@ public class UserGraphTest extends ModelTestResources {
         );
         assertTrue(subGraph.containsEdge(edgeBetweenAAndB));
         assertTrue(subGraph.containsEdge(edgeBetweenBAndC));
-        assertFalse(subGraph.containsVertex(vertexA));
         assertTrue(subGraph.containsVertex(vertexB));
         assertTrue(subGraph.containsVertex(vertexC));
         assertFalse(subGraph.containsEdge(newEdge));
@@ -867,20 +866,6 @@ public class UserGraphTest extends ModelTestResources {
         );
     }
 
-    @Test
-    public void sub_graph_around_an_identifier_to_edges_does_not_include_the_source_vertex() {
-        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
-        IdentifierPojo toDo = edgeBetweenAAndB.addMeta(
-                modelTestScenarios.toDo()
-        ).values().iterator().next();
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                1,
-                toDo.uri()
-        );
-        assertTrue(subGraph.containsEdge(edgeBetweenAAndB));
-        assertTrue(subGraph.containsVertex(vertexB));
-        assertFalse(subGraph.containsVertex(vertexA));
-    }
     @Test
     @Ignore
     public void can_get_meta_center_from_user_graph() {
