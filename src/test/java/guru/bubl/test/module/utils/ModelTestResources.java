@@ -119,7 +119,7 @@ public class ModelTestResources {
     protected static SubGraphForker forker;
     protected static SubGraphForker anotherUserForker;
 
-    protected Transaction transaction;
+    private Transaction transaction;
 
     protected UserGraph userGraph;
 
@@ -169,7 +169,7 @@ public class ModelTestResources {
     }
 
     protected VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
-        return (VertexInSubGraphPojo) wholeGraphAroundDefaultCenterVertex().vertexWithIdentifier(
+        return wholeGraphAroundDefaultCenterVertex().vertexWithIdentifier(
                 vertex.uri()
         );
     }
@@ -178,8 +178,8 @@ public class ModelTestResources {
         return modelTestScenarios.suggestionsToMap(suggestions);
     }
 
-    public EdgePojo edgeInWholeGraph(Edge edge) {
-        return (EdgePojo) wholeGraphAroundDefaultCenterVertex().edgeWithIdentifier(
+    protected EdgePojo edgeInWholeGraph(Edge edge) {
+        return wholeGraphAroundDefaultCenterVertex().edgeWithIdentifier(
                 edge.uri()
         );
     }
@@ -188,7 +188,7 @@ public class ModelTestResources {
         return user;
     }
 
-    public SubGraphOperator wholeGraph() {
+    protected SubGraphOperator wholeGraph() {
         return SubGraphOperator.withVerticesAndEdges(
                 wholeGraph.getAllVertices(),
                 wholeGraph.getAllEdges()

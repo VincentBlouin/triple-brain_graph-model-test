@@ -969,6 +969,64 @@ public class VertexOperatorTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void mergeTo_removes_vertex() {
+        URI farCenterVertexUri = userGraph.createVertex().uri();
+        VertexOperator farCenterVertex = vertexFactory.withUri(
+                farCenterVertexUri
+        );
+        assertTrue(userGraph.haveElementWithId(farCenterVertexUri));
+        farCenterVertex.mergeTo(vertexC);
+        assertFalse(userGraph.haveElementWithId(farCenterVertexUri));
+    }
+
+    @Test
+    public void mergeTo_includes_edges() {
+        URI farCenterVertexUri = userGraph.createVertex().uri();
+        VertexOperator farCenterVertex = vertexFactory.withUri(
+                farCenterVertexUri
+        );
+        Edge edge1 = farCenterVertex.addVertexAndRelation();
+        Edge edge2 = farCenterVertex.addVertexAndRelation();
+        assertFalse(
+                vertexC.hasEdge(edge1)
+        );
+        assertFalse(
+                vertexC.hasEdge(edge2)
+        );
+        farCenterVertex.mergeTo(vertexC);
+        assertTrue(
+                vertexC.hasEdge(edge1)
+        );
+        assertTrue(
+                vertexC.hasEdge(edge2)
+        );
+    }
+
+    @Test
+    public void mergeTo_preserves_edges_direction() {
+        URI farCenterVertexUri = userGraph.createVertex().uri();
+        VertexOperator farCenterVertex = vertexFactory.withUri(
+                farCenterVertexUri
+        );
+        Edge edge1 = farCenterVertex.addVertexAndRelation();
+        Vertex edge1OtherVertex = edge1.destinationVertex();
+        edgeFactory.withUri(edge1.uri()).inverse();
+        farCenterVertex.mergeTo(vertexC);
+
+        EdgeOperator edge1Operator = vertexC.connectedEdges().get(
+                edge1.uri()
+        );
+        assertThat(
+                edge1Operator.sourceVertex(),
+                is(edge1OtherVertex)
+        );
+        assertThat(
+                edge1Operator.destinationVertex(),
+                is(vertexC)
+        );
+    }
+
     private Set<Edge> edgeBetweenBAndCInSet() {
 
         Set<Edge> edges = new HashSet<>();

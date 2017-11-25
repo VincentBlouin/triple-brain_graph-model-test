@@ -52,7 +52,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void limits_the_context_size_of_vertices() {
-        for(int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++) {
             vertexFactory.withUri(
                     vertexB.addVertexAndRelation().destinationVertex().uri()
             ).label("vertex " + i);
@@ -70,7 +70,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void filters_empty_label_from_context() {
-        for(int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++) {
             vertexB.addVertexAndRelation();
         }
         graphIndexer.indexVertex(vertexB);
@@ -99,15 +99,15 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-    public void context_prioritize_vertices_with_most_child(){
-        for(int i = 4; i <= 10; i++){
+    public void context_prioritize_vertices_with_most_child() {
+        for (int i = 4; i <= 10; i++) {
             VertexOperator destinationVertex = vertexFactory.withUri(
                     vertexB.addVertexAndRelation().destinationVertex().uri()
             );
             vertexFactory.withUri(
                     destinationVertex.uri()
             ).label("vertex " + i);
-            for(int j = 0; j <= i; j++){
+            for (int j = 0; j <= i; j++) {
                 destinationVertex.addVertexAndRelation();
             }
         }
@@ -293,7 +293,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-    public void meta_context_includes_label_of_surround_vertices(){
+    public void meta_context_includes_label_of_surround_vertices() {
         IdentifierPojo meta = vertexA.addMeta(
                 modelTestScenarios.person()
         ).values().iterator().next();
@@ -310,7 +310,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-    public void meta_related_to_relation_context_includes_label_of_surround_vertices(){
+    public void meta_related_to_relation_context_includes_label_of_surround_vertices() {
         EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
         IdentifierPojo meta = edge.addMeta(
                 modelTestScenarios.toDo()
@@ -321,7 +321,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
                 user
         ).iterator().next();
         assertTrue(
-                graphElementSearchResult.getContext().values().iterator().next().equals(
+                graphElementSearchResult.getContext().containsValue(
                         "vertex Cadeau"
                 )
         );
