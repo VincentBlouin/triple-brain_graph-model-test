@@ -4,6 +4,8 @@
 
 package guru.bubl.test.module.model;
 
+import guru.bubl.module.model.graph.GraphElementOperator;
+import guru.bubl.test.module.model.graph.GraphElementOperatorTest;
 import guru.bubl.test.module.model.graph.UserGraphTest;
 import guru.bubl.test.module.model.graph.VertexOperatorTest;
 import guru.bubl.test.module.model.graph.WholeGraphTest;
@@ -15,6 +17,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        GraphIndexerTest.class
+        GraphElementOperatorTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}

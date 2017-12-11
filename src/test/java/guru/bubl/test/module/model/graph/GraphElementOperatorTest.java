@@ -20,10 +20,12 @@ import org.junit.Test;
 import org.parboiled.common.StringUtils;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static guru.bubl.module.model.graph.GraphElementOperator.colorProps.background;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -584,4 +586,20 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 vertexB.getIdentifications().containsKey(vertexA.uri())
         );
     }
+
+    @Test
+    public void can_set_colors() {
+        assertFalse(
+                vertexB.getColors().containsKey(background)
+        );
+        Map<GraphElementOperator.colorProps, String> colors = new HashMap<>();
+        colors.put(background, "blue");
+        vertexB.setColors(colors);
+        assertTrue(
+                vertexB.getColors().containsKey(background)
+        );
+        assertThat(vertexB.getColors().get(background), is("blue"));
+    }
 }
+
+
