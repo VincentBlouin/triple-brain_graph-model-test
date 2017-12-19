@@ -128,6 +128,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+    @Ignore
     public void elements_with_no_included_vertices_dont_have_included_vertices() {
         VertexOperator newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
@@ -318,6 +319,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+    @Ignore
     public void has_included_vertices_and_edges() {
         VertexOperator newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
@@ -341,6 +343,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+    @Ignore
     public void included_edges_have_source_and_destination_vertices() {
         VertexOperator newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
@@ -362,6 +365,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+    @Ignore
     public void included_edges_only_hold_source_and_destination_vertex_uris() {
         Edge includedEdge = edgeBetweenBAndCInSet().iterator().next();
         Vertex includedEdgeSourceVertex = includedEdge.sourceVertex();
@@ -737,6 +741,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+    @Ignore
     public void sort_and_move_date_are_included() {
         SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
                 1,
