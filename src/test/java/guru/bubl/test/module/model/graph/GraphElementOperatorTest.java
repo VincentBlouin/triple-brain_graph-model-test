@@ -11,9 +11,7 @@ import guru.bubl.module.model.graph.identification.Identifier;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
-import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
-import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
@@ -599,6 +597,17 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 vertexB.getColors().containsKey(background)
         );
         assertThat(vertexB.getColors().get(background), is("blue"));
+    }
+
+    @Test
+    public void can_children_indexes() {
+        assertFalse(
+                vertexB.getChildrenIndex().contains("test children indexes")
+        );
+        vertexB.setChildrenIndex("test children indexes");
+        assertTrue(
+                vertexB.getChildrenIndex().contains("test children indexes")
+        );
     }
 }
 

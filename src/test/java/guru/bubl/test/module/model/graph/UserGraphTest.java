@@ -7,7 +7,6 @@ package guru.bubl.test.module.model.graph;
 import com.google.common.collect.ImmutableSet;
 import guru.bubl.module.common_utils.Uris;
 import guru.bubl.module.model.FriendlyResource;
-import guru.bubl.module.model.FriendlyResourceFactory;
 import guru.bubl.module.model.Image;
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.GraphElement;
@@ -882,6 +881,7 @@ public class UserGraphTest extends ModelTestResources {
                 is("Human")
         );
     }
+
     @Test
     public void does_not_fail_if_identifier_does_not_have_images() {
         IdentifierPojo identifierPojo = modelTestScenarios.human();
@@ -895,6 +895,23 @@ public class UserGraphTest extends ModelTestResources {
         );
         assertTrue(true);
     }
+
+    @Test
+    public void includes_children_indexes() {
+        vertexB.setChildrenIndex(
+                "test children indexes"
+        );
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                vertexB.uri()
+        );
+        assertTrue(
+                subGraph.vertexWithIdentifier(
+                        vertexB.uri()
+                ).getChildrenIndex().contains("test children indexes")
+        );
+    }
+
     @Override
     public VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
         return userGraph.graphWithAnyVertexAndDepth(
