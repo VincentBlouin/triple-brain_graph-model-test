@@ -6,7 +6,9 @@ package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
+import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
@@ -398,6 +400,25 @@ public class EdgeOperatorTest extends ModelTestResources {
         assertThat(
                 vertexB.getNbPublicNeighbors(),
                 is(0)
+        );
+    }
+
+    @Test
+    public void can_use_as_tag_even_if_deleted() {
+        EdgeOperator edgeAB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        IdentifierPojo edgeABTag = TestScenarios.identificationFromFriendlyResource(
+                edgeAB
+        );
+        edgeAB.remove();
+        EdgeOperator edgeBC = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
+        assertThat(
+                edgeBC.getIdentifications().size(),
+                is(0)
+        );
+        edgeBC.addMeta(edgeABTag);
+        assertThat(
+                edgeBC.getIdentifications().size(),
+                is(1)
         );
     }
 }
