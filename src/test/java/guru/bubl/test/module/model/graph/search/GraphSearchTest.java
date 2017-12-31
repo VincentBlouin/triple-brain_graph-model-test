@@ -7,18 +7,13 @@ package guru.bubl.test.module.model.graph.search;
 import com.google.common.collect.Sets;
 import guru.bubl.module.model.Image;
 import guru.bubl.module.model.graph.*;
-import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.edge.EdgePojo;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
-import guru.bubl.module.model.graph.schema.Schema;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.schema.SchemaPojo;
-import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.*;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestScenarios;
-import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.test.module.utils.search.Neo4jSearchRelatedTest;
 import org.junit.Test;
 
@@ -891,12 +886,12 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         IdentifierPojo identifier = vertexB.addMeta(
                 modelTestScenarios.location()
         ).values().iterator().next();
-        for(int i = 0; i < 5; i++){
-            VertexOperator locationVertex = vertexFactory.createForOwnerUsername(
-             user.username()
+        for (int i = 0; i < 5; i++) {
+            VertexOperator locationVertex = vertexFactory.createForOwner(
+                    user.username()
             );
             locationVertex.label("Location");
-            if(i % 2 == 0){
+            if (i % 2 == 0) {
                 centerGraphElementOperatorFactory.usingFriendlyResource(
                         locationVertex
                 ).incrementNumberOfVisits();

@@ -636,7 +636,7 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void can_remove_a_vertex_having_no_relations() {
-        VertexOperator vertexWithNoRelations = vertexFactory.createForOwnerUsername(
+        VertexOperator vertexWithNoRelations = vertexFactory.createForOwner(
                 user().username()
         );
         URI vertexWithNoRelationsUri = vertexWithNoRelations.uri();
@@ -1024,6 +1024,37 @@ public class VertexOperatorTest extends ModelTestResources {
         assertThat(
                 edge1Operator.destinationVertex(),
                 is(vertexC)
+        );
+    }
+
+    @Test
+    public void can_add_vertex_and_relation_to_the_left_or_right() {
+        EdgeOperator edge = edgeFactory.withUri(
+                vertexC.addVertexAndRelation().uri()
+        );
+        assertFalse(
+                edge.isToTheLeft()
+        );
+        assertFalse(
+                edge.isToTheRight()
+        );
+        edge = edgeFactory.withUri(
+                vertexC.addVertexAndRelationToTheLeft().uri()
+        );
+        assertTrue(
+                edge.isToTheLeft()
+        );
+        assertFalse(
+                edge.isToTheRight()
+        );
+        edge = edgeFactory.withUri(
+                vertexC.addVertexAndRelationToTheRight().uri()
+        );
+        assertFalse(
+                edge.isToTheLeft()
+        );
+        assertTrue(
+                edge.isToTheRight()
         );
     }
 

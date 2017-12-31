@@ -421,4 +421,36 @@ public class EdgeOperatorTest extends ModelTestResources {
                 is(1)
         );
     }
+
+    @Test
+    public void can_set_is_to_the_left() {
+        EdgeOperator edge = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        assertFalse(
+                edge.isToTheLeft()
+        );
+        assertFalse(
+                edge.isToTheRight()
+        );
+        edge.setToTheLeft();
+        assertTrue(
+                edge.isToTheLeft()
+        );
+        assertFalse(
+                edge.isToTheRight()
+        );
+        edge.setToTheRight();
+        assertFalse(
+                edge.isToTheLeft()
+        );
+        assertTrue(
+                edge.isToTheRight()
+        );
+        edge.unsetToTheLeftOrRight();
+        assertFalse(
+                edge.isToTheLeft()
+        );
+        assertFalse(
+                edge.isToTheRight()
+        );
+    }
 }
