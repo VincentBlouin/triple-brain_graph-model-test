@@ -57,7 +57,7 @@ public class SubGraphForkerTest extends ModelTestResources {
         );
         assertThat(
                 results.size(),
-                is(2)
+                is(1)
         );
     }
 
@@ -104,7 +104,7 @@ public class SubGraphForkerTest extends ModelTestResources {
         );
         assertThat(
                 results.size(),
-                is(2)
+                is(1)
         );
         vertexB.makePublic();
         anotherUserForker.fork(
@@ -118,7 +118,7 @@ public class SubGraphForkerTest extends ModelTestResources {
         );
         assertThat(
                 results.size(),
-                is(4)
+                is(2)
         );
     }
 
