@@ -31,21 +31,6 @@ import static org.junit.Assert.*;
 public class GraphElementOperatorTest extends ModelTestResources {
 
     @Test
-    public void cannot_identify_to_self() {
-        String errorMessage = "identification cannot be the same";
-        GraphElementOperator vertexAGraphElement = vertexA;
-        try {
-            vertexAGraphElement.addMeta(
-                    TestScenarios.identificationFromFriendlyResource(
-                            vertexA
-                    ));
-            fail();
-        } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage(), is(errorMessage));
-        }
-    }
-
-    @Test
     public void cannot_have_same_identification_twice() {
         GraphElementOperator vertexAGraphElement = vertexA;
         Integer numberOfGenericIdentifications = vertexAGraphElement.getIdentifications().size();
@@ -551,7 +536,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     public void identifying_to_a_graph_element_that_has_another_identification_that_shares_the_other_graph_element_does_not_increment_the_number_of_references() {
         vertexA.addMeta(
                 modelTestScenarios.person()
-        ).values().iterator().next();
+        );
         IdentifierPojo personIdentification = vertexB.addMeta(
                 modelTestScenarios.person()
         ).values().iterator().next();
@@ -582,6 +567,34 @@ public class GraphElementOperatorTest extends ModelTestResources {
         );
         assertTrue(
                 vertexB.getIdentifications().containsKey(vertexA.uri())
+        );
+    }
+
+    @Test
+    public void can_keep_tag_removed_from_the_reference_after_tagging_to_it_again(){
+        IdentifierPojo vertexATag = vertexB.addMeta(
+                TestScenarios.identificationFromFriendlyResource(
+                        vertexA
+                )
+        ).values().iterator().next();
+        assertTrue(
+                vertexA.getIdentifications().containsKey(
+                        vertexATag.getExternalResourceUri()
+                )
+        );
+        vertexA.removeIdentification(vertexATag);
+        assertFalse(
+                vertexA.getIdentifications().containsKey(
+                        vertexATag.getExternalResourceUri()
+                )
+        );
+        vertexC.addMeta(
+                vertexATag
+        );
+        assertFalse(
+                vertexA.getIdentifications().containsKey(
+                        vertexATag.getExternalResourceUri()
+                )
         );
     }
 

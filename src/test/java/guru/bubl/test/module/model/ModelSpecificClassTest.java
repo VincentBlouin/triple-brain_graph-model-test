@@ -5,10 +5,8 @@
 package guru.bubl.test.module.model;
 
 import guru.bubl.module.model.graph.GraphElementOperator;
-import guru.bubl.test.module.model.graph.GraphElementOperatorTest;
-import guru.bubl.test.module.model.graph.UserGraphTest;
-import guru.bubl.test.module.model.graph.VertexOperatorTest;
-import guru.bubl.test.module.model.graph.WholeGraphTest;
+import guru.bubl.test.module.model.graph.*;
+import guru.bubl.test.module.model.graph.meta.IdentificationOperatorTest;
 import guru.bubl.test.module.model.graph.search.GraphIndexerTest;
 import guru.bubl.test.module.utils.ModelTestRunner;
 import org.junit.Ignore;
@@ -17,7 +15,7 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        UserGraphTest.class
+        IdentificationOperatorTest.class
 
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}
