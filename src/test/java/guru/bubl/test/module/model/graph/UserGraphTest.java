@@ -945,6 +945,19 @@ public class UserGraphTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void include_colors() {
+        vertexB.setColors("blue");
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                vertexB.uri()
+        );
+        assertThat(subGraph.vertexWithIdentifier(
+                vertexB.uri()).getColors()
+                , is("blue")
+        );
+    }
+
     @Override
     public VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
         return userGraph.graphWithAnyVertexAndDepth(

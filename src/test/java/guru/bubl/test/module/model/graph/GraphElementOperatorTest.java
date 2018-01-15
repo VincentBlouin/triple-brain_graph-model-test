@@ -601,19 +601,16 @@ public class GraphElementOperatorTest extends ModelTestResources {
     @Test
     public void can_set_colors() {
         assertFalse(
-                vertexB.getColors().containsKey(background)
+                vertexB.getColors().contains("blue")
         );
-        Map<GraphElementOperator.colorProps, String> colors = new HashMap<>();
-        colors.put(background, "blue");
-        vertexB.setColors(colors);
+        vertexB.setColors("blue");
         assertTrue(
-                vertexB.getColors().containsKey(background)
+                vertexB.getColors().contains("blue")
         );
-        assertThat(vertexB.getColors().get(background), is("blue"));
     }
 
     @Test
-    public void can_children_indexes() {
+    public void can_set_children_indexes() {
         assertFalse(
                 vertexB.getChildrenIndex().contains("test children indexes")
         );
