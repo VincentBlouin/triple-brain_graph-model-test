@@ -593,9 +593,31 @@ public class GraphElementOperatorTest extends ModelTestResources {
         );
         assertFalse(
                 vertexA.getIdentifications().containsKey(
-                        vertexATag.getExternalResourceUri()
+                        vertexATag.uri()
                 )
         );
+    }
+
+    @Test
+    public void removing_tag_from_the_reference_changes_the_external_uri_of_the_tag(){
+        IdentifierPojo vertexATag = vertexB.addMeta(
+                TestScenarios.identificationFromFriendlyResource(
+                        vertexA
+                )
+        ).values().iterator().next();
+        assertTrue(vertexB.getIdentifications().containsKey(
+                vertexA.uri()
+        ));
+        assertFalse(vertexB.getIdentifications().containsKey(
+                vertexATag.uri()
+        ));
+        vertexA.removeIdentification(vertexATag);
+        assertFalse(vertexB.getIdentifications().containsKey(
+                vertexA.uri()
+        ));
+        assertTrue(vertexB.getIdentifications().containsKey(
+                vertexATag.uri()
+        ));
     }
 
     @Test
