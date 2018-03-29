@@ -1027,37 +1027,6 @@ public class VertexOperatorTest extends ModelTestResources {
         );
     }
 
-    @Test
-    public void can_add_vertex_and_relation_to_the_left_or_right() {
-        EdgeOperator edge = edgeFactory.withUri(
-                vertexC.addVertexAndRelation().uri()
-        );
-        assertFalse(
-                edge.isToTheLeft()
-        );
-        assertFalse(
-                edge.isToTheRight()
-        );
-        edge = edgeFactory.withUri(
-                vertexC.addVertexAndRelationToTheLeft().uri()
-        );
-        assertTrue(
-                edge.isToTheLeft()
-        );
-        assertFalse(
-                edge.isToTheRight()
-        );
-        edge = edgeFactory.withUri(
-                vertexC.addVertexAndRelationToTheRight().uri()
-        );
-        assertFalse(
-                edge.isToTheLeft()
-        );
-        assertTrue(
-                edge.isToTheRight()
-        );
-    }
-
     private Set<Edge> edgeBetweenBAndCInSet() {
 
         Set<Edge> edges = new HashSet<>();

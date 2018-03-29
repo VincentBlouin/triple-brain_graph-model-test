@@ -918,34 +918,6 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-    public void includes_is_to_the_left() {
-        EdgeOperator edgeAB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
-        EdgeOperator edgeBC = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                1,
-                vertexB.uri()
-        );
-        assertFalse(
-                subGraph.edgeWithIdentifier(edgeAB.uri()).isToTheLeft()
-        );
-        assertFalse(
-                subGraph.edgeWithIdentifier(edgeBC.uri()).isToTheRight()
-        );
-        edgeAB.setToTheLeft();
-        edgeBC.setToTheRight();
-        subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                1,
-                vertexB.uri()
-        );
-        assertTrue(
-                subGraph.edgeWithIdentifier(edgeAB.uri()).isToTheLeft()
-        );
-        assertTrue(
-                subGraph.edgeWithIdentifier(edgeBC.uri()).isToTheRight()
-        );
-    }
-
-    @Test
     public void include_colors() {
         vertexB.setColors("blue");
         SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
