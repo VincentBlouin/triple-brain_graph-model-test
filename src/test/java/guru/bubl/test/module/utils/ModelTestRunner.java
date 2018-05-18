@@ -8,6 +8,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import guru.bubl.module.model.ModelModule;
+import guru.bubl.module.model.ModelTestModule;
 import guru.bubl.module.model.test.GraphComponentTest;
 import guru.bubl.module.neo4j_graph_manipulator.graph.Neo4jModule;
 import org.junit.AfterClass;
@@ -25,6 +26,7 @@ public class ModelTestRunner {
         injector = Guice.createInjector(
                 Neo4jModule.forTestingUsingEmbedded(),
                 ModelModule.forTesting(),
+                new ModelTestModule(),
                 new AbstractModule() {
                     @Override
                     protected void configure() {

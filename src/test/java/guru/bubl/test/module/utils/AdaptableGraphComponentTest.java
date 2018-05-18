@@ -7,10 +7,7 @@ package guru.bubl.test.module.utils;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import guru.bubl.module.model.FriendlyResourceFactory;
-import guru.bubl.module.model.ModelModule;
-import guru.bubl.module.model.User;
-import guru.bubl.module.model.WholeGraph;
+import guru.bubl.module.model.*;
 import guru.bubl.module.model.graph.GraphFactory;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgePojo;
@@ -74,6 +71,7 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
         injector = Guice.createInjector(
                 Neo4jModule.forTestingUsingEmbedded(),
                 ModelModule.forTesting(),
+                new ModelTestModule(),
                 new AbstractModule() {
                     @Override
                     protected void configure() {
