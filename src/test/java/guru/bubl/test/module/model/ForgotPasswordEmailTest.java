@@ -40,7 +40,7 @@ public class ForgotPasswordEmailTest extends ModelTestResources {
         );
         assertThat(
                 msg.from.getEmail(),
-                is("no-reply@mindrespect.com")
+                is("mindrespect.com <no-reply@mindrespect.com>")
         );
     }
 
@@ -73,7 +73,7 @@ public class ForgotPasswordEmailTest extends ModelTestResources {
         );
         assertTrue(
                 msg.getContent().get(0).getValue().contains(
-                        "Suivez ce lien pour mettre à jour votre mot de passe"
+                        "Suivez ce lien pour modifier votre mot de passe"
                 )
         );
     }

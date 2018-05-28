@@ -11,6 +11,7 @@ import guru.bubl.module.model.ModelModule;
 import guru.bubl.module.model.ModelTestModule;
 import guru.bubl.module.model.test.GraphComponentTest;
 import guru.bubl.module.neo4j_graph_manipulator.graph.Neo4jModule;
+import guru.bubl.module.neo4j_user_repository.Neo4jUserRepositoryModule;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -27,6 +28,7 @@ public class ModelTestRunner {
                 Neo4jModule.forTestingUsingEmbedded(),
                 ModelModule.forTesting(),
                 new ModelTestModule(),
+                new Neo4jUserRepositoryModule(),
                 new AbstractModule() {
                     @Override
                     protected void configure() {

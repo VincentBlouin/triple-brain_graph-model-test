@@ -34,6 +34,7 @@ import guru.bubl.module.neo4j_graph_manipulator.graph.graph.extractor.subgraph.N
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.vertex.Neo4jVertexFactory;
 import guru.bubl.module.neo4j_graph_manipulator.graph.search.Neo4jGraphIndexer;
 import guru.bubl.module.neo4j_graph_manipulator.graph.search.Neo4jGraphSearch;
+import guru.bubl.module.repository.user.UserRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -106,6 +107,9 @@ public class ModelTestResources {
     @Inject
     SubGraphForkerFactory subGraphForkerFactory;
 
+    @Inject
+    protected  UserRepository userRepository;
+
     protected VertexOperator vertexA;
     protected VertexOperator vertexB;
     protected VertexOperator vertexC;
@@ -129,11 +133,13 @@ public class ModelTestResources {
         transaction = ModelTestRunner.graphDatabaseService.beginTx();
         user = User.withEmail(
                 "roger.lamothe@example.org"
-        ).setUsername("roger_lamothe");
+        ).setUsername("roger_lamothe").setPreferredLocales("[en]").password("12345678");
+        user = userRepository.createUser(user);
         forker = subGraphForkerFactory.forUser(user);
         anotherUser = User.withEmail(
                 "colette.armande@example.org"
-        ).setUsername("colette_armande");
+        ).setUsername("colette_armande").setPreferredLocales("[fr]").password("12345678");
+        userRepository.createUser(anotherUser);
         anotherUserForker = subGraphForkerFactory.forUser(anotherUser);
         userGraph = neo4jUserGraphFactory.withUser(user);
         VerticesCalledABAndC verticesCalledABAndC = testScenarios.makeGraphHave3VerticesABCWhereAIsDefaultCenterVertexAndAPointsToBAndBPointsToC(

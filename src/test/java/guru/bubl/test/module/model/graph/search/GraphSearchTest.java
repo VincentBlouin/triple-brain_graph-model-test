@@ -6,6 +6,7 @@ package guru.bubl.test.module.model.graph.search;
 
 import com.google.common.collect.Sets;
 import guru.bubl.module.model.Image;
+import guru.bubl.module.model.User;
 import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.schema.SchemaOperator;

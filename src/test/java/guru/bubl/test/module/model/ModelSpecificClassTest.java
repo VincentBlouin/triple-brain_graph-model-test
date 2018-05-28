@@ -4,10 +4,9 @@
 
 package guru.bubl.test.module.model;
 
-import guru.bubl.module.model.graph.GraphElementOperator;
-import guru.bubl.test.module.model.graph.*;
-import guru.bubl.test.module.model.graph.meta.IdentificationOperatorTest;
-import guru.bubl.test.module.model.graph.search.GraphIndexerTest;
+import guru.bubl.module.model.content.AllContent;
+import guru.bubl.module.model.friend.friend_request_email.FriendRequestEmail;
+import guru.bubl.test.module.model.user.FriendManagerTest;
 import guru.bubl.test.module.utils.ModelTestRunner;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -15,6 +14,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        GraphElementOperatorTest.class
+        FriendManagerTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}
