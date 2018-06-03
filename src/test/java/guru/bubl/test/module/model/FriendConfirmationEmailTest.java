@@ -24,7 +24,8 @@ public class FriendConfirmationEmailTest extends ModelTestResources {
     public void sent_to_correct_recipient() {
         Mail msg = friendConfirmationEmail.sendForUserToUser(
                 destinationUser(),
-                requestUser()
+                requestUser(),
+                "url"
         );
         assertThat(
                 msg.getPersonalization().get(0).getTos().get(0).getEmail(),
@@ -36,7 +37,8 @@ public class FriendConfirmationEmailTest extends ModelTestResources {
     public void has_correct_from(){
         Mail msg = friendConfirmationEmail.sendForUserToUser(
                 destinationUser(),
-                requestUser()
+                requestUser(),
+                "url"
         );
         assertThat(
                 msg.from.getEmail(),
@@ -48,7 +50,8 @@ public class FriendConfirmationEmailTest extends ModelTestResources {
     public void has_correct_body(){
         Mail msg = friendConfirmationEmail.sendForUserToUser(
                 destinationUser(),
-                requestUser()
+                requestUser(),
+                "url"
         );
         assertTrue(
                 msg.getContent().get(0).getValue().contains(
@@ -64,7 +67,8 @@ public class FriendConfirmationEmailTest extends ModelTestResources {
         );
         Mail msg = friendConfirmationEmail.sendForUserToUser(
                 destinationUser,
-                requestUser()
+                requestUser(),
+                "url"
         );
         assertFalse(
                 msg.getContent().get(0).getValue().contains(
