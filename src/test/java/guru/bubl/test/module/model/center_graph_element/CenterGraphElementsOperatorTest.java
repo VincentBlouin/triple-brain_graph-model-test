@@ -107,7 +107,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void includes_public_context_only_if_fetching_plublic_only_centers(){
+    public void includes_public_context_only_if_fetching_public_only_centers(){
         vertexA.makePublic();
         vertexB.makePublic();
         centerGraphElementOperatorFactory.usingFriendlyResource(

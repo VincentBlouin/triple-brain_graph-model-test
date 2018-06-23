@@ -5,6 +5,7 @@
 package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
+import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.Triple;
 import guru.bubl.module.model.graph.identification.Identifier;
 import guru.bubl.module.model.graph.identification.IdentificationFactory;
@@ -460,20 +461,6 @@ public class VertexOperatorTest extends ModelTestResources {
         assertFalse(newVertex.isPublic());
     }
 
-    @Test
-    public void can_make_a_vertex_public() {
-        assertFalse(vertexA.isPublic());
-        vertexA.makePublic();
-        assertTrue(vertexA.isPublic());
-    }
-
-    @Test
-    public void can_make_a_vertex_private() {
-        vertexA.makePublic();
-        assertTrue(vertexA.isPublic());
-        vertexA.makePrivate();
-        assertFalse(vertexA.isPublic());
-    }
 
     @Test
     public void can_make_private_vertex_with_no_relations() {
@@ -488,9 +475,9 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void making_a_vertex_public_makes_all_its_edges_public_where_the_other_end_vertex_is_also_public() {
-        vertexA.makePublic();
-        vertexC.makePrivate();
-        vertexB.makePrivate();
+        vertexA.setShareLevel(ShareLevel.PUBLIC);
+        vertexC.setShareLevel(ShareLevel.PRIVATE);
+        vertexB.setShareLevel(ShareLevel.PRIVATE);
         assertFalse(
                 vertexB.getEdgeThatLinksToDestinationVertex(
                         vertexA
@@ -741,7 +728,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void adding_a_relation_to_existing_vertices_doest_not_increment_nb_public_neighbors_if_both_are_private() {
+    public void adding_a_relation_to_existing_vertices_does_not_increment_nb_public_neighbors_if_both_are_private() {
         assertThat(
                 vertexC.getNbPublicNeighbors(),
                 is(0)
@@ -801,6 +788,50 @@ public class VertexOperatorTest extends ModelTestResources {
         );
         assertThat(
                 vertexA.getNbPublicNeighbors(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void adding_a_relation_to_existing_vertices_increments_nb_friend_neighbors_to_source_if_destination_is_friend() {
+        vertexA.setShareLevel(ShareLevel.FRIENDS);
+        assertThat(
+                vertexC.getNbFriendNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexA.getNbFriendNeighbors(),
+                is(0)
+        );
+        vertexC.addRelationToVertex(vertexA);
+        assertThat(
+                vertexC.getNbFriendNeighbors(),
+                is(1)
+        );
+        assertThat(
+                vertexA.getNbFriendNeighbors(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void adding_a_relation_to_existing_vertices_increments_nb_friend_neighbors_to_destination_if_source_is_friend() {
+        vertexC.setShareLevel(ShareLevel.FRIENDS);
+        assertThat(
+                vertexC.getNbFriendNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexA.getNbFriendNeighbors(),
+                is(0)
+        );
+        vertexC.addRelationToVertex(vertexA);
+        assertThat(
+                vertexC.getNbFriendNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexA.getNbFriendNeighbors(),
                 is(1)
         );
     }
@@ -886,7 +917,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void making_vertex_private_increments_the_number_of_public_neighbor_vertices_set_to_neighbors() {
+    public void making_vertex_private_decrements_the_number_of_public_neighbor_vertices_set_to_neighbors() {
         vertexB.makePublic();
         assertThat(
                 vertexA.getNbPublicNeighbors(),
@@ -1024,6 +1055,70 @@ public class VertexOperatorTest extends ModelTestResources {
         assertThat(
                 edge1Operator.destinationVertex(),
                 is(vertexC)
+        );
+    }
+
+    @Test
+    public void can_set_share_level() {
+        assertThat(
+                vertexA.getShareLevel(),
+                is(ShareLevel.PRIVATE)
+        );
+        vertexA.setShareLevel(
+                ShareLevel.FRIENDS
+        );
+        assertThat(
+                vertexA.getShareLevel(),
+                is(ShareLevel.FRIENDS)
+        );
+    }
+
+    @Test
+    public void setting_share_level_sets_it_for_surrounding_edges() {
+        assertThat(
+                vertexB.getEdgeThatLinksToDestinationVertex(vertexC).getShareLevel(),
+                is(ShareLevel.PRIVATE)
+        );
+        vertexB.setShareLevel(
+                ShareLevel.FRIENDS
+        );
+        assertThat(
+                vertexB.getEdgeThatLinksToDestinationVertex(vertexC).getShareLevel(),
+                is(ShareLevel.PRIVATE)
+        );
+        vertexC.setShareLevel(
+                ShareLevel.FRIENDS
+        );
+        assertThat(
+                vertexB.getEdgeThatLinksToDestinationVertex(vertexC).getShareLevel(),
+                is(ShareLevel.FRIENDS)
+        );
+        vertexB.setShareLevel(ShareLevel.PUBLIC);
+
+        assertThat(
+                vertexB.getEdgeThatLinksToDestinationVertex(vertexC).getShareLevel(),
+                is(ShareLevel.FRIENDS)
+        );
+    }
+
+    @Test
+    public void setting_share_level_to_friends_increments_number_of_friend_neighbors_to_neighbors() {
+        assertThat(
+                vertexA.getNbFriendNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexC.getNbFriendNeighbors(),
+                is(0)
+        );
+        vertexB.setShareLevel(ShareLevel.FRIENDS);
+        assertThat(
+                vertexA.getNbFriendNeighbors(),
+                is(1)
+        );
+        assertThat(
+                vertexC.getNbFriendNeighbors(),
+                is(1)
         );
     }
 

@@ -28,12 +28,12 @@ import guru.bubl.module.model.suggestion.SuggestionPojo;
 import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.module.model.test.scenarios.VerticesCalledABAndC;
-import guru.bubl.module.neo4j_graph_manipulator.graph.graph.Neo4jUserGraphFactory;
-import guru.bubl.module.neo4j_graph_manipulator.graph.graph.Neo4jWholeGraph;
-import guru.bubl.module.neo4j_graph_manipulator.graph.graph.extractor.subgraph.Neo4jSubGraphExtractorFactory;
-import guru.bubl.module.neo4j_graph_manipulator.graph.graph.vertex.Neo4jVertexFactory;
-import guru.bubl.module.neo4j_graph_manipulator.graph.search.Neo4jGraphIndexer;
-import guru.bubl.module.neo4j_graph_manipulator.graph.search.Neo4jGraphSearch;
+import guru.bubl.module.neo4j_graph_manipulator.graph.graph.UserGraphFactoryNeo4j;
+import guru.bubl.module.neo4j_graph_manipulator.graph.graph.WholeGraphNeo4j;
+import guru.bubl.module.neo4j_graph_manipulator.graph.graph.extractor.subgraph.SubGraphExtractorFactoryNeo4j;
+import guru.bubl.module.neo4j_graph_manipulator.graph.graph.vertex.VertexFactoryNeo4j;
+import guru.bubl.module.neo4j_graph_manipulator.graph.search.GraphIndexerNeo4j;
+import guru.bubl.module.neo4j_graph_manipulator.graph.search.GraphSearchNeo4j;
 import guru.bubl.module.repository.user.UserRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -75,10 +75,10 @@ public class ModelTestResources {
     protected TestScenarios testScenarios;
 
     @Inject
-    protected Neo4jSubGraphExtractorFactory neo4jSubGraphExtractorFactory;
+    protected SubGraphExtractorFactoryNeo4j neo4jSubGraphExtractorFactory;
 
     @Inject
-    public Neo4jWholeGraph wholeGraph;
+    public WholeGraphNeo4j wholeGraph;
 
     @Inject
     GraphDatabaseService graphDatabaseService;
@@ -87,19 +87,19 @@ public class ModelTestResources {
     protected EdgeFactory edgeFactory;
 
     @Inject
-    protected Neo4jVertexFactory vertexFactory;
+    protected VertexFactoryNeo4j vertexFactory;
 
     @Inject
-    protected Neo4jUserGraphFactory neo4jUserGraphFactory;
+    protected UserGraphFactoryNeo4j neo4jUserGraphFactory;
 
     @Inject
     protected GraphFactory graphFactory;
 
     @Inject
-    protected Neo4jGraphSearch graphSearch;
+    protected GraphSearchNeo4j graphSearch;
 
     @Inject
-    protected Neo4jGraphIndexer graphIndexer;
+    protected GraphIndexerNeo4j graphIndexer;
 
     @Inject
     protected IdentificationFactory identificationFactory;

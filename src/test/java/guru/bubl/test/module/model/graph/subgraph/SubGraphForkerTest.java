@@ -4,26 +4,18 @@
 
 package guru.bubl.test.module.model.graph.subgraph;
 
-import guru.bubl.module.model.User;
 import guru.bubl.module.model.graph.GraphElementType;
-import guru.bubl.module.model.graph.identification.Identifier;
+import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
+import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.vertex.*;
 import guru.bubl.module.model.search.GraphElementSearchResult;
-import guru.bubl.module.model.test.scenarios.TestScenarios;
-import guru.bubl.module.neo4j_graph_manipulator.graph.Neo4jFriendlyResource;
-import guru.bubl.module.neo4j_graph_manipulator.graph.Relationships;
-import guru.bubl.module.neo4j_graph_manipulator.graph.graph.identification.Neo4jIdentification;
-import guru.bubl.module.neo4j_graph_manipulator.graph.search.SearchResultGetter;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 
-import java.net.URI;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,9 +30,9 @@ public class SubGraphForkerTest extends ModelTestResources {
     public void can_integrate_subgraph() {
         vertexA.label("ananas");
         vertexA.makePublic();
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                1,
-                vertexB.uri()
+        SubGraph subGraph = userGraph.aroundVertexUriInShareLevels(
+                vertexB.uri(),
+                ShareLevel.allShareLevels
         );
         List<GraphElementSearchResult> results = graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
                 "ananas", anotherUser
@@ -66,59 +58,15 @@ public class SubGraphForkerTest extends ModelTestResources {
         vertexOfAnotherUser.makePublic();
         Integer numberOfVertices = numberOfVertices();
         forker.fork(
-                anotherUserGraph.graphWithDepthAndCenterBubbleUri(
-                        0,
-                        vertexOfAnotherUser.uri()
+                anotherUserGraph.aroundVertexUriInShareLevelsWithDepth(
+                        vertexOfAnotherUser.uri(),
+                        ShareLevel.allShareLevels,
+                        0
                 )
         );
         assertThat(
                 numberOfVertices(),
                 is(numberOfVertices + 1)
-        );
-    }
-
-    @Test
-    public void cannot_fork_a_vertex_that_is_not_public() {
-        vertexA.label("ananas");
-        vertexB.label("ananas2");
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                1,
-                vertexB.uri()
-        );
-        anotherUserForker.fork(
-                subGraph
-        );
-        List<GraphElementSearchResult> results = graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
-                "ananas", anotherUser
-        );
-        assertThat(
-                results.size(),
-                is(0)
-        );
-        vertexA.makePublic();
-        anotherUserForker.fork(
-                subGraph
-        );
-        results = graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
-                "ananas", anotherUser
-        );
-        assertThat(
-                results.size(),
-                is(1)
-        );
-        vertexB.makePublic();
-        anotherUserForker.fork(
-                userGraph.graphWithDepthAndCenterBubbleUri(
-                        0,
-                        vertexB.uri()
-                )
-        );
-        results = graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
-                "ananas", anotherUser
-        );
-        assertThat(
-                results.size(),
-                is(2)
         );
     }
 
@@ -129,9 +77,9 @@ public class SubGraphForkerTest extends ModelTestResources {
                 vertexOfAnotherUser.addVertexAndRelation().destinationVertex().uri()
         );
         newVertex.makePublic();
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                1,
-                vertexOfAnotherUser.uri()
+        SubGraph subGraph = userGraph.aroundVertexUriInShareLevels(
+                vertexOfAnotherUser.uri(),
+                ShareLevel.allShareLevels
         );
         Integer numberOfEdges = numberOfEdges();
         forker.fork(
@@ -177,9 +125,10 @@ public class SubGraphForkerTest extends ModelTestResources {
     public void fork_is_identified_to_original() {
         vertexOfAnotherUser.makePublic();
         Vertex forkVertex = forker.fork(
-                anotherUserGraph.graphWithDepthAndCenterBubbleUri(
-                        0,
-                        vertexOfAnotherUser.uri()
+                anotherUserGraph.aroundVertexUriInShareLevelsWithDepth(
+                        vertexOfAnotherUser.uri(),
+                        ShareLevel.allShareLevels,
+                        0
                 )
         ).values().iterator().next();
         VertexInSubGraphPojo vertex = userGraph.graphWithDepthAndCenterBubbleUri(
@@ -200,14 +149,14 @@ public class SubGraphForkerTest extends ModelTestResources {
                 modelTestScenarios.human()
         ).values().iterator().next();
         Vertex forkVertex = forker.fork(
-                anotherUserGraph.graphWithDepthAndCenterBubbleUri(
-                        0,
-                        vertexOfAnotherUser.uri()
+                anotherUserGraph.aroundVertexUriInShareLevels(
+                        vertexOfAnotherUser.uri(),
+                        ShareLevel.allShareLevels
                 )
         ).values().iterator().next();
-        VertexInSubGraphPojo vertex = userGraph.graphWithDepthAndCenterBubbleUri(
-                1,
-                forkVertex.uri()
+        VertexInSubGraphPojo vertex = userGraph.aroundVertexUriInShareLevels(
+                forkVertex.uri(),
+                ShareLevel.allShareLevels
         ).vertices().values().iterator().next();
         assertTrue(
                 vertex.getIdentifications().containsKey(
@@ -225,9 +174,9 @@ public class SubGraphForkerTest extends ModelTestResources {
         vertexC.label("carcason");
         vertexC.makePublic();
         anotherUserForker.fork(
-                userGraph.graphWithDepthAndCenterBubbleUri(
-                        1,
-                        vertexB.uri()
+                userGraph.aroundVertexUriInShareLevels(
+                        vertexB.uri(),
+                        ShareLevel.allShareLevels
                 )
         );
         assertThat(
@@ -267,9 +216,10 @@ public class SubGraphForkerTest extends ModelTestResources {
         Integer numberOfVerticesBefore = numberOfVertices();
         Integer numberOfEdgesBefore = numberOfEdges();
         forker.fork(
-                anotherUserGraph.graphWithDepthAndCenterBubbleUri(
-                        2,
-                        vertexOfAnotherUser.uri()
+                anotherUserGraph.aroundVertexUriInShareLevelsWithDepth(
+                        vertexOfAnotherUser.uri(),
+                        ShareLevel.allShareLevels,
+                        2
                 )
         );
         assertThat(
@@ -286,9 +236,9 @@ public class SubGraphForkerTest extends ModelTestResources {
     public void forked_vertices_have_the_right_number_of_connected_edges() {
         makeAnotherUserHave3LinearPublicVertices();
         Vertex vertex = forker.fork(
-                anotherUserGraph.graphWithDepthAndCenterBubbleUri(
-                        2,
-                        vertexOfAnotherUser.uri()
+                anotherUserGraph.aroundVertexUriInShareLevels(
+                        vertexOfAnotherUser.uri(),
+                        ShareLevel.allShareLevels
                 )
         ).get(vertexOfAnotherUser.uri());
         VertexOperator forkedVertexOfAnotherUser = userGraph.vertexWithUri(
@@ -319,4 +269,5 @@ public class SubGraphForkerTest extends ModelTestResources {
                 p -> p.getType() == GraphElementType.vertex
         ).collect(Collectors.toList());
     }
+
 }

@@ -286,7 +286,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void kept_vertex_nb_public_neighbors_decrements_when_previous_end_is_public_and_new_is_private() {
+    public void changing_destination_keeps_vertex_nb_public_neighbors_decrements_when_previous_end_is_public_and_new_is_private() {
         vertexB.makePublic();
         assertThat(
                 vertexA.getNbPublicNeighbors(),
@@ -332,7 +332,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void decrements_nb_public_neighbors_to_destination_if_source_is_public() {
+    public void remove_decrements_nb_public_neighbors_to_destination_if_source_is_public() {
         vertexA.makePublic();
         assertThat(
                 vertexB.getNbPublicNeighbors(),
@@ -381,7 +381,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void decrements_nb_public_neighbors_if_both_are_public() {
+    public void remove_decrements_nb_public_neighbors_if_both_are_public() {
         vertexA.makePublic();
         vertexB.makePublic();
         assertThat(

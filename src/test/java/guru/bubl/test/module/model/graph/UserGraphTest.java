@@ -8,10 +8,7 @@ import com.google.common.collect.ImmutableSet;
 import guru.bubl.module.common_utils.Uris;
 import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.Image;
-import guru.bubl.module.model.graph.FriendlyResourcePojo;
-import guru.bubl.module.model.graph.GraphElement;
-import guru.bubl.module.model.graph.GraphElementOperator;
-import guru.bubl.module.model.graph.GraphElementPojo;
+import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.edge.EdgePojo;
@@ -777,9 +774,9 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void nb_public_neighbors_is_included() {
         vertexB.makePublic();
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                1,
-                vertexB.uri()
+        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+                vertexB.uri(),
+                ShareLevel.allShareLevels
         );
         VertexInSubGraphPojo vertexAPojo = subGraph.vertexWithIdentifier(
                 vertexA.uri()
@@ -927,6 +924,86 @@ public class UserGraphTest extends ModelTestResources {
         assertThat(subGraph.vertexWithIdentifier(
                 vertexB.uri()).getColors()
                 , is("blue")
+        );
+    }
+
+    @Test
+    public void can_exclude_graph_elements_that_are_not_in_share_levels() {
+        Set<ShareLevel> shareLevels = new HashSet<>();
+        shareLevels.add(ShareLevel.PRIVATE);
+        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+                vertexB.uri(),
+                shareLevels
+        );
+        assertThat(
+                subGraph.vertices().size(),
+                is(3)
+        );
+        assertThat(
+                subGraph.edges().size(),
+                is(2)
+        );
+        shareLevels.clear();
+        shareLevels.add(ShareLevel.PUBLIC);
+        subGraph = userGraph.aroundVertexUriInShareLevels(
+                vertexB.uri(),
+                shareLevels
+        );
+        assertThat(
+                subGraph.vertices().size(),
+                is(0)
+        );
+        assertThat(
+                subGraph.edges().size(),
+                is(0)
+        );
+        vertexB.setShareLevel(ShareLevel.FRIENDS);
+        vertexC.setShareLevel(ShareLevel.FRIENDS);
+        shareLevels.clear();
+        shareLevels.add(ShareLevel.FRIENDS);
+        shareLevels.add(ShareLevel.PUBLIC);
+        shareLevels.add(ShareLevel.PUBLIC_WITH_LINK);
+        subGraph = userGraph.aroundVertexUriInShareLevels(
+                vertexB.uri(),
+                shareLevels
+        );
+        assertThat(
+                subGraph.vertices().size(),
+                is(2)
+        );
+        assertThat(
+                subGraph.edges().size(),
+                is(1)
+        );
+        vertexB.setShareLevel(ShareLevel.PRIVATE);
+        vertexC.setShareLevel(ShareLevel.PRIVATE);
+        subGraph = userGraph.aroundVertexUriInShareLevels(
+                vertexB.uri(),
+                shareLevels
+        );
+        assertThat(
+                subGraph.vertices().size(),
+                is(0)
+        );
+        assertThat(
+                subGraph.edges().size(),
+                is(0)
+        );
+        vertexB.setShareLevel(ShareLevel.PUBLIC);
+        vertexC.setShareLevel(ShareLevel.PUBLIC);
+        shareLevels.clear();
+        shareLevels.add(ShareLevel.PUBLIC);
+        subGraph = userGraph.aroundVertexUriInShareLevels(
+                vertexB.uri(),
+                shareLevels
+        );
+        assertThat(
+                subGraph.vertices().size(),
+                is(2)
+        );
+        assertThat(
+                subGraph.edges().size(),
+                is(1)
         );
     }
 
