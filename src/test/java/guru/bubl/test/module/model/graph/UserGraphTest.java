@@ -795,6 +795,29 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+    public void nb_friends_is_included() {
+        vertexB.setShareLevel(ShareLevel.FRIENDS);
+        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+                vertexB.uri(),
+                ShareLevel.allShareLevels
+        );
+        VertexInSubGraphPojo vertexAPojo = subGraph.vertexWithIdentifier(
+                vertexA.uri()
+        );
+        assertThat(
+                vertexAPojo.getNbFriendNeighbors(),
+                is(1)
+        );
+        VertexInSubGraphPojo vertexBPojo = subGraph.vertexWithIdentifier(
+                vertexB.uri()
+        );
+        assertThat(
+                vertexBPojo.getNbFriendNeighbors(),
+                is(0)
+        );
+    }
+
+    @Test
     public void can_extract_sub_graph_around_an_identifier() {
         IdentifierPojo computerScientist = vertexB.addMeta(
                 modelTestScenarios.computerScientistType()
