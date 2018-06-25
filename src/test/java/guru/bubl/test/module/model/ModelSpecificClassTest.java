@@ -4,6 +4,7 @@
 
 package guru.bubl.test.module.model;
 
+import guru.bubl.module.model.admin.WholeGraphAdminDailyJob;
 import guru.bubl.module.model.content.AllContent;
 import guru.bubl.module.model.friend.friend_request_email.FriendRequestEmail;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
@@ -22,6 +23,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        UserGraphTest.class
+        VertexOperatorTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}

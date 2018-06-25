@@ -531,6 +531,20 @@ public class VertexOperatorTest extends ModelTestResources {
 
 
     @Test
+    public void changing_share_level_from_friend_to_public_decrements_neighbors_number_of_friends() {
+        vertexB.setShareLevel(ShareLevel.FRIENDS);
+        assertThat(
+                vertexC.getNbFriendNeighbors(),
+                is(1)
+        );
+        vertexB.setShareLevel(ShareLevel.PUBLIC);
+        assertThat(
+                vertexC.getNbFriendNeighbors(),
+                is(0)
+        );
+    }
+
+    @Test
     public void can_check_equality() {
         assertTrue(vertexA.equals(vertexA));
         assertFalse(vertexA.equals(vertexB));
