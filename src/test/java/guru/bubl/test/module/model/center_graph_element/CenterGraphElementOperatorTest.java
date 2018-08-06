@@ -111,4 +111,21 @@ public class CenterGraphElementOperatorTest extends ModelTestResources {
                 is(nbCenterGraphElements + 1)
         );
     }
+
+    @Test
+    public void returns_colors(){
+        vertexA.setColors("patatie");
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        CenterGraphElement centerGraphElement = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate().iterator().next();
+        assertThat(
+                centerGraphElement.getGraphElement().getColors(),
+                is("patatie")
+        );
+    }
 }
