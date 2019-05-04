@@ -6,7 +6,6 @@ package guru.bubl.test.module.model.graph.search;
 
 import com.google.common.collect.Sets;
 import guru.bubl.module.model.Image;
-import guru.bubl.module.model.User;
 import guru.bubl.module.model.graph.*;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
@@ -601,7 +600,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 searchResult.getGraphElement().images().size(),
                 is(0)
         );
-        Image image1 = Image.withBase64ForSmallAndUriForBigger(
+        Image image1 = Image.withUrlForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
                 URI.create("/large_1")
         );
@@ -623,7 +622,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         IdentifierPojo identification = modelTestScenarios.computerScientistType();
         String identificationImage = UUID.randomUUID().toString();
         identification.setImages(Sets.newHashSet(
-                Image.withBase64ForSmallAndUriForBigger(
+                Image.withUrlForSmallAndUriForBigger(
                         identificationImage,
                         URI.create("/large_1")
                 )
@@ -637,12 +636,12 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         );
         Image image = searchResult.getGraphElement().images().iterator().next();
         assertThat(
-                image.base64ForSmall(),
+                image.urlForSmall(),
                 is(identificationImage)
         );
         String vertexImage = UUID.randomUUID().toString();
         vertexA.addImages(Sets.newHashSet(
-                Image.withBase64ForSmallAndUriForBigger(
+                Image.withUrlForSmallAndUriForBigger(
                         vertexImage,
                         URI.create("/large_1")
                 )
@@ -653,7 +652,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         );
         image = searchResult.getGraphElement().images().iterator().next();
         assertThat(
-                image.base64ForSmall(),
+                image.urlForSmall(),
                 is(vertexImage)
         );
     }

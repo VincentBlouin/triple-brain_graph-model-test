@@ -397,11 +397,11 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void has_vertices_images() {
-        Image image1 = Image.withBase64ForSmallAndUriForBigger(
+        Image image1 = Image.withUrlForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
                 URI.create("/large_1")
         );
-        Image image2 = Image.withBase64ForSmallAndUriForBigger(
+        Image image2 = Image.withUrlForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
                 URI.create("/large_2")
         );
@@ -430,11 +430,11 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void has_identification_images() {
-        Image image1 = Image.withBase64ForSmallAndUriForBigger(
+        Image image1 = Image.withUrlForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
                 URI.create("/large_1")
         );
-        Image image2 = Image.withBase64ForSmallAndUriForBigger(
+        Image image2 = Image.withUrlForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
                 URI.create("/large_2")
         );

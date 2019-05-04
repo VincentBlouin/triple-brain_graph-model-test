@@ -18,12 +18,10 @@ import org.junit.Test;
 import org.parboiled.common.StringUtils;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static guru.bubl.module.model.graph.GraphElementOperator.colorProps.background;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -101,7 +99,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 identification.images().isEmpty()
         );
         Set<Image> images = new HashSet<>();
-        images.add(Image.withBase64ForSmallAndUriForBigger(
+        images.add(Image.withUrlForSmallAndUriForBigger(
                 "dummy base 64",
                 URI.create("/big_image")
         ));
@@ -124,7 +122,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 computerScientist.images().isEmpty()
         );
         Set<Image> images = new HashSet<>();
-        images.add(Image.withBase64ForSmallAndUriForBigger(
+        images.add(Image.withUrlForSmallAndUriForBigger(
                 "dummy base 64",
                 URI.create("/big_image")
         ));

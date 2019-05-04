@@ -75,11 +75,11 @@ public class FriendlyResourceTest extends ModelTestResources {
 
     @Test
     public void can_add_images() {
-        Image image1 = Image.withBase64ForSmallAndUriForBigger(
+        Image image1 = Image.withUrlForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
                 URI.create("/large_1")
         );
-        Image image2 = Image.withBase64ForSmallAndUriForBigger(
+        Image image2 = Image.withUrlForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
                 URI.create("/large_2")
         );
@@ -105,7 +105,7 @@ public class FriendlyResourceTest extends ModelTestResources {
 
     @Test
     public void adding_a_set_of_images_does_not_erase_previous() {
-        Image image1 = Image.withBase64ForSmallAndUriForBigger(
+        Image image1 = Image.withUrlForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
                 URI.create("/large_1")
         );
@@ -117,7 +117,7 @@ public class FriendlyResourceTest extends ModelTestResources {
                 vertexA.images().size(),
                 is(1)
         );
-        Image image2 = Image.withBase64ForSmallAndUriForBigger(
+        Image image2 = Image.withUrlForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
                 URI.create("/large_2")
         );
@@ -139,7 +139,7 @@ public class FriendlyResourceTest extends ModelTestResources {
 
     @Test
     public void cannot_associate_to_same_image_twice() {
-        Image image1 = Image.withBase64ForSmallAndUriForBigger(
+        Image image1 = Image.withUrlForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
                 URI.create("/large_1")
         );
