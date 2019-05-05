@@ -13,6 +13,8 @@ import guru.bubl.test.module.model.center_graph_element.CenterGraphElementsOpera
 import guru.bubl.test.module.model.graph.EdgeOperatorTest;
 import guru.bubl.test.module.model.graph.UserGraphTest;
 import guru.bubl.test.module.model.graph.VertexOperatorTest;
+import guru.bubl.test.module.model.graph.meta.IdentificationOperatorTest;
+import guru.bubl.test.module.model.graph.meta.UserMetasOperatorTest;
 import guru.bubl.test.module.model.graph.search.GraphIndexerTest;
 import guru.bubl.test.module.model.graph.subgraph.SubGraphForkerTest;
 import guru.bubl.test.module.model.user.FriendManagerTest;
@@ -23,6 +25,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        CenterGraphElementOperatorTest.class
+        UserGraphTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}
