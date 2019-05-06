@@ -906,4 +906,36 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 is(identifier.uri())
         );
     }
+
+    @Test
+    public void meta_context_is_description_if_it_has_one() {
+        IdentifierPojo meta = vertexA.addMeta(
+                modelTestScenarios.possessionIdentification()
+        ).values().iterator().next();
+        graphIndexer.indexMeta(meta);
+        GraphElementSearchResult searchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "Possession",
+                user
+        ).get(0);
+        assertThat(
+                searchResult.getContext().values().iterator().next(),
+                is("In law, possession is the control a person intentionally exercises toward a thing. In all cases, to possess something, a person must have an intention to possess it. A person may be in possession of some property. Like ownership, the possession of things is commonly regulated by states under property law.")
+        );
+    }
+
+    @Test
+    public void meta_context_is_surround_elements_if_it_has_no_description() {
+        IdentifierPojo meta = vertexA.addMeta(
+                modelTestScenarios.computerScientistType()
+        ).values().iterator().next();
+        graphIndexer.indexMeta(meta);
+        GraphElementSearchResult searchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                "Computer ",
+                user
+        ).get(0);
+        assertThat(
+                searchResult.getContext().values().iterator().next(),
+                is("vertex Azure")
+        );
+    }
 }
