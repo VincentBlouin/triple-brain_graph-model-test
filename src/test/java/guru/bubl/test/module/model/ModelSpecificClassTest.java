@@ -16,6 +16,7 @@ import guru.bubl.test.module.model.graph.VertexOperatorTest;
 import guru.bubl.test.module.model.graph.meta.IdentificationOperatorTest;
 import guru.bubl.test.module.model.graph.meta.UserMetasOperatorTest;
 import guru.bubl.test.module.model.graph.search.GraphIndexerTest;
+import guru.bubl.test.module.model.graph.search.GraphSearchTest;
 import guru.bubl.test.module.model.graph.subgraph.SubGraphForkerTest;
 import guru.bubl.test.module.model.user.FriendManagerTest;
 import guru.bubl.test.module.utils.ModelTestRunner;
@@ -25,6 +26,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        UserGraphTest.class
+        GraphSearchTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}
