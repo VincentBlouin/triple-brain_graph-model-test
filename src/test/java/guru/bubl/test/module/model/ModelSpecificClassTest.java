@@ -8,6 +8,7 @@ import guru.bubl.module.model.admin.WholeGraphAdminDailyJob;
 import guru.bubl.module.model.content.AllContent;
 import guru.bubl.module.model.friend.friend_request_email.FriendRequestEmail;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.neo4j_graph_manipulator.graph.center_graph_element.CenterGraphElementsOperatorNeo4j;
 import guru.bubl.test.module.model.center_graph_element.CenterGraphElementOperatorTest;
 import guru.bubl.test.module.model.center_graph_element.CenterGraphElementsOperatorTest;
 import guru.bubl.test.module.model.graph.EdgeOperatorTest;
@@ -26,6 +27,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        GraphSearchTest.class
+        CenterGraphElementsOperatorTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}

@@ -7,6 +7,7 @@ package guru.bubl.test.module.model.center_graph_element;
 import guru.bubl.module.model.center_graph_element.CenterGraphElement;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
+import guru.bubl.module.model.graph.GraphElementOperator;
 import guru.bubl.module.model.graph.GraphElementType;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgePojo;
@@ -113,7 +114,7 @@ public class CenterGraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void returns_colors(){
+    public void returns_colors() {
         vertexA.setColors("patatie");
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA

@@ -267,4 +267,34 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
                 is(1)
         );
     }
+
+    @Test
+    public void can_limit() {
+        CenterGraphElementOperator centerA = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        centerA.updateLastCenterDate();
+        centerA.incrementNumberOfVisits();
+
+        CenterGraphElementOperator centerB = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        );
+        centerB.updateLastCenterDate();
+        centerB.incrementNumberOfVisits();
+
+        Set<CenterGraphElementPojo> centers = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate();
+        assertThat(
+                centers.size(),
+                Matchers.is(2)
+        );
+        centers = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivateWithLimit(1);
+        assertThat(
+                centers.size(),
+                Matchers.is(1)
+        );
+    }
 }
