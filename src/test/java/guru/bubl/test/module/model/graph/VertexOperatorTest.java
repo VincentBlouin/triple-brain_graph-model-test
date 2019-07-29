@@ -539,8 +539,8 @@ public class VertexOperatorTest extends ModelTestResources {
         UUID vertexId = UUID.randomUUID();
         UUID edgeId = UUID.randomUUID();
         EdgePojo newEdge = vertexA.addVertexAndRelationWithIds(
-                vertexId,
-                edgeId
+                vertexId.toString(),
+                edgeId.toString()
         );
         UserUris userUris = new UserUris(vertexA.getOwnerUsername());
         URI vertexUri = userUris.vertexUriFromShortId(vertexId.toString());
@@ -564,8 +564,8 @@ public class VertexOperatorTest extends ModelTestResources {
                 UserUris.graphElementShortId(vertexA.getEdgeThatLinksToDestinationVertex(vertexB).uri())
         );
         EdgePojo newEdge = vertexA.addVertexAndRelationWithIds(
-                vertexId,
-                edgeId
+                vertexId.toString(),
+                edgeId.toString()
         );
         UserUris userUris = new UserUris(vertexA.getOwnerUsername());
         URI vertexUri = userUris.vertexUriFromShortId(vertexId.toString());
