@@ -27,6 +27,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        CenterGraphElementsOperatorTest.class
+        VertexOperatorTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}

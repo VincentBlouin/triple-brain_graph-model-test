@@ -4,9 +4,12 @@
 
 package guru.bubl.test.module.model.graph;
 
+import guru.bubl.module.model.User;
+import guru.bubl.module.model.UserUris;
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.Triple;
+import guru.bubl.module.model.graph.edge.EdgePojo;
 import guru.bubl.module.model.graph.identification.Identifier;
 import guru.bubl.module.model.graph.identification.IdentificationFactory;
 import guru.bubl.module.model.graph.edge.Edge;
@@ -28,6 +31,7 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
@@ -529,6 +533,52 @@ public class VertexOperatorTest extends ModelTestResources {
         );
     }
 
+
+    @Test
+    public void can_add_vertex_and_relation_using_edge_and_vertex_uris() {
+        UUID vertexId = UUID.randomUUID();
+        UUID edgeId = UUID.randomUUID();
+        EdgePojo newEdge = vertexA.addVertexAndRelationWithIds(
+                vertexId,
+                edgeId
+        );
+        UserUris userUris = new UserUris(vertexA.getOwnerUsername());
+        URI vertexUri = userUris.vertexUriFromShortId(vertexId.toString());
+        assertThat(
+                newEdge.destinationVertex().uri(),
+                is(vertexUri)
+        );
+        URI edgeUri = userUris.edgeUriFromShortId(edgeId.toString());
+        assertThat(
+                newEdge.uri(),
+                is(edgeUri)
+        );
+    }
+
+    @Test
+    public void checks_that_uris_dont_already_exist() {
+        UUID vertexId = UUID.fromString(
+                UserUris.graphElementShortId(vertexB.uri())
+        );
+        UUID edgeId = UUID.fromString(
+                UserUris.graphElementShortId(vertexA.getEdgeThatLinksToDestinationVertex(vertexB).uri())
+        );
+        EdgePojo newEdge = vertexA.addVertexAndRelationWithIds(
+                vertexId,
+                edgeId
+        );
+        UserUris userUris = new UserUris(vertexA.getOwnerUsername());
+        URI vertexUri = userUris.vertexUriFromShortId(vertexId.toString());
+        assertThat(
+                newEdge.destinationVertex().uri(),
+                is(not(vertexUri))
+        );
+        URI edgeUri = userUris.edgeUriFromShortId(edgeId.toString());
+        assertThat(
+                newEdge.uri(),
+                is(not(edgeUri))
+        );
+    }
 
     @Test
     public void changing_share_level_from_friend_to_public_decrements_neighbors_number_of_friends() {

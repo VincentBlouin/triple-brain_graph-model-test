@@ -882,32 +882,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-    public void prioritizes_meta_over_other_types_of_bubbles() {
-        IdentifierPojo identifier = vertexB.addMeta(
-                modelTestScenarios.location()
-        ).values().iterator().next();
-        for (int i = 0; i < 5; i++) {
-            VertexOperator locationVertex = vertexFactory.createForOwner(
-                    user.username()
-            );
-            locationVertex.label("Location");
-            if (i % 2 == 0) {
-                centerGraphElementOperatorFactory.usingFriendlyResource(
-                        locationVertex
-                ).incrementNumberOfVisits();
-            }
-        }
-        GraphElementSearchResult firstSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "Location",
-                user
-        ).iterator().next();
-        assertThat(
-                firstSearchResult.getGraphElement().uri(),
-                is(identifier.uri())
-        );
-    }
-
-    @Test
     public void meta_context_is_description_if_it_has_one() {
         IdentifierPojo meta = vertexA.addMeta(
                 modelTestScenarios.possessionIdentification()
