@@ -14,13 +14,11 @@ import guru.bubl.module.neo4j_graph_manipulator.graph.Neo4jModule;
 import guru.bubl.module.neo4j_user_repository.Neo4jUserRepositoryModule;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.neo4j.graphdb.GraphDatabaseService;
 
 public class ModelTestRunner {
     public static Injector injector;
 
 
-    public static GraphDatabaseService graphDatabaseService;
 
     @BeforeClass
     public static void realBeforeClass() {
@@ -36,14 +34,12 @@ public class ModelTestRunner {
                     }
                 }
         );
-        graphDatabaseService = injector.getInstance(GraphDatabaseService.class);
         injector.getInstance(GraphComponentTest.class)
                 .beforeClass();
     }
 
     @AfterClass
     public static void realAfterClass(){
-        graphDatabaseService.shutdown();
         Neo4jModule.clearDb();
     }
 }

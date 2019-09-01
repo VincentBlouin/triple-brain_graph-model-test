@@ -39,7 +39,6 @@ import guru.bubl.module.repository.user.UserRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.neo4j.driver.v1.Session;
-import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
 
 import javax.inject.Inject;
@@ -81,9 +80,6 @@ public class ModelTestResources {
 
     @Inject
     public WholeGraphNeo4j wholeGraph;
-
-    @Inject
-    GraphDatabaseService graphDatabaseService;
 
     @Inject
     protected EdgeFactory edgeFactory;
