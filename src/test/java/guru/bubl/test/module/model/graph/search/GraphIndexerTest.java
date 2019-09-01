@@ -16,6 +16,7 @@ import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.search.GraphIndexer;
 import guru.bubl.test.module.utils.search.Neo4jSearchRelatedTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -191,6 +192,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
+    @Ignore("schema feature is suspended")
     public void index_schema_sets_the_properties_as_context() {
         SchemaOperator schema = createSchema(userGraph.user());
         schema.label("schema1");
@@ -250,6 +252,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         vertexA.makePublic();
         vertexB.makePublic();
         EdgeOperator edgeAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        edgeAAndB.label("AAndB");
         graphIndexer.indexRelation(edgeAAndB);
         GraphElementSearchResult searchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
                 edgeAAndB.label(),
@@ -271,6 +274,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
+    @Ignore("schema feature is suspended")
     public void index_property_sets_schema_as_context() {
         SchemaOperator schema = createSchema(userGraph.user());
         schema.label("schema1");

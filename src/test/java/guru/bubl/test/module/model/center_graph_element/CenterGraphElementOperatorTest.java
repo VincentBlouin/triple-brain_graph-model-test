@@ -13,14 +13,17 @@ import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgePojo;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.hamcrest.core.Is;
 import org.junit.Test;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 public class CenterGraphElementOperatorTest extends ModelTestResources {
 
@@ -127,6 +130,68 @@ public class CenterGraphElementOperatorTest extends ModelTestResources {
         assertThat(
                 centerGraphElement.getGraphElement().getColors(),
                 is("patatie")
+        );
+    }
+
+    @Test
+    public void can_remove_centers() {
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        ).updateLastCenterDate();
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        ).updateLastCenterDate();
+        Set<CenterGraphElementPojo> centers = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate();
+        assertThat(
+                centers.size(),
+                is(2)
+        );
+        Iterator<CenterGraphElementPojo> it = centers.iterator();
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                it.next().getGraphElement()
+        ).remove();
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                it.next().getGraphElement()
+        ).remove();
+        assertTrue(
+                centerGraphElementsOperatorFactory.forUser(
+                        user
+                ).getPublicAndPrivate().isEmpty()
+        );
+    }
+
+    @Test
+    public void removing_center_does_not_remove_all_centers() {
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        ).updateLastCenterDate();
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        ).updateLastCenterDate();
+        assertThat(
+                centerGraphElementsOperatorFactory.forUser(
+                        user
+                ).getPublicAndPrivate().size(),
+                Is.is(2)
+        );
+        CenterGraphElementPojo centerGraphElementPojo = new CenterGraphElementPojo(
+                vertexB.uri()
+        );
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                centerGraphElementPojo.getGraphElement()
+        ).remove();
+        Set<CenterGraphElementPojo> centers = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivate();
+        assertThat(
+                centers.size(),
+                Is.is(1)
+        );
+        assertThat(
+                centers.iterator().next().getGraphElement().uri(),
+                Is.is(vertexA.uri())
         );
     }
 }

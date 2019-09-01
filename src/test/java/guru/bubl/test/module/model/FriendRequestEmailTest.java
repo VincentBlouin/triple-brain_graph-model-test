@@ -5,7 +5,7 @@
 package guru.bubl.test.module.model;
 
 import com.google.inject.Inject;
-import com.sendgrid.Mail;
+import com.sendgrid.helpers.mail.Mail;
 import guru.bubl.module.model.User;
 import guru.bubl.module.model.friend.friend_request_email.FriendRequestEmail;
 import guru.bubl.test.module.utils.ModelTestResources;

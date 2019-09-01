@@ -13,6 +13,7 @@ import guru.bubl.test.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphOperator;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -103,6 +104,7 @@ public class WholeGraphTest extends ModelTestResources {
     }
 
     @Test
+    @Ignore("schema feature is suspended")
     public void can_get_schemas() {
         createSchema();
         createSchema();
@@ -116,10 +118,9 @@ public class WholeGraphTest extends ModelTestResources {
 
     @Test
     public void can_get_all_graph_elements() {
-        createSchema().addProperty();
         assertThat(
                 wholeGraph.getAllGraphElements().size(),
-                is(8)
+                is(6)
         );
     }
 

@@ -9,6 +9,7 @@ import guru.bubl.module.model.graph.schema.SchemaList;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.schema.SchemaPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+@Ignore("schema feature is suspended")
 public class SchemaListTest extends ModelTestResources {
 
     @Inject

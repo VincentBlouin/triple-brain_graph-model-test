@@ -736,41 +736,7 @@ public class UserGraphTest extends ModelTestResources {
                 is(vertexA)
         );
     }
-
-    @Test
-    @Ignore
-    public void sort_and_move_date_are_included() {
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                1,
-                vertexB.uri()
-        );
-        VertexInSubGraphPojo vertexCInSubGraph = subGraph.vertexWithIdentifier(vertexC.uri());
-        assertThat(
-                vertexCInSubGraph.getGraphElement().getSortDate(),
-                is(nullValue())
-        );
-        assertThat(
-                vertexCInSubGraph.getGraphElement().getMoveDate(),
-                is(nullValue())
-        );
-        Date sortDate = new DateTime().minusMillis(10).toDate();
-        Date moveDate = new Date();
-        vertexC.setSortDate(sortDate, moveDate);
-        subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                1,
-                vertexB.uri()
-        );
-        vertexCInSubGraph = subGraph.vertexWithIdentifier(vertexC.uri());
-        assertThat(
-                vertexCInSubGraph.getGraphElement().getSortDate(),
-                is(sortDate)
-        );
-        assertThat(
-                vertexCInSubGraph.getGraphElement().getMoveDate(),
-                is(moveDate)
-        );
-    }
-
+    
     @Test
     public void nb_public_neighbors_is_included() {
         vertexB.makePublic();

@@ -8,15 +8,13 @@ import guru.bubl.module.model.graph.GraphElementType;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
-import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
-import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.vertex.*;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static junit.framework.TestCase.assertTrue;
@@ -24,6 +22,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
+@Ignore("fork feature is suspended")
 public class SubGraphForkerTest extends ModelTestResources {
 
     @Test
@@ -266,7 +265,7 @@ public class SubGraphForkerTest extends ModelTestResources {
 
     private List<GraphElementSearchResult> getOnlyVerticesInSearchResults(List<GraphElementSearchResult> searchResults) {
         return searchResults.stream().filter(
-                p -> p.getType() == GraphElementType.vertex
+                p -> p.getType() == GraphElementType.Vertex
         ).collect(Collectors.toList());
     }
 

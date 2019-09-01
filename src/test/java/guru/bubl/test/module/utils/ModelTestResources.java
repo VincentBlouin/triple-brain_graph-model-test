@@ -4,6 +4,7 @@
 
 package guru.bubl.test.module.utils;
 
+import guru.bubl.module.common_utils.NoEx;
 import guru.bubl.module.model.FriendlyResourceFactory;
 import guru.bubl.module.model.User;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperatorFactory;
@@ -37,12 +38,13 @@ import guru.bubl.module.neo4j_graph_manipulator.graph.search.GraphSearchNeo4j;
 import guru.bubl.module.repository.user.UserRepository;
 import org.junit.After;
 import org.junit.Before;
+import org.neo4j.driver.v1.Session;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
 
 import javax.inject.Inject;
 import java.net.URI;
-import java.sql.Connection;
+import java.sql.Statement;
 import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
@@ -63,7 +65,7 @@ public class ModelTestResources {
     protected FriendlyResourceFactory friendlyResourceFactory;
 
     @Inject
-    protected Connection connection;
+    protected Session session;
 
     @Inject
     protected GraphFactory graphMaker;
@@ -108,7 +110,7 @@ public class ModelTestResources {
     SubGraphForkerFactory subGraphForkerFactory;
 
     @Inject
-    protected  UserRepository userRepository;
+    protected UserRepository userRepository;
 
     protected VertexOperator vertexA;
     protected VertexOperator vertexB;
@@ -130,7 +132,8 @@ public class ModelTestResources {
     @Before
     public void before() {
         ModelTestRunner.injector.injectMembers(this);
-        transaction = ModelTestRunner.graphDatabaseService.beginTx();
+//        transaction = ModelTestRunner.graphDatabaseService.beginTx();
+        removeAllUsers();
         user = User.withEmail(
                 "roger.lamothe@example.org"
         ).setUsername("roger_lamothe").setPreferredLocales("[en]").password("12345678");
@@ -157,8 +160,8 @@ public class ModelTestResources {
 
     @After
     public void after() {
-        transaction.failure();
-        transaction.close();
+//        transaction.failure();
+//        transaction.close();
     }
 
     protected SubGraphPojo wholeGraphAroundDefaultCenterVertex() {
@@ -180,7 +183,7 @@ public class ModelTestResources {
         );
     }
 
-    public Map<URI, SuggestionPojo> suggestionsToMap(SuggestionPojo ... suggestions){
+    public Map<URI, SuggestionPojo> suggestionsToMap(SuggestionPojo... suggestions) {
         return modelTestScenarios.suggestionsToMap(suggestions);
     }
 
@@ -209,7 +212,7 @@ public class ModelTestResources {
         return wholeGraph.getAllEdges().size();
     }
 
-    protected void testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(GraphElementOperator graphElement){
+    protected void testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(GraphElementOperator graphElement) {
         IdentifierPojo computerScientist = graphElement.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
@@ -250,4 +253,9 @@ public class ModelTestResources {
         );
     }
 
+    protected void removeAllUsers() {
+        session.run(
+                "MATCH (n:User) DETACH DELETE n"
+        );
+    }
 }

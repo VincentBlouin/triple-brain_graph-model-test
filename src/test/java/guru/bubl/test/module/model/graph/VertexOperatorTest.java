@@ -606,17 +606,18 @@ public class VertexOperatorTest extends ModelTestResources {
         assertTrue(vertexA.equals(vertexAAsFriendlyResource));
     }
 
-    @Test
-    public void can_get_empty_set_of_included_graph_elements_for_a_vertex_that_have_none() {
-        assertTrue(
-                vertexA.getIncludedVertices().isEmpty()
-        );
-        assertTrue(
-                vertexA.getIncludedEdges().isEmpty()
-        );
-    }
+//    @Test
+//    public void can_get_empty_set_of_included_graph_elements_for_a_vertex_that_have_none() {
+//        assertTrue(
+//                vertexA.getIncludedVertices().isEmpty()
+//        );
+//        assertTrue(
+//                vertexA.getIncludedEdges().isEmpty()
+//        );
+//    }
 
     @Test
+    @Ignore
     public void can_create_vertex_from_graph_elements_set() {
         Vertex newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
@@ -659,6 +660,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+    @Ignore
     public void removing_a_graph_element_removes_it_from_included_graph_elements_as_well() {
         Vertex newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
@@ -705,6 +707,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+    @Ignore
     public void removing_a_vertex_removes_its_delete_edges_from_included_graph_elements_as_well() {
         Vertex newVertex = vertexFactory.createFromGraphElements(
                 vertexBAndC(),
@@ -744,15 +747,15 @@ public class VertexOperatorTest extends ModelTestResources {
         );
     }
 
-    @Test
-    public void including_a_vertex_doesnt_add_to_it_any_included_graph_elements() {
-        vertexFactory.createFromGraphElements(
-                vertexBAndC(),
-                edgeBetweenBAndCInSet()
-        );
-        assertTrue(vertexB.getIncludedVertices().isEmpty());
-        assertTrue(vertexB.getIncludedEdges().isEmpty());
-    }
+//    @Test
+//    public void including_a_vertex_doesnt_add_to_it_any_included_graph_elements() {
+//        vertexFactory.createFromGraphElements(
+//                vertexBAndC(),
+//                edgeBetweenBAndCInSet()
+//        );
+//        assertTrue(vertexB.getIncludedVertices().isEmpty());
+//        assertTrue(vertexB.getIncludedEdges().isEmpty());
+//    }
 
     @Test
     public void when_deleting_a_vertex_it_decrements_the_number_of_connected_vertices_of_its_neighbors() {
@@ -1076,6 +1079,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+    @Ignore
     public void mergeTo_includes_edges() {
         URI farCenterVertexUri = userGraph.createVertex().uri();
         VertexOperator farCenterVertex = vertexFactory.withUri(

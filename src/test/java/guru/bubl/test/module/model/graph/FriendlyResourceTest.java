@@ -40,7 +40,7 @@ public class FriendlyResourceTest extends ModelTestResources {
     @Test
     public void setting_null_label_converts_to_empty_string() {
         FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
-                URI.create("/some_uri"),
+                URI.create("/" + UUID.randomUUID()),
                 null,
                 new HashSet<Image>(),
                 "",
@@ -58,7 +58,7 @@ public class FriendlyResourceTest extends ModelTestResources {
     @Test
     public void setting_null_comment_converts_to_empty_string() {
         FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
-                URI.create("/some_uri"),
+                URI.create("/" + UUID.randomUUID()),
                 "",
                 new HashSet<Image>(),
                 null,

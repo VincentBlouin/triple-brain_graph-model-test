@@ -4,6 +4,7 @@
 
 package guru.bubl.test.module.model.user;
 
+import guru.bubl.module.model.User;
 import guru.bubl.module.model.friend.FriendManager;
 import guru.bubl.module.model.friend.FriendManagerFactory;
 import guru.bubl.module.model.friend.FriendStatus;
@@ -25,6 +26,8 @@ public class FriendManagerTest extends ModelTestResources {
     @Test
     public void can_add_friend() {
         FriendManager friendManager = friendManagerFactory.forUser(user);
+        User roger = userRepository.findByUsername(user.username());
+        User colette = userRepository.findByUsername(anotherUser.username());
         assertTrue(
                 friendManager.list().isEmpty()
         );
