@@ -5,6 +5,7 @@
 package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.Image;
+import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.GraphElementOperator;
 import guru.bubl.module.model.graph.identification.IdentificationOperator;
 import guru.bubl.module.model.graph.identification.Identifier;
@@ -13,17 +14,17 @@ import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
+import guru.bubl.module.neo4j_graph_manipulator.graph.graph.identification.IdentificationNeo4j;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 import org.parboiled.common.StringUtils;
 
 import java.net.URI;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.*;
 
 public class GraphElementOperatorTest extends ModelTestResources {
@@ -201,6 +202,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 )
         );
     }
+
     @Test
     public void identifications_do_not_apply_for_all_elements() {
         vertexA.addMeta(
@@ -569,7 +571,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void can_keep_tag_removed_from_the_reference_after_tagging_to_it_again(){
+    public void can_keep_tag_removed_from_the_reference_after_tagging_to_it_again() {
         IdentifierPojo vertexATag = vertexB.addMeta(
                 TestScenarios.identificationFromFriendlyResource(
                         vertexA
@@ -597,7 +599,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void removing_tag_from_the_reference_changes_the_external_uri_of_the_tag(){
+    public void removing_tag_from_the_reference_changes_the_external_uri_of_the_tag() {
         IdentifierPojo vertexATag = vertexB.addMeta(
                 TestScenarios.identificationFromFriendlyResource(
                         vertexA
@@ -617,6 +619,26 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 vertexATag.uri()
         ));
     }
+
+    @Test
+    public void can_tag_using_no_reference() {
+        Identifier tag = new IdentifierPojo(
+                URI.create(
+                        "/service/users/" + user.username() + "/void/" + UUID.randomUUID().toString()
+                ),
+                new FriendlyResourcePojo(
+                        "Void tag"
+                )
+        );
+        Collection<IdentifierPojo> tags = vertexA.addMeta(
+                tag
+        ).values();
+        assertThat(
+                tags.iterator().next(),
+                is(notNullValue())
+        );
+    }
+
 
     @Test
     public void can_set_colors() {
