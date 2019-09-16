@@ -624,7 +624,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     public void can_tag_using_no_reference() {
         Identifier tag = new IdentifierPojo(
                 URI.create(
-                        "/service/users/" + user.username() + "/void/" + UUID.randomUUID().toString()
+                        "/service/users/" + user.username() + "/void/ref/" + UUID.randomUUID().toString()
                 ),
                 new FriendlyResourcePojo(
                         "Void tag"
