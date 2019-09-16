@@ -12,7 +12,6 @@ import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
@@ -51,7 +50,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void can_get_only_public_bubbles(){
+    public void can_get_only_public_bubbles() {
         centerGraphElementOperatorFactory.usingFriendlyResource(vertexA).updateLastCenterDate();
         Integer nbPublicCenters = centerGraphElementsOperatorFactory.forUser(
                 user
@@ -68,7 +67,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void does_not_return_public_bubble_if_not_a_center_bubble(){
+    public void does_not_return_public_bubble_if_not_a_center_bubble() {
         assertThat(
                 centerGraphElementsOperatorFactory.forUser(
                         user
@@ -89,7 +88,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void includes_context(){
+    public void includes_context() {
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
         );
@@ -107,7 +106,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void includes_public_context_only_if_fetching_public_only_centers(){
+    public void includes_public_context_only_if_fetching_public_only_centers() {
         vertexA.makePublic();
         vertexB.makePublic();
         centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -135,7 +134,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void returns_number_of_references_of_center_metas(){
+    public void returns_number_of_references_of_center_metas() {
         IdentifierPojo meta = vertexA.addMeta(
                 modelTestScenarios.person()
         ).values().iterator().next();
@@ -146,8 +145,8 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
                 user
         ).getPublicAndPrivate();
         CenterGraphElementPojo centerMeta = null;
-        for(CenterGraphElementPojo centerGraphElement: centerGraphElements){
-            if(UserUris.isUriOfAnIdentifier(centerGraphElement.getGraphElement().uri())){
+        for (CenterGraphElementPojo centerGraphElement : centerGraphElements) {
+            if (UserUris.isUriOfAnIdentifier(centerGraphElement.getGraphElement().uri())) {
                 centerMeta = centerGraphElement;
             }
         }
@@ -180,10 +179,40 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         );
         centers = centerGraphElementsOperatorFactory.forUser(
                 user
-        ).getPublicAndPrivateWithLimit(1);
+        ).getPublicAndPrivateWithLimitAndSkip(1, 0);
         assertThat(
                 centers.size(),
                 Matchers.is(1)
+        );
+    }
+
+    @Test
+    public void can_paginate() {
+        CenterGraphElementOperator centerA = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        centerA.updateLastCenterDate();
+        centerA.incrementNumberOfVisits();
+
+        CenterGraphElementOperator centerB = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        );
+        centerB.updateLastCenterDate();
+        centerB.incrementNumberOfVisits();
+
+        CenterGraphElementPojo center = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivateWithLimitAndSkip(1, 0).iterator().next();
+        assertThat(
+                center.getGraphElement().label(),
+                Matchers.is("vertex B")
+        );
+        center = centerGraphElementsOperatorFactory.forUser(
+                user
+        ).getPublicAndPrivateWithLimitAndSkip(1, 1).iterator().next();
+        assertThat(
+                center.getGraphElement().label(),
+                Matchers.is("vertex A")
         );
     }
 }
