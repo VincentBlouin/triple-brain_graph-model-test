@@ -67,9 +67,6 @@ public class ModelTestResources {
     protected Session session;
 
     @Inject
-    protected GraphFactory graphMaker;
-
-    @Inject
     public ModelTestScenarios modelTestScenarios;
 
     @Inject

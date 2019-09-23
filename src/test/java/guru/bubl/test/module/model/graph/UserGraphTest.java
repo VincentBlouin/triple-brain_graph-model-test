@@ -736,7 +736,7 @@ public class UserGraphTest extends ModelTestResources {
                 is(vertexA)
         );
     }
-    
+
     @Test
     public void nb_public_neighbors_is_included() {
         vertexB.makePublic();
@@ -993,6 +993,27 @@ public class UserGraphTest extends ModelTestResources {
         assertThat(
                 subGraph.edges().size(),
                 is(1)
+        );
+    }
+
+    @Test
+    public void returns_is_a_pattern_or_not() {
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                vertexB.uri()
+        );
+        Vertex vertexBInSubGraph = subGraph.vertexWithIdentifier(vertexB.uri());
+        assertFalse(
+                vertexBInSubGraph.isPattern()
+        );
+        vertexB.makePattern();
+        subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                vertexB.uri()
+        );
+        vertexBInSubGraph = subGraph.vertexWithIdentifier(vertexB.uri());
+        assertTrue(
+                vertexBInSubGraph.isPattern()
         );
     }
 
