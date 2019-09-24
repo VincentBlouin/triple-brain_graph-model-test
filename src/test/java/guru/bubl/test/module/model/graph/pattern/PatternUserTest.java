@@ -25,9 +25,6 @@ import static org.junit.Assert.*;
 
 public class PatternUserTest extends ModelTestResources {
 
-    @Inject
-    PatternUserFactory patternUserFactory;
-
     @Test
     public void can_clone() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();

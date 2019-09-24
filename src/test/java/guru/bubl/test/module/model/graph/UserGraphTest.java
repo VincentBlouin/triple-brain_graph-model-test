@@ -27,7 +27,6 @@ import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.Is;
-import org.joda.time.DateTime;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -998,22 +997,39 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void returns_is_a_pattern_or_not() {
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                1,
-                vertexB.uri()
+        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+                vertexB.uri(),
+                ShareLevel.allShareLevels
         );
         Vertex vertexBInSubGraph = subGraph.vertexWithIdentifier(vertexB.uri());
         assertFalse(
                 vertexBInSubGraph.isPattern()
         );
         vertexB.makePattern();
-        subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                1,
-                vertexB.uri()
+        subGraph = userGraph.aroundVertexUriInShareLevels(
+                vertexB.uri(),
+                ShareLevel.allShareLevels
         );
         vertexBInSubGraph = subGraph.vertexWithIdentifier(vertexB.uri());
         assertTrue(
                 vertexBInSubGraph.isPattern()
+        );
+    }
+
+    @Test
+    public void returns_pattern_uri() {
+        vertexB.makePattern();
+        URI newUri = patternUserFactory.forUserAndPatternUri(
+                user,
+                vertexB.uri()
+        ).use();
+        Vertex newCenter = userGraph.aroundVertexUriInShareLevels(
+                newUri,
+                ShareLevel.allShareLevels
+        ).vertexWithIdentifier(newUri);
+        assertEquals(
+                newCenter.getPatternUri(),
+                vertexB.uri()
         );
     }
 

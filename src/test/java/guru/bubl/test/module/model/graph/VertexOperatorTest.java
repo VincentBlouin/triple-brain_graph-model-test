@@ -4,27 +4,26 @@
 
 package guru.bubl.test.module.model.graph;
 
-import guru.bubl.module.model.User;
+import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.UserUris;
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.Triple;
-import guru.bubl.module.model.graph.edge.EdgePojo;
-import guru.bubl.module.model.graph.identification.Identifier;
-import guru.bubl.module.model.graph.identification.IdentificationFactory;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
-import guru.bubl.module.model.test.scenarios.TestScenarios;
-import guru.bubl.test.module.utils.ModelTestResources;
+import guru.bubl.module.model.graph.edge.EdgePojo;
+import guru.bubl.module.model.graph.identification.IdentificationFactory;
+import guru.bubl.module.model.graph.identification.Identifier;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
+import guru.bubl.module.model.suggestion.Suggestion;
+import guru.bubl.module.model.suggestion.SuggestionPojo;
+import guru.bubl.module.model.test.scenarios.TestScenarios;
+import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.core.Is;
 import org.junit.Ignore;
 import org.junit.Test;
-import guru.bubl.module.model.FriendlyResource;
-import guru.bubl.module.model.suggestion.Suggestion;
-import guru.bubl.module.model.suggestion.SuggestionPojo;
 
 import javax.inject.Inject;
 import java.net.URI;
@@ -38,7 +37,8 @@ import static junit.framework.Assert.fail;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 
 
 public class VertexOperatorTest extends ModelTestResources {
@@ -1188,6 +1188,23 @@ public class VertexOperatorTest extends ModelTestResources {
                 vertexC.getNbFriendNeighbors(),
                 is(1)
         );
+    }
+
+    @Test
+    public void make_pattern_makes_connected_nodes_public() {
+        assertFalse(vertexC.isPublic());
+        vertexA.makePattern();
+        assertTrue(vertexC.isPublic());
+    }
+
+    @Test
+    public void make_pattern_does_not_make_public_a_vertex_that_shares_a_tag_with_a_connected_vertex() {
+        vertexC.getEdgeThatLinksToDestinationVertex(vertexB).remove();
+        vertexC.addMeta(modelTestScenarios.computerScientistType());
+        vertexB.addMeta(modelTestScenarios.computerScientistType());
+        assertFalse(vertexC.isPublic());
+        vertexA.makePattern();
+        assertFalse(vertexC.isPublic());
     }
 
     private Set<Edge> edgeBetweenBAndCInSet() {

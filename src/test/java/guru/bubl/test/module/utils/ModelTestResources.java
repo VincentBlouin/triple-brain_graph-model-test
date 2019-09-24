@@ -16,6 +16,7 @@ import guru.bubl.module.model.graph.edge.EdgeFactory;
 import guru.bubl.module.model.graph.edge.EdgePojo;
 import guru.bubl.module.model.graph.identification.IdentificationFactory;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.graph.pattern.PatternUserFactory;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.subgraph.SubGraphForker;
 import guru.bubl.module.model.graph.subgraph.SubGraphForkerFactory;
@@ -101,6 +102,9 @@ public class ModelTestResources {
 
     @Inject
     SubGraphForkerFactory subGraphForkerFactory;
+
+    @Inject
+    protected PatternUserFactory patternUserFactory;
 
     @Inject
     protected UserRepository userRepository;
