@@ -903,6 +903,27 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+    public void includes_children_indexes_for_tags() {
+        IdentifierPojo computerScientist = vertexB.addMeta(
+                modelTestScenarios.computerScientistType()
+        ).values().iterator().next();
+        vertexC.addMeta(
+                computerScientist
+        );
+        identificationFactory.withUri(
+                computerScientist.uri()
+        ).setChildrenIndex("test children indexes");
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                computerScientist.uri()
+        );
+        assertThat(
+                subGraph.getChildrenIndexesCenterTag(),
+                is("test children indexes")
+        );
+    }
+
+    @Test
     public void include_colors() {
         vertexB.setColors("blue");
         SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(

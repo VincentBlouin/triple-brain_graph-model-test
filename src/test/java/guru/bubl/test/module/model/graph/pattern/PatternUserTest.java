@@ -9,6 +9,7 @@ import guru.bubl.module.model.graph.pattern.PatternUserFactory;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.vertex.Vertex;
+import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.test.module.utils.ModelTestResources;
@@ -99,6 +100,31 @@ public class PatternUserTest extends ModelTestResources {
         assertThat(
                 edgeCloned.getOwnerUsername(),
                 is(anotherUser.username())
+        );
+    }
+
+    @Test
+    public void clones_deep() {
+        vertexA.label("apricot beer");
+        vertexC.label("cayman island");
+        vertexA.makePattern();
+        URI cloneUri = patternUserFactory.forUserAndPatternUri(
+                anotherUser,
+                vertexA.uri()
+        ).use();
+        SubGraphPojo subGraph = anotherUserGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                cloneUri
+        );
+        VertexInSubGraph vertexInSubGraph = getVertexWithLabel(subGraph, "vertex B");
+        assertThat(
+                vertexInSubGraph.getNumberOfConnectedEdges(),
+                is(2)
+        );
+        List<GraphElementSearchResult> results = graphSearch.searchForAllOwnResources("caymand island", anotherUser);
+        assertThat(
+                results.size(),
+                is(1)
         );
     }
 

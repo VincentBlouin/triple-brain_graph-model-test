@@ -23,6 +23,7 @@ import guru.bubl.module.model.graph.subgraph.SubGraphForkerFactory;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.vertex.Vertex;
+import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.meta.UserMetasOperatorFactory;
@@ -242,6 +243,16 @@ public class ModelTestResources {
                 ).getNbReferences(),
                 is(1)
         );
+    }
+
+    protected VertexInSubGraphPojo getVertexWithLabel(SubGraphPojo subGraph, String label) {
+        VertexInSubGraphPojo vertexWithLabel = null;
+        for (VertexInSubGraphPojo vertex : subGraph.vertices().values()) {
+            if (vertex.label().equals(label)) {
+                vertexWithLabel = vertex;
+            }
+        }
+        return vertexWithLabel;
     }
 
     protected SchemaOperator createSchema() {

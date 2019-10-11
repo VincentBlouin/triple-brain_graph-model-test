@@ -4,6 +4,7 @@
 
 package guru.bubl.test.module.model;
 
+import guru.bubl.module.model.graph.pattern.PatternUser;
 import guru.bubl.test.module.model.graph.UserGraphTest;
 import guru.bubl.test.module.model.graph.pattern.PatternUserTest;
 import guru.bubl.test.module.utils.ModelTestRunner;
