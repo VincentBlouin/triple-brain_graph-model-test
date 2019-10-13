@@ -40,6 +40,7 @@ import guru.bubl.module.neo4j_graph_manipulator.graph.search.GraphSearchNeo4j;
 import guru.bubl.module.repository.user.UserRepository;
 import org.junit.After;
 import org.junit.Before;
+import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.graphdb.Transaction;
 
@@ -66,7 +67,7 @@ public class ModelTestResources {
     protected FriendlyResourceFactory friendlyResourceFactory;
 
     @Inject
-    protected Session session;
+    protected Driver driver;
 
     @Inject
     public ModelTestScenarios modelTestScenarios;
@@ -262,8 +263,10 @@ public class ModelTestResources {
     }
 
     protected void removeAllUsers() {
-        session.run(
-                "MATCH (n:User) DETACH DELETE n"
-        );
+        try ( Session session = driver.session() ){
+            session.run(
+                    "MATCH (n:User) DETACH DELETE n"
+            );
+        }
     }
 }
