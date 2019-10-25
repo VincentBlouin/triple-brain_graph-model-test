@@ -128,6 +128,9 @@ public class ModelTestResources {
 
     protected UserGraph userGraph;
 
+    protected User thirdUser;
+    protected VertexOperator thirdUserVertex;
+
     @Before
     public void before() {
         ModelTestRunner.injector.injectMembers(this);
@@ -268,5 +271,16 @@ public class ModelTestResources {
                     "MATCH (n:User) DETACH DELETE n"
             );
         }
+    }
+
+    protected void setupThirdUser(){
+        thirdUser = User.withEmail(
+                "tres.usuario@example.org"
+        ).setUsername("tres").setPreferredLocales("[es]").password("12345678");
+        thirdUser = userRepository.createUser(thirdUser);
+        thirdUserVertex = vertexFactory.withUri(
+                neo4jUserGraphFactory.withUser(thirdUser).createVertex().uri()
+        );
+        thirdUserVertex.label("vértice");
     }
 }
