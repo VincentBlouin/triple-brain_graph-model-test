@@ -249,4 +249,23 @@ public class PatternUserTest extends ModelTestResources {
                 is(1)
         );
     }
+
+    @Test
+    public void does_not_clone_beyond_tags() {
+        vertexC.label("carrot");
+        vertexA.addMeta(modelTestScenarios.computerScientistType());
+        vertexB.addMeta(modelTestScenarios.computerScientistType());
+        vertexC.addMeta(modelTestScenarios.computerScientistType());
+        vertexB.makePattern();
+        vertexB.getEdgeThatLinksToDestinationVertex(vertexC).remove();
+        patternUserFactory.forUserAndPatternUri(
+                anotherUser,
+                vertexB.uri()
+        ).use();
+        List<GraphElementSearchResult> searchResults = graphSearch.searchForAllOwnResources("carrot", anotherUser);
+        assertThat(
+                searchResults.size(),
+                is(0)
+        );
+    }
 }
