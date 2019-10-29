@@ -217,6 +217,9 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     @Test
     public void relation_source_and_destination_vertex_label_and_uri_are_included_in_result() {
         indexGraph();
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA.getEdgeThatLinksToDestinationVertex(vertexB)
+        ).incrementNumberOfVisits();
         List<GraphElementSearchResult> relations = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
                 "between vertex A and B",
                 user
@@ -493,6 +496,9 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     @Test
     public void search_queries_can_have_special_characters() {
         vertexA.label("a test");
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        ).incrementNumberOfVisits();
         indexGraph();
         List<GraphElementSearchResult> vertices = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 "a\\(test*",
@@ -536,7 +542,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         );
         indexGraph();
         vertex = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                vertexA.label(),
+                "Azure",
                 user
         ).get(0).getGraphElementSearchResult().getGraphElement();
         assertThat(
@@ -768,7 +774,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         vertexC.makePublic();
         graphIndexer.indexVertex(vertexB);
         Map<URI, String> surroundVertices = graphSearch.searchPublicVerticesOnly(
-                "vertex Bareau"
+                "Bareau"
         ).iterator().next().getContext();
         assertThat(
                 surroundVertices.size(),
@@ -777,7 +783,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         vertexC.makePrivate();
         graphIndexer.indexVertex(vertexB);
         surroundVertices = graphSearch.searchPublicVerticesOnly(
-                "vertex Bareau"
+                "Bareau"
         ).iterator().next().getContext();
         assertThat(
                 surroundVertices.size(),
@@ -820,7 +826,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         );
         vertexA.addMeta(vertexBAsIdentifier);
         GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "vertex Bareau",
+                "Azure",
                 user
         ).iterator().next();
         assertThat(
@@ -838,7 +844,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         vertexA.addMeta(vertexBAsIdentifier);
         graphIndexer.indexVertex(vertexB);
         GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "vertex Bareau",
+                "Bareau",
                 user
         ).iterator().next();
         assertThat(
@@ -919,7 +925,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         ).values().iterator().next();
         graphIndexer.indexMeta(meta);
         GraphElementSearchResult searchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "Computer ",
+                "Computer",
                 user
         ).get(0);
         assertThat(

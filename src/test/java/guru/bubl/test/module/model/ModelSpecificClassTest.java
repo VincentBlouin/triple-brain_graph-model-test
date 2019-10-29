@@ -10,6 +10,8 @@ import guru.bubl.test.module.model.center_graph_element.CenterGraphElementsOpera
 import guru.bubl.test.module.model.graph.GraphElementOperatorTest;
 import guru.bubl.test.module.model.graph.UserGraphTest;
 import guru.bubl.test.module.model.graph.pattern.PatternUserTest;
+import guru.bubl.test.module.model.graph.search.GraphIndexerTest;
+import guru.bubl.test.module.model.graph.search.GraphSearchTest;
 import guru.bubl.test.module.utils.ModelTestRunner;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -17,6 +19,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        PatternUserTest.class
+        GraphIndexerTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}
