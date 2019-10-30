@@ -168,8 +168,9 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 modelTestScenarios.person()
         ).values().iterator().next();
         wholeGraphAdmin.reindexAll();
-        GraphElementSearchResult graphElementSearchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
-                "Person",
+        GraphElementSearchResult graphElementSearchResult = graphSearchFactory.usingSearchTerm(
+                "Person"
+        ).searchRelationsForAutoCompletionByLabel(
                 user
         ).iterator().next();
         assertTrue(

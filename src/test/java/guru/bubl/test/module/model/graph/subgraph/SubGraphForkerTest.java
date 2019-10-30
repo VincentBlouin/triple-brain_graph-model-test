@@ -33,8 +33,10 @@ public class SubGraphForkerTest extends ModelTestResources {
                 vertexB.uri(),
                 ShareLevel.allShareLevels
         );
-        List<GraphElementSearchResult> results = graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
-                "ananas", anotherUser
+        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm(
+                "ananas"
+        ).searchOnlyForOwnVerticesForAutoCompletionByLabel(
+                anotherUser
         );
         assertThat(
                 results.size(),
@@ -43,8 +45,10 @@ public class SubGraphForkerTest extends ModelTestResources {
         anotherUserForker.fork(
                 subGraph
         );
-        results = graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
-                "ananas", anotherUser
+        results = graphSearchFactory.usingSearchTerm(
+                "ananas"
+        ).searchOnlyForOwnVerticesForAutoCompletionByLabel(
+                anotherUser
         );
         assertThat(
                 results.size(),
@@ -180,8 +184,9 @@ public class SubGraphForkerTest extends ModelTestResources {
         );
         assertThat(
                 getOnlyVerticesInSearchResults(
-                        graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
-                                "barbe",
+                        graphSearchFactory.usingSearchTerm(
+                                "barbe"
+                        ).searchOnlyForOwnVerticesForAutoCompletionByLabel(
                                 anotherUser
                         )
                 ).size(),
@@ -190,8 +195,9 @@ public class SubGraphForkerTest extends ModelTestResources {
 
         assertThat(
                 getOnlyVerticesInSearchResults(
-                        graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
-                                "abracadaba",
+                        graphSearchFactory.usingSearchTerm(
+                                "abracadaba"
+                        ).searchOnlyForOwnVerticesForAutoCompletionByLabel(
                                 anotherUser
                         )
                 ).size(),
@@ -200,8 +206,9 @@ public class SubGraphForkerTest extends ModelTestResources {
 
         assertThat(
                 getOnlyVerticesInSearchResults(
-                        graphSearch.searchOnlyForOwnVerticesForAutoCompletionByLabel(
-                                "carcason",
+                        graphSearchFactory.usingSearchTerm(
+                                "carcason"
+                        ).searchOnlyForOwnVerticesForAutoCompletionByLabel(
                                 anotherUser
                         )
                 ).size(),

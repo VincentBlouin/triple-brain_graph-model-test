@@ -3,9 +3,7 @@ package guru.bubl.test.module.model.graph.pattern;
 import guru.bubl.module.model.graph.GraphElement;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.edge.EdgePojo;
 import guru.bubl.module.model.graph.identification.IdentifierPojo;
-import guru.bubl.module.model.graph.pattern.PatternUserFactory;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.vertex.Vertex;
@@ -13,15 +11,12 @@ import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.test.module.utils.ModelTestResources;
-import guru.bubl.test.module.utils.ModelTestScenarios;
 import org.junit.Test;
 
-import javax.inject.Inject;
 import java.net.URI;
-import java.util.Iterator;
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 public class PatternUserTest extends ModelTestResources {
@@ -35,7 +30,7 @@ public class PatternUserTest extends ModelTestResources {
         );
         vertexB.label("maple syrup");
         vertexB.makePattern();
-        List<GraphElementSearchResult> results = graphSearch.searchForAllOwnResources("maple syrup", user);
+        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm("maple syrup").searchForAllOwnResources(user);
         assertThat(
                 results.size(),
                 is(1)
@@ -44,7 +39,7 @@ public class PatternUserTest extends ModelTestResources {
                 user,
                 vertexB.uri()
         ).use();
-        results = graphSearch.searchForAllOwnResources("maple syrup", user);
+        results = graphSearchFactory.usingSearchTerm("maple syrup").searchForAllOwnResources(user);
         assertThat(
                 results.size(),
                 is(2)
@@ -60,7 +55,7 @@ public class PatternUserTest extends ModelTestResources {
     public void clones_have_their_own_uri() {
         vertexB.label("maple syrup");
         vertexB.makePattern();
-        List<GraphElementSearchResult> results = graphSearch.searchForAllOwnResources("maple syrup", user);
+        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm("maple syrup").searchForAllOwnResources(user);
         assertThat(
                 results.size(),
                 is(1)
@@ -70,7 +65,7 @@ public class PatternUserTest extends ModelTestResources {
                 vertexB.uri()
         ).use();
         vertexB.label("original B");
-        GraphElement clonedB = graphSearch.searchForAllOwnResources("maple syrup", user).iterator().next().getGraphElement();
+        GraphElement clonedB = graphSearchFactory.usingSearchTerm("maple syrup").searchForAllOwnResources(user).iterator().next().getGraphElement();
         assertNotEquals(
                 clonedB.uri(),
                 "null"
@@ -85,7 +80,7 @@ public class PatternUserTest extends ModelTestResources {
                 anotherUser,
                 vertexB.uri()
         ).use();
-        List<GraphElementSearchResult> results = graphSearch.searchForAllOwnResources("maple syrup", anotherUser);
+        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm("maple syrup").searchForAllOwnResources(anotherUser);
         URI clonedUri = results.iterator().next().getGraphElement().uri();
         SubGraphPojo subGraph = anotherUserGraph.graphWithDepthAndCenterBubbleUri(
                 1,
@@ -121,7 +116,7 @@ public class PatternUserTest extends ModelTestResources {
                 vertexInSubGraph.getNumberOfConnectedEdges(),
                 is(2)
         );
-        List<GraphElementSearchResult> results = graphSearch.searchForAllOwnResources("caymand island", anotherUser);
+        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm("caymand island").searchForAllOwnResources(anotherUser);
         assertThat(
                 results.size(),
                 is(1)
@@ -164,7 +159,7 @@ public class PatternUserTest extends ModelTestResources {
                 vertexB.uri()
         ).use();
         vertexB.label("original B");
-        GraphElement clonedVertexB = graphSearch.searchForAllOwnResources("maple syrup", user).get(0).getGraphElement();
+        GraphElement clonedVertexB = graphSearchFactory.usingSearchTerm("maple syrup").searchForAllOwnResources(user).get(0).getGraphElement();
         assertTrue(vertexB.isPattern());
         assertFalse(
                 vertexFactory.withUri(clonedVertexB.uri()).isPattern()
@@ -185,7 +180,7 @@ public class PatternUserTest extends ModelTestResources {
                 vertexB.uri()
         ).use();
         vertexA.label("original A");
-        GraphElement clonedVertexB = graphSearch.searchForAllOwnResources("apricot tree", user).get(0).getGraphElement();
+        GraphElement clonedVertexB = graphSearchFactory.usingSearchTerm("apricot tree").searchForAllOwnResources(user).get(0).getGraphElement();
         assertTrue(vertexA.isPublic());
         assertFalse(
                 vertexFactory.withUri(clonedVertexB.uri()).isPublic()
@@ -262,7 +257,7 @@ public class PatternUserTest extends ModelTestResources {
                 anotherUser,
                 vertexB.uri()
         ).use();
-        List<GraphElementSearchResult> searchResults = graphSearch.searchForAllOwnResources("carrot", anotherUser);
+        List<GraphElementSearchResult> searchResults = graphSearchFactory.usingSearchTerm("carrot").searchForAllOwnResources(anotherUser);
         assertThat(
                 searchResults.size(),
                 is(0)

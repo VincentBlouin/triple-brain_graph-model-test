@@ -34,16 +34,18 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void index_vertex_sets_its_private_surround_graph() {
-        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                vertexB.label(),
+        GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
+                vertexB.label()
+        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 user
         ).iterator().next();
         assertTrue(
                 vertexSearchResult.getContext().isEmpty()
         );
         graphIndexer.indexVertex(vertexB);
-        vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                vertexB.label(),
+        vertexSearchResult = graphSearchFactory.usingSearchTerm(
+                vertexB.label()
+        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 user
         ).iterator().next();
         assertFalse(
@@ -59,8 +61,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
             ).label("vertex " + i);
         }
         graphIndexer.indexVertex(vertexB);
-        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                vertexB.label(),
+        GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
+                vertexB.label()
+        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 user
         ).iterator().next();
         assertThat(
@@ -75,8 +78,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
             vertexB.addVertexAndRelation();
         }
         graphIndexer.indexVertex(vertexB);
-        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                vertexB.label(),
+        GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
+                vertexB.label()
+        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 user
         ).iterator().next();
         assertThat(
@@ -89,8 +93,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     public void context_can_have_quotes() {
         vertexA.label("\"some\" label");
         graphIndexer.indexVertex(vertexB);
-        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                vertexB.label(),
+        GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
+                vertexB.label()
+        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 user
         ).iterator().next();
         assertThat(
@@ -113,8 +118,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
             }
         }
         graphIndexer.indexVertex(vertexB);
-        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                vertexB.label(),
+        GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
+                vertexB.label()
+        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 user
         ).iterator().next();
         String[] context = vertexSearchResult.getContext().values().toArray(
@@ -139,8 +145,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     @Test
     public void surround_graph_does_not_include_all_vertices() {
         graphIndexer.indexVertex(vertexA);
-        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                vertexA.label(),
+        GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
+                vertexA.label()
+        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 user
         ).iterator().next();
         assertThat(
@@ -154,8 +161,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         vertexB.makePublic();
         vertexA.makePublic();
         graphIndexer.indexVertex(vertexB);
-        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                vertexB.label(),
+        GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
+                vertexB.label()
+        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 anotherUser
         ).iterator().next();
         assertThat(
@@ -164,8 +172,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         );
         vertexC.makePublic();
         graphIndexer.indexVertex(vertexB);
-        vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                vertexB.label(),
+        vertexSearchResult = graphSearchFactory.usingSearchTerm(
+                vertexB.label()
+        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 anotherUser
         ).iterator().next();
         assertFalse(
@@ -180,8 +189,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     @Test
     public void context_does_not_include_self_vertex() {
         graphIndexer.indexVertex(vertexB);
-        GraphElementSearchResult vertexSearchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                vertexB.label(),
+        GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
+                vertexB.label()
+        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 user
         ).iterator().next();
         assertFalse(
@@ -199,8 +209,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         graphIndexer.indexSchema(userGraph.schemaPojoWithUri(
                 schema.uri()
         ));
-        GraphElementSearchResult searchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "schema",
+        GraphElementSearchResult searchResult = graphSearchFactory.usingSearchTerm(
+                "schema"
+        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 user
         ).iterator().next();
         assertTrue(
@@ -211,8 +222,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         graphIndexer.indexSchema(userGraph.schemaPojoWithUri(
                 schema.uri()
         ));
-        searchResult = graphSearch.searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                "schema",
+        searchResult = graphSearchFactory.usingSearchTerm(
+                "schema"
+        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
                 user
         ).iterator().next();
         assertFalse(
@@ -223,16 +235,18 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     @Test
     public void index_relation_sets_source_and_destination_vertex_as_context() {
         EdgeOperator edgeAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
-        GraphElementSearchResult searchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
-                edgeAAndB.label(),
+        GraphElementSearchResult searchResult = graphSearchFactory.usingSearchTerm(
+                edgeAAndB.label()
+        ).searchRelationsForAutoCompletionByLabel(
                 user
         ).iterator().next();
         assertTrue(
                 searchResult.getContext().isEmpty()
         );
         graphIndexer.indexRelation(edgeAAndB);
-        searchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
-                edgeAAndB.label(),
+        searchResult = graphSearchFactory.usingSearchTerm(
+                edgeAAndB.label()
+        ).searchRelationsForAutoCompletionByLabel(
                 user
         ).iterator().next();
         assertTrue(
@@ -254,8 +268,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         EdgeOperator edgeAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         edgeAAndB.label("AAndB");
         graphIndexer.indexRelation(edgeAAndB);
-        GraphElementSearchResult searchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
-                edgeAAndB.label(),
+        GraphElementSearchResult searchResult = graphSearchFactory.usingSearchTerm(
+                edgeAAndB.label()
+        ).searchRelationsForAutoCompletionByLabel(
                 anotherUser
         ).iterator().next();
         assertFalse(
@@ -264,8 +279,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         vertexA.makePrivate();
         graphIndexer.indexRelation(edgeAAndB);
 
-        List<GraphElementSearchResult> graphElementSearchResults = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
-                edgeAAndB.label(),
+        List<GraphElementSearchResult> graphElementSearchResults = graphSearchFactory.usingSearchTerm(
+                edgeAAndB.label()
+        ).searchRelationsForAutoCompletionByLabel(
                 anotherUser
         );
         assertTrue(
@@ -285,8 +301,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         );
         GraphElementPojo propertyPojo = schemaPojo.getProperties().values().iterator().next();
         graphIndexer.indexProperty(propertyPojo, schemaPojo);
-        GraphElementSearchResult graphElementSearchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
-                "a property",
+        GraphElementSearchResult graphElementSearchResult = graphSearchFactory.usingSearchTerm(
+                "a property"
+        ).searchRelationsForAutoCompletionByLabel(
                 user
         ).iterator().next();
         assertTrue(
@@ -302,8 +319,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
                 modelTestScenarios.person()
         ).values().iterator().next();
         graphIndexer.indexMeta(meta);
-        GraphElementSearchResult graphElementSearchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
-                "Person",
+        GraphElementSearchResult graphElementSearchResult = graphSearchFactory.usingSearchTerm(
+                "Person"
+        ).searchRelationsForAutoCompletionByLabel(
                 user
         ).iterator().next();
         assertTrue(
@@ -320,8 +338,9 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
                 modelTestScenarios.toDo()
         ).values().iterator().next();
         graphIndexer.indexMeta(meta);
-        GraphElementSearchResult graphElementSearchResult = graphSearch.searchRelationsPropertiesSchemasForAutoCompletionByLabel(
-                "To do",
+        GraphElementSearchResult graphElementSearchResult = graphSearchFactory.usingSearchTerm(
+                "To do"
+        ).searchRelationsForAutoCompletionByLabel(
                 user
         ).iterator().next();
         assertTrue(

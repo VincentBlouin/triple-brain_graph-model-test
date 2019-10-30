@@ -27,6 +27,7 @@ import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.meta.UserMetasOperatorFactory;
+import guru.bubl.module.model.search.GraphSearchFactory;
 import guru.bubl.module.model.suggestion.SuggestionPojo;
 import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
@@ -94,7 +95,7 @@ public class ModelTestResources {
     protected GraphFactory graphFactory;
 
     @Inject
-    protected GraphSearchNeo4j graphSearch;
+    protected GraphSearchFactory graphSearchFactory;
 
     @Inject
     protected GraphIndexerNeo4j graphIndexer;
