@@ -1198,6 +1198,36 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+    public void make_pattern_updates_nb_vertices_of_private_nb_to_public() {
+        vertexC.setShareLevel(ShareLevel.FRIENDS);
+        assertThat(
+                vertexB.getNbFriendNeighbors(),
+                is(1)
+        );
+        assertThat(
+                vertexB.getNumberOfConnectedEdges(),
+                is(2)
+        );
+        assertThat(
+                vertexB.getNbPublicNeighbors(),
+                is(0)
+        );
+        vertexA.makePattern();
+        assertThat(
+                vertexB.getNbFriendNeighbors(),
+                is(0)
+        );
+        assertThat(
+                vertexB.getNumberOfConnectedEdges(),
+                is(2)
+        );
+        assertThat(
+                vertexB.getNbPublicNeighbors(),
+                is(2)
+        );
+    }
+
+    @Test
     public void make_pattern_does_not_make_public_a_vertex_that_shares_a_tag_with_a_connected_vertex() {
         vertexC.getEdgeThatLinksToDestinationVertex(vertexB).remove();
         vertexC.addMeta(modelTestScenarios.computerScientistType());
