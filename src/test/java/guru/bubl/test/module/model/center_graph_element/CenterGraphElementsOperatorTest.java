@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -448,6 +449,94 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         assertThat(
                 centers.size(),
                 is(0)
+        );
+    }
+
+    @Test
+    public void returns_number_of_connected_edges() {
+        CenterGraphElementOperator vertexBCenter = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        );
+        vertexBCenter.updateLastCenterDate();
+        vertexBCenter.incrementNumberOfVisits();
+        CenterGraphElementPojo center = centerGraphElementsOperatorFactory.usingDefaultLimits().getPublicAndPrivateForOwner(
+                user
+        ).iterator().next();
+        assertThat(
+                center.getNumberOfConnectedEdges(),
+                is(2)
+        );
+    }
+
+    @Test
+    public void does_not_return_number_of_connected_edges_for_not_owned_vertices() {
+        vertexB.makePublic();
+        CenterGraphElementOperator vertexBCenter = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        );
+        vertexBCenter.updateLastCenterDate();
+        vertexBCenter.incrementNumberOfVisits();
+        CenterGraphElementPojo center = centerGraphElementsOperatorFactory.usingDefaultLimits().getPublicOfUser(
+                user
+        ).iterator().next();
+        assertThat(
+                center.getNumberOfConnectedEdges(),
+                is(nullValue())
+        );
+    }
+
+    @Test
+    public void returns_number_of_public() {
+        vertexB.makePublic();
+        vertexC.makePublic();
+        vertexA.setShareLevel(ShareLevel.FRIENDS);
+        CenterGraphElementOperator vertexBCenter = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        );
+        vertexBCenter.updateLastCenterDate();
+        vertexBCenter.incrementNumberOfVisits();
+        CenterGraphElementPojo center = centerGraphElementsOperatorFactory.usingDefaultLimits().getPublicOfUser(
+                user
+        ).iterator().next();
+        assertThat(
+                center.getNbPublicNeighbors(),
+                is(1)
+        );
+        assertThat(
+                center.getNbFriendNeighbors(),
+                is(nullValue())
+        );
+    }
+
+    @Test
+    public void returns_number_of_public_and_friends() {
+        FriendManager friendManager = friendManagerFactory.forUser(user);
+        friendManager.add(anotherUser);
+        friendManagerFactory.forUser(anotherUser).confirm(
+                user
+        );
+        vertexA.setShareLevel(ShareLevel.FRIENDS);
+        vertexB.setShareLevel(ShareLevel.FRIENDS);
+        vertexC.setShareLevel(ShareLevel.FRIENDS);
+        CenterGraphElementOperator vertexBCenter = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        );
+        vertexBCenter.updateLastCenterDate();
+        vertexBCenter.incrementNumberOfVisits();
+        CenterGraphElementPojo center = centerGraphElementsOperatorFactory.usingDefaultLimits().getFriendsFeedForUser(
+                anotherUser
+        ).iterator().next();
+        assertThat(
+                center.getNbFriendNeighbors(),
+                is(2)
+        );
+        assertThat(
+                center.getNbPublicNeighbors(),
+                is(0)
+        );
+        assertThat(
+                center.getNumberOfConnectedEdges(),
+                is(nullValue())
         );
     }
 }
