@@ -4,7 +4,6 @@
 
 package guru.bubl.test.module.utils;
 
-import guru.bubl.module.common_utils.NoEx;
 import guru.bubl.module.model.FriendlyResourceFactory;
 import guru.bubl.module.model.User;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperatorFactory;
@@ -14,8 +13,8 @@ import guru.bubl.module.model.graph.GraphFactory;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeFactory;
 import guru.bubl.module.model.graph.edge.EdgePojo;
-import guru.bubl.module.model.graph.identification.IdentificationFactory;
-import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.graph.tag.TagFactory;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.pattern.PatternUserFactory;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.subgraph.SubGraphForker;
@@ -23,10 +22,9 @@ import guru.bubl.module.model.graph.subgraph.SubGraphForkerFactory;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.vertex.Vertex;
-import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
-import guru.bubl.module.model.meta.UserMetasOperatorFactory;
+import guru.bubl.module.model.tag.UserTagsOperatorFactory;
 import guru.bubl.module.model.search.GraphSearchFactory;
 import guru.bubl.module.model.suggestion.SuggestionPojo;
 import guru.bubl.module.model.test.SubGraphOperator;
@@ -37,7 +35,6 @@ import guru.bubl.module.neo4j_graph_manipulator.graph.graph.WholeGraphNeo4j;
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.extractor.subgraph.SubGraphExtractorFactoryNeo4j;
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.vertex.VertexFactoryNeo4j;
 import guru.bubl.module.neo4j_graph_manipulator.graph.search.GraphIndexerNeo4j;
-import guru.bubl.module.neo4j_graph_manipulator.graph.search.GraphSearchNeo4j;
 import guru.bubl.module.repository.user.UserRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -47,7 +44,6 @@ import org.neo4j.graphdb.Transaction;
 
 import javax.inject.Inject;
 import java.net.URI;
-import java.sql.Statement;
 import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
@@ -56,7 +52,7 @@ import static org.junit.Assert.assertThat;
 public class ModelTestResources {
 
     @Inject
-    protected UserMetasOperatorFactory userMetasOperatorFactory;
+    protected UserTagsOperatorFactory userTagsOperatorFactory;
 
     @Inject
     protected CenterGraphElementOperatorFactory centerGraphElementOperatorFactory;
@@ -101,7 +97,7 @@ public class ModelTestResources {
     protected GraphIndexerNeo4j graphIndexer;
 
     @Inject
-    protected IdentificationFactory identificationFactory;
+    protected TagFactory tagFactory;
 
     @Inject
     SubGraphForkerFactory subGraphForkerFactory;
@@ -216,10 +212,10 @@ public class ModelTestResources {
     }
 
     protected void testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(GraphElementOperator graphElement) {
-        IdentifierPojo computerScientist = graphElement.addMeta(
+        TagPojo computerScientist = graphElement.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
-        IdentifierPojo personIdentification = graphElement.addMeta(
+        TagPojo personIdentification = graphElement.addMeta(
                 modelTestScenarios.person()
         ).values().iterator().next();
         vertexB.addMeta(
@@ -237,13 +233,13 @@ public class ModelTestResources {
         );
         graphElement.remove();
         assertThat(
-                identificationFactory.withUri(
+                tagFactory.withUri(
                         computerScientist.uri()
                 ).getNbReferences(),
                 is(0)
         );
         assertThat(
-                identificationFactory.withUri(
+                tagFactory.withUri(
                         personIdentification.uri()
                 ).getNbReferences(),
                 is(1)

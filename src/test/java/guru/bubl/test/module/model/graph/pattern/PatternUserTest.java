@@ -3,7 +3,7 @@ package guru.bubl.test.module.model.graph.pattern;
 import guru.bubl.module.model.graph.GraphElement;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.vertex.Vertex;
@@ -126,11 +126,11 @@ public class PatternUserTest extends ModelTestResources {
     @Test
     public void integrates_tags_into_user_own_tags() {
         vertexB.makePattern();
-        IdentifierPojo tag = new IdentifierPojo(
+        TagPojo tag = new TagPojo(
                 URI.create("/some-external-uri")
         );
         vertexA.addMeta(tag);
-        IdentifierPojo integratedTag = vertexOfAnotherUser.addMeta(
+        TagPojo integratedTag = vertexOfAnotherUser.addMeta(
                 tag
         ).values().iterator().next();
         assertThat(
@@ -142,7 +142,7 @@ public class PatternUserTest extends ModelTestResources {
                 vertexB.uri()
         ).use();
         assertThat(
-                identificationFactory.withUri(integratedTag.uri()).getNbReferences(),
+                tagFactory.withUri(integratedTag.uri()).getNbReferences(),
                 is(2)
         );
     }

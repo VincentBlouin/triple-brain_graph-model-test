@@ -14,7 +14,7 @@ import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.edge.EdgePojo;
 import guru.bubl.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
 import guru.bubl.module.model.graph.exceptions.NonExistingResourceException;
-import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.schema.Schema;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.schema.SchemaPojo;
@@ -197,7 +197,7 @@ public class UserGraphTest extends ModelTestResources {
         SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
         );
-        IdentifierPojo identification = subGraph.vertexWithIdentifier(
+        TagPojo identification = subGraph.vertexWithIdentifier(
                 vertexA.uri()
         ).getIdentifications().values().iterator().next();
         assertThat(
@@ -441,7 +441,7 @@ public class UserGraphTest extends ModelTestResources {
                 image1,
                 image2
         );
-        IdentifierPojo identification = modelTestScenarios.computerScientistType();
+        TagPojo identification = modelTestScenarios.computerScientistType();
         identification.setImages(
                 images
         );
@@ -644,13 +644,13 @@ public class UserGraphTest extends ModelTestResources {
         SchemaOperator schemaOperator = userGraph.schemaOperatorWithUri(
                 userGraph.createSchema().uri()
         );
-        IdentifierPojo createdComputerScientistType = schemaOperator.addMeta(
+        TagPojo createdComputerScientistType = schemaOperator.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
                 schemaOperator.uri()
         );
-        IdentifierPojo identificationPojo = schemaPojo.getIdentifications().values().iterator().next();
+        TagPojo identificationPojo = schemaPojo.getIdentifications().values().iterator().next();
         assertThat(
                 identificationPojo,
                 is(createdComputerScientistType)
@@ -679,14 +679,14 @@ public class UserGraphTest extends ModelTestResources {
                 userGraph.createSchema().uri()
         );
         GraphElementOperator createdProperty = schemaOperator.addProperty();
-        IdentifierPojo createdComputerScientistType = createdProperty.addMeta(
+        TagPojo createdComputerScientistType = createdProperty.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
                 schemaOperator.uri()
         );
         GraphElementPojo property = schemaPojo.getProperties().values().iterator().next();
-        IdentifierPojo identificationPojo = property.getIdentifications().values().iterator().next();
+        TagPojo identificationPojo = property.getIdentifications().values().iterator().next();
         assertThat(
                 identificationPojo,
                 is(createdComputerScientistType)
@@ -784,7 +784,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void can_extract_sub_graph_around_an_identifier() {
-        IdentifierPojo computerScientist = vertexB.addMeta(
+        TagPojo computerScientist = vertexB.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         vertexC.addMeta(
@@ -801,7 +801,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void it_does_not_fail_if_identifier_references_nothing() {
-        IdentifierPojo computerScientist = vertexB.addMeta(
+        TagPojo computerScientist = vertexB.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         vertexB.remove();
@@ -817,7 +817,7 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void sub_graph_around_an_identifier_related_to_relations_include_vertices_and_relations() {
         EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
-        IdentifierPojo toDo = edgeBetweenAAndB.addMeta(
+        TagPojo toDo = edgeBetweenAAndB.addMeta(
                 modelTestScenarios.toDo()
         ).values().iterator().next();
         EdgeOperator edgeBetweenBAndC = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
@@ -840,7 +840,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void sub_graph_around_an_identifier_to_a_vertex_does_not_include_the_source_vertex() {
-        IdentifierPojo human = vertexB.addMeta(
+        TagPojo human = vertexB.addMeta(
                 modelTestScenarios.human()
         ).values().iterator().next();
         SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
@@ -858,7 +858,7 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     @Ignore
     public void can_get_meta_center_from_user_graph() {
-        IdentifierPojo human = vertexB.addMeta(
+        TagPojo human = vertexB.addMeta(
                 modelTestScenarios.human()
         ).values().iterator().next();
         SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
@@ -874,10 +874,10 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void does_not_fail_if_identifier_does_not_have_images() {
-        IdentifierPojo identifierPojo = modelTestScenarios.human();
-        identifierPojo.images();
+        TagPojo tagPojo = modelTestScenarios.human();
+        tagPojo.images();
         vertexB.addMeta(
-                identifierPojo
+                tagPojo
         ).values().iterator().next();
         SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
                 1,
@@ -904,13 +904,13 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void includes_children_indexes_for_tags() {
-        IdentifierPojo computerScientist = vertexB.addMeta(
+        TagPojo computerScientist = vertexB.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         vertexC.addMeta(
                 computerScientist
         );
-        identificationFactory.withUri(
+        tagFactory.withUri(
                 computerScientist.uri()
         ).setChildrenIndex("test children indexes");
         SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
@@ -918,14 +918,14 @@ public class UserGraphTest extends ModelTestResources {
                 computerScientist.uri()
         );
         assertThat(
-                subGraph.getChildrenIndexesCenterTag(),
+                subGraph.getCenterMeta().getChildrenIndex(),
                 is("test children indexes")
         );
     }
 
     @Test
     public void tags_can_no_surrounding_graph_elements(){
-        IdentifierPojo computerScientist = vertexB.addMeta(
+        TagPojo computerScientist = vertexB.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         vertexB.removeIdentification(

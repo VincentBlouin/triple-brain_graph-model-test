@@ -8,7 +8,7 @@ import guru.bubl.module.model.center_graph_element.CenterGraphElement;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
 import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.core.Is;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class CenterGraphElementOperatorTest extends ModelTestResources {
 
     @Test
     public void can_get_center_elements_of_type_meta() {
-        IdentifierPojo meta = vertexA.addMeta(
+        TagPojo meta = vertexA.addMeta(
                 modelTestScenarios.person()
         ).values().iterator().next();
         List<CenterGraphElementPojo> centerGraphElements = centerGraphElementsOperatorFactory.usingDefaultLimits(

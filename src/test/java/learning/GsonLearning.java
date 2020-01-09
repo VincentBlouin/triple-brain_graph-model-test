@@ -6,7 +6,7 @@ package learning;
 
 import com.google.gson.Gson;
 import guru.bubl.test.module.utils.AdaptableGraphComponentTest;
-import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -24,7 +24,7 @@ public class GsonLearning extends AdaptableGraphComponentTest {
     @Test
     public void can_convert_vertex()throws Exception{
         Gson gson = new Gson();
-        IdentifierPojo timBernersLeePojo = modelTestScenarios.timBernersLee();
+        TagPojo timBernersLeePojo = modelTestScenarios.timBernersLee();
         vertexB.addMeta(
                 timBernersLeePojo
         );

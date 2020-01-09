@@ -4,16 +4,13 @@
 
 package guru.bubl.test.module.model.center_graph_element;
 
-import guru.bubl.module.model.User;
 import guru.bubl.module.model.UserUris;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
 import guru.bubl.module.model.friend.FriendManager;
 import guru.bubl.module.model.friend.FriendManagerFactory;
 import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.identification.IdentifierPojo;
-import guru.bubl.module.model.graph.vertex.Vertex;
-import guru.bubl.module.model.graph.vertex.VertexOperator;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -137,7 +134,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
 
     @Test
     public void returns_number_of_references_of_center_metas() {
-        IdentifierPojo meta = vertexA.addMeta(
+        TagPojo meta = vertexA.addMeta(
                 modelTestScenarios.person()
         ).values().iterator().next();
         centerGraphElementOperatorFactory.usingFriendlyResource(

@@ -12,8 +12,8 @@ import guru.bubl.module.model.graph.Triple;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.edge.EdgePojo;
-import guru.bubl.module.model.graph.identification.IdentificationFactory;
-import guru.bubl.module.model.graph.identification.Identifier;
+import guru.bubl.module.model.graph.tag.TagFactory;
+import guru.bubl.module.model.graph.tag.Tag;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
@@ -47,7 +47,7 @@ public class VertexOperatorTest extends ModelTestResources {
     VertexFactory vertexFactory;
 
     @Inject
-    IdentificationFactory identificationFactory;
+    TagFactory tagFactory;
 
     @Test
     public void can_update_label() {
@@ -277,7 +277,7 @@ public class VertexOperatorTest extends ModelTestResources {
                 user()
         );
         Edge edge = vertexA.acceptSuggestion(nameSuggestion);
-        Identifier identification = edge.getIdentifications().values().iterator().next();
+        Tag identification = edge.getIdentifications().values().iterator().next();
         assertThat(
                 identification.getExternalResourceUri(),
                 Is.is(nameSuggestion.getSameAs().uri())
@@ -346,7 +346,7 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void can_get_empty_list_after_removing_last_same_as() {
-        Identifier timBernersLee = vertexA.addMeta(
+        Tag timBernersLee = vertexA.addMeta(
                 modelTestScenarios.timBernersLee()
         ).values().iterator().next();
         assertFalse(vertexA.getIdentifications().isEmpty());
@@ -378,7 +378,7 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void can_assign_the_same_identification_to_2_vertices() {
-        Identifier timBernersLee = vertexA.addMeta(
+        Tag timBernersLee = vertexA.addMeta(
                 modelTestScenarios.timBernersLee()
         ).values().iterator().next();
         vertexB.addMeta(
@@ -405,7 +405,7 @@ public class VertexOperatorTest extends ModelTestResources {
         newVertex.label("Tim Berners Lee");
         assertTrue(newVertex.getIdentifications().isEmpty());
         newVertex.addMeta(modelTestScenarios.timBernersLee());
-        Identifier sameAs = newVertex.getIdentifications().values().iterator().next();
+        Tag sameAs = newVertex.getIdentifications().values().iterator().next();
         assertThat(
                 sameAs.getExternalResourceUri(),
                 is(
@@ -419,7 +419,7 @@ public class VertexOperatorTest extends ModelTestResources {
         assertFalse(vertexA.getIdentifications().containsKey(
                 modelTestScenarios.extraterrestrial().getExternalResourceUri()
         ));
-        Identifier ExtraTerrestrial = vertexA.addMeta(
+        Tag ExtraTerrestrial = vertexA.addMeta(
                 modelTestScenarios.extraterrestrial()
         ).values().iterator().next();
         assertTrue(vertexA.getIdentifications().containsKey(
@@ -951,7 +951,7 @@ public class VertexOperatorTest extends ModelTestResources {
                 user,
                 vertexA
         );
-        Identifier identification = identificationFactory.withUri(
+        Tag identification = tagFactory.withUri(
                 vertexAClone.getIdentifications().get(
                         vertexA.uri()
                 ).uri()
@@ -1256,7 +1256,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     private Boolean hasTypeWithExternalUri(Vertex vertex, URI externalUri) {
-        for (Identifier identification : vertex.getIdentifications().values()) {
+        for (Tag identification : vertex.getIdentifications().values()) {
             if (identification.getExternalResourceUri().equals(externalUri)) {
                 return true;
             }

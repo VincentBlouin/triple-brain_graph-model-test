@@ -4,11 +4,9 @@
 
 package guru.bubl.test.module.model.graph.meta;
 
-import guru.bubl.module.model.graph.identification.IdentificationOperator;
-import guru.bubl.module.model.graph.identification.Identifier;
-import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.graph.tag.TagOperator;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
-import guru.bubl.test.module.utils.ModelTestScenarios;
 import org.junit.Test;
 
 import java.net.URI;
@@ -18,37 +16,37 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
-public class IdentificationOperatorTest extends ModelTestResources {
+public class TagOperatorTest extends ModelTestResources {
 
     @Test
     public void can_set_number_of_references() {
-        IdentifierPojo identificationPojo = vertexA.addMeta(
+        TagPojo identificationPojo = vertexA.addMeta(
                 modelTestScenarios.tShirt()
         ).values().iterator().next();
-        IdentificationOperator identificationOperator = identificationFactory.withUri(
+        TagOperator tagOperator = tagFactory.withUri(
                 identificationPojo.uri()
         );
         assertThat(
-                identificationOperator.getNbReferences(),
+                tagOperator.getNbReferences(),
                 is(1)
         );
-        identificationOperator.setNbReferences(5);
+        tagOperator.setNbReferences(5);
         assertThat(
-                identificationOperator.getNbReferences(),
+                tagOperator.getNbReferences(),
                 is(5)
         );
     }
 
     @Test
     public void can_build_pojo() {
-        IdentifierPojo identificationPojo = vertexA.addMeta(
+        TagPojo identificationPojo = vertexA.addMeta(
                 modelTestScenarios.location()
         ).values().iterator().next();
         URI identifierUri = identificationPojo.uri();
-        IdentificationOperator identificationOperator = identificationFactory.withUri(
+        TagOperator tagOperator = tagFactory.withUri(
                 identifierUri
         );
-        identificationPojo = identificationOperator.buildPojo();
+        identificationPojo = tagOperator.buildPojo();
         assertThat(
                 identificationPojo.label(),
                 is("Location")
@@ -73,11 +71,11 @@ public class IdentificationOperatorTest extends ModelTestResources {
 
     @Test
     public void mergeTo_removes_tag() {
-        IdentifierPojo personFromFreebase = vertexA.addMeta(
+        TagPojo personFromFreebase = vertexA.addMeta(
                 modelTestScenarios.personFromFreebase()
         ).values().iterator().next();
 
-        IdentifierPojo personTag = vertexA.addMeta(
+        TagPojo personTag = vertexA.addMeta(
                 modelTestScenarios.person()
         ).values().iterator().next();
         assertTrue(
@@ -85,7 +83,7 @@ public class IdentificationOperatorTest extends ModelTestResources {
                         personFromFreebase.uri()
                 )
         );
-        identificationFactory.withUri(
+        tagFactory.withUri(
                 personFromFreebase.uri()
         ).mergeTo(personTag);
         assertFalse(
@@ -97,17 +95,17 @@ public class IdentificationOperatorTest extends ModelTestResources {
 
     @Test
     public void mergeTo_includes_tagged_graph_elements() {
-        IdentifierPojo personFromFreebase = vertexA.addMeta(
+        TagPojo personFromFreebase = vertexA.addMeta(
                 modelTestScenarios.personFromFreebase()
         ).values().iterator().next();
-        IdentifierPojo personTag = vertexB.addMeta(
+        TagPojo personTag = vertexB.addMeta(
                 modelTestScenarios.person()
         ).values().iterator().next();
         vertexC.addMeta(
                 personFromFreebase
         );
         assertThat(
-                identificationFactory.withUri(
+                tagFactory.withUri(
                         personTag.uri()
                 ).getNbReferences(),
                 is(1)
@@ -117,11 +115,11 @@ public class IdentificationOperatorTest extends ModelTestResources {
                         personTag.getExternalResourceUri()
                 )
         );
-        identificationFactory.withUri(
+        tagFactory.withUri(
                 personFromFreebase.uri()
         ).mergeTo(personTag);
         assertThat(
-                identificationFactory.withUri(
+                tagFactory.withUri(
                         personTag.uri()
                 ).getNbReferences(),
                 is(3)
@@ -137,17 +135,17 @@ public class IdentificationOperatorTest extends ModelTestResources {
     public void mergeTo_excludes_non_related_graph_elements() {
         vertexC.addMeta(modelTestScenarios.computerScientistType());
         vertexB.addVertexAndRelation();
-        IdentifierPojo personFromFreebase = vertexA.addMeta(
+        TagPojo personFromFreebase = vertexA.addMeta(
                 modelTestScenarios.personFromFreebase()
         ).values().iterator().next();
-        IdentifierPojo person = vertexB.addMeta(
+        TagPojo person = vertexB.addMeta(
                 modelTestScenarios.person()
         ).values().iterator().next();
-        identificationFactory.withUri(
+        tagFactory.withUri(
                 personFromFreebase.uri()
         ).mergeTo(person);
         assertThat(
-                identificationFactory.withUri(
+                tagFactory.withUri(
                         person.uri()
                 ).getNbReferences(),
                 is(2)

@@ -7,8 +7,8 @@ package guru.bubl.test.module.model.center_graph_element;
 import com.google.inject.Inject;
 import guru.bubl.module.model.WholeGraph;
 import guru.bubl.module.model.admin.WholeGraphAdmin;
-import guru.bubl.module.model.graph.identification.IdentificationOperator;
-import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.graph.tag.TagOperator;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
@@ -31,21 +31,21 @@ public class WholeGraphAdminTest extends ModelTestResources {
         vertexB.addMeta(
                 modelTestScenarios.possessionIdentification()
         );
-        IdentifierPojo identificationPojo = vertexA.addMeta(
+        TagPojo identificationPojo = vertexA.addMeta(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
-        identificationFactory.withUri(
+        tagFactory.withUri(
                 identificationPojo.uri()
         ).setNbReferences(5);
         assertThat(
-                identificationFactory.withUri(
+                tagFactory.withUri(
                         identificationPojo.uri()
                 ).getNbReferences(),
                 is(5)
         );
         wholeGraphAdmin.refreshNumberOfReferencesToAllIdentifications();
         assertThat(
-                identificationFactory.withUri(
+                tagFactory.withUri(
                         identificationPojo.uri()
                 ).getNbReferences(),
                 is(2)
@@ -54,11 +54,11 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
     @Test
     public void sets_number_of_reference_to_zero_for_meta_having_zero_references() {
-        IdentifierPojo meta = vertexB.addMeta(
+        TagPojo meta = vertexB.addMeta(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
         wholeGraphAdmin.refreshNumberOfReferencesToAllIdentifications();
-        IdentificationOperator metaOperator = identificationFactory.withUri(meta.uri());
+        TagOperator metaOperator = tagFactory.withUri(meta.uri());
         assertThat(
                 metaOperator.getNbReferences(),
                 is(1)
@@ -74,7 +74,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
     @Test
     public void can_remove_metas_having_zero_references() {
-        IdentifierPojo possessionMeta = vertexB.addMeta(
+        TagPojo possessionMeta = vertexB.addMeta(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
         vertexB.addMeta(

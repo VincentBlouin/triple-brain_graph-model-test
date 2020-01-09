@@ -6,7 +6,7 @@ package guru.bubl.test.module.model.graph.subgraph;
 
 import guru.bubl.module.model.graph.GraphElementType;
 import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.vertex.*;
 import guru.bubl.module.model.search.GraphElementSearchResult;
@@ -148,7 +148,7 @@ public class SubGraphForkerTest extends ModelTestResources {
     @Test
     public void identifications_are_included() {
         vertexOfAnotherUser.makePublic();
-        IdentifierPojo identifier = vertexOfAnotherUser.addMeta(
+        TagPojo identifier = vertexOfAnotherUser.addMeta(
                 modelTestScenarios.human()
         ).values().iterator().next();
         Vertex forkVertex = forker.fork(

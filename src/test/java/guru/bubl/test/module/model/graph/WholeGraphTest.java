@@ -6,8 +6,8 @@ package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
-import guru.bubl.module.model.graph.identification.IdentificationOperator;
-import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.graph.tag.TagOperator;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.test.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.Vertex;
@@ -149,16 +149,16 @@ public class WholeGraphTest extends ModelTestResources {
         VertexOperator anotherUserVertex = vertexFactory.withUri(
                 neo4jUserGraphFactory.withUser(anotherUser).createVertex().uri()
         );
-        IdentifierPojo anotherUserTag = anotherUserVertex.addMeta(
+        TagPojo anotherUserTag = anotherUserVertex.addMeta(
                 modelTestScenarios.book()
         ).values().iterator().next();
         VertexOperator newUserVertex = vertexFactory.withUri(
                 neo4jUserGraphFactory.withUser(user).createVertex().uri()
         );
-        IdentifierPojo newUserTag = newUserVertex.addMeta(
+        TagPojo newUserTag = newUserVertex.addMeta(
                 modelTestScenarios.person()
         ).values().iterator().next();
-        Set<IdentificationOperator> allUserTags = wholeGraph.getAllTagsOfUser(user);
+        Set<TagOperator> allUserTags = wholeGraph.getAllTagsOfUser(user);
         assertTrue(
                 allUserTags.contains(
                         newUserTag

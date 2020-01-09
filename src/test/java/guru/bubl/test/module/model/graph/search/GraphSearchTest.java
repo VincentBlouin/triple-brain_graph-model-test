@@ -6,7 +6,7 @@ package guru.bubl.test.module.model.graph.search;
 
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.graph.*;
-import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.schema.SchemaPojo;
 import guru.bubl.module.model.search.*;
@@ -886,7 +886,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void identifiers_are_included() {
-        IdentifierPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
+        TagPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
         vertexBAsIdentifier.setLabel(
                 "some identifier"
         );
@@ -904,7 +904,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void related_elements_do_not_include_the_identifier() {
-        IdentifierPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
+        TagPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
         vertexBAsIdentifier.setLabel(
                 "some identifier"
         );
@@ -923,7 +923,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void can_search_for_identifiers() {
-        IdentifierPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
+        TagPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
         vertexBAsIdentifier.setLabel(
                 "some identifier"
         );
@@ -941,7 +941,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void identifiers_have_their_external_uri() {
-        IdentifierPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
+        TagPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(vertexB);
         vertexBAsIdentifier.setLabel(
                 "some identifier"
         );
@@ -975,7 +975,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void meta_context_is_description_if_it_has_one() {
-        IdentifierPojo meta = vertexA.addMeta(
+        TagPojo meta = vertexA.addMeta(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
         graphIndexer.indexMeta(meta);
@@ -992,7 +992,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void meta_context_is_surround_elements_if_it_has_no_description() {
-        IdentifierPojo meta = vertexA.addMeta(
+        TagPojo meta = vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         graphIndexer.indexMeta(meta);

@@ -6,7 +6,7 @@ package guru.bubl.test.module.utils;
 
 import guru.bubl.module.model.User;
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
-import guru.bubl.module.model.graph.identification.IdentifierPojo;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.suggestion.Suggestion;
 import guru.bubl.module.model.suggestion.SuggestionPojo;
 
@@ -20,8 +20,8 @@ public class ModelTestScenarios {
     public static URI TYPE = URI.create("type");
     public static URI GENERIC = URI.create("generic");
 
-    public IdentifierPojo computerScientistType() {
-        return new IdentifierPojo(
+    public TagPojo computerScientistType() {
+        return new TagPojo(
                 URI.create(
                         "http://rdf.freebase.com/rdf/computer.computer_scientist"
                 ),
@@ -31,8 +31,8 @@ public class ModelTestScenarios {
         );
     }
 
-    public IdentifierPojo timBernersLee() {
-        return new IdentifierPojo(
+    public TagPojo timBernersLee() {
+        return new TagPojo(
                 URI.create(
                         "http://www.w3.org/People/Berners-Lee/card#i"
                 ),
@@ -42,8 +42,8 @@ public class ModelTestScenarios {
         );
     }
 
-    public IdentifierPojo creatorPredicate() {
-        return new IdentifierPojo(
+    public TagPojo creatorPredicate() {
+        return new TagPojo(
                 URI.create(
                         "http://purl.org/dc/terms/creator"
                 ),
@@ -52,14 +52,14 @@ public class ModelTestScenarios {
                 ));
     }
 
-    public IdentifierPojo possessionIdentification() {
+    public TagPojo possessionIdentification() {
         FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
                 "Possession"
         );
         friendlyResourcePojo.setComment(
                 "In law, possession is the control a person intentionally exercises toward a thing. In all cases, to possess something, a person must have an intention to possess it. A person may be in possession of some property. Like ownership, the possession of things is commonly regulated by states under property law."
         );
-        return new IdentifierPojo(
+        return new TagPojo(
                 URI.create(
                         "http://rdf.freebase.com/rdf/m/0613q"
                 ),
@@ -67,8 +67,8 @@ public class ModelTestScenarios {
         );
     }
 
-    public IdentifierPojo timBernersLeeInFreebase() {
-        return new IdentifierPojo(
+    public TagPojo timBernersLeeInFreebase() {
+        return new TagPojo(
                 URI.create(
                         "http://rdf.freebase.com/rdf/en/tim_berners-lee"
                 ),
@@ -78,8 +78,8 @@ public class ModelTestScenarios {
         );
     }
 
-    public IdentifierPojo extraterrestrial() {
-        return new IdentifierPojo(
+    public TagPojo extraterrestrial() {
+        return new TagPojo(
                 URI.create(
                         "http://rdf.example.org/extraterrestrial"
                 ),
@@ -89,8 +89,8 @@ public class ModelTestScenarios {
         );
     }
 
-    public IdentifierPojo human() {
-        return new IdentifierPojo(
+    public TagPojo human() {
+        return new TagPojo(
                 URI.create(
                         "/human"
                 ),
@@ -100,8 +100,8 @@ public class ModelTestScenarios {
         );
     }
 
-    public IdentifierPojo toDo() {
-        return new IdentifierPojo(
+    public TagPojo toDo() {
+        return new TagPojo(
                 URI.create(
                         "/to-do"
                 ),
@@ -111,8 +111,8 @@ public class ModelTestScenarios {
         );
     }
 
-    public IdentifierPojo person() {
-        return new IdentifierPojo(
+    public TagPojo person() {
+        return new TagPojo(
                 URI.create(
                         "http://xmlns.com/foaf/0.1/Person"
                 ),
@@ -122,8 +122,8 @@ public class ModelTestScenarios {
         );
     }
 
-    public IdentifierPojo personFromFreebase() {
-        return new IdentifierPojo(
+    public TagPojo personFromFreebase() {
+        return new TagPojo(
                 URI.create(
                         "http://rdf.freebase.com/rdf/people/person"
                 ),
@@ -133,14 +133,14 @@ public class ModelTestScenarios {
         );
     }
 
-    public IdentifierPojo location() {
+    public TagPojo location() {
         FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
                 "Location"
         );
         friendlyResourcePojo.setComment(
                 "The Location type is used for any topic with a fixed location on the planet Earth. It includes geographic features such as oceans and mountains, political entities like cities and man-made objects like buildings.Guidelines for filling in location properties:geolocation: the longitude and latitude (in decimal notation) of the feature, or of the geographical center (centroid) fo the feature.contains and contained by: these properties can be used to show spatial relationships between different locations, such as an island contained by a body of water (which is equivalent to saying the body of water contains the island), a state contained by a country, a mountain within the borders of a national park, etc. For geopolitical locations,   containment two levels up and down is the ideal minimum. For example, the next two levels up for the city of Detroit are Wayne County and the state of Michigan.adjoins: also used to show spatial relations, in this case between locations that share a border.USBG Name: A unique name given to geographic features within the U.S. and its territories by the United States Board on Geographic Names. More information can be found on their website. GNIS ID: A unique id given to geographic features within the U.S. and its territories by the United States Board on Geographic Names. GNIS stands for Geographic Names Information System. More information can be found on their website.GEOnet Feature ID: The UFI (Unique Feature ID) used by GeoNet for features outside of the United States. More information can be found on their website."
         );
-        return new IdentifierPojo(
+        return new TagPojo(
                 URI.create(
                         "http://rdf.freebase.com/rdf/m/01n7"
                 ),
@@ -148,8 +148,8 @@ public class ModelTestScenarios {
         );
     }
 
-    public IdentifierPojo event() {
-        return new IdentifierPojo(
+    public TagPojo event() {
+        return new TagPojo(
                 URI.create(
                         "http://rdf.freebase.com/rdf/time/event"
                 ),
@@ -159,14 +159,14 @@ public class ModelTestScenarios {
         );
     }
 
-    public IdentifierPojo tShirt() {
+    public TagPojo tShirt() {
         FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
                 "T-shirt"
         );
         friendlyResourcePojo.setComment(
                 "A T-shirt is a style of fabric shirt, named after the T shape of the body and sleeves."
         );
-        return new IdentifierPojo(
+        return new TagPojo(
                 URI.create(
                         "http://rdf.freebase.com/rdf/m/013s93"
                 ),
@@ -174,14 +174,14 @@ public class ModelTestScenarios {
         );
     }
 
-    public IdentifierPojo book(){
+    public TagPojo book(){
         FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
                 "Book"
         );
         friendlyResourcePojo.setComment(
                 "medium for a collection of words and/or pictures to represent knowledge or a fictional story, often manifested in bound paper and ink, or in e-books"
         );
-        return new IdentifierPojo(
+        return new TagPojo(
                 URI.create(
                         "https://www.wikidata.org/wiki/Q571"
                 ),
@@ -220,8 +220,8 @@ public class ModelTestScenarios {
         );
     }
 
-    public IdentifierPojo startDateIdentification() {
-        return new IdentifierPojo(
+    public TagPojo startDateIdentification() {
+        return new TagPojo(
                 URI.create(
                         "http://rdf.freebase.com/rdf/time/event/start_date"
                 ),
