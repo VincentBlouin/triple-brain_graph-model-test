@@ -924,6 +924,24 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+    public void tags_can_no_surrounding_graph_elements(){
+        IdentifierPojo computerScientist = vertexB.addMeta(
+                modelTestScenarios.computerScientistType()
+        ).values().iterator().next();
+        vertexB.removeIdentification(
+                computerScientist
+        );
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                computerScientist.uri()
+        );
+        assertThat(
+                subGraph.getCenterMeta().label(),
+                is("Computer Scientist")
+        );
+    }
+
+    @Test
     public void include_colors() {
         vertexB.setColors("blue");
         SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
