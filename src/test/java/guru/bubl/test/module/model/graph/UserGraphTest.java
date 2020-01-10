@@ -924,7 +924,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-    public void tags_can_no_surrounding_graph_elements(){
+    public void tags_can_have_no_surrounding_graph_elements() {
         TagPojo computerScientist = vertexB.addMeta(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
@@ -934,6 +934,22 @@ public class UserGraphTest extends ModelTestResources {
         SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
                 1,
                 computerScientist.uri()
+        );
+        assertThat(
+                subGraph.getCenterMeta().label(),
+                is("Computer Scientist")
+        );
+    }
+
+    @Test
+    public void center_tag_is_set_correctly_even_if_tag_shares_graph_element_with_another_tag() {
+        TagPojo tag = vertexB.addMeta(
+                modelTestScenarios.computerScientistType()
+        ).values().iterator().next();
+        vertexB.addMeta(modelTestScenarios.person());
+        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                tag.uri()
         );
         assertThat(
                 subGraph.getCenterMeta().label(),
