@@ -1127,6 +1127,21 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+    public void mergeTo_keeps_tags() {
+        vertexA.addMeta(modelTestScenarios.computerScientistType());
+        vertexC.addMeta(modelTestScenarios.human());
+        assertThat(
+                vertexA.getIdentifications().size(),
+                is(1)
+        );
+        vertexC.mergeTo(vertexA);
+        assertThat(
+                vertexA.getIdentifications().size(),
+                is(2)
+        );
+    }
+
+    @Test
     public void can_set_share_level() {
         assertThat(
                 vertexA.getShareLevel(),
