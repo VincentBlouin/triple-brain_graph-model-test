@@ -216,6 +216,25 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
+    public void includes_tags() {
+        CenterGraphElementOperator centerA = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        vertexA.addMeta(
+                modelTestScenarios.computerScientistType()
+        );
+        centerA.updateLastCenterDate();
+        centerA.incrementNumberOfVisits();
+        CenterGraphElementPojo center = centerGraphElementsOperatorFactory.usingLimitAndSkip(
+                1, 0
+        ).getPublicAndPrivateForOwner(user).iterator().next();
+        assertThat(
+                center.getGraphElement().getIdentifications().size(),
+                is(1)
+        );
+    }
+
+    @Test
     public void getting_all_public_does_not_return_private() {
         vertexA.makePublic();
         CenterGraphElementOperator centerA = centerGraphElementOperatorFactory.usingFriendlyResource(
