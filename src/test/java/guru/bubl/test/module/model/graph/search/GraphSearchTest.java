@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
 public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
-    public void can_use_parenthesis(){
+    public void can_use_parenthesis() {
         vertexA.label("z(arg");
         List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm(
                 "z(arg"
@@ -898,6 +898,28 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         ).iterator().next();
         assertThat(
                 vertexSearchResult.getGraphElement().getIdentifications().size(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void can_search_for_tags_only() {
+        vertexA.label("Computer Scientist");
+        vertexB.addMeta(
+                modelTestScenarios.computerScientistType()
+        );
+        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm(
+                "Computer Scientist"
+        ).searchForAllOwnResources(user);
+        assertThat(
+                results.size(),
+                is(2)
+        );
+        results = graphSearchFactory.usingSearchTerm(
+                "Computer Scientist"
+        ).searchOwnTagsForAutoCompletionByLabel(user);
+        assertThat(
+                results.size(),
                 is(1)
         );
     }
