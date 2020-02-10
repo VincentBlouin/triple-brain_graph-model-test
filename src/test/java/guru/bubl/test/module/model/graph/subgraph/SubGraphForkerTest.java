@@ -31,7 +31,7 @@ public class SubGraphForkerTest extends ModelTestResources {
         vertexA.makePublic();
         SubGraph subGraph = userGraph.aroundVertexUriInShareLevels(
                 vertexB.uri(),
-                ShareLevel.allShareLevels
+                ShareLevel.allShareLevelsInt
         );
         List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm(
                 "ananas"
@@ -61,10 +61,11 @@ public class SubGraphForkerTest extends ModelTestResources {
         vertexOfAnotherUser.makePublic();
         Integer numberOfVertices = numberOfVertices();
         forker.fork(
-                anotherUserGraph.aroundVertexUriInShareLevelsWithDepth(
+                anotherUserGraph.aroundVertexUriWithDepthInShareLevels(
                         vertexOfAnotherUser.uri(),
-                        ShareLevel.allShareLevels,
-                        0
+                        0,
+                        ShareLevel.allShareLevelsInt
+
                 )
         );
         assertThat(
@@ -82,7 +83,7 @@ public class SubGraphForkerTest extends ModelTestResources {
         newVertex.makePublic();
         SubGraph subGraph = userGraph.aroundVertexUriInShareLevels(
                 vertexOfAnotherUser.uri(),
-                ShareLevel.allShareLevels
+                ShareLevel.allShareLevelsInt
         );
         Integer numberOfEdges = numberOfEdges();
         forker.fork(
@@ -128,10 +129,10 @@ public class SubGraphForkerTest extends ModelTestResources {
     public void fork_is_identified_to_original() {
         vertexOfAnotherUser.makePublic();
         Vertex forkVertex = forker.fork(
-                anotherUserGraph.aroundVertexUriInShareLevelsWithDepth(
+                anotherUserGraph.aroundVertexUriWithDepthInShareLevels(
                         vertexOfAnotherUser.uri(),
-                        ShareLevel.allShareLevels,
-                        0
+                        0,
+                        ShareLevel.allShareLevelsInt
                 )
         ).values().iterator().next();
         VertexInSubGraphPojo vertex = userGraph.graphWithDepthAndCenterBubbleUri(
@@ -154,12 +155,12 @@ public class SubGraphForkerTest extends ModelTestResources {
         Vertex forkVertex = forker.fork(
                 anotherUserGraph.aroundVertexUriInShareLevels(
                         vertexOfAnotherUser.uri(),
-                        ShareLevel.allShareLevels
+                        ShareLevel.allShareLevelsInt
                 )
         ).values().iterator().next();
         VertexInSubGraphPojo vertex = userGraph.aroundVertexUriInShareLevels(
                 forkVertex.uri(),
-                ShareLevel.allShareLevels
+                ShareLevel.allShareLevelsInt
         ).vertices().values().iterator().next();
         assertTrue(
                 vertex.getIdentifications().containsKey(
@@ -179,7 +180,7 @@ public class SubGraphForkerTest extends ModelTestResources {
         anotherUserForker.fork(
                 userGraph.aroundVertexUriInShareLevels(
                         vertexB.uri(),
-                        ShareLevel.allShareLevels
+                        ShareLevel.allShareLevelsInt
                 )
         );
         assertThat(
@@ -222,10 +223,10 @@ public class SubGraphForkerTest extends ModelTestResources {
         Integer numberOfVerticesBefore = numberOfVertices();
         Integer numberOfEdgesBefore = numberOfEdges();
         forker.fork(
-                anotherUserGraph.aroundVertexUriInShareLevelsWithDepth(
+                anotherUserGraph.aroundVertexUriWithDepthInShareLevels(
                         vertexOfAnotherUser.uri(),
-                        ShareLevel.allShareLevels,
-                        2
+                        2,
+                        ShareLevel.allShareLevelsInt
                 )
         );
         assertThat(
@@ -244,7 +245,7 @@ public class SubGraphForkerTest extends ModelTestResources {
         Vertex vertex = forker.fork(
                 anotherUserGraph.aroundVertexUriInShareLevels(
                         vertexOfAnotherUser.uri(),
-                        ShareLevel.allShareLevels
+                        ShareLevel.allShareLevelsInt
                 )
         ).get(vertexOfAnotherUser.uri());
         VertexOperator forkedVertexOfAnotherUser = userGraph.vertexWithUri(

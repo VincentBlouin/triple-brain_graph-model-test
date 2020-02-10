@@ -10,6 +10,7 @@ import guru.bubl.test.module.model.center_graph_element.CenterGraphElementsOpera
 import guru.bubl.test.module.model.graph.GraphElementOperatorTest;
 import guru.bubl.test.module.model.graph.UserGraphTest;
 import guru.bubl.test.module.model.graph.VertexOperatorTest;
+import guru.bubl.test.module.model.graph.meta.TagOperatorTest;
 import guru.bubl.test.module.model.graph.pattern.PatternUserTest;
 import guru.bubl.test.module.model.graph.search.GraphIndexerTest;
 import guru.bubl.test.module.model.graph.search.GraphSearchTest;

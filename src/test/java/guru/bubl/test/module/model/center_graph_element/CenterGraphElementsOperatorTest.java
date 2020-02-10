@@ -13,6 +13,7 @@ import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -553,6 +554,25 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         assertThat(
                 center.getNumberOfConnectedEdges(),
                 is(nullValue())
+        );
+    }
+
+    @Test
+    public void private_tags_are_excluded_when_not_owned_centers(){
+        vertexA.makePublic();
+        CenterGraphElementOperator vertexACenter = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        vertexACenter.updateLastCenterDate();
+        vertexACenter.incrementNumberOfVisits();
+        vertexA.addMeta(
+                modelTestScenarios.person()
+        ).values().iterator().next();
+        CenterGraphElementPojo center = centerGraphElementsOperatorFactory.usingDefaultLimits().getPublicOfUser(
+                user
+        ).iterator().next();
+        assertTrue(
+                center.getGraphElement().getIdentifications().isEmpty()
         );
     }
 }

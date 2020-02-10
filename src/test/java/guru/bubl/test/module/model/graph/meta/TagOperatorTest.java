@@ -4,6 +4,7 @@
 
 package guru.bubl.test.module.model.graph.meta;
 
+import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.tag.TagOperator;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
@@ -154,6 +155,26 @@ public class TagOperatorTest extends ModelTestResources {
                 vertexC.getIdentifications().containsKey(
                         person.getExternalResourceUri()
                 )
+        );
+    }
+
+    @Test
+    public void can_set_share_level() {
+        URI tagUri = vertexA.addMeta(
+                modelTestScenarios.location()
+        ).values().iterator().next().uri();
+        assertThat(
+                tagFactory.withUri(
+                        tagUri
+                ).getShareLevel(),
+                is(ShareLevel.PRIVATE)
+        );
+        tagFactory.withUri(tagUri).setShareLevel(ShareLevel.FRIENDS);
+        assertThat(
+                tagFactory.withUri(
+                        tagUri
+                ).getShareLevel(),
+                is(ShareLevel.FRIENDS)
         );
     }
 }
