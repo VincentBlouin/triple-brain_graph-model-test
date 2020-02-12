@@ -24,6 +24,7 @@ import guru.bubl.module.model.graph.vertex.*;
 import guru.bubl.module.model.suggestion.Suggestion;
 import guru.bubl.module.model.suggestion.SuggestionOrigin;
 import guru.bubl.module.model.test.SubGraphOperator;
+import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.Is;
@@ -48,6 +49,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void can_get_graph_with_default_center_vertex() {
         SubGraph graph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
@@ -59,6 +61,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void can_get_graph_with_custom_center_vertex() {
         SubGraph graph = userGraph.graphWithDepthAndCenterBubbleUri(
@@ -72,6 +75,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void correct_edges_are_in_graph() {
         Edge betweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
@@ -92,6 +96,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void source_and_destination_vertex_are_in_edges() {
         Edge betweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
@@ -115,6 +120,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void elements_with_no_identifications_dont_have_identifications() {
         vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -128,7 +134,7 @@ public class UserGraphTest extends ModelTestResources {
         );
     }
 
-//    @Test ("Inculded vertices suspended feature")
+//    @Test   ("Inculded vertices suspended feature")
 //    public void elements_with_no_included_vertices_dont_have_included_vertices() {
 //        VertexOperator newVertex = vertexFactory.createFromGraphElements(
 //                vertexBAndC(),
@@ -149,6 +155,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void schemas_with_no_identifications_dont_have_identifications() {
         vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -162,6 +169,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void has_generic_identifications() {
         vertexA.addMeta(
@@ -179,6 +187,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void can_return_multiple_identifications_for_one_graph_element() {
         vertexA.addMeta(
@@ -198,6 +207,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void has_number_of_references_to_an_identification() {
         vertexA.addMeta(
                 modelTestScenarios.person()
@@ -215,6 +225,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void vertex_suggestions_have_their_properties_sub_graph() {
         vertexA.setSuggestions(
@@ -235,6 +246,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void suggestions_have_their_own_label() {
         vertexA.setSuggestions(
@@ -258,6 +270,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void has_suggestions_origin() {
         vertexA.setSuggestions(
@@ -307,6 +320,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void can_get_multiple_suggestions_in_sub_graph() {
         vertexA.setSuggestions(
                 suggestionsToMap(
@@ -326,7 +340,7 @@ public class UserGraphTest extends ModelTestResources {
         );
     }
 
-//    @Test ("Suspended feature")
+//    @Test   ("Suspended feature")
 //    public void has_included_vertices_and_edges() {
 //        VertexOperator newVertex = vertexFactory.createFromGraphElements(
 //                vertexBAndC(),
@@ -349,7 +363,7 @@ public class UserGraphTest extends ModelTestResources {
 //        );
 //    }
 
-//    @Test ("Suspended feature")
+//    @Test   ("Suspended feature")
 //    public void included_edges_have_source_and_destination_vertices() {
 //        VertexOperator newVertex = vertexFactory.createFromGraphElements(
 //                vertexBAndC(),
@@ -370,7 +384,7 @@ public class UserGraphTest extends ModelTestResources {
 //        );
 //    }
 
-//    @Test ("Suspended feature")
+//    @Test   ("Suspended feature")
 //    public void included_edges_only_hold_source_and_destination_vertex_uris() {
 //        Edge includedEdge = edgeBetweenBAndCInSet().iterator().next();
 //        Vertex includedEdgeSourceVertex = includedEdge.sourceVertex();
@@ -405,6 +419,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void has_vertices_images() {
         Image image1 = Image.withUrlForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
@@ -438,6 +453,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void has_identification_images() {
         Image image1 = Image.withUrlForSmallAndUriForBigger(
@@ -482,6 +498,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void can_get_circular_graph_with_default_center_vertex() {
         vertexC.addRelationToVertex(vertexA);
         SubGraph graph = userGraph.graphWithDepthAndCenterBubbleUri(
@@ -502,6 +519,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void can_get_a_limited_graph_with_default_center_vertex() throws Exception {
         SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
@@ -554,6 +572,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void can_get_sub_graph_of_source_vertex_of_center_vertex() {
         SubGraph subGraph;
         Edge newEdge = vertexA.addVertexAndRelation();
@@ -571,6 +590,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void can_get_sub_graph_of_source_vertex_of_center_vertex_having_also_a_circular_relation() {
         vertexC.addRelationToVertex(vertexA);
         Edge edgeGoingOutOfC = vertexC.addVertexAndRelation();
@@ -583,6 +603,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void with_a_depth_of_sub_vertices_of_zero_only_central_vertex_is_returned() {
         SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
@@ -603,6 +624,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void an_exception_is_thrown_when_getting_graph_with_default_center_vertex_with_negative_depth() {
         try {
             userGraph.graphWithDepthAndCenterBubbleUri(
@@ -617,6 +639,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void an_exception_is_thrown_when_getting_graph_with_custom_center_vertex_with_negative_depth() {
         try {
             userGraph.graphWithDepthAndCenterBubbleUri(-1, vertexB.uri());
@@ -627,6 +650,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void an_exception_is_thrown_when_getting_graph_with_non_existing_center_vertex() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
@@ -641,6 +665,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void can_create_new_vertex_out_of_nothing() {
         Vertex vertex = userGraph.createVertex();
         SubGraphOperator subGraph = wholeGraph();
@@ -649,12 +674,14 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void can_create_schema() {
         Schema schema = userGraph.createSchema();
         assertThat(schema.uri(), is(notNullValue()));
     }
 
     @Test
+
 
     public void can_get_schema() {
         Schema schema = userGraph.createSchema();
@@ -664,6 +691,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void schemas_have_their_identifications() {
         SchemaOperator schemaOperator = userGraph.schemaOperatorWithUri(
@@ -684,6 +712,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void schema_contains_its_properties() {
         SchemaOperator schemaOperator = userGraph.schemaOperatorWithUri(
                 userGraph.createSchema().uri()
@@ -700,6 +729,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void schema_properties_includes_their_identifications() {
         SchemaOperator schemaOperator = userGraph.schemaOperatorWithUri(
@@ -722,6 +752,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void vertex_details_are_not_included_in_edge_source_and_destination_vertex() {
         SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
@@ -739,6 +770,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void changing_edge_source_vertex_reflects_in_getting_subgraph() {
         EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
@@ -767,6 +799,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void nb_public_neighbors_is_included() {
         vertexB.makePublic();
         SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
@@ -790,6 +823,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void nb_friends_is_included() {
         vertexB.setShareLevel(ShareLevel.FRIENDS);
@@ -815,6 +849,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void can_extract_sub_graph_around_an_identifier() {
         TagPojo computerScientist = vertexB.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -832,6 +867,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void includes_tag_share_level() {
         TagPojo computerScientist = vertexB.addMeta(
@@ -866,6 +902,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void excludes_tag_not_in_same_share_level() {
         vertexB.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -885,6 +922,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void it_does_not_fail_if_identifier_references_nothing() {
         TagPojo computerScientist = vertexB.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -900,6 +938,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void sub_graph_around_an_identifier_related_to_relations_include_vertices_and_relations() {
         EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
@@ -926,6 +965,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void sub_graph_around_an_identifier_to_a_vertex_does_not_include_the_source_vertex() {
         TagPojo human = vertexB.addMeta(
                 modelTestScenarios.human()
@@ -944,6 +984,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void can_get_meta_center_from_user_graph() {
         TagPojo human = vertexB.addMeta(
                 modelTestScenarios.human()
@@ -961,6 +1002,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void does_not_fail_if_identifier_does_not_have_images() {
         TagPojo tagPojo = modelTestScenarios.human();
         tagPojo.images();
@@ -975,6 +1017,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void includes_children_indexes() {
         vertexB.setChildrenIndex(
@@ -992,6 +1035,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void includes_children_indexes_for_tags() {
         TagPojo computerScientist = vertexB.addMeta(
@@ -1015,6 +1059,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void tags_can_have_no_surrounding_graph_elements() {
         TagPojo computerScientist = vertexB.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -1034,6 +1079,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
 
+
     public void center_tag_is_set_correctly_even_if_tag_shares_graph_element_with_another_tag() {
         TagPojo tag = vertexB.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -1050,6 +1096,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+
     public void excludes_edges_around_tag_when_destination_or_source_vertex_is_private() {
         EdgeOperator bToCEdge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
         TagPojo tag = bToCEdge.addMeta(
@@ -1076,13 +1123,83 @@ public class UserGraphTest extends ModelTestResources {
         assertTrue(
                 subGraph.edges().isEmpty()
         );
-        assertTrue(
-                subGraph.vertices().isEmpty()
+        assertThat(
+                subGraph.vertices().size(),
+                is(1)
         );
     }
 
     @Test
+    public void include_edges_around_tag_when_destination_and_source_vertex_are_public() {
+        EdgeOperator bToCEdge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
+        TagPojo tag = bToCEdge.addMeta(
+                modelTestScenarios.person()
+        ).values().iterator().next();
+        edgeFactory.withUri(
+                vertexB.addVertexAndRelation().uri()
+        ).addMeta(
+                tag
+        );
+        vertexB.makePublic();
+        vertexC.makePublic();
+        tagFactory.withUri(
+                tag.uri()
+        ).setShareLevel(ShareLevel.PUBLIC);
+        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+                tag.uri(),
+                ShareLevel.PUBLIC.getIndex(),
+                ShareLevel.PUBLIC_WITH_LINK.getIndex()
+        );
+        assertThat(
+                subGraph.getCenterMeta().label(),
+                is("Person")
+        );
+        assertThat(
+                subGraph.edges().size(),
+                is(1)
+        );
+        assertThat(
+                subGraph.vertices().size(),
+                is(2)
+        );
+    }
 
+    @Test
+    public void include_edges_around_tag_when_destination_and_source_vertex_are_all_public() {
+        vertexA.remove();
+        EdgeOperator bToCEdge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
+        EdgeOperator newEdge = edgeFactory.withUri(
+                vertexB.addVertexAndRelation().uri()
+        );
+        TagPojo tag = newEdge.addMeta(
+                TestScenarios.identificationFromFriendlyResource(bToCEdge)
+        ).values().iterator().next();
+        newEdge.destinationVertex().makePublic();
+        vertexB.makePublic();
+        vertexC.makePublic();
+        tagFactory.withUri(
+                tag.uri()
+        ).setShareLevel(ShareLevel.PUBLIC);
+        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+                tag.uri(),
+                ShareLevel.PUBLIC.getIndex(),
+                ShareLevel.PUBLIC_WITH_LINK.getIndex()
+        );
+        assertThat(
+                subGraph.getCenterMeta().label(),
+                is("between vertex B and vertex C")
+        );
+        assertThat(
+                subGraph.edges().size(),
+                is(2)
+        );
+        assertThat(
+                subGraph.vertices().size(),
+                is(3)
+        );
+    }
+
+    @Test
     public void include_colors() {
         vertexB.setColors("blue");
         SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
