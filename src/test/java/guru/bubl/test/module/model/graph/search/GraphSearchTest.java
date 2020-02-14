@@ -1162,4 +1162,18 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 is(ShareLevel.PUBLIC)
         );
     }
+
+    @Test
+    public void includes_colors() {
+        vertexA.setColors("colors");
+        GraphElementSearchResult searchResult = graphSearchFactory.usingSearchTermSkipAndLimit(
+                "vertex Azure",
+                0,
+                10
+        ).searchForAllOwnResources(user).iterator().next();
+        assertThat(
+                searchResult.getGraphElement().getColors(),
+                is("colors")
+        );
+    }
 }
