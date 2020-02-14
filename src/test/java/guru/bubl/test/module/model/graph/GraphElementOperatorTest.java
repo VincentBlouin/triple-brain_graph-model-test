@@ -175,7 +175,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
 
     @Test
     public void can_remove_self_identifier() {
-        TagPojo vertexBAsIdentifier = TestScenarios.identificationFromFriendlyResource(
+        TagPojo vertexBAsIdentifier = TestScenarios.tagFromFriendlyResource(
                 vertexB
         );
         TagPojo createdVertexBAsIdentifier = vertexA.addMeta(
@@ -289,7 +289,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     @Test
     public void graph_element_becomes_identified_to_itself_if_used_as_identifier() {
         TagPojo identification = vertexA.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         vertexB
                 )
         ).values().iterator().next();
@@ -308,7 +308,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     @Test
     public void when_identified_to_a_graph_element_the_number_of_references_to_the_new_identifier_is_2() {
         TagPojo identification = vertexA.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         vertexB
                 )
         ).values().iterator().next();
@@ -321,7 +321,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     @Test
     public void can_identify_to_an_identification_where_the_external_uri_is_the_identification_uri() {
         TagPojo vertexBAsIdentification = vertexA.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         vertexB
                 )
         ).values().iterator().next();
@@ -346,7 +346,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     @Test
     public void when_identifying_to_an_identification_the_uri_and_external_uri_are_set_correctly() {
         TagPojo vertexBAsIdentification = vertexA.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         vertexB
                 )
         ).values().iterator().next();
@@ -370,7 +370,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     @Test
     public void an_identification_does_identify_to_itself() {
         TagPojo vertexBAsIdentification = vertexA.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         vertexB
                 )
         ).values().iterator().next();
@@ -393,7 +393,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     @Test
     public void when_identifying_to_an_identification_the_number_of_references_increases_by_1() {
         TagPojo vertexBAsIdentification = vertexA.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         vertexB
                 )
         ).values().iterator().next();
@@ -413,7 +413,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     public void when_identifying_to_a_schema_the_number_of_references_for_first_identification_is_2_and_the_next_increase_by_1() {
         SchemaOperator schema = createSchema();
         TagPojo schemaAsIdentification = vertexA.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         schema
                 )
         ).values().iterator().next();
@@ -422,7 +422,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 is(2)
         );
         schemaAsIdentification = vertexB.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         schema
                 )
         ).values().iterator().next();
@@ -436,7 +436,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     public void when_identifying_to_a_schema_property_the_number_of_references_increases_by_1() {
         GraphElementOperator property = createSchema().addProperty();
         TagPojo propertyAsIdentification = vertexA.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         property
                 )
         ).values().iterator().next();
@@ -445,7 +445,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 is(2)
         );
         propertyAsIdentification = vertexB.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         property
                 )
         ).values().iterator().next();
@@ -465,7 +465,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 vertexC
         );
         edgeBetweenBAndC.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         edgeBetweenAAndB
                 )
         );
@@ -493,7 +493,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 vertexC
         );
         Map<URI, TagPojo> returnedIdentifiers = edgeBetweenBAndC.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         edgeBetweenAAndB
                 )
         );
@@ -521,7 +521,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 is(1)
         );
         personIdentification = vertexB.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         vertexA
                 )
         ).get(personIdentification.getExternalResourceUri());
@@ -544,7 +544,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 is(2)
         );
         personIdentification = vertexB.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         vertexA
                 )
         ).get(personIdentification.getExternalResourceUri());
@@ -560,7 +560,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
                 vertexB.getIdentifications().containsKey(vertexA.uri())
         );
         vertexB.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         vertexA
                 )
         );
@@ -572,7 +572,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     @Test
     public void can_keep_tag_removed_from_the_reference_after_tagging_to_it_again() {
         TagPojo vertexATag = vertexB.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         vertexA
                 )
         ).values().iterator().next();
@@ -600,7 +600,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     @Test
     public void removing_tag_from_the_reference_changes_the_external_uri_of_the_tag() {
         TagPojo vertexATag = vertexB.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         vertexA
                 )
         ).values().iterator().next();

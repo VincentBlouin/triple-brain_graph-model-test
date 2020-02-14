@@ -28,7 +28,6 @@ import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.Is;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -1172,7 +1171,7 @@ public class UserGraphTest extends ModelTestResources {
                 vertexB.addVertexAndRelation().uri()
         );
         TagPojo tag = newEdge.addMeta(
-                TestScenarios.identificationFromFriendlyResource(bToCEdge)
+                TestScenarios.tagFromFriendlyResource(bToCEdge)
         ).values().iterator().next();
         newEdge.destinationVertex().makePublic();
         vertexB.makePublic();

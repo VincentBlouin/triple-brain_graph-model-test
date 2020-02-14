@@ -123,7 +123,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
     @Test
     public void does_not_duplicate_identifications_when_re_adding_even_if_identification_is_a_graph_element() {
         vertexB.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         vertexA
                 )
         );

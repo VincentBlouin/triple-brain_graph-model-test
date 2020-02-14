@@ -364,7 +364,7 @@ public class VertexOperatorTest extends ModelTestResources {
                 )
         );
         vertexA.addMeta(
-                TestScenarios.identificationFromFriendlyResource(
+                TestScenarios.tagFromFriendlyResource(
                         vertexB
                 )
         );

@@ -405,7 +405,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     @Test
     public void can_use_as_tag_even_if_deleted() {
         EdgeOperator edgeAB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
-        TagPojo edgeABTag = TestScenarios.identificationFromFriendlyResource(
+        TagPojo edgeABTag = TestScenarios.tagFromFriendlyResource(
                 edgeAB
         );
         edgeAB.remove();
