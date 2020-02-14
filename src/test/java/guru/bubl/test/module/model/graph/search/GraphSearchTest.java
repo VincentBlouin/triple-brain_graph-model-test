@@ -1176,4 +1176,25 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 is("colors")
         );
     }
+    
+    @Test
+    public void includes_is_pattern() {
+        GraphElementSearchResult searchResult = graphSearchFactory.usingSearchTermSkipAndLimit(
+                "vertex Azure",
+                0,
+                10
+        ).searchForAllOwnResources(user).iterator().next();
+        assertFalse(
+                searchResult.isPattern()
+        );
+        vertexA.makePattern();
+        searchResult = graphSearchFactory.usingSearchTermSkipAndLimit(
+                "vertex Azure",
+                0,
+                10
+        ).searchForAllOwnResources(user).iterator().next();
+        assertTrue(
+                searchResult.isPattern()
+        );
+    }
 }
