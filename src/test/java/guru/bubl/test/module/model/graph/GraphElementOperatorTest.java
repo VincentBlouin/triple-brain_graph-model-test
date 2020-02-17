@@ -7,6 +7,7 @@ package guru.bubl.test.module.model.graph;
 import guru.bubl.module.model.Image;
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.GraphElementOperator;
+import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.tag.TagOperator;
 import guru.bubl.module.model.graph.tag.Tag;
 import guru.bubl.module.model.graph.tag.TagPojo;
@@ -15,6 +16,7 @@ import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.parboiled.common.StringUtils;
 
@@ -56,6 +58,27 @@ public class GraphElementOperatorTest extends ModelTestResources {
         );
         assertNotNull(
                 identification.lastModificationDate()
+        );
+    }
+
+    @Test
+    public void add_tag_returns_share_level() {
+        TagPojo tag = vertexA.addMeta(
+                modelTestScenarios.event()
+        ).values().iterator().next();
+        assertThat(
+                tag.getShareLevel(),
+                is(ShareLevel.PRIVATE)
+        );
+        tagFactory.withUri(
+                tag.uri()
+        ).setShareLevel(ShareLevel.PUBLIC);
+        tag = vertexB.addMeta(
+                modelTestScenarios.event()
+        ).values().iterator().next();
+        assertThat(
+                tag.getShareLevel(),
+                is(ShareLevel.PUBLIC)
         );
     }
 
