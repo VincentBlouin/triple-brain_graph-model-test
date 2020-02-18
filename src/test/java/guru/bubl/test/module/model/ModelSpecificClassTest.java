@@ -5,6 +5,7 @@
 package guru.bubl.test.module.model;
 
 import guru.bubl.module.model.graph.pattern.PatternUser;
+import guru.bubl.module.model.graph.tag.TagOperator;
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.GraphElementOperatorNeo4j;
 import guru.bubl.test.module.model.center_graph_element.CenterGraphElementOperatorTest;
 import guru.bubl.test.module.model.center_graph_element.CenterGraphElementsOperatorTest;
@@ -22,6 +23,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        GraphElementOperatorTest.class
+        TagOperatorTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}

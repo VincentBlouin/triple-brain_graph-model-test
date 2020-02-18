@@ -8,6 +8,7 @@ import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.tag.TagOperator;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.URI;
@@ -177,4 +178,31 @@ public class TagOperatorTest extends ModelTestResources {
                 is(ShareLevel.FRIENDS)
         );
     }
+
+//    @Test
+//    @Ignore("the complexisity of implementing this is not worth the value")
+//    public void cannot_change_share_level_when_connected_to_a_pattern() {
+//        TagPojo tag = vertexB.addMeta(
+//                modelTestScenarios.location()
+//        ).values().iterator().next();
+//        vertexA.makePattern();
+//        assertThat(
+//                tagFactory.withUri(
+//                        tag.uri()
+//                ).getShareLevel(),
+//                is(ShareLevel.PUBLIC)
+//        );
+//        Boolean success = tagFactory.withUri(
+//                tag.uri()
+//        ).setShareLevel(ShareLevel.PRIVATE);
+//        assertFalse(
+//                success
+//        );
+//        assertThat(
+//                tagFactory.withUri(
+//                        tag.uri()
+//                ).getShareLevel(),
+//                is(ShareLevel.PUBLIC)
+//        );
+//    }
 }
