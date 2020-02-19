@@ -182,6 +182,31 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    public void add_new_tag_share_level_is_private() {
+        TagPojo tag = modelTestScenarios.computerScientistType();
+        tag = vertexA.addMeta(
+                tag
+        ).values().iterator().next();
+        assertThat(
+                tag.getShareLevel(),
+                is(ShareLevel.PRIVATE)
+        );
+    }
+
+    @Test
+    public void add_new_tag_can_set_share_level() {
+        TagPojo tag = modelTestScenarios.computerScientistType();
+        tag.setShareLevel(ShareLevel.PUBLIC);
+        tag = vertexA.addMeta(
+                tag
+        ).values().iterator().next();
+        assertThat(
+                tag.getShareLevel(),
+                is(ShareLevel.PUBLIC)
+        );
+    }
+
+    @Test
     public void can_remove_identification_having_no_external_uri() {
         TagPojo identification = vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
