@@ -503,104 +503,108 @@ public class GraphElementOperatorTest extends ModelTestResources {
         );
     }
 
-    @Test
-    public void identifying_to_a_graph_element_also_identifies_to_its_identifiers() {
-        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
-        edgeBetweenAAndB.addMeta(
-                modelTestScenarios.possessionIdentification()
-        );
-        EdgeOperator edgeBetweenBAndC = vertexB.getEdgeThatLinksToDestinationVertex(
-                vertexC
-        );
-        edgeBetweenBAndC.addMeta(
-                TestScenarios.tagFromFriendlyResource(
-                        edgeBetweenAAndB
-                )
-        );
-        assertTrue(
-                edgeBetweenBAndC.getIdentifications().containsKey(edgeBetweenAAndB.uri())
-        );
-        assertTrue(
-                edgeBetweenBAndC.getIdentifications().containsKey(
-                        modelTestScenarios.possessionIdentification().getExternalResourceUri()
-                )
-        );
-        assertThat(
-                edgeBetweenBAndC.getIdentifications().size(),
-                is(2)
-        );
-    }
+//    @Test
+//    @Ignore("feature tagging to a graph element also tags to remote graph element tags")
+//    public void identifying_to_a_graph_element_also_identifies_to_its_identifiers() {
+//        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+//        edgeBetweenAAndB.addMeta(
+//                modelTestScenarios.possessionIdentification()
+//        );
+//        EdgeOperator edgeBetweenBAndC = vertexB.getEdgeThatLinksToDestinationVertex(
+//                vertexC
+//        );
+//        edgeBetweenBAndC.addMeta(
+//                TestScenarios.tagFromFriendlyResource(
+//                        edgeBetweenAAndB
+//                )
+//        );
+//        assertTrue(
+//                edgeBetweenBAndC.getIdentifications().containsKey(edgeBetweenAAndB.uri())
+//        );
+//        assertTrue(
+//                edgeBetweenBAndC.getIdentifications().containsKey(
+//                        modelTestScenarios.possessionIdentification().getExternalResourceUri()
+//                )
+//        );
+//        assertThat(
+//                edgeBetweenBAndC.getIdentifications().size(),
+//                is(2)
+//        );
+//    }
 
-    @Test
-    public void identifying_to_a_graph_element_that_has_multiple_identifiers_returns_them_all() {
-        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
-        edgeBetweenAAndB.addMeta(
-                modelTestScenarios.possessionIdentification()
-        );
-        EdgeOperator edgeBetweenBAndC = vertexB.getEdgeThatLinksToDestinationVertex(
-                vertexC
-        );
-        Map<URI, TagPojo> returnedIdentifiers = edgeBetweenBAndC.addMeta(
-                TestScenarios.tagFromFriendlyResource(
-                        edgeBetweenAAndB
-                )
-        );
-        assertTrue(
-                returnedIdentifiers.containsKey(edgeBetweenAAndB.uri())
-        );
-        assertTrue(
-                returnedIdentifiers.containsKey(
-                        modelTestScenarios.possessionIdentification().getExternalResourceUri()
-                )
-        );
-        assertThat(
-                returnedIdentifiers.size(),
-                is(2)
-        );
-    }
+//    @Test
+//    @Ignore("feature tagging to a graph element also tags to remote graph element tags")
+//    public void identifying_to_a_graph_element_that_has_multiple_identifiers_returns_them_all() {
+//        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+//        edgeBetweenAAndB.addMeta(
+//                modelTestScenarios.possessionIdentification()
+//        );
+//        EdgeOperator edgeBetweenBAndC = vertexB.getEdgeThatLinksToDestinationVertex(
+//                vertexC
+//        );
+//        Map<URI, TagPojo> returnedIdentifiers = edgeBetweenBAndC.addMeta(
+//                TestScenarios.tagFromFriendlyResource(
+//                        edgeBetweenAAndB
+//                )
+//        );
+//        assertTrue(
+//                returnedIdentifiers.containsKey(edgeBetweenAAndB.uri())
+//        );
+//        assertTrue(
+//                returnedIdentifiers.containsKey(
+//                        modelTestScenarios.possessionIdentification().getExternalResourceUri()
+//                )
+//        );
+//        assertThat(
+//                returnedIdentifiers.size(),
+//                is(2)
+//        );
+//    }
 
-    @Test
-    public void new_identifications_from_identifying_to_a_graph_element_that_has_multiple_identifiers_increments_their_number_of_references() {
-        TagPojo personIdentification = vertexA.addMeta(
-                modelTestScenarios.person()
-        ).values().iterator().next();
-        assertThat(
-                personIdentification.getNbReferences(),
-                is(1)
-        );
-        personIdentification = vertexB.addMeta(
-                TestScenarios.tagFromFriendlyResource(
-                        vertexA
-                )
-        ).get(personIdentification.getExternalResourceUri());
-        assertThat(
-                personIdentification.getNbReferences(),
-                is(2)
-        );
-    }
+//    @Test
+//    @Ignore("feature tagging to a graph element also tags to remote graph element tags")
+//    public void new_identifications_from_identifying_to_a_graph_element_that_has_multiple_identifiers_increments_their_number_of_references() {
+//        TagPojo personIdentification = vertexA.addMeta(
+//                modelTestScenarios.person()
+//        ).values().iterator().next();
+//        assertThat(
+//                personIdentification.getNbReferences(),
+//                is(1)
+//        );
+//        personIdentification = vertexB.addMeta(
+//                TestScenarios.tagFromFriendlyResource(
+//                        vertexA
+//                )
+//        ).get(personIdentification.getExternalResourceUri());
+//        assertThat(
+//                personIdentification.getNbReferences(),
+//                is(2)
+//        );
+//    }
 
-    @Test
-    public void identifying_to_a_graph_element_that_has_another_identification_that_shares_the_other_graph_element_does_not_increment_the_number_of_references() {
-        vertexA.addMeta(
-                modelTestScenarios.person()
-        );
-        TagPojo personIdentification = vertexB.addMeta(
-                modelTestScenarios.person()
-        ).values().iterator().next();
-        assertThat(
-                personIdentification.getNbReferences(),
-                is(2)
-        );
-        personIdentification = vertexB.addMeta(
-                TestScenarios.tagFromFriendlyResource(
-                        vertexA
-                )
-        ).get(personIdentification.getExternalResourceUri());
-        assertThat(
-                personIdentification.getNbReferences(),
-                is(2)
-        );
-    }
+//    @Test
+//    @Ignore("feature tagging to a graph element also tags to remote graph element tags")
+//    public void identifying_to_a_graph_element_that_has_another_identification_that_shares_the_other_graph_element_does_not_increment_the_number_of_references() {
+//        vertexA.addMeta(
+//                modelTestScenarios.person()
+//        );
+//        TagPojo personIdentification = vertexB.addMeta(
+//                modelTestScenarios.person()
+//        ).values().iterator().next();
+//        assertThat(
+//                personIdentification.getNbReferences(),
+//                is(2)
+//        );
+//        personIdentification = vertexB.addMeta(
+//                TestScenarios.tagFromFriendlyResource(
+//                        vertexA
+//                )
+//        ).get(personIdentification.getExternalResourceUri());
+//        assertThat(
+//                personIdentification.getNbReferences(),
+//                is(2)
+//        );
+//    }
 
     @Test
     public void when_identifying_to_graph_element_the_relation_type_is_correct() {
@@ -706,6 +710,27 @@ public class GraphElementOperatorTest extends ModelTestResources {
         vertexB.setChildrenIndex("test children indexes");
         assertTrue(
                 vertexB.getChildrenIndex().contains("test children indexes")
+        );
+    }
+
+    @Test
+    public void add_additional_self_tag_returns_identifications() {
+        TagPojo tag = TestScenarios.tagFromFriendlyResource(
+                vertexA
+        );
+        tag.setExternalResourceUri(
+                URI.create(tag.getExternalResourceUri() + "/" + UUID.randomUUID())
+        );
+        Map<URI, TagPojo> tags = vertexA.addMeta(
+                tag
+        );
+        assertThat(
+                tags.get(tag.getExternalResourceUri()),
+                is(notNullValue())
+        );
+        assertThat(
+                tags.get(tag.getExternalResourceUri()).uri(),
+                is(notNullValue())
         );
     }
 }
