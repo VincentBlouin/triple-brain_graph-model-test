@@ -287,6 +287,21 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
+    public void can_get_patterns_even_if_non_center() {
+        List centers = centerGraphElementsOperatorFactory.usingDefaultLimits().getAllPatterns();
+        assertThat(
+                centers.size(),
+                is(0)
+        );
+        vertexA.makePattern();
+        centers = centerGraphElementsOperatorFactory.usingDefaultLimits().getAllPatterns();
+        assertThat(
+                centers.size(),
+                is(1)
+        );
+    }
+
+    @Test
     public void can_get_for_friends() {
         vertexOfAnotherUser.setShareLevel(ShareLevel.FRIENDS);
         CenterGraphElementOperator centerOfAnotherUser = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -558,7 +573,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void private_tags_are_excluded_when_not_owned_centers(){
+    public void private_tags_are_excluded_when_not_owned_centers() {
         vertexA.makePublic();
         CenterGraphElementOperator vertexACenter = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
