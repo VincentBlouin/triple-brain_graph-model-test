@@ -116,10 +116,15 @@ public class PatternUserTest extends ModelTestResources {
                 vertexInSubGraph.getNumberOfConnectedEdges(),
                 is(2)
         );
-        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm("caymand island").searchForAllOwnResources(anotherUser);
+        subGraph = anotherUserGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                vertexInSubGraph.uri()
+        );
+
+        Vertex vertexC = getVertexWithLabel(subGraph, "cayman island");
         assertThat(
-                results.size(),
-                is(1)
+                vertexC.label(),
+                is("cayman island")
         );
     }
 

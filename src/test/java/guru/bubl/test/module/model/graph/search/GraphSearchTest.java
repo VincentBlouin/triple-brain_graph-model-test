@@ -24,7 +24,6 @@ import static org.junit.Assert.*;
 public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
     @Test
-
     public void can_use_parenthesis() {
         vertexA.label("z(arg");
         List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm(
@@ -39,7 +38,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-
     public void can_use_accent() {
         vertexC.label("tâche");
         List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm(
@@ -54,7 +52,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-
     public void search_queries_can_have_single_quotes() {
         vertexA.label("a'test");
         List<GraphElementSearchResult> vertices = graphSearchFactory.usingSearchTerm(
@@ -90,7 +87,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 //    }
 
     @Test
-
     public void can_search_vertices_for_auto_completion() {
         indexGraph();
         indexVertex(pineApple);
@@ -106,7 +102,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-
     public void cant_search_in_vertices_of_another_user() {
         indexGraph();
         indexVertex(pineApple);
@@ -121,7 +116,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-
     public void vertex_comment_is_not_included_in_search_result() {
         vertexA.comment("A description");
         indexGraph();
@@ -138,7 +132,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-
     public void can_search_for_other_users_public_vertices() {
         indexGraph();
         List<GraphElementSearchResult> vertices = graphSearchFactory.usingSearchTerm(
@@ -156,7 +149,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-
     public void search_for_other_users_public_vertices_does_not_include_private_tags() {
         vertexA.makePublic();
         Tag tag = vertexA.addMeta(modelTestScenarios.computerScientistType()).values().iterator().next();
@@ -183,7 +175,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
 
     @Test
-
     public void searching_for_own_vertices_only_does_not_return_vertices_of_other_users() {
         vertexA.makePublic();
         indexGraph();
@@ -227,7 +218,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 //    }
 
     @Test
-
     public void cannot_search_for_the_identifiers_of_another_user() {
         vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -253,7 +243,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-
     public void search_is_case_insensitive() {
         indexGraph();
         List<GraphElementSearchResult> vertices = graphSearchFactory.usingSearchTerm(
@@ -271,7 +260,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-
     public void case_is_preserved_when_getting_label() {
         vertexA.label("Azure");
         indexGraph();
@@ -288,7 +276,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-
     public void search_goes_beyond_two_first_words() {
         vertexA.label(
                 "bonjour monsieur proute"
@@ -311,7 +298,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 
 
     @Test
-
     public void can_search_relations() {
         indexGraph();
         List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm(
@@ -323,7 +309,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-
     public void relation_source_and_destination_vertex_label_and_uri_are_included_in_result() {
         indexGraph();
         centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -1176,7 +1161,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 is("colors")
         );
     }
-    
+
     @Test
     public void includes_is_pattern() {
         GraphElementSearchResult searchResult = graphSearchFactory.usingSearchTermSkipAndLimit(
@@ -1195,6 +1180,36 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         ).searchForAllOwnResources(user).iterator().next();
         assertTrue(
                 searchResult.isPattern()
+        );
+    }
+
+    @Test
+    public void excludes_graph_elements_under_pattern() {
+        vertexB.label("soleil");
+        assertFalse(
+                vertexB.isUnderPattern()
+        );
+        List<GraphElementSearchResult> searchResults = graphSearchFactory.usingSearchTermSkipAndLimit(
+                "soleil",
+                0,
+                10
+        ).searchForAllOwnResources(user);
+        assertThat(
+                searchResults.size(),
+                is(1)
+        );
+        vertexA.makePattern();
+        assertTrue(
+                vertexB.isUnderPattern()
+        );
+        searchResults = graphSearchFactory.usingSearchTermSkipAndLimit(
+                "soleil",
+                0,
+                10
+        ).searchForAllOwnResources(user);
+        assertThat(
+                searchResults.size(),
+                is(0)
         );
     }
 }
