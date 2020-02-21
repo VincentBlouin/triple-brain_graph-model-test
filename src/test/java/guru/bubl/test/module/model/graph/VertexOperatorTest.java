@@ -29,7 +29,6 @@ import org.junit.Test;
 import javax.inject.Inject;
 import java.net.URI;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -64,9 +63,6 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
-
-
     public void can_update_comment() {
         assertThat(
                 vertexA.comment(),
@@ -82,9 +78,6 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
-
-
     public void can_check_if_vertex_has_edge() {
         EdgeOperator edge = vertexA.getEdgeThatLinksToDestinationVertex(
                 vertexB
@@ -113,9 +106,6 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
-
-
     public void can_add_vertex_and_relation() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
         Edge edge = vertexA.addVertexAndRelation();
@@ -131,9 +121,6 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
-
-
     public void can_remove_a_vertex() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
 
@@ -148,9 +135,6 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
-
-
     public void removing_a_vertex_decrements_number_of_references_to_its_identification() {
         testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(
                 vertexA
@@ -158,9 +142,6 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
-
-
     public void can_get_number_of_connected_edges() {
         assertThat(
                 vertexB.getNumberOfConnectedEdges(),
@@ -187,9 +168,6 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
-
-
     public void removing_a_vertex_removes_its_relations() {
         URI edgeBetweenCAndBUri = vertexB.getEdgeThatLinksToDestinationVertex(
                 vertexC
@@ -1590,7 +1568,6 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
     public void undo_pattern_removes_flag_to_children() {
         vertexB.makePattern();
         vertexB.undoPattern();
@@ -1675,6 +1652,30 @@ public class VertexOperatorTest extends ModelTestResources {
         assertThat(
                 vertexB.getNumberOfConnectedEdges(),
                 is(2)
+        );
+    }
+
+    @Test
+    public void on_pattern_create_nb_pattern_usage_is_zero(){
+        vertexA.makePattern();
+        assertThat(
+                vertexA.getNbPatternUsage(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void undo_pattern_and_remake_resets_number_of_pattern_usage(){
+        vertexA.makePattern();
+        patternUserFactory.forUserAndPatternUri(
+                anotherUser,
+                vertexA.uri()
+        ).use();
+        vertexA.undoPattern();
+        vertexA.makePattern();
+        assertThat(
+                vertexA.getNbPatternUsage(),
+                is(0)
         );
     }
 

@@ -268,4 +268,17 @@ public class PatternUserTest extends ModelTestResources {
                 is(0)
         );
     }
+
+    @Test
+    public void use_pattern_increments_nb_pattern_usage() {
+        vertexB.makePattern();
+        patternUserFactory.forUserAndPatternUri(
+                anotherUser,
+                vertexB.uri()
+        ).use();
+        assertThat(
+                vertexB.getNbPatternUsage(),
+                is(1)
+        );
+    }
 }
