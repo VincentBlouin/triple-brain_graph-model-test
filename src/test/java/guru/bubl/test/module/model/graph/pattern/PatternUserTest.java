@@ -270,7 +270,7 @@ public class PatternUserTest extends ModelTestResources {
     }
 
     @Test
-    public void use_pattern_increments_nb_pattern_usage() {
+    public void increments_nb_pattern_usage() {
         vertexB.makePattern();
         patternUserFactory.forUserAndPatternUri(
                 anotherUser,
@@ -279,6 +279,38 @@ public class PatternUserTest extends ModelTestResources {
         assertThat(
                 vertexB.getNbPatternUsage(),
                 is(1)
+        );
+    }
+
+    @Test
+    public void are_not_considered_under_pattern() {
+        vertexB.makePattern();
+        URI centerUri = patternUserFactory.forUserAndPatternUri(
+                anotherUser,
+                vertexB.uri()
+        ).use();
+        SubGraph subGraph = anotherUserGraph.graphWithDepthAndCenterBubbleUri(
+                1,
+                centerUri
+        );
+        subGraph.vertices().remove(centerUri);
+        VertexOperator vertexUnder = vertexFactory.withUri(
+                subGraph.vertices().values().iterator().next().uri()
+        );
+        assertFalse(
+                vertexUnder.isUnderPattern()
+        );
+        vertexUnder.label("apricot tree");
+        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm(
+                "apricot tree"
+        ).searchForAllOwnResources(anotherUser);
+        assertThat(
+                results.size(),
+                is(1)
+        );
+        assertThat(
+                results.iterator().next().getGraphElement().label(),
+                is("apricot tree")
         );
     }
 }
