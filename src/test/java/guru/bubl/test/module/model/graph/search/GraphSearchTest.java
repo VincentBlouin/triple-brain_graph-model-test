@@ -66,25 +66,24 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         );
     }
 
-//    @Test 
-//    ("Todo")
-//    public void search_queries_can_have_special_characters() {
-//        vertexA.label("a\\(test*");
-//        centerGraphElementOperatorFactory.usingFriendlyResource(
-//                vertexA
-//        ).incrementNumberOfVisits();
-//        indexGraph();
-//        List<GraphElementSearchResult> vertices = graphSearchFactory.usingSearchTerm(
-//                "a\\(test*"
-//        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-//                user
-//        );
-//        GraphElement vertex = vertices.get(0).getGraphElementSearchResult().getGraphElement();
-//        assertThat(
-//                vertex.label(),
-//                is("a\\(test*")
-//        );
-//    }
+    @Test
+    public void search_queries_can_have_special_characters() {
+        vertexA.label("a\\(test*");
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        ).incrementNumberOfVisits();
+        indexGraph();
+        List<GraphElementSearchResult> vertices = graphSearchFactory.usingSearchTerm(
+                "a\\(test*"
+        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+                user
+        );
+        GraphElement vertex = vertices.get(0).getGraphElementSearchResult().getGraphElement();
+        assertThat(
+                vertex.label(),
+                is("a\\(test*")
+        );
+    }
 
     @Test
     public void can_search_vertices_for_auto_completion() {
@@ -295,7 +294,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         );
         assertThat(vertices.size(), is(2));
     }
-
 
     @Test
     public void can_search_relations() {
