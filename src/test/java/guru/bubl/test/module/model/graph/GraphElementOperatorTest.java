@@ -5,6 +5,7 @@
 package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.Image;
+import guru.bubl.module.model.UserUris;
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.GraphElementOperator;
 import guru.bubl.module.model.graph.ShareLevel;
@@ -731,6 +732,27 @@ public class GraphElementOperatorTest extends ModelTestResources {
         assertThat(
                 tags.get(tag.getExternalResourceUri()).uri(),
                 is(notNullValue())
+        );
+    }
+
+    @Test
+    public void add_additional_self_tag_returns_identifications_using_custom_uri() {
+        TagPojo tag = TestScenarios.tagFromFriendlyResource(
+                vertexA
+        );
+        URI customUri = new UserUris(user).generateIdentificationUri();
+        tag.setUri(customUri);
+        tag.setExternalResourceUri(
+                URI.create(tag.getExternalResourceUri() + "/" + UUID.randomUUID())
+        );
+        vertexA.addMeta(
+                tag
+        );
+        assertThat(
+                tagFactory.withUri(
+                        customUri
+                ).label(),
+                is("vertex A")
         );
     }
 }
