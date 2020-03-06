@@ -5,19 +5,20 @@
 package guru.bubl.test.module.model.graph.search;
 
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
-import guru.bubl.module.model.graph.*;
+import guru.bubl.module.model.graph.GraphElement;
+import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.tag.Tag;
 import guru.bubl.module.model.graph.tag.TagPojo;
-import guru.bubl.module.model.search.*;
+import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.search.Neo4jSearchRelatedTest;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.URI;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -1210,4 +1211,24 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 is(0)
         );
     }
+
+    @Test
+    public void can_search_all_patterns() {
+        vertexB.makePublic();
+        List<GraphElementSearchResult> vertices = graphSearchFactory.usingSearchTerm(
+                "vertex B"
+        ).searchAllPatterns();
+        assertTrue(
+                vertices.isEmpty()
+        );
+        vertexB.makePattern();
+        vertices = graphSearchFactory.usingSearchTerm(
+                "vertex B"
+        ).searchAllPatterns();
+        assertThat(
+                vertices.size(),
+                is(1)
+        );
+    }
+
 }
