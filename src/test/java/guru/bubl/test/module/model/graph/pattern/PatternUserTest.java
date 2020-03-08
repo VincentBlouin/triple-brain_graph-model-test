@@ -30,7 +30,7 @@ public class PatternUserTest extends ModelTestResources {
         );
         vertexB.label("maple syrup");
         vertexB.makePattern();
-        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm("maple syrup").searchForAllOwnResources(user);
+        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm("maple syrup").searchOnlyForOwnVerticesForAutoCompletionByLabel(user);
         assertThat(
                 results.size(),
                 is(1)
@@ -39,7 +39,7 @@ public class PatternUserTest extends ModelTestResources {
                 user,
                 vertexB.uri()
         ).use();
-        results = graphSearchFactory.usingSearchTerm("maple syrup").searchForAllOwnResources(user);
+        results = graphSearchFactory.usingSearchTerm("maple syrup").searchOnlyForOwnVerticesForAutoCompletionByLabel(user);
         assertThat(
                 results.size(),
                 is(2)
@@ -80,7 +80,7 @@ public class PatternUserTest extends ModelTestResources {
                 anotherUser,
                 vertexB.uri()
         ).use();
-        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm("maple syrup").searchForAllOwnResources(anotherUser);
+        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm("maple syrup").searchOnlyForOwnVerticesForAutoCompletionByLabel(anotherUser);
         URI clonedUri = results.iterator().next().getGraphElement().uri();
         SubGraphPojo subGraph = anotherUserGraph.graphWithDepthAndCenterBubbleUri(
                 1,
@@ -311,6 +311,34 @@ public class PatternUserTest extends ModelTestResources {
         assertThat(
                 results.iterator().next().getGraphElement().label(),
                 is("apricot tree")
+        );
+    }
+
+    @Test
+    public void root_vertex_is_tagged_to_the_pattern() {
+        vertexB.comment("vertex b comment");
+        vertexB.makePattern();
+        URI centerUri = patternUserFactory.forUserAndPatternUri(
+                anotherUser,
+                vertexB.uri()
+        ).use();
+        SubGraph subGraph = userGraph.aroundVertexUriInShareLevels(
+                centerUri,
+                ShareLevel.allShareLevelsInt
+        );
+        Vertex vertexBCopy = subGraph.vertexWithIdentifier(centerUri);
+        TagPojo patternTag = vertexBCopy.getIdentifications().values().iterator().next();
+        assertThat(
+                patternTag.getExternalResourceUri(),
+                is(vertexB.uri())
+        );
+        assertThat(
+                patternTag.label(),
+                is("vertex B")
+        );
+        assertThat(
+                patternTag.comment(),
+                is("vertex b comment")
         );
     }
 }

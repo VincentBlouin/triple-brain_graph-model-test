@@ -32,6 +32,7 @@ import static org.junit.Assert.*;
 public class GraphElementOperatorTest extends ModelTestResources {
 
     @Test
+    
     public void cannot_have_same_identification_twice() {
         GraphElementOperator vertexAGraphElement = vertexA;
         Integer numberOfGenericIdentifications = vertexAGraphElement.getIdentifications().size();
@@ -50,6 +51,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void adding_identification_returns_identification_created_fields() {
         TagPojo identification = vertexA.addMeta(
                 modelTestScenarios.timBernersLee()
@@ -63,6 +65,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void add_tag_returns_share_level() {
         TagPojo tag = vertexA.addMeta(
                 modelTestScenarios.event()
@@ -84,6 +87,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void users_identification_have_their_own_uri_for_same_identification() {
         TagPojo identificationOfAnotherUser = vertexOfAnotherUser.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -104,6 +108,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void uri_of_identification_does_not_change_if_added_twice() {
         TagPojo identification = vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -115,6 +120,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void adding_existing_identification_keeps_existing_images() {
         TagPojo identification = vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -138,6 +144,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void identifications_can_have_images() {
         TagPojo computerScientist = vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -163,6 +170,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void adding_existing_identification_returns_existing_description() {
         TagPojo identification = vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -183,6 +191,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void add_new_tag_share_level_is_private() {
         TagPojo tag = modelTestScenarios.computerScientistType();
         tag = vertexA.addMeta(
@@ -195,6 +204,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void add_new_tag_can_set_share_level() {
         TagPojo tag = modelTestScenarios.computerScientistType();
         tag.setShareLevel(ShareLevel.PUBLIC);
@@ -208,6 +218,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void can_remove_identification_having_no_external_uri() {
         TagPojo identification = vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -223,6 +234,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void can_remove_self_identifier() {
         TagPojo vertexBAsIdentifier = TestScenarios.tagFromFriendlyResource(
                 vertexB
@@ -252,6 +264,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void identifications_do_not_apply_for_all_elements() {
         vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -265,6 +278,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void on_creation_identifications_have_1_reference() {
         TagPojo identification = vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -276,6 +290,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void adding_an_identification_increments_number_of_references() {
         TagPojo identification = vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -294,6 +309,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void removing_an_identification_decrements_number_of_references() {
         vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -317,6 +333,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void removing_a_vertex_decrements_number_of_metas_related_to_the_connected_edges() {
         EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         TagOperator metaOperator = tagFactory.withUri(
@@ -336,6 +353,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void graph_element_becomes_identified_to_itself_if_used_as_identifier() {
         TagPojo identification = vertexA.addMeta(
                 TestScenarios.tagFromFriendlyResource(
@@ -355,6 +373,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void when_identified_to_a_graph_element_the_number_of_references_to_the_new_identifier_is_2() {
         TagPojo identification = vertexA.addMeta(
                 TestScenarios.tagFromFriendlyResource(
@@ -368,6 +387,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void can_identify_to_an_identification_where_the_external_uri_is_the_identification_uri() {
         TagPojo vertexBAsIdentification = vertexA.addMeta(
                 TestScenarios.tagFromFriendlyResource(
@@ -393,6 +413,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void when_identifying_to_an_identification_the_uri_and_external_uri_are_set_correctly() {
         TagPojo vertexBAsIdentification = vertexA.addMeta(
                 TestScenarios.tagFromFriendlyResource(
@@ -417,6 +438,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void an_identification_does_identify_to_itself() {
         TagPojo vertexBAsIdentification = vertexA.addMeta(
                 TestScenarios.tagFromFriendlyResource(
@@ -440,6 +462,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void when_identifying_to_an_identification_the_number_of_references_increases_by_1() {
         TagPojo vertexBAsIdentification = vertexA.addMeta(
                 TestScenarios.tagFromFriendlyResource(
@@ -459,6 +482,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void when_identifying_to_a_schema_the_number_of_references_for_first_identification_is_2_and_the_next_increase_by_1() {
         SchemaOperator schema = createSchema();
         TagPojo schemaAsIdentification = vertexA.addMeta(
@@ -482,6 +506,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void when_identifying_to_a_schema_property_the_number_of_references_increases_by_1() {
         GraphElementOperator property = createSchema().addProperty();
         TagPojo propertyAsIdentification = vertexA.addMeta(
@@ -505,7 +530,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
 //    @Test
-//    @Ignore("feature tagging to a graph element also tags to remote graph element tags")
+//    ("feature tagging to a graph element also tags to remote graph element tags")
 //    public void identifying_to_a_graph_element_also_identifies_to_its_identifiers() {
 //        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
 //        edgeBetweenAAndB.addMeta(
@@ -534,7 +559,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
 //    }
 
 //    @Test
-//    @Ignore("feature tagging to a graph element also tags to remote graph element tags")
+//    ("feature tagging to a graph element also tags to remote graph element tags")
 //    public void identifying_to_a_graph_element_that_has_multiple_identifiers_returns_them_all() {
 //        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
 //        edgeBetweenAAndB.addMeta(
@@ -563,7 +588,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
 //    }
 
 //    @Test
-//    @Ignore("feature tagging to a graph element also tags to remote graph element tags")
+//    ("feature tagging to a graph element also tags to remote graph element tags")
 //    public void new_identifications_from_identifying_to_a_graph_element_that_has_multiple_identifiers_increments_their_number_of_references() {
 //        TagPojo personIdentification = vertexA.addMeta(
 //                modelTestScenarios.person()
@@ -584,7 +609,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
 //    }
 
 //    @Test
-//    @Ignore("feature tagging to a graph element also tags to remote graph element tags")
+//    ("feature tagging to a graph element also tags to remote graph element tags")
 //    public void identifying_to_a_graph_element_that_has_another_identification_that_shares_the_other_graph_element_does_not_increment_the_number_of_references() {
 //        vertexA.addMeta(
 //                modelTestScenarios.person()
@@ -608,6 +633,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
 //    }
 
     @Test
+    
     public void when_identifying_to_graph_element_the_relation_type_is_correct() {
         assertFalse(
                 vertexB.getIdentifications().containsKey(vertexA.uri())
@@ -623,6 +649,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void can_keep_tag_removed_from_the_reference_after_tagging_to_it_again() {
         TagPojo vertexATag = vertexB.addMeta(
                 TestScenarios.tagFromFriendlyResource(
@@ -651,6 +678,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void removing_tag_from_the_reference_changes_the_external_uri_of_the_tag() {
         TagPojo vertexATag = vertexB.addMeta(
                 TestScenarios.tagFromFriendlyResource(
@@ -673,6 +701,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void can_tag_using_no_reference() {
         Tag tag = new TagPojo(
                 URI.create(
@@ -693,6 +722,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
 
 
     @Test
+    
     public void can_set_colors() {
         assertFalse(
                 vertexB.getColors().contains("blue")
@@ -704,6 +734,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void can_set_children_indexes() {
         assertFalse(
                 vertexB.getChildrenIndex().contains("test children indexes")
@@ -715,6 +746,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
+    
     public void add_additional_self_tag_returns_identifications() {
         TagPojo tag = TestScenarios.tagFromFriendlyResource(
                 vertexA
@@ -736,7 +768,8 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void add_additional_self_tag_returns_identifications_using_custom_uri() {
+    
+    public void can_use_custom_uri() {
         TagPojo tag = TestScenarios.tagFromFriendlyResource(
                 vertexA
         );
@@ -753,6 +786,27 @@ public class GraphElementOperatorTest extends ModelTestResources {
                         customUri
                 ).label(),
                 is("vertex A")
+        );
+    }
+
+    @Test
+    public void checks_if_custom_uri_as_right_owner() {
+        TagPojo tag = TestScenarios.tagFromFriendlyResource(
+                vertexA
+        );
+        URI customUri = new UserUris(anotherUser).generateIdentificationUri();
+        tag.setUri(customUri);
+        tag.setExternalResourceUri(
+                URI.create(tag.getExternalResourceUri() + "/" + UUID.randomUUID())
+        );
+        Map<URI, TagPojo> addedTags = vertexA.addMeta(
+                tag
+        );
+        assertTrue(
+                addedTags.isEmpty()
+        );
+        assertTrue(
+                vertexA.getIdentifications().isEmpty()
         );
     }
 }
