@@ -64,15 +64,6 @@ public class WholeGraphTest extends ModelTestResources {
     }
 
     @Test
-    public void schemas_are_not_included_in_vertices() {
-        createSchema();
-        assertThat(
-                wholeGraph.getAllVertices().size(),
-                is(4)
-        );
-    }
-
-    @Test
     public void can_get_edges() {
         assertThat(
                 wholeGraph.getAllEdges().size(),
@@ -100,19 +91,6 @@ public class WholeGraphTest extends ModelTestResources {
                 allUserEdges.contains(
                         anotherUserEdge
                 )
-        );
-    }
-
-    @Test
-    @Ignore("schema feature is suspended")
-    public void can_get_schemas() {
-        createSchema();
-        createSchema();
-        createSchema();
-        createSchema();
-        assertThat(
-                wholeGraph.getAllSchemas().size(),
-                is(4)
         );
     }
 

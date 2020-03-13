@@ -5,18 +5,13 @@
 package guru.bubl.test.module.model.graph.search;
 
 import com.google.inject.Inject;
-import guru.bubl.module.model.graph.GraphElementOperator;
-import guru.bubl.module.model.graph.GraphElementPojo;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.tag.TagPojo;
-import guru.bubl.module.model.graph.schema.SchemaOperator;
-import guru.bubl.module.model.graph.schema.SchemaPojo;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.search.GraphIndexer;
 import guru.bubl.test.module.utils.search.Neo4jSearchRelatedTest;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -201,36 +196,6 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         );
     }
 
-    @Test
-    @Ignore("schema feature is suspended")
-    public void index_schema_sets_the_properties_as_context() {
-        SchemaOperator schema = createSchema(userGraph.user());
-        schema.label("schema1");
-        graphIndexer.indexSchema(userGraph.schemaPojoWithUri(
-                schema.uri()
-        ));
-        GraphElementSearchResult searchResult = graphSearchFactory.usingSearchTerm(
-                "schema"
-        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                user
-        ).iterator().next();
-        assertTrue(
-                searchResult.getContext().isEmpty()
-        );
-        schema.addProperty().label("property 1");
-        schema.addProperty().label("property 2");
-        graphIndexer.indexSchema(userGraph.schemaPojoWithUri(
-                schema.uri()
-        ));
-        searchResult = graphSearchFactory.usingSearchTerm(
-                "schema"
-        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                user
-        ).iterator().next();
-        assertFalse(
-                searchResult.getContext().isEmpty()
-        );
-    }
 
     @Test
     public void index_relation_sets_source_and_destination_vertex_as_context() {
@@ -286,30 +251,6 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         );
         assertTrue(
                 graphElementSearchResults.isEmpty()
-        );
-    }
-
-    @Test
-    @Ignore("schema feature is suspended")
-    public void index_property_sets_schema_as_context() {
-        SchemaOperator schema = createSchema(userGraph.user());
-        schema.label("schema1");
-        GraphElementOperator property = schema.addProperty();
-        property.label("a property");
-        SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
-                schema.uri()
-        );
-        GraphElementPojo propertyPojo = schemaPojo.getProperties().values().iterator().next();
-        graphIndexer.indexProperty(propertyPojo, schemaPojo);
-        GraphElementSearchResult graphElementSearchResult = graphSearchFactory.usingSearchTerm(
-                "a property"
-        ).searchRelationsForAutoCompletionByLabel(
-                user
-        ).iterator().next();
-        assertTrue(
-                graphElementSearchResult.getContext().containsValue(
-                        "schema1"
-                )
         );
     }
 

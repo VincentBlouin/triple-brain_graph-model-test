@@ -8,19 +8,20 @@ import com.google.common.collect.ImmutableSet;
 import guru.bubl.module.common_utils.Uris;
 import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.Image;
-import guru.bubl.module.model.graph.*;
+import guru.bubl.module.model.graph.FriendlyResourcePojo;
+import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.edge.EdgePojo;
 import guru.bubl.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
 import guru.bubl.module.model.graph.exceptions.NonExistingResourceException;
-import guru.bubl.module.model.graph.tag.TagPojo;
-import guru.bubl.module.model.graph.schema.Schema;
-import guru.bubl.module.model.graph.schema.SchemaOperator;
-import guru.bubl.module.model.graph.schema.SchemaPojo;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
-import guru.bubl.module.model.graph.vertex.*;
+import guru.bubl.module.model.graph.tag.TagPojo;
+import guru.bubl.module.model.graph.vertex.Vertex;
+import guru.bubl.module.model.graph.vertex.VertexFactory;
+import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
+import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.suggestion.Suggestion;
 import guru.bubl.module.model.suggestion.SuggestionOrigin;
 import guru.bubl.module.model.test.SubGraphOperator;
@@ -35,7 +36,6 @@ import java.net.URI;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.*;
@@ -74,8 +74,6 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void correct_edges_are_in_graph() {
         Edge betweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         Edge betweenBAndC = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
@@ -95,8 +93,6 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void source_and_destination_vertex_are_in_edges() {
         Edge betweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
@@ -118,8 +114,6 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void elements_with_no_identifications_dont_have_identifications() {
         vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -152,24 +146,8 @@ public class UserGraphTest extends ModelTestResources {
 //        );
 //    }
 
-    @Test
-
-
-    public void schemas_with_no_identifications_dont_have_identifications() {
-        vertexA.addMeta(
-                modelTestScenarios.computerScientistType()
-        );
-        SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
-                userGraph.createSchema().uri()
-        );
-        assertTrue(
-                schemaPojo.getIdentifications().isEmpty()
-        );
-    }
 
     @Test
-
-
     public void has_generic_identifications() {
         vertexA.addMeta(
                 modelTestScenarios.computerScientistType()
@@ -671,87 +649,11 @@ public class UserGraphTest extends ModelTestResources {
         assertTrue(subGraph.containsVertex(vertex));
     }
 
-    @Test
 
 
-    public void can_create_schema() {
-        Schema schema = userGraph.createSchema();
-        assertThat(schema.uri(), is(notNullValue()));
-    }
+
 
     @Test
-
-
-    public void can_get_schema() {
-        Schema schema = userGraph.createSchema();
-        URI originalUri = schema.uri();
-        schema = userGraph.schemaPojoWithUri(originalUri);
-        assertThat(schema.uri(), is(originalUri));
-    }
-
-    @Test
-
-
-    public void schemas_have_their_identifications() {
-        SchemaOperator schemaOperator = userGraph.schemaOperatorWithUri(
-                userGraph.createSchema().uri()
-        );
-        TagPojo createdComputerScientistType = schemaOperator.addMeta(
-                modelTestScenarios.computerScientistType()
-        ).values().iterator().next();
-        SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
-                schemaOperator.uri()
-        );
-        TagPojo identificationPojo = schemaPojo.getIdentifications().values().iterator().next();
-        assertThat(
-                identificationPojo,
-                is(createdComputerScientistType)
-        );
-    }
-
-    @Test
-
-
-    public void schema_contains_its_properties() {
-        SchemaOperator schemaOperator = userGraph.schemaOperatorWithUri(
-                userGraph.createSchema().uri()
-        );
-        schemaOperator.label("patate");
-        GraphElement createdProperty = schemaOperator.addProperty();
-        SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
-                schemaOperator.uri()
-        );
-        assertThat(
-                schemaPojo.getProperties().values().iterator().next(),
-                is(createdProperty)
-        );
-    }
-
-    @Test
-
-
-    public void schema_properties_includes_their_identifications() {
-        SchemaOperator schemaOperator = userGraph.schemaOperatorWithUri(
-                userGraph.createSchema().uri()
-        );
-        GraphElementOperator createdProperty = schemaOperator.addProperty();
-        TagPojo createdComputerScientistType = createdProperty.addMeta(
-                modelTestScenarios.computerScientistType()
-        ).values().iterator().next();
-        SchemaPojo schemaPojo = userGraph.schemaPojoWithUri(
-                schemaOperator.uri()
-        );
-        GraphElementPojo property = schemaPojo.getProperties().values().iterator().next();
-        TagPojo identificationPojo = property.getIdentifications().values().iterator().next();
-        assertThat(
-                identificationPojo,
-                is(createdComputerScientistType)
-        );
-    }
-
-    @Test
-
-
     public void vertex_details_are_not_included_in_edge_source_and_destination_vertex() {
         SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES

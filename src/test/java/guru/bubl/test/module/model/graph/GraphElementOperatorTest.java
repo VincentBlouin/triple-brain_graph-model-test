@@ -9,15 +9,13 @@ import guru.bubl.module.model.UserUris;
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.GraphElementOperator;
 import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.tag.TagOperator;
-import guru.bubl.module.model.graph.tag.Tag;
-import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
-import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
+import guru.bubl.module.model.graph.tag.Tag;
+import guru.bubl.module.model.graph.tag.TagOperator;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.parboiled.common.StringUtils;
 
@@ -477,54 +475,6 @@ public class GraphElementOperatorTest extends ModelTestResources {
         ).values().iterator().next();
         assertThat(
                 createdIdentification.getNbReferences(),
-                is(3)
-        );
-    }
-
-    @Test
-    
-    public void when_identifying_to_a_schema_the_number_of_references_for_first_identification_is_2_and_the_next_increase_by_1() {
-        SchemaOperator schema = createSchema();
-        TagPojo schemaAsIdentification = vertexA.addMeta(
-                TestScenarios.tagFromFriendlyResource(
-                        schema
-                )
-        ).values().iterator().next();
-        assertThat(
-                schemaAsIdentification.getNbReferences(),
-                is(2)
-        );
-        schemaAsIdentification = vertexB.addMeta(
-                TestScenarios.tagFromFriendlyResource(
-                        schema
-                )
-        ).values().iterator().next();
-        assertThat(
-                schemaAsIdentification.getNbReferences(),
-                is(3)
-        );
-    }
-
-    @Test
-    
-    public void when_identifying_to_a_schema_property_the_number_of_references_increases_by_1() {
-        GraphElementOperator property = createSchema().addProperty();
-        TagPojo propertyAsIdentification = vertexA.addMeta(
-                TestScenarios.tagFromFriendlyResource(
-                        property
-                )
-        ).values().iterator().next();
-        assertThat(
-                propertyAsIdentification.getNbReferences(),
-                is(2)
-        );
-        propertyAsIdentification = vertexB.addMeta(
-                TestScenarios.tagFromFriendlyResource(
-                        property
-                )
-        ).values().iterator().next();
-        assertThat(
-                propertyAsIdentification.getNbReferences(),
                 is(3)
         );
     }

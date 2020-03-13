@@ -16,7 +16,6 @@ import guru.bubl.module.model.graph.edge.EdgePojo;
 import guru.bubl.module.model.graph.tag.TagFactory;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.pattern.PatternUserFactory;
-import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.subgraph.SubGraphForker;
 import guru.bubl.module.model.graph.subgraph.SubGraphForkerFactory;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
@@ -254,12 +253,6 @@ public class ModelTestResources {
             }
         }
         return vertexWithLabel;
-    }
-
-    protected SchemaOperator createSchema() {
-        return userGraph.schemaOperatorWithUri(
-                userGraph.createSchema().uri()
-        );
     }
 
     protected void removeAllUsers() {

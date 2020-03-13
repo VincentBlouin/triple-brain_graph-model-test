@@ -6,8 +6,6 @@ package guru.bubl.test.module.utils.search;
 
 import guru.bubl.module.model.User;
 import guru.bubl.module.model.graph.GraphFactory;
-import guru.bubl.module.model.graph.edge.EdgeOperator;
-import guru.bubl.module.model.graph.schema.SchemaOperator;
 import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
@@ -78,11 +76,5 @@ public class Neo4jSearchRelatedTest extends ModelTestResources {
 
     protected void indexVertex(VertexOperator vertex) {
 
-    }
-
-    protected SchemaOperator createSchema(User user) {
-        return userGraph.schemaOperatorWithUri(
-                graphMaker.loadForUser(user).createSchema().uri()
-        );
     }
 }
