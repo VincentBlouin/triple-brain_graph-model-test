@@ -40,32 +40,6 @@ public class JsonConvertTest extends ModelTestResources {
         );
     }
 
-//    @Test
-//    @Ignore("included vertices feature suspsended")
-//    public void can_convert_vertex_included_vertices_and_edges() {
-//        VertexOperator newVertex = vertexFactory.createFromGraphElements(
-//                vertexBAndC(),
-//                edgeBetweenBAndCInSet()
-//        );
-//        newVertex.addRelationToVertex(vertexA);
-//        JSONObject newVertexJson = VertexInSubGraphJson.toJson(
-//                vertexInWholeConnectedGraph(
-//                        newVertex
-//                )
-//        );
-//        VertexInSubGraphPojo newVertexPojo = VertexInSubGraphJson.fromJson(
-//                newVertexJson
-//        );
-//        assertThat(
-//                newVertexPojo.getIncludedVertices().size(),
-//                is(2)
-//        );
-//        assertThat(
-//                newVertexPojo.getIncludedEdges().size(),
-//                is(1)
-//        );
-//    }
-
     @Test
     public void converting_edge_to_json_throws_no_error() {
         EdgeJson.toJson(
@@ -120,44 +94,5 @@ public class JsonConvertTest extends ModelTestResources {
         );
     }
 
-//    @Test
-//    @Ignore ("included vertices is suspended feature")
-//    public void included_vertices_are_a_json_object_mapped_with_uri() throws Exception {
-//        VertexOperator newVertex = vertexFactory.createFromGraphElements(
-//                vertexBAndC(),
-//                edgeBetweenBAndCInSet()
-//        );
-//        newVertex.addRelationToVertex(vertexA);
-//        JSONObject newVertexJson = VertexInSubGraphJson.toJson(
-//                vertexInWholeConnectedGraph(newVertex)
-//        );
-//        JSONObject includedVertices = newVertexJson.getJSONObject(
-//                "vertex"
-//        ).getJSONObject("includedVertices");
-//        Vertex vertexBFromJson = VertexInSubGraphJson.fromJson(
-//                includedVertices.getJSONObject(
-//                        vertexB.uri().toString()
-//                ));
-//        assertTrue(
-//                vertexBFromJson.equals(vertexB)
-//        );
-//    }
-
-    private Set<Vertex> vertexBAndC() {
-        Set<Vertex> vertexBAndC = new HashSet<>();
-        vertexBAndC.add(vertexB);
-        vertexBAndC.add(vertexC);
-        return vertexBAndC;
-    }
-
-    private Set<Edge> edgeBetweenBAndCInSet() {
-        Set<Edge> edges = new HashSet<>();
-        edges.add(
-                vertexB.getEdgeThatLinksToDestinationVertex(
-                        vertexC
-                )
-        );
-        return edges;
-    }
 }
 

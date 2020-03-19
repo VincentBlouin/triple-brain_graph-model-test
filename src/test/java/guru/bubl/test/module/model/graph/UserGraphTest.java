@@ -132,26 +132,6 @@ public class UserGraphTest extends ModelTestResources {
         );
     }
 
-//    @Test   ("Inculded vertices suspended feature")
-//    public void elements_with_no_included_vertices_dont_have_included_vertices() {
-//        VertexOperator newVertex = vertexFactory.createFromGraphElements(
-//                vertexBAndC(),
-//                edgeBetweenBAndCInSet()
-//        );
-//        newVertex.addRelationToVertex(vertexA);
-//        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-//                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
-//                newVertex.uri()
-//        );
-//        VertexInSubGraph vertexAInSubgraph = subGraph.vertexWithIdentifier(
-//                vertexA.uri()
-//        );
-//        assertTrue(
-//                vertexAInSubgraph.getIncludedVertices().isEmpty()
-//        );
-//    }
-
-
     @Test
     public void has_generic_identifications() {
         vertexA.addTag(
@@ -212,108 +192,7 @@ public class UserGraphTest extends ModelTestResources {
         );
     }
 
-//    @Test 
-//    ("to complete")
-//    public void has_suggestion_multiple_origins() {
-//        vertexA.setSuggestions(
-//                suggestionsToMap(
-//                        modelTestScenarios.nameSuggestionFromPersonIdentification(user()),
-//                        modelTestScenarios.nameSuggestionFromSymbolIdentification(user())
-//                )
-//        );
-//        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-//                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
-//        );
-//        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
-//                vertexA.uri()
-//        );
-//        Suggestion suggestionInSubGraph = vertexAInSubGraph.getSuggestions().values().iterator().next();
-//        assertThat(
-//                suggestionInSubGraph.origins().size(),
-//                is(2)
-//        );
-//    }
-
-//    @Test   ("Suspended feature")
-//    public void has_included_vertices_and_edges() {
-//        VertexOperator newVertex = vertexFactory.createFromGraphElements(
-//                vertexBAndC(),
-//                edgeBetweenBAndCInSet()
-//        );
-//        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-//                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
-//                newVertex.uri()
-//        );
-//        VertexInSubGraph compositeVertexInSubGraph = subGraph.vertexWithIdentifier(
-//                newVertex.uri()
-//        );
-//        assertThat(
-//                compositeVertexInSubGraph.getIncludedVertices().size(),
-//                is(2)
-//        );
-//        assertThat(
-//                compositeVertexInSubGraph.getIncludedEdges().size(),
-//                is(1)
-//        );
-//    }
-
-//    @Test   ("Suspended feature")
-//    public void included_edges_have_source_and_destination_vertices() {
-//        VertexOperator newVertex = vertexFactory.createFromGraphElements(
-//                vertexBAndC(),
-//                edgeBetweenBAndCInSet()
-//        );
-//        newVertex.addRelationToVertex(vertexA);
-//        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-//                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
-//        );
-//        Edge edge = subGraph.vertexWithIdentifier(
-//                newVertex.uri()
-//        ).getIncludedEdges().values().iterator().next();
-//        assertNotNull(
-//                edge.sourceVertex()
-//        );
-//        assertNotNull(
-//                edge.destinationVertex()
-//        );
-//    }
-
-//    @Test   ("Suspended feature")
-//    public void included_edges_only_hold_source_and_destination_vertex_uris() {
-//        Edge includedEdge = edgeBetweenBAndCInSet().iterator().next();
-//        Vertex includedEdgeSourceVertex = includedEdge.sourceVertex();
-//        Vertex includedEdgeDestinationVertex = includedEdge.destinationVertex();
-//        assertFalse(
-//                includedEdgeSourceVertex.label().isEmpty()
-//        );
-//        assertFalse(
-//                includedEdgeDestinationVertex.label().isEmpty()
-//        );
-//        VertexOperator newVertex = vertexFactory.createFromGraphElements(
-//                vertexBAndC(),
-//                edgeBetweenBAndCInSet()
-//        );
-//
-//        newVertex.addRelationToVertex(vertexA);
-//        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-//                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
-//        );
-//        includedEdge = subGraph.vertexWithIdentifier(
-//                newVertex.uri()
-//        ).getIncludedEdges().values().iterator().next();
-//        includedEdgeSourceVertex = includedEdge.sourceVertex();
-//        includedEdgeDestinationVertex = includedEdge.destinationVertex();
-//        assertTrue(
-//                includedEdgeSourceVertex.label().isEmpty()
-//        );
-//        assertTrue(
-//                includedEdgeDestinationVertex.label().isEmpty()
-//        );
-//    }
-
     @Test
-
-
     public void has_vertices_images() {
         Image image1 = Image.withUrlForSmallAndUriForBigger(
                 UUID.randomUUID().toString(),
@@ -585,8 +464,6 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void nb_public_neighbors_is_included() {
         vertexB.makePublic();
         SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
@@ -610,8 +487,6 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void nb_friends_is_included() {
         vertexB.setShareLevel(ShareLevel.FRIENDS);
         SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(

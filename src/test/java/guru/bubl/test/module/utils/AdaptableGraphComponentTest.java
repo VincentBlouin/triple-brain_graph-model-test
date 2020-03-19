@@ -17,7 +17,6 @@ import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
-import guru.bubl.module.model.suggestion.SuggestionPojo;
 import guru.bubl.module.model.test.GraphComponentTest;
 import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
@@ -28,8 +27,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import javax.inject.Inject;
-import java.net.URI;
-import java.util.Map;
 
 public class AdaptableGraphComponentTest implements GraphComponentTest {
 
@@ -181,9 +178,5 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     @Override
     public EdgePojo edgeInWholeGraph(Edge edge) {
         return graphComponentTest.edgeInWholeGraph(edge);
-    }
-
-    public Map<URI, SuggestionPojo> suggestionsToMap(SuggestionPojo... suggestions) {
-        return modelTestScenarios.suggestionsToMap(suggestions);
     }
 }

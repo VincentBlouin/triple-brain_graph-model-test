@@ -4,15 +4,10 @@
 
 package guru.bubl.test.module.utils;
 
-import guru.bubl.module.model.User;
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.tag.TagPojo;
-import guru.bubl.module.model.suggestion.Suggestion;
-import guru.bubl.module.model.suggestion.SuggestionPojo;
 
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ModelTestScenarios {
 
@@ -174,7 +169,7 @@ public class ModelTestScenarios {
         );
     }
 
-    public TagPojo book(){
+    public TagPojo book() {
         FriendlyResourcePojo friendlyResourcePojo = new FriendlyResourcePojo(
                 "Book"
         );
@@ -189,37 +184,6 @@ public class ModelTestScenarios {
         );
     }
 
-    public SuggestionPojo nameSuggestionFromPersonIdentification(User user) {
-        return SuggestionPojo.forSameAsTypeOriginAndOwner(
-                new FriendlyResourcePojo(
-                        URI.create("http://xmlns.com/foaf/0.1/name"),
-                        "Name"
-                ),
-                new FriendlyResourcePojo(
-                        URI.create("http://rdf.freebase.com/rdf/type/text"),
-                        "Text"
-                ),
-                Suggestion.SUGGESTION_IDENTIFICATION_PREFIX + "http://xmlns.com/foaf/0.1/Person",
-                user
-        );
-    }
-
-    public SuggestionPojo nameSuggestionFromSymbolIdentification(User user) {
-        String symbolUri = "http://rdf.freebase.com/rdf/m/09ddf";
-        return SuggestionPojo.forSameAsTypeOriginAndOwner(
-                new FriendlyResourcePojo(
-                        URI.create("http://xmlns.com/foaf/0.1/name"),
-                        "Name"
-                ),
-                new FriendlyResourcePojo(
-                        URI.create("http://rdf.freebase.com/rdf/type/text"),
-                        "Text"
-                ),
-                Suggestion.SUGGESTION_IDENTIFICATION_PREFIX + symbolUri,
-                user
-        );
-    }
-
     public TagPojo startDateIdentification() {
         return new TagPojo(
                 URI.create(
@@ -229,66 +193,5 @@ public class ModelTestScenarios {
                         "Start Date"
                 )
         );
-    }
-
-    public SuggestionPojo startDateSuggestionFromEventIdentification(User user) {
-        return SuggestionPojo.forSameAsTypeOriginAndOwner(
-                new FriendlyResourcePojo(
-                        URI.create("http://rdf.freebase.com/rdf/time/event/start_date"),
-                        "Start date"
-                ),
-                new FriendlyResourcePojo(
-                        URI.create("http://rdf.freebase.com/rdf/type/datetime"),
-                        "Date"
-                ),
-                Suggestion.SUGGESTION_IDENTIFICATION_PREFIX + "http://rdf.freebase.com/rdf/time/event",
-                user
-        );
-    }
-
-    public SuggestionPojo venueSuggestionFromEventIdentification(User user) {
-        return SuggestionPojo.forSameAsTypeOriginAndOwner(
-                new FriendlyResourcePojo(
-                        URI.create("https://www.wikidata.org/wiki/Q17350442"),
-                        "venue"
-                ),
-                new FriendlyResourcePojo(
-                        URI.create("https://www.wikidata.org/wiki/Q13226383"),
-                        "Facility"
-                ),
-                Suggestion.SUGGESTION_IDENTIFICATION_PREFIX + "http://rdf.freebase.com/rdf/time/event",
-                user
-        );
-    }
-
-    public SuggestionPojo peopleInvolvedSuggestionFromEventIdentification(User user) {
-        FriendlyResourcePojo sameAs = new FriendlyResourcePojo(
-                URI.create("http://rdf.freebase.com/rdf/people/person"),
-                "Person"
-        );
-        sameAs.setComment(
-                "A person is a human being (man, woman or child) known to have actually existed. Living persons, celebrities and politicians are persons, as are deceased persons.\n\nNote: A person topic is distinct from a user in Metaweb. Users have profiles that can only be edited by the users themselves. A person topic can be edited by anyone and is intended as a factual representation of details about a person.\n\nFor more information, please see the Freebase wiki page on person."
-        );
-        return SuggestionPojo.forSameAsTypeOriginAndOwner(
-                new FriendlyResourcePojo(
-                        URI.create("http://rdf.freebase.com/rdf/time/event/people_involved"),
-                        "People involved"
-                ),
-                sameAs,
-                Suggestion.SUGGESTION_IDENTIFICATION_PREFIX +
-                        "http://rdf.freebase.com/rdf/time/event",
-                user
-        );
-    }
-
-    public Map<URI, SuggestionPojo> suggestionsToMap(SuggestionPojo... suggestions) {
-        Map<URI, SuggestionPojo> suggestionPojoMap = new HashMap<>();
-        for (SuggestionPojo suggestionPojo : suggestions) {
-            suggestionPojoMap.put(
-                    suggestionPojo.uri(),
-                    suggestionPojo
-            );
-        }
-        return suggestionPojoMap;
     }
 }

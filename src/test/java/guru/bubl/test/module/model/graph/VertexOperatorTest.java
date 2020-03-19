@@ -6,23 +6,18 @@ package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.UserUris;
-import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.Triple;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.edge.EdgePojo;
-import guru.bubl.module.model.graph.tag.TagFactory;
 import guru.bubl.module.model.graph.tag.Tag;
+import guru.bubl.module.model.graph.tag.TagFactory;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
-import guru.bubl.module.model.suggestion.Suggestion;
-import guru.bubl.module.model.suggestion.SuggestionPojo;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
-import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -30,7 +25,6 @@ import java.net.URI;
 import java.util.UUID;
 
 import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -164,128 +158,6 @@ public class VertexOperatorTest extends ModelTestResources {
         assertFalse(
                 userGraph.haveElementWithId(
                         edgeBetweenAAndBUri
-                )
-        );
-    }
-
-
-    @Test 
-    public void can_add_suggestions_to_a_vertex() {
-        assertTrue(
-                vertexA.getSuggestions().isEmpty()
-        );
-        vertexA.addSuggestions(
-                suggestionsToMap(
-                        modelTestScenarios.startDateSuggestionFromEventIdentification(user())
-                )
-        );
-        assertFalse(
-                vertexA.getSuggestions().isEmpty()
-        );
-        Suggestion addedSuggestion = vertexA.getSuggestions().values().iterator().next();
-        assertThat(
-                addedSuggestion.label(),
-                is("Start date")
-        );
-        assertThat(
-                addedSuggestion.getType().uri(),
-                is(
-                        URI.create("http://rdf.freebase.com/rdf/type/datetime")
-                )
-        );
-        assertThat(
-                addedSuggestion.getSameAs().uri(),
-                is(
-                        URI.create("http://rdf.freebase.com/rdf/time/event/start_date")
-                )
-        );
-        assertTrue(
-                addedSuggestion.origins().iterator().next().isRelatedToFriendlyResource(
-                        new FriendlyResourcePojo(
-                                URI.create("http://rdf.freebase.com/rdf/time/event")
-                        )
-                )
-        );
-    }
-
-    @Test 
-    public void edge_from_accepting_suggestion_has_suggestion_label() {
-        SuggestionPojo nameSuggestion = modelTestScenarios.nameSuggestionFromPersonIdentification(
-                user()
-        );
-        Edge edge = vertexA.acceptSuggestion(nameSuggestion);
-        assertThat(edge.label(), is(nameSuggestion.label()));
-    }
-
-    @Test
-    public void edge_from_accepting_suggestion_has_suggestion_same_as() {
-        SuggestionPojo nameSuggestion = modelTestScenarios.nameSuggestionFromPersonIdentification(
-                user()
-        );
-        Edge edge = vertexA.acceptSuggestion(nameSuggestion);
-        Tag identification = edge.getTags().values().iterator().next();
-        assertThat(
-                identification.getExternalResourceUri(),
-                Is.is(nameSuggestion.getSameAs().uri())
-        );
-    }
-
-    @Test 
-    public void new_vertex_from_accepting_suggestion_has_suggestion_same_as_and_type() {
-        SuggestionPojo nameSuggestion = modelTestScenarios.nameSuggestionFromPersonIdentification(
-                user()
-        );
-        Vertex newVertex = vertexA.acceptSuggestion(nameSuggestion).destinationVertex();
-        assertThat(newVertex.getTags().size(), is(2));
-        assertTrue(
-                hasTypeWithExternalUri(
-                        newVertex,
-                        nameSuggestion.getSameAs().uri()
-                )
-        );
-        assertTrue(
-                hasTypeWithExternalUri(
-                        newVertex,
-                        nameSuggestion.getType().uri()
-                )
-        );
-    }
-
-    @Test 
-    public void vertex_from_suggestion_from_comparison_has_type_label() {
-        SuggestionPojo suggestion = testScenarios.suggestionFromComparisonForUserAndTriple(
-                anotherUser,
-                Triple.fromEdgeSourceAndDestination(
-                        vertexA.getEdgeThatLinksToDestinationVertex(vertexB),
-                        vertexOfAnotherUser,
-                        vertexB
-                )
-        );
-        Vertex newVertex = vertexOfAnotherUser.acceptSuggestion(
-                suggestion
-        ).destinationVertex();
-        assertThat(
-                newVertex.label(),
-                is("vertex B")
-        );
-    }
-
-    @Test 
-    public void vertex_from_suggestion_from_comparison_is_not_identified_to_suggestion_same_as() {
-        SuggestionPojo suggestion = testScenarios.suggestionFromComparisonForUserAndTriple(
-                anotherUser,
-                Triple.fromEdgeSourceAndDestination(
-                        vertexA.getEdgeThatLinksToDestinationVertex(vertexB),
-                        vertexOfAnotherUser,
-                        vertexB
-                )
-        );
-        VertexOperator newVertex = vertexOfAnotherUser.acceptSuggestion(
-                suggestion
-        ).destinationVertex();
-        assertFalse(
-                newVertex.getTags().containsKey(
-                        suggestion.getSameAs().uri()
                 )
         );
     }

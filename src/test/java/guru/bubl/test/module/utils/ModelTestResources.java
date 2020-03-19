@@ -25,7 +25,6 @@ import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphSearchFactory;
-import guru.bubl.module.model.suggestion.SuggestionPojo;
 import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.module.model.test.scenarios.VerticesCalledABAndC;
@@ -42,8 +41,6 @@ import org.neo4j.driver.v1.Session;
 import org.neo4j.graphdb.Transaction;
 
 import javax.inject.Inject;
-import java.net.URI;
-import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -177,10 +174,6 @@ public class ModelTestResources {
         return wholeGraphAroundDefaultCenterVertex().vertexWithIdentifier(
                 vertex.uri()
         );
-    }
-
-    public Map<URI, SuggestionPojo> suggestionsToMap(SuggestionPojo... suggestions) {
-        return modelTestScenarios.suggestionsToMap(suggestions);
     }
 
     protected EdgePojo edgeInWholeGraph(Edge edge) {
