@@ -64,7 +64,8 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     public static Injector injector;
 
 
-    public void beforeClass(){}
+    public void beforeClass() {
+    }
 
     @BeforeClass
     public static void realBeforeClass() {
@@ -84,7 +85,7 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     }
 
     @Before
-    public void before(){
+    public void before() {
         injector.injectMembers(this);
         graphComponentTest.before();
         userGraph = userGraph();
@@ -95,15 +96,16 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     }
 
     @After
-    public void after(){
+    public void after() {
         graphComponentTest.after();
     }
 
     @Override
-    public void afterClass(){}
+    public void afterClass() {
+    }
 
     @AfterClass
-    public static void realAfterClass(){
+    public static void realAfterClass() {
         injector.getInstance(GraphComponentTest.class)
                 .afterClass();
     }
@@ -112,6 +114,12 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     public int numberOfEdgesAndVertices() {
         return graphComponentTest.numberOfEdgesAndVertices();
     }
+
+    @Override
+    public SubGraphPojo wholeGraphAroundDefaultCenterVertex() {
+        return graphComponentTest.wholeGraphAroundDefaultCenterVertex();
+    }
+
 
     @Override
     public User user() {
@@ -153,10 +161,6 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
         return graphComponentTest.vertexOfAnotherUser();
     }
 
-    @Override
-    public SubGraphPojo wholeGraphAroundDefaultCenterVertex() {
-        return graphComponentTest.wholeGraphAroundDefaultCenterVertex();
-    }
 
     @Override
     public SubGraphOperator wholeGraph() {
@@ -179,7 +183,7 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
         return graphComponentTest.edgeInWholeGraph(edge);
     }
 
-    public Map<URI, SuggestionPojo> suggestionsToMap(SuggestionPojo ... suggestions){
+    public Map<URI, SuggestionPojo> suggestionsToMap(SuggestionPojo... suggestions) {
         return modelTestScenarios.suggestionsToMap(suggestions);
     }
 }

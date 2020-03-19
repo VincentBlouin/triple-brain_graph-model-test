@@ -28,63 +28,68 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
     @Test
     public void can_refresh_identifications_number_of_references() {
-        vertexB.addMeta(
+        vertexB.addTag(
                 modelTestScenarios.possessionIdentification()
         );
-        TagPojo identificationPojo = vertexA.addMeta(
+        TagPojo identificationPojo = vertexA.addTag(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
         tagFactory.withUri(
                 identificationPojo.uri()
-        ).setNbReferences(5);
+        ).getNbNeighbors().setPrivate(5);
         assertThat(
                 tagFactory.withUri(
                         identificationPojo.uri()
-                ).getNbReferences(),
+                ).getNbNeighbors().getPrivate(),
                 is(5)
         );
-        wholeGraphAdmin.refreshNumberOfReferencesToAllIdentifications();
+        wholeGraphAdmin.refreshNbNeighborsToAllTags();
         assertThat(
                 tagFactory.withUri(
                         identificationPojo.uri()
-                ).getNbReferences(),
+                ).getNbNeighbors().getPrivate(),
                 is(2)
         );
     }
 
     @Test
     public void sets_number_of_reference_to_zero_for_meta_having_zero_references() {
-        TagPojo meta = vertexB.addMeta(
+        TagPojo meta = vertexB.addTag(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
-        wholeGraphAdmin.refreshNumberOfReferencesToAllIdentifications();
+        wholeGraphAdmin.refreshNbNeighborsToAllTags();
         TagOperator metaOperator = tagFactory.withUri(meta.uri());
         assertThat(
-                metaOperator.getNbReferences(),
+                metaOperator.getNbNeighbors().getPrivate(),
                 is(1)
         );
-        vertexB.removeIdentification(meta);
-        metaOperator.setNbReferences(1);
-        wholeGraphAdmin.refreshNumberOfReferencesToAllIdentifications();
+        vertexB.removeTag(meta);
+        metaOperator.getNbNeighbors().setPrivate(1);
+        wholeGraphAdmin.refreshNbNeighborsToAllTags();
         assertThat(
-                metaOperator.getNbReferences(),
+                metaOperator.getNbNeighbors().getPrivate(),
                 is(0)
         );
     }
 
     @Test
     public void can_remove_metas_having_zero_references() {
-        TagPojo possessionMeta = vertexB.addMeta(
+        TagPojo possessionTag = vertexB.addTag(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
-        vertexB.addMeta(
+        vertexB.addTag(
                 modelTestScenarios.creatorPredicate()
         ).values().iterator().next();
         assertThat(
                 wholeGraph.getAllTags().size(),
                 is(2)
         );
-        vertexB.removeIdentification(possessionMeta);
+        TagOperator possesionTagOperator = tagFactory.withUri(possessionTag.uri());
+        possesionTagOperator.getNbNeighbors().setPrivate(0);
+        assertThat(
+                possesionTagOperator.getNbNeighbors().getTotal(),
+                is(0)
+        );
         assertThat(
                 wholeGraph.getAllTags().size(),
                 is(2)
@@ -98,73 +103,57 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
     @Test
     public void does_not_duplicate_identifications_when_re_adding() {
-        vertexB.addMeta(
+        vertexB.addTag(
                 modelTestScenarios.possessionIdentification()
         );
         assertThat(
-                vertexB.getIdentifications().size(),
+                vertexB.getTags().size(),
                 is(1)
         );
         assertThat(
-                vertexB.getIdentifications().size(),
+                vertexB.getTags().size(),
                 is(1)
         );
         wholeGraphAdmin.reAddIdentifications();
         assertThat(
-                vertexB.getIdentifications().size(),
+                vertexB.getTags().size(),
                 is(1)
         );
         assertThat(
-                vertexB.getIdentifications().size(),
+                vertexB.getTags().size(),
                 is(1)
         );
     }
 
     @Test
     public void does_not_duplicate_identifications_when_re_adding_even_if_identification_is_a_graph_element() {
-        vertexB.addMeta(
+        vertexB.addTag(
                 TestScenarios.tagFromFriendlyResource(
                         vertexA
                 )
         );
         assertThat(
-                vertexB.getIdentifications().size(),
+                vertexB.getTags().size(),
                 is(1)
         );
         assertThat(
-                vertexB.getIdentifications().size(),
-                is(1)
-        );
-        assertThat(
-                vertexA.getIdentifications().size(),
-                is(1)
-        );
-        assertThat(
-                vertexA.getIdentifications().size(),
+                vertexB.getTags().size(),
                 is(1)
         );
         wholeGraphAdmin.reAddIdentifications();
         assertThat(
-                vertexB.getIdentifications().size(),
+                vertexB.getTags().size(),
                 is(1)
         );
         assertThat(
-                vertexB.getIdentifications().size(),
-                is(1)
-        );
-        assertThat(
-                vertexA.getIdentifications().size(),
-                is(1)
-        );
-        assertThat(
-                vertexA.getIdentifications().size(),
+                vertexB.getTags().size(),
                 is(1)
         );
     }
 
     @Test
     public void index_all_includes_metas() {
-        vertexA.addMeta(
+        vertexA.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
         wholeGraphAdmin.reindexAll();
@@ -182,14 +171,14 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
     @Test
     public void can_refresh_number_of_connected_edges() {
-        vertexB.setNumberOfConnectedEdges(8);
+        vertexB.getNbNeighbors().setPrivate(8);
         assertThat(
-                vertexB.getNumberOfConnectedEdges(),
+                vertexB.getNbNeighbors().getTotal(),
                 is(8)
         );
-        wholeGraphAdmin.refreshNumberOfConnectedEdges();
+        wholeGraphAdmin.refreshNbNeighbors();
         assertThat(
-                vertexB.getNumberOfConnectedEdges(),
+                vertexB.getNbNeighbors().getTotal(),
                 is(2)
         );
     }
@@ -198,14 +187,14 @@ public class WholeGraphAdminTest extends ModelTestResources {
     public void can_refresh_number_of_public_connected_edges() {
         vertexB.makePublic();
         vertexC.makePublic();
-        vertexB.setNumberOfPublicConnectedEdges(8);
+        vertexB.getNbNeighbors().setPublic(8);
         assertThat(
-                vertexB.getNbPublicNeighbors(),
+                vertexB.getNbNeighbors().getPublic(),
                 is(8)
         );
-        wholeGraphAdmin.refreshNumberOfConnectedEdges();
+        wholeGraphAdmin.refreshNbNeighbors();
         assertThat(
-                vertexB.getNbPublicNeighbors(),
+                vertexB.getNbNeighbors().getPublic(),
                 is(1)
         );
     }

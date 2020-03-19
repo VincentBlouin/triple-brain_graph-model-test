@@ -24,9 +24,10 @@ public class PatternUserTest extends ModelTestResources {
     @Test
     public void can_clone() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexB.uri(),
                 1,
-                vertexB.uri()
+                ShareLevel.allShareLevelsInt
         );
         vertexB.label("maple syrup");
         vertexB.makePattern();
@@ -82,9 +83,10 @@ public class PatternUserTest extends ModelTestResources {
         ).use();
         List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm("maple syrup").searchOnlyForOwnVerticesForAutoCompletionByLabel(anotherUser);
         URI clonedUri = results.iterator().next().getGraphElement().uri();
-        SubGraphPojo subGraph = anotherUserGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraphPojo subGraph = anotherUserGraph.aroundVertexUriWithDepthInShareLevels(
+                clonedUri,
                 1,
-                clonedUri
+                ShareLevel.allShareLevelsInt
         );
         Vertex vertexBCloned = subGraph.vertexWithIdentifier(clonedUri);
         assertThat(
@@ -107,18 +109,20 @@ public class PatternUserTest extends ModelTestResources {
                 anotherUser,
                 vertexA.uri()
         ).use();
-        SubGraphPojo subGraph = anotherUserGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraphPojo subGraph = anotherUserGraph.aroundVertexUriWithDepthInShareLevels(
+                cloneUri,
                 1,
-                cloneUri
+                ShareLevel.allShareLevelsInt
         );
         VertexInSubGraph vertexInSubGraph = getVertexWithLabel(subGraph, "vertex B");
         assertThat(
-                vertexInSubGraph.getNumberOfConnectedEdges(),
+                vertexInSubGraph.getNbNeighbors().getTotal(),
                 is(2)
         );
-        subGraph = anotherUserGraph.graphWithDepthAndCenterBubbleUri(
+        subGraph = anotherUserGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexInSubGraph.uri(),
                 1,
-                vertexInSubGraph.uri()
+                ShareLevel.allShareLevelsInt
         );
 
         Vertex vertexC = getVertexWithLabel(subGraph, "cayman island");
@@ -134,12 +138,12 @@ public class PatternUserTest extends ModelTestResources {
         TagPojo tag = new TagPojo(
                 URI.create("/some-external-uri")
         );
-        vertexA.addMeta(tag);
-        TagPojo integratedTag = vertexOfAnotherUser.addMeta(
+        vertexA.addTag(tag);
+        TagPojo integratedTag = vertexOfAnotherUser.addTag(
                 tag
         ).values().iterator().next();
         assertThat(
-                integratedTag.getNbReferences(),
+                integratedTag.getNbNeighbors().getTotal(),
                 is(1)
         );
         patternUserFactory.forUserAndPatternUri(
@@ -147,7 +151,7 @@ public class PatternUserTest extends ModelTestResources {
                 vertexB.uri()
         ).use();
         assertThat(
-                tagFactory.withUri(integratedTag.uri()).getNbReferences(),
+                tagFactory.withUri(integratedTag.uri()).getNbNeighbors().getTotal(),
                 is(2)
         );
     }
@@ -235,9 +239,9 @@ public class PatternUserTest extends ModelTestResources {
     @Test
     public void does_not_remove_user_tags() {
         vertexOfAnotherUser.makePattern();
-        vertexB.addMeta(modelTestScenarios.computerScientistType());
+        vertexB.addTag(modelTestScenarios.computerScientistType());
         assertThat(
-                vertexB.getIdentifications().size(),
+                vertexB.getTags().size(),
                 is(1)
         );
         patternUserFactory.forUserAndPatternUri(
@@ -245,7 +249,7 @@ public class PatternUserTest extends ModelTestResources {
                 vertexOfAnotherUser.uri()
         ).use();
         assertThat(
-                vertexB.getIdentifications().size(),
+                vertexB.getTags().size(),
                 is(1)
         );
     }
@@ -253,9 +257,9 @@ public class PatternUserTest extends ModelTestResources {
     @Test
     public void does_not_clone_beyond_tags() {
         vertexC.label("carrot");
-        vertexA.addMeta(modelTestScenarios.computerScientistType());
-        vertexB.addMeta(modelTestScenarios.computerScientistType());
-        vertexC.addMeta(modelTestScenarios.computerScientistType());
+        vertexA.addTag(modelTestScenarios.computerScientistType());
+        vertexB.addTag(modelTestScenarios.computerScientistType());
+        vertexC.addTag(modelTestScenarios.computerScientistType());
         vertexB.makePattern();
         vertexB.getEdgeThatLinksToDestinationVertex(vertexC).remove();
         patternUserFactory.forUserAndPatternUri(
@@ -289,9 +293,10 @@ public class PatternUserTest extends ModelTestResources {
                 anotherUser,
                 vertexB.uri()
         ).use();
-        SubGraph subGraph = anotherUserGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraph subGraph = anotherUserGraph.aroundVertexUriWithDepthInShareLevels(
+                centerUri,
                 1,
-                centerUri
+                ShareLevel.allShareLevelsInt
         );
         subGraph.vertices().remove(centerUri);
         VertexOperator vertexUnder = vertexFactory.withUri(
@@ -327,7 +332,7 @@ public class PatternUserTest extends ModelTestResources {
                 ShareLevel.allShareLevelsInt
         );
         Vertex vertexBCopy = subGraph.vertexWithIdentifier(centerUri);
-        TagPojo patternTag = vertexBCopy.getIdentifications().values().iterator().next();
+        TagPojo patternTag = vertexBCopy.getTags().values().iterator().next();
         assertThat(
                 patternTag.getExternalResourceUri(),
                 is(vertexB.uri())

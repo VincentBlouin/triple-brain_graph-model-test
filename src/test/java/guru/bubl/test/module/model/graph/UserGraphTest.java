@@ -5,16 +5,12 @@
 package guru.bubl.test.module.model.graph;
 
 import com.google.common.collect.ImmutableSet;
-import guru.bubl.module.common_utils.Uris;
 import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.Image;
-import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.edge.EdgePojo;
-import guru.bubl.module.model.graph.exceptions.InvalidDepthOfSubVerticesException;
-import guru.bubl.module.model.graph.exceptions.NonExistingResourceException;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.tag.TagPojo;
@@ -22,18 +18,17 @@ import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
-import guru.bubl.module.model.suggestion.Suggestion;
-import guru.bubl.module.model.suggestion.SuggestionOrigin;
 import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import javax.inject.Inject;
 import java.net.URI;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
@@ -50,8 +45,10 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void can_get_graph_with_default_center_vertex() {
-        SubGraph graph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        SubGraph graph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                ShareLevel.allShareLevelsInt
         );
         assertThat(graph, is(not(nullValue())));
         assertThat(graph.numberOfVertices(), is(3));
@@ -63,9 +60,11 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void can_get_graph_with_custom_center_vertex() {
-        SubGraph graph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraph graph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexB.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
-                vertexB.uri());
+                ShareLevel.allShareLevelsInt
+        );
         assertThat(graph, is(not(nullValue())));
         Vertex centerVertex = graph.vertexWithIdentifier(vertexB.uri());
         assertThat(graph.numberOfEdges(), is(2));
@@ -77,8 +76,10 @@ public class UserGraphTest extends ModelTestResources {
     public void correct_edges_are_in_graph() {
         Edge betweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         Edge betweenBAndC = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                ShareLevel.allShareLevelsInt
         );
         assertThat(
                 subGraph.edges().size(),
@@ -95,8 +96,10 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void source_and_destination_vertex_are_in_edges() {
         Edge betweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                ShareLevel.allShareLevelsInt
         );
         Edge betweenAAndBFromSubGraph = subGraph.edgeWithIdentifier(
                 betweenAAndB.uri()
@@ -115,15 +118,17 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void elements_with_no_identifications_dont_have_identifications() {
-        vertexA.addMeta(
+        vertexA.addTag(
                 modelTestScenarios.computerScientistType()
         );
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                ShareLevel.allShareLevelsInt
         );
         Vertex vertexBInSubgraph = subGraph.vertices().get(vertexB.uri());
         assertTrue(
-                vertexBInSubgraph.getIdentifications().isEmpty()
+                vertexBInSubgraph.getTags().isEmpty()
         );
     }
 
@@ -149,17 +154,19 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void has_generic_identifications() {
-        vertexA.addMeta(
+        vertexA.addTag(
                 modelTestScenarios.computerScientistType()
         );
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                ShareLevel.allShareLevelsInt
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
                 vertexA.uri()
         );
         assertTrue(
-                vertexAInSubGraph.getIdentifications().values().iterator().hasNext()
+                vertexAInSubGraph.getTags().values().iterator().hasNext()
         );
     }
 
@@ -167,109 +174,41 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void can_return_multiple_identifications_for_one_graph_element() {
-        vertexA.addMeta(
+        vertexA.addTag(
                 modelTestScenarios.person()
         );
-        vertexA.addMeta(
+        vertexA.addTag(
                 modelTestScenarios.timBernersLee()
         );
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                ShareLevel.allShareLevelsInt
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
                 vertexA.uri()
         );
-        assertThat(vertexAInSubGraph.getIdentifications().size(), is(2));
+        assertThat(vertexAInSubGraph.getTags().size(), is(2));
     }
 
     @Test
 
 
     public void has_number_of_references_to_an_identification() {
-        vertexA.addMeta(
+        vertexA.addTag(
                 modelTestScenarios.person()
         );
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                ShareLevel.allShareLevelsInt
         );
-        TagPojo identification = subGraph.vertexWithIdentifier(
+        TagPojo tag = subGraph.vertexWithIdentifier(
                 vertexA.uri()
-        ).getIdentifications().values().iterator().next();
+        ).getTags().values().iterator().next();
         assertThat(
-                identification.getNbReferences(),
+                tag.getNbNeighbors().getTotal(),
                 is(1)
-        );
-    }
-
-    @Test
-
-
-    public void vertex_suggestions_have_their_properties_sub_graph() {
-        vertexA.setSuggestions(
-                suggestionsToMap(
-                        modelTestScenarios.startDateSuggestionFromEventIdentification(
-                                user()
-                        )
-                )
-        );
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
-        );
-        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
-                vertexA.uri()
-        );
-        Suggestion suggestion = vertexAInSubGraph.getSuggestions().values().iterator().next();
-        assertThat(suggestion.label(), is("Start date"));
-    }
-
-    @Test
-
-
-    public void suggestions_have_their_own_label() {
-        vertexA.setSuggestions(
-                suggestionsToMap(
-                        modelTestScenarios.startDateSuggestionFromEventIdentification(user()),
-                        modelTestScenarios.nameSuggestionFromPersonIdentification(user())
-                )
-        );
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
-        );
-        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
-                vertexA.uri()
-        );
-        List<String> labels = new ArrayList<>();
-        for (Suggestion suggestion : vertexAInSubGraph.getSuggestions().values()) {
-            labels.add(suggestion.label());
-        }
-        assertTrue(labels.contains("Start date"));
-        assertTrue(labels.contains("Name"));
-    }
-
-    @Test
-
-
-    public void has_suggestions_origin() {
-        vertexA.setSuggestions(
-                suggestionsToMap(
-                        modelTestScenarios.startDateSuggestionFromEventIdentification(user())
-                )
-        );
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
-        );
-        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
-                vertexA.uri()
-        );
-        Suggestion suggestion = vertexAInSubGraph.getSuggestions().values().iterator().next();
-        SuggestionOrigin origin = suggestion.origins().iterator().next();
-        FriendlyResourcePojo identification = new FriendlyResourcePojo(
-                URI.create("http://rdf.freebase.com/rdf/time/event")
-        );
-        assertTrue(
-                origin.isRelatedToFriendlyResource(
-                        identification
-                )
         );
     }
 
@@ -294,28 +233,6 @@ public class UserGraphTest extends ModelTestResources {
 //                is(2)
 //        );
 //    }
-
-    @Test
-
-
-    public void can_get_multiple_suggestions_in_sub_graph() {
-        vertexA.setSuggestions(
-                suggestionsToMap(
-                        modelTestScenarios.startDateSuggestionFromEventIdentification(user()),
-                        modelTestScenarios.nameSuggestionFromPersonIdentification(user())
-                )
-        );
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
-        );
-        VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
-                vertexA.uri()
-        );
-        assertThat(
-                vertexAInSubGraph.getSuggestions().size(),
-                is(2)
-        );
-    }
 
 //    @Test   ("Suspended feature")
 //    public void has_included_vertices_and_edges() {
@@ -411,8 +328,10 @@ public class UserGraphTest extends ModelTestResources {
                 image2
         );
         vertexA.addImages(images);
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                ShareLevel.allShareLevelsInt
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
                 vertexA.uri()
@@ -449,17 +368,19 @@ public class UserGraphTest extends ModelTestResources {
         identification.setImages(
                 images
         );
-        vertexA.addMeta(
+        vertexA.addTag(
                 identification
         );
 
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                ShareLevel.allShareLevelsInt
         );
         VertexInSubGraph vertexAInSubGraph = subGraph.vertexWithIdentifier(
                 vertexA.uri()
         );
-        FriendlyResource identificationInSubGraph = vertexAInSubGraph.getIdentifications().values().iterator().next();
+        FriendlyResource identificationInSubGraph = vertexAInSubGraph.getTags().values().iterator().next();
         assertThat(
                 identificationInSubGraph.images().size(),
                 is(2)
@@ -478,9 +399,10 @@ public class UserGraphTest extends ModelTestResources {
 
     public void can_get_circular_graph_with_default_center_vertex() {
         vertexC.addRelationToVertex(vertexA);
-        SubGraph graph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraph graph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
-                vertexA.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertThat(
                 graph,
@@ -499,16 +421,19 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void can_get_a_limited_graph_with_default_center_vertex() throws Exception {
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
                 2,
-                vertexA.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertThat(subGraph.numberOfEdges(), is(2));
         assertThat(subGraph.numberOfVertices(), is(3));
         assertTrue(subGraph.containsVertex(vertexA));
 
-        subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                1, vertexA.uri()
+        subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
+                1,
+                ShareLevel.allShareLevelsInt
         );
         assertThat(subGraph.numberOfEdges(), is(1));
         assertThat(subGraph.numberOfVertices(), is(2));
@@ -520,9 +445,10 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void can_get_a_limited_graph_with_a_custom_center_vertex() {
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexC.uri(),
                 1,
-                vertexC.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertThat(subGraph.numberOfVertices(), is(2));
         assertThat(subGraph.numberOfEdges(), is(1));
@@ -535,8 +461,10 @@ public class UserGraphTest extends ModelTestResources {
 
     public void can_get_sub_graph_of_destination_vertex_of_center_vertex() {
         Edge newEdge = vertexC.addVertexAndRelation();
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                2, vertexB.uri()
+        SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexB.uri(),
+                2,
+                ShareLevel.allShareLevelsInt
         );
         assertThat(subGraph.numberOfEdges(), is(3));
         assertThat(subGraph.numberOfVertices(), is(4));
@@ -548,13 +476,13 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void can_get_sub_graph_of_source_vertex_of_center_vertex() {
         SubGraph subGraph;
         Edge newEdge = vertexA.addVertexAndRelation();
-        subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                2, vertexB.uri()
+        subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexB.uri(),
+                2,
+                ShareLevel.allShareLevelsInt
         );
         assertThat(subGraph.numberOfVertices(), is(4));
         assertThat(subGraph.numberOfEdges(), is(3));
@@ -566,33 +494,33 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void can_get_sub_graph_of_source_vertex_of_center_vertex_having_also_a_circular_relation() {
         vertexC.addRelationToVertex(vertexA);
         Edge edgeGoingOutOfC = vertexC.addVertexAndRelation();
 
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
                 2,
-                vertexA.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertTrue(subGraph.containsVertex(edgeGoingOutOfC.destinationVertex()));
     }
 
     @Test
-
-
     public void with_a_depth_of_sub_vertices_of_zero_only_central_vertex_is_returned() {
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
                 0,
-                vertexA.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertThat(subGraph.numberOfVertices(), is(1));
         assertThat(subGraph.numberOfEdges(), is(0));
         assertTrue(subGraph.containsVertex(vertexA));
 
-        subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
-                0, vertexB.uri()
+        subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexB.uri(),
+                0,
+                ShareLevel.allShareLevelsInt
         );
         assertThat(subGraph.numberOfVertices(), is(1));
         assertThat(subGraph.numberOfEdges(), is(0));
@@ -600,49 +528,6 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-
-
-    public void an_exception_is_thrown_when_getting_graph_with_default_center_vertex_with_negative_depth() {
-        try {
-            userGraph.graphWithDepthAndCenterBubbleUri(
-                    -1,
-                    vertexA.uri()
-            );
-            fail();
-        } catch (InvalidDepthOfSubVerticesException e) {
-            assertThat(e.getMessage(), Is.is("Invalid depth of sub vertices. Depth was:-1 and center vertex uri was:" + vertexA.uri()));
-        }
-    }
-
-    @Test
-
-
-    public void an_exception_is_thrown_when_getting_graph_with_custom_center_vertex_with_negative_depth() {
-        try {
-            userGraph.graphWithDepthAndCenterBubbleUri(-1, vertexB.uri());
-            fail();
-        } catch (InvalidDepthOfSubVerticesException e) {
-            assertThat(e.getMessage(), Is.is("Invalid depth of sub vertices. Depth was:-1 and center vertex uri was:" + vertexB.uri()));
-        }
-    }
-
-    @Test
-
-
-    public void an_exception_is_thrown_when_getting_graph_with_non_existing_center_vertex() {
-        Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
-        try {
-            userGraph.graphWithDepthAndCenterBubbleUri(1, Uris.get("/invalid_uri"));
-            fail();
-        } catch (NonExistingResourceException e) {
-            assertThat(e.getMessage(), is("Resource with URI: /invalid_uri not found"));
-        }
-        assertThat(numberOfEdgesAndVertices(), is(numberOfEdgesAndVertices));
-    }
-
-    @Test
-
-
     public void can_create_new_vertex_out_of_nothing() {
         Vertex vertex = userGraph.createVertex();
         SubGraphOperator subGraph = wholeGraph();
@@ -650,13 +535,12 @@ public class UserGraphTest extends ModelTestResources {
     }
 
 
-
-
-
     @Test
     public void vertex_details_are_not_included_in_edge_source_and_destination_vertex() {
-        SubGraphPojo subGraph = userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                ShareLevel.allShareLevelsInt
         );
         Vertex sourceVertexInEdge = subGraph.edges().values().iterator().next().sourceVertex();
         assertThat(
@@ -675,9 +559,10 @@ public class UserGraphTest extends ModelTestResources {
 
     public void changing_edge_source_vertex_reflects_in_getting_subgraph() {
         EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexB.uri(),
                 1,
-                vertexB.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertThat(
                 subGraph.edgeWithIdentifier(
@@ -686,9 +571,10 @@ public class UserGraphTest extends ModelTestResources {
                 is(vertexB)
         );
         edge.changeSourceVertex(vertexA);
-        subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
                 1,
-                vertexA.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertThat(
                 subGraph.edgeWithIdentifier(
@@ -711,14 +597,14 @@ public class UserGraphTest extends ModelTestResources {
                 vertexA.uri()
         );
         assertThat(
-                vertexAPojo.getNbPublicNeighbors(),
+                vertexAPojo.getNbNeighbors().getPublic(),
                 is(1)
         );
         VertexInSubGraphPojo vertexBPojo = subGraph.vertexWithIdentifier(
                 vertexB.uri()
         );
         assertThat(
-                vertexBPojo.getNbPublicNeighbors(),
+                vertexBPojo.getNbNeighbors().getPublic(),
                 is(0)
         );
     }
@@ -736,14 +622,14 @@ public class UserGraphTest extends ModelTestResources {
                 vertexA.uri()
         );
         assertThat(
-                vertexAPojo.getNbFriendNeighbors(),
+                vertexAPojo.getNbNeighbors().getFriend(),
                 is(1)
         );
         VertexInSubGraphPojo vertexBPojo = subGraph.vertexWithIdentifier(
                 vertexB.uri()
         );
         assertThat(
-                vertexBPojo.getNbFriendNeighbors(),
+                vertexBPojo.getNbNeighbors().getFriend(),
                 is(0)
         );
     }
@@ -752,15 +638,16 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void can_extract_sub_graph_around_an_identifier() {
-        TagPojo computerScientist = vertexB.addMeta(
+        TagPojo computerScientist = vertexB.addTag(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
-        vertexC.addMeta(
+        vertexC.addTag(
                 computerScientist
         );
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                computerScientist.uri(),
                 1,
-                computerScientist.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertTrue(subGraph.containsVertex(vertexB));
         assertTrue(subGraph.containsVertex(vertexC));
@@ -771,7 +658,7 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void includes_tag_share_level() {
-        TagPojo computerScientist = vertexB.addMeta(
+        TagPojo computerScientist = vertexB.addTag(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
@@ -780,7 +667,7 @@ public class UserGraphTest extends ModelTestResources {
         );
         TagPojo tagInSubGraph = subGraph.vertexWithIdentifier(
                 vertexB.uri()
-        ).getIdentifications().values().iterator().next();
+        ).getTags().values().iterator().next();
         assertThat(
                 tagInSubGraph.getShareLevel(),
                 is(ShareLevel.PRIVATE)
@@ -794,7 +681,7 @@ public class UserGraphTest extends ModelTestResources {
         );
         tagInSubGraph = subGraph.vertexWithIdentifier(
                 vertexB.uri()
-        ).getIdentifications().values().iterator().next();
+        ).getTags().values().iterator().next();
         assertThat(
                 tagInSubGraph.getShareLevel(),
                 is(ShareLevel.PUBLIC)
@@ -805,7 +692,7 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void excludes_tag_not_in_same_share_level() {
-        vertexB.addMeta(
+        vertexB.addTag(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         vertexB.makePublic();
@@ -816,7 +703,7 @@ public class UserGraphTest extends ModelTestResources {
         assertThat(
                 subGraph.vertexWithIdentifier(
                         vertexB.uri()
-                ).getIdentifications().size(),
+                ).getTags().size(),
                 is(0)
         );
     }
@@ -825,13 +712,14 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void it_does_not_fail_if_identifier_references_nothing() {
-        TagPojo computerScientist = vertexB.addMeta(
+        TagPojo computerScientist = vertexB.addTag(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         vertexB.remove();
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                computerScientist.uri(),
                 1,
-                computerScientist.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertTrue(
                 subGraph.vertices().isEmpty()
@@ -843,18 +731,19 @@ public class UserGraphTest extends ModelTestResources {
 
     public void sub_graph_around_an_identifier_related_to_relations_include_vertices_and_relations() {
         EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
-        TagPojo toDo = edgeBetweenAAndB.addMeta(
+        TagPojo toDo = edgeBetweenAAndB.addTag(
                 modelTestScenarios.toDo()
         ).values().iterator().next();
         EdgeOperator edgeBetweenBAndC = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
-        edgeBetweenBAndC.addMeta(
+        edgeBetweenBAndC.addTag(
                 toDo
         );
         EdgePojo newEdge = vertexC.addVertexAndRelation();
         Vertex newVertex = newEdge.destinationVertex();
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                toDo.uri(),
                 1,
-                toDo.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertTrue(subGraph.containsEdge(edgeBetweenAAndB));
         assertTrue(subGraph.containsEdge(edgeBetweenBAndC));
@@ -868,12 +757,13 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void sub_graph_around_an_identifier_to_a_vertex_does_not_include_the_source_vertex() {
-        TagPojo human = vertexB.addMeta(
+        TagPojo human = vertexB.addTag(
                 modelTestScenarios.human()
         ).values().iterator().next();
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                human.uri(),
                 1,
-                human.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertTrue(
                 subGraph.containsVertex(vertexB)
@@ -887,12 +777,13 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void can_get_meta_center_from_user_graph() {
-        TagPojo human = vertexB.addMeta(
+        TagPojo human = vertexB.addTag(
                 modelTestScenarios.human()
         ).values().iterator().next();
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                human.uri(),
                 1,
-                human.uri()
+                ShareLevel.allShareLevelsInt
         );
         human = subGraph.getCenterMeta();
         assertThat(
@@ -907,12 +798,13 @@ public class UserGraphTest extends ModelTestResources {
     public void does_not_fail_if_identifier_does_not_have_images() {
         TagPojo tagPojo = modelTestScenarios.human();
         tagPojo.images();
-        vertexB.addMeta(
+        vertexB.addTag(
                 tagPojo
         ).values().iterator().next();
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexB.uri(),
                 1,
-                vertexB.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertTrue(true);
     }
@@ -924,9 +816,10 @@ public class UserGraphTest extends ModelTestResources {
         vertexB.setChildrenIndex(
                 "test children indexes"
         );
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexB.uri(),
                 1,
-                vertexB.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertTrue(
                 subGraph.vertexWithIdentifier(
@@ -939,18 +832,19 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void includes_children_indexes_for_tags() {
-        TagPojo computerScientist = vertexB.addMeta(
+        TagPojo computerScientist = vertexB.addTag(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
-        vertexC.addMeta(
+        vertexC.addTag(
                 computerScientist
         );
         tagFactory.withUri(
                 computerScientist.uri()
         ).setChildrenIndex("test children indexes");
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                computerScientist.uri(),
                 1,
-                computerScientist.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertThat(
                 subGraph.getCenterMeta().getChildrenIndex(),
@@ -962,15 +856,16 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void tags_can_have_no_surrounding_graph_elements() {
-        TagPojo computerScientist = vertexB.addMeta(
+        TagPojo computerScientist = vertexB.addTag(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
-        vertexB.removeIdentification(
+        vertexB.removeTag(
                 computerScientist
         );
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                computerScientist.uri(),
                 1,
-                computerScientist.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertThat(
                 subGraph.getCenterMeta().label(),
@@ -982,13 +877,14 @@ public class UserGraphTest extends ModelTestResources {
 
 
     public void center_tag_is_set_correctly_even_if_tag_shares_graph_element_with_another_tag() {
-        TagPojo tag = vertexB.addMeta(
+        TagPojo tag = vertexB.addTag(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
-        vertexB.addMeta(modelTestScenarios.person());
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        vertexB.addTag(modelTestScenarios.person());
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                tag.uri(),
                 1,
-                tag.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertThat(
                 subGraph.getCenterMeta().label(),
@@ -1000,12 +896,12 @@ public class UserGraphTest extends ModelTestResources {
 
     public void excludes_edges_around_tag_when_destination_or_source_vertex_is_private() {
         EdgeOperator bToCEdge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
-        TagPojo tag = bToCEdge.addMeta(
+        TagPojo tag = bToCEdge.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
         edgeFactory.withUri(
                 vertexB.addVertexAndRelation().uri()
-        ).addMeta(
+        ).addTag(
                 tag
         );
         vertexC.makePublic();
@@ -1033,12 +929,12 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void include_edges_around_tag_when_destination_and_source_vertex_are_public() {
         EdgeOperator bToCEdge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
-        TagPojo tag = bToCEdge.addMeta(
+        TagPojo tag = bToCEdge.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
         edgeFactory.withUri(
                 vertexB.addVertexAndRelation().uri()
-        ).addMeta(
+        ).addTag(
                 tag
         );
         vertexB.makePublic();
@@ -1072,7 +968,7 @@ public class UserGraphTest extends ModelTestResources {
         EdgeOperator newEdge = edgeFactory.withUri(
                 vertexB.addVertexAndRelation().uri()
         );
-        TagPojo tag = newEdge.addMeta(
+        TagPojo tag = newEdge.addTag(
                 TestScenarios.tagFromFriendlyResource(bToCEdge)
         ).values().iterator().next();
         newEdge.destinationVertex().makePublic();
@@ -1092,20 +988,21 @@ public class UserGraphTest extends ModelTestResources {
         );
         assertThat(
                 subGraph.edges().size(),
-                is(2)
+                is(1)
         );
         assertThat(
                 subGraph.vertices().size(),
-                is(3)
+                is(2)
         );
     }
 
     @Test
     public void include_colors() {
         vertexB.setColors("blue");
-        SubGraphPojo subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexB.uri(),
                 1,
-                vertexB.uri()
+                ShareLevel.allShareLevelsInt
         );
         assertThat(subGraph.vertexWithIdentifier(
                 vertexB.uri()).getColors()
@@ -1230,8 +1127,10 @@ public class UserGraphTest extends ModelTestResources {
 
     @Override
     public VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
-        return userGraph.graphWithAnyVertexAndDepth(
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES
+        return userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexA.uri(),
+                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
+                ShareLevel.allShareLevelsInt
         ).vertexWithIdentifier(vertex.uri());
     }
 

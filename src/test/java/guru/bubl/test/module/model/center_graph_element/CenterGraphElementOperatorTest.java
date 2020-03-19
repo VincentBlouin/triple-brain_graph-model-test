@@ -46,7 +46,7 @@ public class CenterGraphElementOperatorTest extends ModelTestResources {
 
     @Test
     public void can_get_center_elements_of_type_meta() {
-        TagPojo meta = vertexA.addMeta(
+        TagPojo meta = vertexA.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
         List<CenterGraphElementPojo> centerGraphElements = centerGraphElementsOperatorFactory.usingDefaultLimits(

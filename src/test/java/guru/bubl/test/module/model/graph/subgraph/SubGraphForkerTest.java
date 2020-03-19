@@ -102,9 +102,10 @@ public class SubGraphForkerTest extends ModelTestResources {
         );
         vertexOfAnotherUser.makePrivate();
         destinationVertex.makePublic();
-        SubGraph subGraph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexOfAnotherUser.uri(),
                 1,
-                vertexOfAnotherUser.uri()
+                ShareLevel.allShareLevelsInt
         );
         Integer numberOfEdges = numberOfEdges();
         forker.fork(
@@ -135,12 +136,13 @@ public class SubGraphForkerTest extends ModelTestResources {
                         ShareLevel.allShareLevelsInt
                 )
         ).values().iterator().next();
-        VertexInSubGraphPojo vertex = userGraph.graphWithDepthAndCenterBubbleUri(
+        VertexInSubGraphPojo vertex = userGraph.aroundVertexUriWithDepthInShareLevels(
+                forkVertex.uri(),
                 1,
-                forkVertex.uri()
+                ShareLevel.allShareLevelsInt
         ).vertices().values().iterator().next();
         assertTrue(
-                vertex.getIdentifications().containsKey(
+                vertex.getTags().containsKey(
                         vertexOfAnotherUser.uri()
                 )
         );
@@ -149,7 +151,7 @@ public class SubGraphForkerTest extends ModelTestResources {
     @Test
     public void identifications_are_included() {
         vertexOfAnotherUser.makePublic();
-        TagPojo identifier = vertexOfAnotherUser.addMeta(
+        TagPojo identifier = vertexOfAnotherUser.addTag(
                 modelTestScenarios.human()
         ).values().iterator().next();
         Vertex forkVertex = forker.fork(
@@ -163,7 +165,7 @@ public class SubGraphForkerTest extends ModelTestResources {
                 ShareLevel.allShareLevelsInt
         ).vertices().values().iterator().next();
         assertTrue(
-                vertex.getIdentifications().containsKey(
+                vertex.getTags().containsKey(
                         identifier.getExternalResourceUri()
                 )
         );
@@ -252,7 +254,7 @@ public class SubGraphForkerTest extends ModelTestResources {
                 vertex.uri()
         );
         assertThat(
-                forkedVertexOfAnotherUser.getNumberOfConnectedEdges(),
+                forkedVertexOfAnotherUser.getNbNeighbors().getTotal(),
                 is(1)
         );
     }

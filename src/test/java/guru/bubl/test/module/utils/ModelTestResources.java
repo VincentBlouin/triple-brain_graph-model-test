@@ -10,20 +10,20 @@ import guru.bubl.module.model.center_graph_element.CenterGraphElementOperatorFac
 import guru.bubl.module.model.center_graph_element.CenterGraphElementsOperatorFactory;
 import guru.bubl.module.model.graph.GraphElementOperator;
 import guru.bubl.module.model.graph.GraphFactory;
+import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeFactory;
 import guru.bubl.module.model.graph.edge.EdgePojo;
-import guru.bubl.module.model.graph.tag.TagFactory;
-import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.pattern.PatternUserFactory;
 import guru.bubl.module.model.graph.subgraph.SubGraphForker;
 import guru.bubl.module.model.graph.subgraph.SubGraphForkerFactory;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.subgraph.UserGraph;
+import guru.bubl.module.model.graph.tag.TagFactory;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
-import guru.bubl.module.model.tag.UserTagsOperatorFactory;
 import guru.bubl.module.model.search.GraphSearchFactory;
 import guru.bubl.module.model.suggestion.SuggestionPojo;
 import guru.bubl.module.model.test.SubGraphOperator;
@@ -49,9 +49,6 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class ModelTestResources {
-
-    @Inject
-    protected UserTagsOperatorFactory userTagsOperatorFactory;
 
     @Inject
     protected CenterGraphElementOperatorFactory centerGraphElementOperatorFactory;
@@ -164,9 +161,10 @@ public class ModelTestResources {
 
     protected SubGraphPojo wholeGraphAroundDefaultCenterVertex() {
         Integer depthThatShouldCoverWholeGraph = 1000;
-        return neo4jSubGraphExtractorFactory.withCenterVertexAndDepth(
+        return neo4jSubGraphExtractorFactory.withCenterVertexInShareLevelsAndDepth(
                 vertexA.uri(),
-                depthThatShouldCoverWholeGraph
+                depthThatShouldCoverWholeGraph,
+                ShareLevel.allShareLevelsInt
         ).load();
     }
 
@@ -211,36 +209,36 @@ public class ModelTestResources {
     }
 
     protected void testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(GraphElementOperator graphElement) {
-        TagPojo computerScientist = graphElement.addMeta(
+        TagPojo computerScientist = graphElement.addTag(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
-        TagPojo personIdentification = graphElement.addMeta(
+        TagPojo personIdentification = graphElement.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
-        vertexB.addMeta(
+        vertexB.addTag(
                 modelTestScenarios.person()
         );
-        computerScientist = graphElement.getIdentifications().get(computerScientist.getExternalResourceUri());
+        computerScientist = graphElement.getTags().get(computerScientist.getExternalResourceUri());
         assertThat(
-                computerScientist.getNbReferences(),
+                computerScientist.getNbNeighbors().getPrivate(),
                 is(1)
         );
-        personIdentification = graphElement.getIdentifications().get(personIdentification.getExternalResourceUri());
+        personIdentification = graphElement.getTags().get(personIdentification.getExternalResourceUri());
         assertThat(
-                personIdentification.getNbReferences(),
+                personIdentification.getNbNeighbors().getPrivate(),
                 is(2)
         );
         graphElement.remove();
         assertThat(
                 tagFactory.withUri(
                         computerScientist.uri()
-                ).getNbReferences(),
+                ).getNbNeighbors().getPrivate(),
                 is(0)
         );
         assertThat(
                 tagFactory.withUri(
                         personIdentification.uri()
-                ).getNbReferences(),
+                ).getNbNeighbors().getPrivate(),
                 is(1)
         );
     }
@@ -256,14 +254,14 @@ public class ModelTestResources {
     }
 
     protected void removeAllUsers() {
-        try ( Session session = driver.session() ){
+        try (Session session = driver.session()) {
             session.run(
                     "MATCH (n:User) DETACH DELETE n"
             );
         }
     }
 
-    protected void setupThirdUser(){
+    protected void setupThirdUser() {
         thirdUser = User.withEmail(
                 "tres.usuario@example.org"
         ).setUsername("tres").setPreferredLocales("[es]").password("12345678");

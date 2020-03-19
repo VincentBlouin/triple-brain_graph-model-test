@@ -5,6 +5,7 @@
 package learning;
 
 import com.google.gson.Gson;
+import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.test.module.utils.AdaptableGraphComponentTest;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
@@ -22,15 +23,17 @@ import static org.junit.Assert.fail;
 
 public class GsonLearning extends AdaptableGraphComponentTest {
     @Test
-    public void can_convert_vertex()throws Exception{
+    public void can_convert_vertex() throws Exception {
         Gson gson = new Gson();
         TagPojo timBernersLeePojo = modelTestScenarios.timBernersLee();
-        vertexB.addMeta(
+        vertexB.addTag(
                 timBernersLeePojo
         );
-        SubGraph graph = userGraph.graphWithDepthAndCenterBubbleUri(
+        SubGraph graph = userGraph.aroundVertexUriWithDepthInShareLevels(
+                vertexB.uri(),
                 3,
-                vertexB.uri());
+                ShareLevel.allShareLevelsInt
+        );
         VertexInSubGraphPojo vertexBInSubGraphPojo = (VertexInSubGraphPojo) graph.vertexWithIdentifier(
                 vertexB.uri()
         );
@@ -44,7 +47,7 @@ public class GsonLearning extends AdaptableGraphComponentTest {
     }
 
     @Test
-    public void map_converts_to_object_and_not_array()throws Exception{
+    public void map_converts_to_object_and_not_array() throws Exception {
         Map<String, String> map = new HashMap<>();
         map.put("pomme", "avion");
         Gson gson = new Gson();
@@ -55,13 +58,13 @@ public class GsonLearning extends AdaptableGraphComponentTest {
                 jsonObject.getString("pomme"),
                 is("avion")
         );
-        try{
+        try {
             new JSONArray(
                     gson.toJson(map)
             );
             fail();
-        }catch(Exception e){
-           //success
+        } catch (Exception e) {
+            //success
         }
     }
 

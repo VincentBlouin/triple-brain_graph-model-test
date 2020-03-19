@@ -5,6 +5,9 @@
 package guru.bubl.test.module.model.graph.search;
 
 import com.google.inject.Inject;
+import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
+import guru.bubl.module.model.center_graph_element.CenterGraphElementOperatorFactory;
+import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
@@ -12,6 +15,7 @@ import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.search.GraphIndexer;
 import guru.bubl.test.module.utils.search.Neo4jSearchRelatedTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -31,7 +35,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     public void index_vertex_sets_its_private_surround_graph() {
         GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
                 vertexB.label()
-        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+        ).searchForAllOwnResources(
                 user
         ).iterator().next();
         assertTrue(
@@ -40,7 +44,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         graphIndexer.indexVertex(vertexB);
         vertexSearchResult = graphSearchFactory.usingSearchTerm(
                 vertexB.label()
-        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+        ).searchForAllOwnResources(
                 user
         ).iterator().next();
         assertFalse(
@@ -58,7 +62,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         graphIndexer.indexVertex(vertexB);
         GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
                 vertexB.label()
-        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+        ).searchForAllOwnResources(
                 user
         ).iterator().next();
         assertThat(
@@ -75,7 +79,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         graphIndexer.indexVertex(vertexB);
         GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
                 vertexB.label()
-        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+        ).searchForAllOwnResources(
                 user
         ).iterator().next();
         assertThat(
@@ -90,7 +94,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         graphIndexer.indexVertex(vertexB);
         GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
                 vertexB.label()
-        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+        ).searchForAllOwnResources(
                 user
         ).iterator().next();
         assertThat(
@@ -115,7 +119,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         graphIndexer.indexVertex(vertexB);
         GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
                 vertexB.label()
-        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+        ).searchForAllOwnResources(
                 user
         ).iterator().next();
         String[] context = vertexSearchResult.getContext().values().toArray(
@@ -142,7 +146,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         graphIndexer.indexVertex(vertexA);
         GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
                 vertexA.label()
-        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+        ).searchForAllOwnResources(
                 user
         ).iterator().next();
         assertThat(
@@ -156,27 +160,21 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         vertexB.makePublic();
         vertexA.makePublic();
         graphIndexer.indexVertex(vertexB);
-        GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
-                vertexB.label()
-        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                anotherUser
-        ).iterator().next();
+        CenterGraphElementOperator vertexBAsCenter = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        );
+        vertexBAsCenter.incrementNumberOfVisits();
+        vertexBAsCenter.updateLastCenterDate();
+        CenterGraphElementPojo center = centerGraphElementsOperatorFactory.usingDefaultLimits().getAllPublic().iterator().next();
         assertThat(
-                vertexSearchResult.getContext().size(),
+                center.getContext().size(),
                 is(1)
         );
         vertexC.makePublic();
         graphIndexer.indexVertex(vertexB);
-        vertexSearchResult = graphSearchFactory.usingSearchTerm(
-                vertexB.label()
-        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
-                anotherUser
-        ).iterator().next();
-        assertFalse(
-                vertexSearchResult.getContext().isEmpty()
-        );
+        center = centerGraphElementsOperatorFactory.usingDefaultLimits().getAllPublic().iterator().next();
         assertThat(
-                vertexSearchResult.getContext().size(),
+                center.getContext().size(),
                 is(2)
         );
     }
@@ -186,7 +184,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
         graphIndexer.indexVertex(vertexB);
         GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
                 vertexB.label()
-        ).searchForAnyResourceThatCanBeUsedAsAnIdentifier(
+        ).searchForAllOwnResources(
                 user
         ).iterator().next();
         assertFalse(
@@ -256,7 +254,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
 
     @Test
     public void meta_context_includes_label_of_surround_vertices() {
-        TagPojo meta = vertexA.addMeta(
+        TagPojo meta = vertexA.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
         graphIndexer.indexMeta(meta);
@@ -275,7 +273,7 @@ public class GraphIndexerTest extends Neo4jSearchRelatedTest {
     @Test
     public void meta_related_to_relation_context_includes_label_of_surround_vertices() {
         EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
-        TagPojo meta = edge.addMeta(
+        TagPojo meta = edge.addTag(
                 modelTestScenarios.toDo()
         ).values().iterator().next();
         graphIndexer.indexMeta(meta);

@@ -13,7 +13,6 @@ import guru.bubl.test.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphOperator;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -107,13 +106,13 @@ public class WholeGraphTest extends ModelTestResources {
         assertTrue(
                 wholeGraph.getAllTags().isEmpty()
         );
-        vertexA.addMeta(
+        vertexA.addTag(
                 modelTestScenarios.human()
         );
-        vertexA.addMeta(
+        vertexA.addTag(
                 modelTestScenarios.person()
         );
-        vertexA.addMeta(
+        vertexA.addTag(
                 modelTestScenarios.timBernersLee()
         );
         assertThat(
@@ -127,13 +126,13 @@ public class WholeGraphTest extends ModelTestResources {
         VertexOperator anotherUserVertex = vertexFactory.withUri(
                 neo4jUserGraphFactory.withUser(anotherUser).createVertex().uri()
         );
-        TagPojo anotherUserTag = anotherUserVertex.addMeta(
+        TagPojo anotherUserTag = anotherUserVertex.addTag(
                 modelTestScenarios.book()
         ).values().iterator().next();
         VertexOperator newUserVertex = vertexFactory.withUri(
                 neo4jUserGraphFactory.withUser(user).createVertex().uri()
         );
-        TagPojo newUserTag = newUserVertex.addMeta(
+        TagPojo newUserTag = newUserVertex.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
         Set<TagOperator> allUserTags = wholeGraph.getAllTagsOfUser(user);

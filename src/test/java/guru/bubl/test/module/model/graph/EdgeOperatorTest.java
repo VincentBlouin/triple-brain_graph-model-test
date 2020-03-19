@@ -99,32 +99,17 @@ public class EdgeOperatorTest extends ModelTestResources {
         assertThat(updatedNumberOfEdgesAndVertices, is(numberOfEdgesAndVertices - 1));
     }
 
-    @Test
-    public void deleting_a_relation_decrements_number_of_connected_edges_to_vertices() {
-        assertThat(vertexA.getNumberOfConnectedEdges(), is(1));
-        assertThat(vertexB.getNumberOfConnectedEdges(), is(2));
-        vertexA.getEdgeThatLinksToDestinationVertex(vertexB).remove();
-        assertThat(vertexA.getNumberOfConnectedEdges(), is(0));
-        assertThat(vertexB.getNumberOfConnectedEdges(), is(1));
-    }
 
     @Test
-    public void removing_an_edge_decrements_number_of_references_to_its_identification() {
-        testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(
-                vertexA.getEdgeThatLinksToDestinationVertex(vertexB)
-        );
-    }
-
-    @Test
-    public void can_add_meta() {
+    public void can_add_tag() {
         EdgeOperator newEdge = edgeFactory.withUri(
                 vertexA.addVertexAndRelation().uri()
         );
-        assertTrue(newEdge.getIdentifications().isEmpty());
-        newEdge.addMeta(
+        assertTrue(newEdge.getTags().isEmpty());
+        newEdge.addTag(
                 modelTestScenarios.creatorPredicate()
         );
-        assertFalse(newEdge.getIdentifications().isEmpty());
+        assertFalse(newEdge.getTags().isEmpty());
     }
 
     @Test
@@ -158,7 +143,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     public void an_edge_is_private_at_creation_if_both_end_vertices_are_private() {
         Edge edge = vertexA.addVertexAndRelation();
         assertFalse(
-                edge.isPublic()
+                edgeFactory.withUri(edge.uri()).isPublic()
         );
     }
 
@@ -167,7 +152,7 @@ public class EdgeOperatorTest extends ModelTestResources {
         vertexA.makePublic();
         Edge edge = vertexA.addVertexAndRelation();
         assertFalse(
-                edge.isPublic()
+                edgeFactory.withUri(edge.uri()).isPublic()
         );
     }
 
@@ -175,7 +160,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     public void an_edge_is_public_at_creation_if_both_end_vertices_are_public() {
         vertexA.makePublic();
         vertexC.makePublic();
-        Edge edge = vertexA.addRelationToVertex(vertexC);
+        EdgeOperator edge = vertexA.addRelationToVertex(vertexC);
         assertTrue(
                 edge.isPublic()
         );
@@ -199,12 +184,12 @@ public class EdgeOperatorTest extends ModelTestResources {
     public void changing_source_vertex_increments_number_of_connected_vertices_for_new_source_vertex() {
         EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
         assertThat(
-                vertexA.getNumberOfConnectedEdges(),
+                vertexA.getNbNeighbors().getTotal(),
                 is(1)
         );
         edge.changeSourceVertex(vertexA);
         assertThat(
-                vertexA.getNumberOfConnectedEdges(),
+                vertexA.getNbNeighbors().getTotal(),
                 is(2)
         );
     }
@@ -213,12 +198,12 @@ public class EdgeOperatorTest extends ModelTestResources {
     public void changing_source_vertex_decrements_number_of_connected_vertices_for_previous_source_vertex() {
         EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
         assertThat(
-                vertexB.getNumberOfConnectedEdges(),
+                vertexB.getNbNeighbors().getTotal(),
                 is(2)
         );
         edge.changeSourceVertex(vertexA);
         assertThat(
-                vertexB.getNumberOfConnectedEdges(),
+                vertexB.getNbNeighbors().getTotal(),
                 is(1)
         );
     }
@@ -241,12 +226,12 @@ public class EdgeOperatorTest extends ModelTestResources {
     public void kept_vertex_nb_public_neighbors_is_unchanged_when_previous_and_new_end_are_private() {
         EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         assertThat(
-                vertexA.getNbPublicNeighbors(),
+                vertexA.getNbNeighbors().getPublic(),
                 is(0)
         );
         edgeBetweenAAndB.changeDestinationVertex(vertexC);
         assertThat(
-                vertexA.getNbPublicNeighbors(),
+                vertexA.getNbNeighbors().getPublic(),
                 is(0)
         );
     }
@@ -258,12 +243,12 @@ public class EdgeOperatorTest extends ModelTestResources {
         vertexC.makePublic();
         EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         assertThat(
-                vertexA.getNbPublicNeighbors(),
+                vertexA.getNbNeighbors().getPublic(),
                 is(1)
         );
         edgeBetweenAAndB.changeDestinationVertex(vertexC);
         assertThat(
-                vertexA.getNbPublicNeighbors(),
+                vertexA.getNbNeighbors().getPublic(),
                 is(1)
         );
     }
@@ -273,13 +258,13 @@ public class EdgeOperatorTest extends ModelTestResources {
     public void kept_vertex_nb_public_neighbors_increments_when_previous_end_is_private_and_new_is_public() {
         EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         assertThat(
-                vertexA.getNbPublicNeighbors(),
+                vertexA.getNbNeighbors().getPublic(),
                 is(0)
         );
         vertexC.makePublic();
         edgeBetweenAAndB.changeDestinationVertex(vertexC);
         assertThat(
-                vertexA.getNbPublicNeighbors(),
+                vertexA.getNbNeighbors().getPublic(),
                 is(1)
         );
     }
@@ -288,14 +273,14 @@ public class EdgeOperatorTest extends ModelTestResources {
     public void changing_destination_keeps_vertex_nb_public_neighbors_decrements_when_previous_end_is_public_and_new_is_private() {
         vertexB.makePublic();
         assertThat(
-                vertexA.getNbPublicNeighbors(),
+                vertexA.getNbNeighbors().getPublic(),
                 is(1)
         );
         vertexC.makePrivate();
         EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         edgeBetweenAAndB.changeDestinationVertex(vertexC);
         assertThat(
-                vertexA.getNbPublicNeighbors(),
+                vertexA.getNbNeighbors().getPublic(),
                 is(0)
         );
     }
@@ -304,13 +289,13 @@ public class EdgeOperatorTest extends ModelTestResources {
     public void previous_vertex_nb_public_neighbors_decrements_when_kept_vertex_is_public() {
         vertexA.makePublic();
         assertThat(
-                vertexB.getNbPublicNeighbors(),
+                vertexB.getNbNeighbors().getPublic(),
                 is(1)
         );
         EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         edgeBetweenAAndB.changeDestinationVertex(vertexC);
         assertThat(
-                vertexB.getNbPublicNeighbors(),
+                vertexB.getNbNeighbors().getPublic(),
                 is(0)
         );
     }
@@ -319,86 +304,14 @@ public class EdgeOperatorTest extends ModelTestResources {
     public void new_vertex_nb_public_neighbors_increments_when_kept_vertex_is_public() {
         vertexA.makePublic();
         assertThat(
-                vertexC.getNbPublicNeighbors(),
+                vertexC.getNbNeighbors().getPublic(),
                 is(0)
         );
         EdgeOperator edgeBetweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         edgeBetweenAAndB.changeDestinationVertex(vertexC);
         assertThat(
-                vertexC.getNbPublicNeighbors(),
+                vertexC.getNbNeighbors().getPublic(),
                 is(1)
-        );
-    }
-
-    @Test
-    public void remove_decrements_nb_public_neighbors_to_destination_if_source_is_public() {
-        vertexA.makePublic();
-        assertThat(
-                vertexB.getNbPublicNeighbors(),
-                is(1)
-        );
-        vertexA.getEdgeThatLinksToDestinationVertex(vertexB).remove();
-        assertThat(
-                vertexB.getNbPublicNeighbors(),
-                is(0)
-        );
-    }
-
-    @Test
-    public void decrements_nb_public_neighbors_to_source_if_destination_is_public() {
-        vertexB.makePublic();
-        assertThat(
-                vertexA.getNbPublicNeighbors(),
-                is(1)
-        );
-        vertexA.getEdgeThatLinksToDestinationVertex(vertexB).remove();
-        assertThat(
-                vertexA.getNbPublicNeighbors(),
-                is(0)
-        );
-    }
-
-    @Test
-    public void does_not_decrement_nb_public_neighbors_if_both_are_private() {
-        assertThat(
-                vertexA.getNbPublicNeighbors(),
-                is(0)
-        );
-        assertThat(
-                vertexB.getNbPublicNeighbors(),
-                is(0)
-        );
-        vertexA.getEdgeThatLinksToDestinationVertex(vertexB).remove();
-        assertThat(
-                vertexA.getNbPublicNeighbors(),
-                is(0)
-        );
-        assertThat(
-                vertexB.getNbPublicNeighbors(),
-                is(0)
-        );
-    }
-
-    @Test
-    public void remove_decrements_nb_public_neighbors_if_both_are_public() {
-        vertexA.makePublic();
-        vertexB.makePublic();
-        assertThat(
-                vertexA.getNbPublicNeighbors(),
-                is(1)
-        );
-        assertThat(
-                vertexB.getNbPublicNeighbors(),
-                is(1)
-        );
-        vertexA.getEdgeThatLinksToDestinationVertex(vertexB).remove();
-        assertThat(
-                vertexA.getNbPublicNeighbors(),
-                is(0)
-        );
-        assertThat(
-                vertexB.getNbPublicNeighbors(),
-                is(0)
         );
     }
 
@@ -411,12 +324,12 @@ public class EdgeOperatorTest extends ModelTestResources {
         edgeAB.remove();
         EdgeOperator edgeBC = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
         assertThat(
-                edgeBC.getIdentifications().size(),
+                edgeBC.getTags().size(),
                 is(0)
         );
-        edgeBC.addMeta(edgeABTag);
+        edgeBC.addTag(edgeABTag);
         assertThat(
-                edgeBC.getIdentifications().size(),
+                edgeBC.getTags().size(),
                 is(1)
         );
     }

@@ -8,7 +8,6 @@ import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.tag.TagOperator;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.URI;
@@ -22,62 +21,62 @@ public class TagOperatorTest extends ModelTestResources {
 
     @Test
     public void can_set_number_of_references() {
-        TagPojo identificationPojo = vertexA.addMeta(
+        TagPojo identificationPojo = vertexA.addTag(
                 modelTestScenarios.tShirt()
         ).values().iterator().next();
         TagOperator tagOperator = tagFactory.withUri(
                 identificationPojo.uri()
         );
         assertThat(
-                tagOperator.getNbReferences(),
+                tagOperator.getNbNeighbors().getPrivate(),
                 is(1)
         );
-        tagOperator.setNbReferences(5);
+        tagOperator.getNbNeighbors().setPrivate(5);
         assertThat(
-                tagOperator.getNbReferences(),
+                tagOperator.getNbNeighbors().getPrivate(),
                 is(5)
         );
     }
 
     @Test
     public void can_build_pojo() {
-        TagPojo identificationPojo = vertexA.addMeta(
+        TagPojo tag = vertexA.addTag(
                 modelTestScenarios.location()
         ).values().iterator().next();
-        URI identifierUri = identificationPojo.uri();
+        URI identifierUri = tag.uri();
         TagOperator tagOperator = tagFactory.withUri(
                 identifierUri
         );
-        identificationPojo = tagOperator.buildPojo();
+        tag = tagOperator.buildPojo();
         assertThat(
-                identificationPojo.label(),
+                tag.label(),
                 is("Location")
         );
         assertThat(
-                identificationPojo.getNbReferences(),
+                tag.getNbNeighbors().getPrivate(),
                 is(1)
         );
         assertThat(
-                identificationPojo.uri(),
+                tag.uri(),
                 is(identifierUri)
         );
         assertThat(
-                identificationPojo.getExternalResourceUri().toString(),
+                tag.getExternalResourceUri().toString(),
                 is("http://rdf.freebase.com/rdf/m/01n7")
         );
         assertThat(
-                identificationPojo.comment(),
+                tag.comment(),
                 is("The Location type is used for any topic with a fixed location on the planet Earth. It includes geographic features such as oceans and mountains, political entities like cities and man-made objects like buildings.Guidelines for filling in location properties:geolocation: the longitude and latitude (in decimal notation) of the feature, or of the geographical center (centroid) fo the feature.contains and contained by: these properties can be used to show spatial relationships between different locations, such as an island contained by a body of water (which is equivalent to saying the body of water contains the island), a state contained by a country, a mountain within the borders of a national park, etc. For geopolitical locations,   containment two levels up and down is the ideal minimum. For example, the next two levels up for the city of Detroit are Wayne County and the state of Michigan.adjoins: also used to show spatial relations, in this case between locations that share a border.USBG Name: A unique name given to geographic features within the U.S. and its territories by the United States Board on Geographic Names. More information can be found on their website. GNIS ID: A unique id given to geographic features within the U.S. and its territories by the United States Board on Geographic Names. GNIS stands for Geographic Names Information System. More information can be found on their website.GEOnet Feature ID: The UFI (Unique Feature ID) used by GeoNet for features outside of the United States. More information can be found on their website.")
         );
     }
 
     @Test
     public void mergeTo_removes_tag() {
-        TagPojo personFromFreebase = vertexA.addMeta(
+        TagPojo personFromFreebase = vertexA.addTag(
                 modelTestScenarios.personFromFreebase()
         ).values().iterator().next();
 
-        TagPojo personTag = vertexA.addMeta(
+        TagPojo personTag = vertexA.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
         assertTrue(
@@ -97,23 +96,23 @@ public class TagOperatorTest extends ModelTestResources {
 
     @Test
     public void mergeTo_includes_tagged_graph_elements() {
-        TagPojo personFromFreebase = vertexA.addMeta(
+        TagPojo personFromFreebase = vertexA.addTag(
                 modelTestScenarios.personFromFreebase()
         ).values().iterator().next();
-        TagPojo personTag = vertexB.addMeta(
+        TagPojo personTag = vertexB.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
-        vertexC.addMeta(
+        vertexC.addTag(
                 personFromFreebase
         );
         assertThat(
                 tagFactory.withUri(
                         personTag.uri()
-                ).getNbReferences(),
+                ).getNbNeighbors().getPrivate(),
                 is(1)
         );
         assertFalse(
-                vertexA.getIdentifications().containsKey(
+                vertexA.getTags().containsKey(
                         personTag.getExternalResourceUri()
                 )
         );
@@ -123,11 +122,11 @@ public class TagOperatorTest extends ModelTestResources {
         assertThat(
                 tagFactory.withUri(
                         personTag.uri()
-                ).getNbReferences(),
+                ).getNbNeighbors().getPrivate(),
                 is(3)
         );
         assertTrue(
-                vertexA.getIdentifications().containsKey(
+                vertexA.getTags().containsKey(
                         personTag.getExternalResourceUri()
                 )
         );
@@ -135,12 +134,12 @@ public class TagOperatorTest extends ModelTestResources {
 
     @Test
     public void mergeTo_excludes_non_related_graph_elements() {
-        vertexC.addMeta(modelTestScenarios.computerScientistType());
+        vertexC.addTag(modelTestScenarios.computerScientistType());
         vertexB.addVertexAndRelation();
-        TagPojo personFromFreebase = vertexA.addMeta(
+        TagPojo personFromFreebase = vertexA.addTag(
                 modelTestScenarios.personFromFreebase()
         ).values().iterator().next();
-        TagPojo person = vertexB.addMeta(
+        TagPojo person = vertexB.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
         tagFactory.withUri(
@@ -149,11 +148,11 @@ public class TagOperatorTest extends ModelTestResources {
         assertThat(
                 tagFactory.withUri(
                         person.uri()
-                ).getNbReferences(),
+                ).getNbNeighbors().getPrivate(),
                 is(2)
         );
         assertFalse(
-                vertexC.getIdentifications().containsKey(
+                vertexC.getTags().containsKey(
                         person.getExternalResourceUri()
                 )
         );
@@ -161,7 +160,7 @@ public class TagOperatorTest extends ModelTestResources {
 
     @Test
     public void can_set_share_level() {
-        URI tagUri = vertexA.addMeta(
+        URI tagUri = vertexA.addTag(
                 modelTestScenarios.location()
         ).values().iterator().next().uri();
         assertThat(
