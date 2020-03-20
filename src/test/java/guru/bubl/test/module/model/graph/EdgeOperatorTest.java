@@ -11,6 +11,7 @@ import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.URI;

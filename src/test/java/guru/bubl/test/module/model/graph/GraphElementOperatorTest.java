@@ -27,7 +27,6 @@ import static org.junit.Assert.*;
 public class GraphElementOperatorTest extends ModelTestResources {
 
     @Test
-
     public void cannot_have_same_identification_twice() {
         GraphElementOperator vertexAGraphElement = vertexA;
         Integer numberOfGenericIdentifications = vertexAGraphElement.getTags().size();
@@ -46,7 +45,6 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void adding_identification_returns_identification_created_fields() {
         TagPojo identification = vertexA.addTag(
                 modelTestScenarios.timBernersLee()
@@ -60,7 +58,6 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void add_tag_returns_share_level() {
         TagPojo tag = vertexA.addTag(
                 modelTestScenarios.event()
@@ -82,7 +79,6 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void users_identification_have_their_own_uri_for_same_identification() {
         TagPojo identificationOfAnotherUser = vertexOfAnotherUser.addTag(
                 modelTestScenarios.computerScientistType()
