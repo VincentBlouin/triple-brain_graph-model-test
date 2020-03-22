@@ -9,10 +9,12 @@ import guru.bubl.module.model.UserUris;
 import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.GraphElementOperator;
 import guru.bubl.module.model.graph.ShareLevel;
+import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.tag.Tag;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.parboiled.common.StringUtils;
 
@@ -25,6 +27,123 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.*;
 
 public class GraphElementOperatorTest extends ModelTestResources {
+
+    @Test
+    public void can_remove_self_identifier() {
+        TagPojo vertexBAsIdentifier = TestScenarios.tagFromFriendlyResource(
+                vertexB
+        );
+        TagPojo createdVertexBAsIdentifier = vertexA.addTag(
+                vertexBAsIdentifier
+        ).values().iterator().next();
+        SubGraphPojo subGraph = neo4jSubGraphExtractorFactory.withCenterVertexInShareLevels(
+                createdVertexBAsIdentifier.uri(),
+                ShareLevel.allShareLevelsInt
+        ).load();
+        assertTrue(
+                subGraph.vertices().containsKey(
+                        vertexB.uri()
+                )
+        );
+        vertexB.removeTag(createdVertexBAsIdentifier);
+        subGraph = neo4jSubGraphExtractorFactory.withCenterVertexInShareLevels(
+                createdVertexBAsIdentifier.uri(),
+                ShareLevel.allShareLevelsInt
+        ).load();
+        assertFalse(
+                subGraph.vertices().containsKey(
+                        vertexB.uri()
+                )
+        );
+    }
+
+    @Test
+    public void graph_element_becomes_identified_to_itself_if_used_as_identifier() {
+        TagPojo identification = vertexA.addTag(
+                TestScenarios.tagFromFriendlyResource(
+                        vertexB
+                )
+        ).values().iterator().next();
+        assertTrue(
+                vertexA.getTags().containsKey(
+                        identification.getExternalResourceUri()
+                )
+        );
+        assertTrue(
+                vertexB.getTags().containsKey(
+                        identification.getExternalResourceUri()
+                )
+        );
+    }
+
+    @Test
+    public void when_identified_to_a_graph_element_the_number_of_references_to_the_new_identifier_is_2() {
+        TagPojo tag = vertexA.addTag(
+                TestScenarios.tagFromFriendlyResource(
+                        vertexB
+                )
+        ).values().iterator().next();
+        assertThat(
+                tag.getNbNeighbors().getTotal(),
+                is(2)
+        );
+        assertThat(
+                tagFactory.withUri(tag.uri()).getNbNeighbors().getTotal(),
+                is(2)
+        );
+    }
+
+    @Test
+
+    public void an_identification_does_identify_to_itself() {
+        TagPojo vertexBAsIdentification = vertexA.addTag(
+                TestScenarios.tagFromFriendlyResource(
+                        vertexB
+                )
+        ).values().iterator().next();
+        URI vertexBAsAnIdentificationUri = vertexBAsIdentification.uri();
+        vertexBAsIdentification.setExternalResourceUri(vertexBAsAnIdentificationUri);
+        vertexBAsIdentification.setUri(null);
+        Tag createdIdentification = vertexC.addTag(
+                vertexBAsIdentification
+        ).values().iterator().next();
+        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+                createdIdentification.uri(),
+                ShareLevel.allShareLevelsInt
+        );
+        assertThat(
+                subGraph.vertices().size(),
+                is(3)
+        );
+    }
+
+    @Test
+    public void can_keep_tag_removed_from_the_reference_after_tagging_to_it_again() {
+        TagPojo vertexATag = vertexB.addTag(
+                TestScenarios.tagFromFriendlyResource(
+                        vertexA
+                )
+        ).values().iterator().next();
+        assertTrue(
+                vertexA.getTags().containsKey(
+                        vertexATag.getExternalResourceUri()
+                )
+        );
+        vertexA.removeTag(vertexATag);
+        assertFalse(
+                vertexA.getTags().containsKey(
+                        vertexATag.getExternalResourceUri()
+                )
+        );
+        vertexC.addTag(
+                vertexATag
+        );
+        assertFalse(
+                vertexA.getTags().containsKey(
+                        vertexATag.uri()
+                )
+        );
+    }
 
     @Test
     public void cannot_have_same_identification_twice() {
@@ -328,7 +447,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
         ).values().iterator().next();
         assertThat(
                 tagFactory.withUri(vertexBAsIdentification.uri()).getNbNeighbors().getTotal(),
-                is(1)
+                is(2)
         );
         URI vertexBAsAnIdentificationUri = vertexBAsIdentification.uri();
         vertexBAsIdentification.setExternalResourceUri(vertexBAsAnIdentificationUri);
@@ -338,7 +457,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
         ).values().iterator().next();
         assertThat(
                 tagFactory.withUri(createdIdentification.uri()).getNbNeighbors().getTotal(),
-                is(2)
+                is(3)
         );
     }
 
@@ -381,7 +500,6 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void can_tag_using_no_reference() {
         Tag tag = new TagPojo(
                 URI.create(
@@ -402,7 +520,6 @@ public class GraphElementOperatorTest extends ModelTestResources {
 
 
     @Test
-
     public void can_set_colors() {
         assertFalse(
                 vertexB.getColors().contains("blue")
@@ -414,7 +531,6 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void can_set_children_indexes() {
         assertFalse(
                 vertexB.getChildrenIndex().contains("test children indexes")
@@ -426,7 +542,6 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void add_additional_self_tag_returns_identifications() {
         TagPojo tag = TestScenarios.tagFromFriendlyResource(
                 vertexA
@@ -448,12 +563,11 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void can_use_custom_uri() {
         TagPojo tag = TestScenarios.tagFromFriendlyResource(
                 vertexA
         );
-        URI customUri = new UserUris(user).generateIdentificationUri();
+        URI customUri = new UserUris(user).generateTagUri();
         tag.setUri(customUri);
         tag.setExternalResourceUri(
                 URI.create(tag.getExternalResourceUri() + "/" + UUID.randomUUID())
@@ -474,7 +588,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
         TagPojo tag = TestScenarios.tagFromFriendlyResource(
                 vertexA
         );
-        URI customUri = new UserUris(anotherUser).generateIdentificationUri();
+        URI customUri = new UserUris(anotherUser).generateTagUri();
         tag.setUri(customUri);
         tag.setExternalResourceUri(
                 URI.create(tag.getExternalResourceUri() + "/" + UUID.randomUUID())

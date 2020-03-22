@@ -863,11 +863,11 @@ public class UserGraphTest extends ModelTestResources {
         );
         assertThat(
                 subGraph.edges().size(),
-                is(1)
+                is(2)
         );
         assertThat(
                 subGraph.vertices().size(),
-                is(2)
+                is(3)
         );
     }
 

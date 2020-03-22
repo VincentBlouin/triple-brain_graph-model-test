@@ -152,7 +152,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         );
         CenterGraphElementPojo centerMeta = null;
         for (CenterGraphElementPojo centerGraphElement : centerGraphElements) {
-            if (UserUris.isUriOfAnIdentifier(centerGraphElement.getGraphElement().uri())) {
+            if (UserUris.isUriOfATag(centerGraphElement.getGraphElement().uri())) {
                 centerMeta = centerGraphElement;
             }
         }
