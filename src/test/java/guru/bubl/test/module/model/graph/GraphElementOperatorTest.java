@@ -12,6 +12,7 @@ import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.tag.Tag;
 import guru.bubl.module.model.graph.tag.TagPojo;
+import guru.bubl.module.model.graph.vertex.NbNeighbors;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Ignore;
@@ -301,7 +302,6 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void add_new_tag_share_level_is_private() {
         TagPojo tag = modelTestScenarios.computerScientistType();
         tag = vertexA.addTag(
@@ -328,21 +328,45 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void can_remove_identification_having_no_external_uri() {
-        TagPojo identification = vertexA.addTag(
+        TagPojo tag = vertexA.addTag(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         assertTrue(
-                vertexA.getTags().containsValue(identification)
+                vertexA.getTags().containsValue(tag)
         );
-        identification.setExternalResourceUri(null);
-        vertexA.removeTag(identification);
+        tag.setExternalResourceUri(null);
+        vertexA.removeTag(tag);
         assertFalse(
-                vertexA.getTags().containsValue(identification)
+                vertexA.getTags().containsValue(tag)
         );
     }
 
+    @Test
+    public void remove_tag_decrements_nb_neighbors() {
+        vertexA.setShareLevel(ShareLevel.FRIENDS);
+        TagPojo tag = vertexA.addTag(
+                modelTestScenarios.computerScientistType()
+        ).values().iterator().next();
+        NbNeighbors nbNeighbors = tagFactory.withUri(tag.uri()).getNbNeighbors();
+        assertThat(
+                nbNeighbors.getFriend(),
+                is(1)
+        );
+        assertThat(
+                nbNeighbors.getTotal(),
+                is(1)
+        );
+        vertexA.removeTag(tag);
+        assertThat(
+                nbNeighbors.getFriend(),
+                is(0)
+        );
+        assertThat(
+                nbNeighbors.getTotal(),
+                is(0)
+        );
+    }
 
     @Test
     public void identifications_do_not_apply_for_all_elements() {

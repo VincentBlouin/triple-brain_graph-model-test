@@ -571,7 +571,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
     @Test
-    public void tag_nb_references_is_included() {
+    public void tag_neighbors_is_included() {
         TagPojo tag = vertexA.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
