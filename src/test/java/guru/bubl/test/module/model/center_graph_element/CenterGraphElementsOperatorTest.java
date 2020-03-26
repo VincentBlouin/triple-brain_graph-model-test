@@ -11,8 +11,10 @@ import guru.bubl.module.model.friend.FriendManager;
 import guru.bubl.module.model.friend.FriendManagerFactory;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.tag.TagPojo;
+import guru.bubl.module.model.graph.vertex.NbNeighbors;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -63,7 +65,6 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
 
 
     @Test
-
     public void can_get_only_public_bubbles() {
         centerGraphElementOperatorFactory.usingFriendlyResource(vertexA).updateLastCenterDate();
         Integer nbPublicCenters = centerGraphElementsOperatorFactory.usingDefaultLimits().getAllPublic().size();
@@ -139,7 +140,6 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void returns_number_of_references_of_center_metas() {
         TagPojo meta = vertexA.addTag(
                 modelTestScenarios.person()
@@ -163,7 +163,32 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
+    public void get_public_and_private_returns_nb_public_and_friends_neighbors_too() {
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        );
+        vertexA.makePublic();
+        vertexC.setShareLevel(ShareLevel.FRIENDS);
+        centerGraphElementOperator.updateLastCenterDate();
+        CenterGraphElementPojo centerGraphElement = centerGraphElementsOperatorFactory.usingDefaultLimits().getPublicAndPrivateForOwner(
+                user
+        ).iterator().next();
+        NbNeighbors nbNeighbors = centerGraphElement.getNbNeighbors();
+        assertThat(
+                nbNeighbors.getPrivate(),
+                is(0)
+        );
+        assertThat(
+                nbNeighbors.getFriend(),
+                is(1)
+        );
+        assertThat(
+                nbNeighbors.getPublic(),
+                is(1)
+        );
+    }
 
+    @Test
     public void can_limit() {
         CenterGraphElementOperator centerA = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA

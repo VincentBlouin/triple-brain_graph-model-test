@@ -42,8 +42,6 @@ public class UserGraphTest extends ModelTestResources {
     protected VertexFactory vertexFactory;
 
     @Test
-
-
     public void can_get_graph_with_default_center_vertex() {
         SubGraph graph = userGraph.aroundVertexUriWithDepthInShareLevels(
                 vertexA.uri(),
@@ -57,8 +55,6 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void can_get_graph_with_custom_center_vertex() {
         SubGraph graph = userGraph.aroundVertexUriWithDepthInShareLevels(
                 vertexB.uri(),
@@ -151,8 +147,6 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void can_return_multiple_identifications_for_one_graph_element() {
         vertexA.addTag(
                 modelTestScenarios.person()

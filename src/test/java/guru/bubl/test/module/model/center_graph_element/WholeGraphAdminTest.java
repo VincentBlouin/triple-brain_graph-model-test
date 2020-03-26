@@ -27,7 +27,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
     protected WholeGraph wholeGraph;
 
     @Test
-    public void can_refresh_identifications_number_of_references() {
+    public void can_refresh_tags_number_of_references() {
         vertexB.addTag(
                 modelTestScenarios.possessionIdentification()
         );
@@ -53,7 +53,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    public void sets_number_of_reference_to_zero_for_meta_having_zero_references() {
+    public void sets_number_of_reference_to_zero_for_tag_having_zero_references() {
         TagPojo meta = vertexB.addTag(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
@@ -73,7 +73,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    public void can_remove_metas_having_zero_references() {
+    public void can_remove_tags_having_zero_references() {
         TagPojo possessionTag = vertexB.addTag(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
@@ -102,7 +102,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    public void does_not_duplicate_identifications_when_re_adding() {
+    public void does_not_duplicate_tags_when_re_adding() {
         vertexB.addTag(
                 modelTestScenarios.possessionIdentification()
         );
@@ -126,7 +126,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    public void does_not_duplicate_identifications_when_re_adding_even_if_identification_is_a_graph_element() {
+    public void does_not_duplicate_tags_when_re_adding_even_if_tag_is_a_graph_element() {
         vertexB.addTag(
                 TestScenarios.tagFromFriendlyResource(
                         vertexA
@@ -152,7 +152,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    public void index_all_includes_metas() {
+    public void index_all_includes_tags() {
         vertexA.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
@@ -171,12 +171,17 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
     @Test
     public void can_refresh_number_of_connected_edges() {
+
         vertexB.getNbNeighbors().setPrivate(8);
         assertThat(
                 vertexB.getNbNeighbors().getTotal(),
                 is(8)
         );
         wholeGraphAdmin.refreshNbNeighbors();
+        assertThat(
+                vertexA.getNbNeighbors().getTotal(),
+                is(1)
+        );
         assertThat(
                 vertexB.getNbNeighbors().getTotal(),
                 is(2)
