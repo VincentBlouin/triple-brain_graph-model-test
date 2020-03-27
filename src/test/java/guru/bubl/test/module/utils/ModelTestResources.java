@@ -6,22 +6,18 @@ package guru.bubl.test.module.utils;
 
 import guru.bubl.module.model.FriendlyResourceFactory;
 import guru.bubl.module.model.User;
+import guru.bubl.module.model.admin.WholeGraphAdmin;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperatorFactory;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementsOperatorFactory;
-import guru.bubl.module.model.graph.GraphElementOperator;
 import guru.bubl.module.model.graph.GraphFactory;
 import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeFactory;
-import guru.bubl.module.model.graph.edge.EdgePojo;
 import guru.bubl.module.model.graph.pattern.PatternUserFactory;
 import guru.bubl.module.model.graph.subgraph.SubGraphForker;
 import guru.bubl.module.model.graph.subgraph.SubGraphForkerFactory;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.tag.TagFactory;
-import guru.bubl.module.model.graph.tag.TagPojo;
-import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphSearchFactory;
@@ -29,10 +25,9 @@ import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.module.model.test.scenarios.VerticesCalledABAndC;
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.UserGraphFactoryNeo4j;
-import guru.bubl.module.neo4j_graph_manipulator.graph.graph.WholeGraphNeo4j;
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.extractor.subgraph.SubGraphExtractorFactoryNeo4j;
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.vertex.VertexFactoryNeo4j;
-import guru.bubl.module.neo4j_graph_manipulator.graph.search.GraphIndexerNeo4j;
+import guru.bubl.module.neo4j_graph_manipulator.graph.test.WholeGraphNeo4j;
 import guru.bubl.module.repository.user.UserRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -87,9 +82,6 @@ public class ModelTestResources {
     protected GraphSearchFactory graphSearchFactory;
 
     @Inject
-    protected GraphIndexerNeo4j graphIndexer;
-
-    @Inject
     protected TagFactory tagFactory;
 
     @Inject
@@ -97,6 +89,9 @@ public class ModelTestResources {
 
     @Inject
     protected PatternUserFactory patternUserFactory;
+
+    @Inject
+    protected WholeGraphAdmin wholeGraphAdmin;
 
     @Inject
     protected UserRepository userRepository;
@@ -170,18 +165,6 @@ public class ModelTestResources {
                 numberOfEdges();
     }
 
-    protected VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
-        return wholeGraphAroundDefaultCenterVertex().vertexWithIdentifier(
-                vertex.uri()
-        );
-    }
-
-    protected EdgePojo edgeInWholeGraph(Edge edge) {
-        return wholeGraphAroundDefaultCenterVertex().edgeWithIdentifier(
-                edge.uri()
-        );
-    }
-
     public User user() {
         return user;
     }
@@ -199,41 +182,6 @@ public class ModelTestResources {
 
     protected int numberOfEdges() {
         return wholeGraph.getAllEdges().size();
-    }
-
-    protected void testThatRemovingGraphElementRemovesTheNumberOfReferencesToItsIdentification(GraphElementOperator graphElement) {
-        TagPojo computerScientist = graphElement.addTag(
-                modelTestScenarios.computerScientistType()
-        ).values().iterator().next();
-        TagPojo personIdentification = graphElement.addTag(
-                modelTestScenarios.person()
-        ).values().iterator().next();
-        vertexB.addTag(
-                modelTestScenarios.person()
-        );
-        computerScientist = graphElement.getTags().get(computerScientist.getExternalResourceUri());
-        assertThat(
-                computerScientist.getNbNeighbors().getPrivate(),
-                is(1)
-        );
-        personIdentification = graphElement.getTags().get(personIdentification.getExternalResourceUri());
-        assertThat(
-                personIdentification.getNbNeighbors().getPrivate(),
-                is(2)
-        );
-        graphElement.remove();
-        assertThat(
-                tagFactory.withUri(
-                        computerScientist.uri()
-                ).getNbNeighbors().getPrivate(),
-                is(0)
-        );
-        assertThat(
-                tagFactory.withUri(
-                        personIdentification.uri()
-                ).getNbNeighbors().getPrivate(),
-                is(1)
-        );
     }
 
     protected VertexInSubGraphPojo getVertexWithLabel(SubGraphPojo subGraph, String label) {

@@ -231,14 +231,10 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         ).searchRelationsForAutoCompletionByLabel(
                 user
         );
-        Map<URI, String> context = relations.get(0).getContext();
+        String context = relations.get(0).getContext();
         assertThat(
-                context.get(vertexA.uri()),
-                is("vertex Azure")
-        );
-        assertThat(
-                context.get(vertexB.uri()),
-                is("vertex Bareau")
+                context,
+                is("vertex Bareau{{vertex Azure")
         );
     }
 
@@ -298,22 +294,6 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 //        );
 //        assertTrue(
 //                searchResult.getGraphElement().getIdentifications().isEmpty()
-//        );
-//    }
-
-//    @Test 
-//    ("schema feature is suspended")
-//    public void can_get_property_details() {
-//        SchemaOperator schema = createSchema(userGraph.user());
-//        GraphElementOperator property1 = schema.addProperty();
-//        property1.label("prop1");
-//        GraphElementSearchResult searchResult = graphSearch.getDetails(
-//                property1.uri(),
-//                userGraph.user()
-//        );
-//        assertThat(
-//                searchResult.getGraphElement().label(),
-//                is("prop1")
 //        );
 //    }
 
@@ -414,66 +394,19 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     @Test
 
     public void vertices_have_their_surround_vertices_label_and_uri_in_result() {
-        graphIndexer.indexVertex(vertexA);
+        wholeGraphAdmin.reindexAll();
         GraphElementSearchResult searchResult = graphSearchFactory.usingSearchTerm(
                 "Azure"
         ).searchOnlyForOwnVerticesForAutoCompletionByLabel(
                 user
         ).iterator().next();
         assertThat(
-                searchResult.getContext().get(
-                        vertexB.uri()
-                ),
+                searchResult.getContext(),
                 is("vertex Bareau")
         );
     }
 
-//    @Test 
-//    ("schema feature is suspended")
-//    public void results_limit_is_on_number_of_results_not_number_of_related_elements() {
-//        SchemaOperator schema = createSchema(userGraph.user());
-//        schema.label("schema1");
-//        for (int i = 1; i <= 12; i++) {
-//            schema.addProperty();
-//        }
-//        SchemaOperator schema2 = createSchema(userGraph.user());
-//        schema2.label("schema2");
-//        for (int i = 1; i <= 12; i++) {
-//            schema2.addProperty();
-//        }
-//        List<GraphElementSearchResult> searchResult = graphSearchFactory.usingSearchTerm(
-//                "schema"
-//        ).searchForAllOwnResources(
-//                user
-//        );
-//        assertThat(
-//                searchResult.size(),
-//                is(2)
-//        );
-//    }
-//
-//    @Test 
-//    ("schema feature is suspended")
-//    public void can_search_public_vertices_as_anonymous_user() {
-//        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm(
-//                "vert"
-//        ).searchForAllOwnResources(
-//                user
-//        );
-//        assertThat(
-//                results.size(),
-//                is(5)
-//        );
-//        vertexB.makePublic();
-//        List<GraphElementSearchResult> publicVerticesOnlyResult = graphSearchFactory.usingSearchTerm(
-//                "vert"
-//        ).searchPublicVerticesOnly();
-//        assertThat(
-//                publicVerticesOnlyResult.size(),
-//                is(1)
-//        );
-//    }
-//
+
 //    @Test 
 //    ("getDetails is suspended")
 //    public void can_get_search_details_of_public_resource_as_anonymous_user() {
@@ -488,32 +421,21 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
 ////        );
 //    }
 //
-//    @Test 
-//    ("schema feature is suspended")
-//    public void cannot_get_search_details_of_private_resource_as_anonymous_user() {
-//        vertexB.comment("some comment");
-//        vertexB.makePrivate();
-//        GraphElementSearchResult searchResult = graphSearch.getDetailsAnonymously(
-//                vertexB.uri()
-//        );
-//        assertNull(searchResult);
-//    }
-
     @Test
     public void does_not_include_private_vertices_of_another_user() {
         vertexB.makePublic();
         vertexA.makePublic();
         vertexC.makePublic();
-        graphIndexer.indexVertex(vertexB);
-        Map<URI, String> surroundVertices = graphSearchFactory.usingSearchTerm(
+        wholeGraphAdmin.reindexAll();
+        String surroundVertices = graphSearchFactory.usingSearchTerm(
                 "Bareau"
         ).searchForAllOwnResources(user).iterator().next().getContext();
         assertThat(
-                surroundVertices.size(),
+                surroundVertices.split("\\{\\{").length,
                 is(2)
         );
         vertexC.makePrivate();
-        graphIndexer.indexVertex(vertexB);
+        wholeGraphAdmin.reindexAll();
         List<GraphElementSearchResult> searchResult = graphSearchFactory.usingSearchTerm(
                 "Bareau"
         ).searchForAllOwnResources(user2);
@@ -534,9 +456,9 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         ).searchForAllOwnResources(
                 user
         ).iterator().next();
-        Map<URI, String> vertices = vertexSearchResult.getContext();
+        String vertices = vertexSearchResult.getContext();
         assertThat(
-                vertices.size(),
+                vertices.split("\\{\\{").length,
                 is(2)
         );
         vertexC.makePrivate();
@@ -547,7 +469,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         ).iterator().next();
         vertices = vertexSearchResult.getContext();
         assertThat(
-                vertices.size(),
+                vertices.split("\\{\\{").length,
                 is(2)
         );
     }
@@ -633,14 +555,14 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
                 "some identifier"
         );
         vertexA.addTag(vertexBAsIdentifier);
-        graphIndexer.indexVertex(vertexB);
+        wholeGraphAdmin.reindexAll();
         GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
                 "Bareau"
         ).searchForAllOwnResources(
                 user
         ).iterator().next();
         assertThat(
-                vertexSearchResult.getContext().size(),
+                vertexSearchResult.getContext().split("\\{\\{").length,
                 is(2)
         );
     }
@@ -703,14 +625,14 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         TagPojo meta = vertexA.addTag(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
-        graphIndexer.indexMeta(meta);
+        wholeGraphAdmin.reindexAll();
         GraphElementSearchResult searchResult = graphSearchFactory.usingSearchTerm(
                 "Possession"
         ).searchForAllOwnResources(
                 user
         ).get(0);
         assertThat(
-                searchResult.getContext().values().iterator().next(),
+                searchResult.getContext(),
                 is("In law, possession is the control a person intentionally exercises toward a thing. In all cases, to possess something, a person must have an intention to possess it. A person may be in possession of some property. Like ownership, the possession of things is commonly regulated by states under property law.")
         );
     }
@@ -721,14 +643,14 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         TagPojo meta = vertexA.addTag(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
-        graphIndexer.indexMeta(meta);
+        wholeGraphAdmin.reindexAll();
         GraphElementSearchResult searchResult = graphSearchFactory.usingSearchTerm(
                 "Computer"
         ).searchForAllOwnResources(
                 user
         ).get(0);
         assertThat(
-                searchResult.getContext().values().iterator().next(),
+                searchResult.getContext(),
                 is("vertex Azure")
         );
     }

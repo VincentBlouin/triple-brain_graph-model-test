@@ -5,6 +5,7 @@
 package guru.bubl.test.module.utils.search;
 
 import guru.bubl.module.model.User;
+import guru.bubl.module.model.admin.WholeGraphAdmin;
 import guru.bubl.module.model.graph.GraphFactory;
 import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.vertex.Vertex;
@@ -63,15 +64,7 @@ public class Neo4jSearchRelatedTest extends ModelTestResources {
 
 
     protected void indexGraph() {
-        graphIndexer.indexVertex(vertexA);
-        graphIndexer.indexVertex(vertexB);
-        graphIndexer.indexVertex(vertexC);
-        graphIndexer.indexRelation(
-                vertexA.getEdgeThatLinksToDestinationVertex(vertexB)
-        );
-        graphIndexer.indexRelation(
-                vertexB.getEdgeThatLinksToDestinationVertex(vertexC)
-        );
+        wholeGraphAdmin.reindexAll();
     }
 
     protected void indexVertex(VertexOperator vertex) {

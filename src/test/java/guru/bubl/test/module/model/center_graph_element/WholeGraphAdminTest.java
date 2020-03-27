@@ -7,24 +7,28 @@ package guru.bubl.test.module.model.center_graph_element;
 import com.google.inject.Inject;
 import guru.bubl.module.model.WholeGraph;
 import guru.bubl.module.model.admin.WholeGraphAdmin;
+import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
+import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.tag.TagOperator;
 import guru.bubl.module.model.graph.tag.TagPojo;
+import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 public class WholeGraphAdminTest extends ModelTestResources {
 
     @Inject
     WholeGraphAdmin wholeGraphAdmin;
-
-    @Inject
-    protected WholeGraph wholeGraph;
 
     @Test
     public void can_refresh_tags_number_of_references() {
@@ -73,81 +77,241 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    public void can_remove_tags_having_zero_references() {
-        TagPojo possessionTag = vertexB.addTag(
-                modelTestScenarios.possessionIdentification()
-        ).values().iterator().next();
-        vertexB.addTag(
-                modelTestScenarios.creatorPredicate()
-        ).values().iterator().next();
+    
+
+    public void reindex_all_sets_private_context() {
+        wholeGraphAdmin.reindexAll();
         assertThat(
-                wholeGraph.getAllTags().size(),
+                vertexB.getPrivateContext(),
+                is("vertex C{{vertex A")
+        );
+        assertThat(
+                vertexA.getPrivateContext(),
+                is("vertex B")
+        );
+        assertThat(
+                vertexC.getPrivateContext(),
+                is("vertex B")
+        );
+    }
+
+    @Test
+    
+
+    public void reindex_all_sets_context_even_if_no_connected_edges() {
+        VertexOperator newVertex = vertexFactory.withUri(
+                userGraph.createVertex().uri()
+        );
+        newVertex.addRelationToVertex(vertexB);
+        wholeGraphAdmin.reindexAll();
+        assertThat(
+                newVertex.getPrivateContext(),
+                is("vertex B")
+        );
+        newVertex.getEdgeThatLinksToDestinationVertex(vertexB).remove();
+        wholeGraphAdmin.reindexAll();
+        assertThat(
+                newVertex.getPrivateContext(),
+                is("")
+        );
+    }
+
+    @Test
+    
+    public void index_vertex_sets_its_private_surround_graph() {
+        assertThat(
+                vertexB.getPrivateContext(),
+                is("")
+        );
+        wholeGraphAdmin.reindexAll();
+        assertThat(
+                vertexB.getPrivateContext(),
+                is("vertex C{{vertex A")
+        );
+    }
+
+    @Test
+    public void limits_the_context_size_of_vertices() {
+        for (int i = 0; i < 10; i++) {
+            vertexFactory.withUri(
+                    vertexB.addVertexAndRelation().destinationVertex().uri()
+            ).label("vertex " + i);
+        }
+        wholeGraphAdmin.reindexAll();
+        assertThat(
+                vertexB.getPrivateContext().length(),
+                is(110)
+        );
+    }
+
+    @Test
+    
+    public void filters_empty_label_from_context() {
+        for (int i = 0; i < 5; i++) {
+            vertexB.addVertexAndRelation();
+        }
+        wholeGraphAdmin.reindexAll();
+        assertThat(
+                vertexB.getPrivateContext(),
+                is("vertex C{{vertex A")
+        );
+    }
+
+    @Test
+    
+
+    public void context_can_have_quotes() {
+        vertexA.label("\"some\" label");
+        wholeGraphAdmin.reindexAll();
+        GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
+                vertexB.label()
+        ).searchForAllOwnResources(
+                user
+        ).iterator().next();
+        assertThat(
+                vertexSearchResult.getContext().split("\\{\\{").length,
                 is(2)
         );
-        TagOperator possesionTagOperator = tagFactory.withUri(possessionTag.uri());
-        possesionTagOperator.getNbNeighbors().setPrivate(0);
+    }
+
+    @Test
+    
+
+    public void context_prioritize_vertices_with_most_child() {
+        for (int i = 4; i <= 10; i++) {
+            VertexOperator destinationVertex = vertexFactory.withUri(
+                    vertexB.addVertexAndRelation().destinationVertex().uri()
+            );
+            vertexFactory.withUri(
+                    destinationVertex.uri()
+            ).label("vertex " + i);
+            for (int j = 0; j <= i; j++) {
+                destinationVertex.addVertexAndRelation();
+            }
+        }
+        wholeGraphAdmin.reindexAll();
+        String[] context = vertexB.getPrivateContext().split("\\{\\{");
         assertThat(
-                possesionTagOperator.getNbNeighbors().getTotal(),
-                is(0)
+                context[0],
+                is("vertex 10")
         );
         assertThat(
-                wholeGraph.getAllTags().size(),
-                is(2)
+                context[1],
+                is("vertex 9")
         );
-        wholeGraphAdmin.removeMetasHavingZeroReferences();
         assertThat(
-                wholeGraph.getAllTags().size(),
+                context[4],
+                is("vertex 6")
+        );
+    }
+
+    @Test
+    
+
+    public void surround_graph_does_not_include_all_vertices() {
+        wholeGraphAdmin.reindexAll();
+        GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
+                vertexA.label()
+        ).searchForAllOwnResources(
+                user
+        ).iterator().next();
+        assertThat(
+                vertexSearchResult.getContext().split("\\{\\{").length,
                 is(1)
         );
     }
 
     @Test
-    public void does_not_duplicate_tags_when_re_adding() {
-        vertexB.addTag(
-                modelTestScenarios.possessionIdentification()
+    
+
+    public void index_vertex_sets_its_public_surround_graph() {
+        vertexB.makePublic();
+        vertexA.makePublic();
+        wholeGraphAdmin.reindexAll();
+        CenterGraphElementOperator vertexBAsCenter = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
         );
+        vertexBAsCenter.incrementNumberOfVisits();
+        vertexBAsCenter.updateLastCenterDate();
+        CenterGraphElementPojo center = centerGraphElementsOperatorFactory.usingDefaultLimits().getAllPublic().iterator().next();
         assertThat(
-                vertexB.getTags().size(),
+                center.getContext().split("\\{\\{").length,
                 is(1)
         );
+        vertexC.makePublic();
+        wholeGraphAdmin.reindexAll();
+        center = centerGraphElementsOperatorFactory.usingDefaultLimits().getAllPublic().iterator().next();
         assertThat(
-                vertexB.getTags().size(),
-                is(1)
-        );
-        wholeGraphAdmin.reAddIdentifications();
-        assertThat(
-                vertexB.getTags().size(),
-                is(1)
-        );
-        assertThat(
-                vertexB.getTags().size(),
-                is(1)
+                center.getContext().split("\\{\\{").length,
+                is(2)
         );
     }
 
     @Test
-    public void does_not_duplicate_tags_when_re_adding_even_if_tag_is_a_graph_element() {
-        vertexB.addTag(
-                TestScenarios.tagFromFriendlyResource(
-                        vertexA
+    
+
+    public void context_does_not_include_self_vertex() {
+        wholeGraphAdmin.reindexAll();
+        assertFalse(
+                vertexB.getPrivateContext().contains(
+                        vertexB.label()
                 )
         );
+    }
+
+
+    @Test
+    
+
+    public void index_relation_sets_source_and_destination_vertex_as_context() {
+        EdgeOperator edgeAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         assertThat(
-                vertexB.getTags().size(),
-                is(1)
+                edgeAAndB.getPrivateContext(),
+                is("")
         );
+        wholeGraphAdmin.reindexAll();
         assertThat(
-                vertexB.getTags().size(),
-                is(1)
+                edgeAAndB.getPrivateContext(),
+                is("vertex B{{vertex A")
         );
-        wholeGraphAdmin.reAddIdentifications();
+    }
+
+
+    @Test
+    
+    public void meta_context_includes_label_of_surround_vertices() {
+        vertexA.addTag(
+                modelTestScenarios.person()
+        ).values().iterator().next();
+        wholeGraphAdmin.reindexAll();
+        GraphElementSearchResult graphElementSearchResult = graphSearchFactory.usingSearchTerm(
+                "Person"
+        ).searchRelationsForAutoCompletionByLabel(
+                user
+        ).iterator().next();
         assertThat(
-                vertexB.getTags().size(),
-                is(1)
+                graphElementSearchResult.getContext(),
+                is("vertex A")
         );
+    }
+
+    @Test
+    
+
+    public void meta_related_to_relation_context_includes_label_of_surround_vertices() {
+        EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
+        edge.addTag(
+                modelTestScenarios.toDo()
+        ).values().iterator().next();
+        wholeGraphAdmin.reindexAll();
+        GraphElementSearchResult graphElementSearchResult = graphSearchFactory.usingSearchTerm(
+                "To do"
+        ).searchRelationsForAutoCompletionByLabel(
+                user
+        ).iterator().next();
         assertThat(
-                vertexB.getTags().size(),
-                is(1)
+                graphElementSearchResult.getContext(),
+                is("vertex C")
         );
     }
 
@@ -162,14 +326,18 @@ public class WholeGraphAdminTest extends ModelTestResources {
         ).searchRelationsForAutoCompletionByLabel(
                 user
         ).iterator().next();
-        assertTrue(
-                graphElementSearchResult.getContext().values().iterator().next().equals(
+        assertThat(
+                graphElementSearchResult.getContext(),
+                is(
                         "vertex A"
                 )
         );
     }
 
     @Test
+    
+
+
     public void can_refresh_number_of_connected_edges() {
 
         vertexB.getNbNeighbors().setPrivate(8);
@@ -189,6 +357,9 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
+    
+
+
     public void can_refresh_number_of_public_connected_edges() {
         vertexB.makePublic();
         vertexC.makePublic();
@@ -203,4 +374,20 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 is(1)
         );
     }
+
+    @Test
+    
+
+
+    public void can_set_nb_neighbors_to_zero() {
+        vertexA.getEdgeThatLinksToDestinationVertex(vertexB).remove();
+        vertexA.getNbNeighbors().setPrivate(10);
+        wholeGraphAdmin.refreshNbNeighbors();
+        assertThat(
+                vertexA.getNbNeighbors().getPrivate(),
+                is(0)
+        );
+    }
+
+
 }

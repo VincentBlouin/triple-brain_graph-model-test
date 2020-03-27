@@ -9,13 +9,9 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import guru.bubl.module.model.*;
 import guru.bubl.module.model.graph.GraphFactory;
-import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.edge.EdgePojo;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.subgraph.UserGraph;
-import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexFactory;
-import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.test.GraphComponentTest;
 import guru.bubl.module.model.test.SubGraphOperator;
@@ -169,14 +165,4 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
         graphComponentTest.removeWholeGraph();
     }
 
-
-    @Override
-    public VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
-        return graphComponentTest.vertexInWholeConnectedGraph(vertex);
-    }
-
-    @Override
-    public EdgePojo edgeInWholeGraph(Edge edge) {
-        return graphComponentTest.edgeInWholeGraph(edge);
-    }
 }

@@ -5,18 +5,16 @@
 package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.ShareLevel;
+import guru.bubl.module.model.graph.edge.EdgePojo;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.vertex.*;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Ignore;
 import org.junit.Test;
-import guru.bubl.module.model.graph.vertex.Vertex;
-import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
-import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.graph.edge.EdgeJson;
 import guru.bubl.module.model.graph.SubGraphJson;
-import guru.bubl.module.model.graph.vertex.VertexInSubGraphJson;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +28,7 @@ public class JsonConvertTest extends ModelTestResources {
     @Test
     public void can_convert_vertex_to_and_from() {
         JSONObject vertexAJson = VertexInSubGraphJson.toJson(
-                vertexInWholeConnectedGraph(vertexA)
+                userGraph.aroundVertexUriInShareLevels(vertexA.uri(), ShareLevel.allShareLevelsInt).vertexWithIdentifier(vertexA.uri())
         );
         VertexInSubGraphPojo vertexA = VertexInSubGraphJson.fromJson(
                 vertexAJson
@@ -42,10 +40,9 @@ public class JsonConvertTest extends ModelTestResources {
 
     @Test
     public void converting_edge_to_json_throws_no_error() {
+        Edge edge = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
         EdgeJson.toJson(
-                edgeInWholeGraph(
-                        vertexA.getEdgeThatLinksToDestinationVertex(vertexB)
-                )
+                userGraph.aroundVertexUriInShareLevels(vertexA.uri(), ShareLevel.allShareLevelsInt).edgeWithIdentifier(edge.uri())
         );
     }
 

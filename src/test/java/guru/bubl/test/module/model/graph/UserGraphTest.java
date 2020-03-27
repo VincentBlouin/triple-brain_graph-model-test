@@ -994,15 +994,6 @@ public class UserGraphTest extends ModelTestResources {
         );
     }
 
-    @Override
-    public VertexInSubGraphPojo vertexInWholeConnectedGraph(Vertex vertex) {
-        return userGraph.aroundVertexUriWithDepthInShareLevels(
-                vertexA.uri(),
-                DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
-                ShareLevel.allShareLevelsInt
-        ).vertexWithIdentifier(vertex.uri());
-    }
-
     private Set<Vertex> vertexBAndC() {
         Set<Vertex> vertexBAndC = new HashSet<>();
         vertexBAndC.add(vertexB);
