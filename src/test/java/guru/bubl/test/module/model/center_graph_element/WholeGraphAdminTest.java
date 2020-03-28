@@ -5,7 +5,6 @@
 package guru.bubl.test.module.model.center_graph_element;
 
 import com.google.inject.Inject;
-import guru.bubl.module.model.WholeGraph;
 import guru.bubl.module.model.admin.WholeGraphAdmin;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
@@ -14,16 +13,12 @@ import guru.bubl.module.model.graph.tag.TagOperator;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
-import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.List;
-
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 
 public class WholeGraphAdminTest extends ModelTestResources {
 

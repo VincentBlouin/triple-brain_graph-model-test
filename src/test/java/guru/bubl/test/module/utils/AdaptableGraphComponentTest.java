@@ -51,9 +51,6 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     @Inject
     public ModelTestScenarios modelTestScenarios;
 
-    @Inject
-    WholeGraph wholeGraph;
-
     public static Injector injector;
 
 
