@@ -12,35 +12,33 @@ import guru.bubl.module.model.center_graph_element.CenterGraphElementsOperatorFa
 import guru.bubl.module.model.graph.GraphFactory;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.edge.EdgeFactory;
+import guru.bubl.module.model.graph.group_relation.GroupRelationFactory;
+import guru.bubl.module.model.graph.group_relation.GroupRelationOperator;
 import guru.bubl.module.model.graph.pattern.PatternUserFactory;
-import guru.bubl.module.model.graph.subgraph.SubGraphForker;
-import guru.bubl.module.model.graph.subgraph.SubGraphForkerFactory;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.tag.TagFactory;
-import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
+import guru.bubl.module.model.graph.vertex.VertexPojo;
 import guru.bubl.module.model.search.GraphSearchFactory;
 import guru.bubl.module.model.test.SubGraphOperator;
+import guru.bubl.module.model.test.scenarios.GraphElementsOfTestScenario;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
-import guru.bubl.module.model.test.scenarios.VerticesCalledABAndC;
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.UserGraphFactoryNeo4j;
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.extractor.subgraph.SubGraphExtractorFactoryNeo4j;
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.vertex.VertexFactoryNeo4j;
 import guru.bubl.module.neo4j_graph_manipulator.graph.test.WholeGraphNeo4j;
 import guru.bubl.module.repository.user.UserRepository;
-import org.junit.After;
 import org.junit.Before;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.Session;
-import org.neo4j.graphdb.Transaction;
 
 import javax.inject.Inject;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
 public class ModelTestResources {
+
+    @Inject
+    protected GroupRelationFactory groupRelationFactory;
 
     @Inject
     protected CenterGraphElementOperatorFactory centerGraphElementOperatorFactory;
@@ -85,9 +83,6 @@ public class ModelTestResources {
     protected TagFactory tagFactory;
 
     @Inject
-    SubGraphForkerFactory subGraphForkerFactory;
-
-    @Inject
     protected PatternUserFactory patternUserFactory;
 
     @Inject
@@ -99,17 +94,13 @@ public class ModelTestResources {
     protected VertexOperator vertexA;
     protected VertexOperator vertexB;
     protected VertexOperator vertexC;
+    protected GroupRelationOperator groupRelation;
 
     protected static User user;
 
     protected static User anotherUser;
     protected static UserGraph anotherUserGraph;
     protected static VertexOperator vertexOfAnotherUser;
-
-    protected static SubGraphForker forker;
-    protected static SubGraphForker anotherUserForker;
-
-    private Transaction transaction;
 
     protected UserGraph userGraph;
 
@@ -119,36 +110,28 @@ public class ModelTestResources {
     @Before
     public void before() {
         ModelTestRunner.injector.injectMembers(this);
-//        transaction = ModelTestRunner.graphDatabaseService.beginTx();
-        removeAllUsers();
+        removeAll();
         user = User.withEmail(
                 "roger.lamothe@example.org"
         ).setUsername("roger_lamothe").setPreferredLocales("[en]").password("12345678");
         user = userRepository.createUser(user);
-        forker = subGraphForkerFactory.forUser(user);
         anotherUser = User.withEmail(
                 "colette.armande@example.org"
         ).setUsername("colette_armande").setPreferredLocales("[fr]").password("12345678");
         userRepository.createUser(anotherUser);
-        anotherUserForker = subGraphForkerFactory.forUser(anotherUser);
         userGraph = neo4jUserGraphFactory.withUser(user);
-        VerticesCalledABAndC verticesCalledABAndC = testScenarios.makeGraphHave3VerticesABCWhereAIsDefaultCenterVertexAndAPointsToBAndBPointsToC(
+        GraphElementsOfTestScenario graphElementsOfTestScenario = testScenarios.buildTestScenario(
                 userGraph
         );
-        vertexA = verticesCalledABAndC.vertexA();
-        vertexB = verticesCalledABAndC.vertexB();
-        vertexC = verticesCalledABAndC.vertexC();
+        vertexA = graphElementsOfTestScenario.getVertexA();
+        vertexB = graphElementsOfTestScenario.getVertexB();
+        vertexC = graphElementsOfTestScenario.getVertexC();
+        groupRelation = graphElementsOfTestScenario.getGroupRelation();
         anotherUserGraph = neo4jUserGraphFactory.withUser(anotherUser);
         vertexOfAnotherUser = vertexFactory.withUri(
                 anotherUserGraph.createVertex().uri()
         );
         vertexOfAnotherUser.label("vertex of another user");
-    }
-
-    @After
-    public void after() {
-//        transaction.failure();
-//        transaction.close();
     }
 
     protected SubGraphPojo wholeGraphAroundDefaultCenterVertex() {
@@ -184,9 +167,9 @@ public class ModelTestResources {
         return wholeGraph.getAllEdges().size();
     }
 
-    protected VertexInSubGraphPojo getVertexWithLabel(SubGraphPojo subGraph, String label) {
-        VertexInSubGraphPojo vertexWithLabel = null;
-        for (VertexInSubGraphPojo vertex : subGraph.vertices().values()) {
+    protected VertexPojo getVertexWithLabel(SubGraphPojo subGraph, String label) {
+        VertexPojo vertexWithLabel = null;
+        for (VertexPojo vertex : subGraph.vertices().values()) {
             if (vertex.label().equals(label)) {
                 vertexWithLabel = vertex;
             }
@@ -194,10 +177,10 @@ public class ModelTestResources {
         return vertexWithLabel;
     }
 
-    protected void removeAllUsers() {
+    protected void removeAll() {
         try (Session session = driver.session()) {
             session.run(
-                    "MATCH (n:User) DETACH DELETE n"
+                    "MATCH (n:Resource) DETACH DELETE n"
             );
         }
     }

@@ -8,11 +8,10 @@ import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.tag.TagOperator;
 import guru.bubl.module.model.graph.tag.TagPojo;
+import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.test.module.utils.ModelTestResources;
-import guru.bubl.module.model.graph.vertex.Vertex;
-import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
-import guru.bubl.module.model.graph.vertex.VertexInSubGraphOperator;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -27,8 +26,8 @@ public class WholeGraphTest extends ModelTestResources {
     public void there_are_no_duplicates_in_vertices() {
         assertFalse(wholeGraph.getAllVertices().isEmpty());
         Set<Vertex> visitedVertices = new HashSet<Vertex>();
-        Set<VertexInSubGraphOperator> vertices = wholeGraph.getAllVertices();
-        for (VertexInSubGraph vertex : vertices) {
+        Set<VertexOperator> vertices = wholeGraph.getAllVertices();
+        for (Vertex vertex : vertices) {
             if (visitedVertices.contains(vertex)) {
                 fail();
             }
@@ -41,7 +40,7 @@ public class WholeGraphTest extends ModelTestResources {
     public void can_get_all_vertices_of_single_user() {
         Vertex anotherUserVertex = neo4jUserGraphFactory.withUser(anotherUser).createVertex();
         Vertex newUserVertex = neo4jUserGraphFactory.withUser(user).createVertex();
-        Set<VertexInSubGraphOperator> allUserVertices = wholeGraph.getAllVerticesOfUser(user);
+        Set<VertexOperator> allUserVertices = wholeGraph.getAllVerticesOfUser(user);
         assertTrue(
                 allUserVertices.contains(
                         newUserVertex
@@ -58,7 +57,7 @@ public class WholeGraphTest extends ModelTestResources {
     public void can_get_all_vertices() {
         assertThat(
                 wholeGraph.getAllVertices().size(),
-                is(4)
+                is(6)
         );
     }
 
@@ -66,7 +65,7 @@ public class WholeGraphTest extends ModelTestResources {
     public void can_get_edges() {
         assertThat(
                 wholeGraph.getAllEdges().size(),
-                is(2)
+                is(4)
         );
     }
 
@@ -97,14 +96,15 @@ public class WholeGraphTest extends ModelTestResources {
     public void can_get_all_graph_elements() {
         assertThat(
                 wholeGraph.getAllGraphElements().size(),
-                is(6)
+                is(12)
         );
     }
 
     @Test
     public void can_get_all_identifications() {
-        assertTrue(
-                wholeGraph.getAllTags().isEmpty()
+        assertThat(
+                wholeGraph.getAllTags().size(),
+                is(1)
         );
         vertexA.addTag(
                 modelTestScenarios.human()
@@ -117,7 +117,7 @@ public class WholeGraphTest extends ModelTestResources {
         );
         assertThat(
                 wholeGraph.getAllTags().size(),
-                is(3)
+                is(4)
         );
     }
 

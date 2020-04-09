@@ -5,19 +5,16 @@
 package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.edge.EdgePojo;
-import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
+import guru.bubl.module.model.graph.SubGraphJson;
 import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.vertex.*;
+import guru.bubl.module.model.graph.edge.EdgeJson;
+import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
+import guru.bubl.module.model.graph.vertex.Vertex;
+import guru.bubl.module.model.graph.vertex.VertexJson;
+import guru.bubl.module.model.graph.vertex.VertexPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.codehaus.jettison.json.JSONObject;
-import org.junit.Ignore;
 import org.junit.Test;
-import guru.bubl.module.model.graph.edge.EdgeJson;
-import guru.bubl.module.model.graph.SubGraphJson;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -27,10 +24,10 @@ public class JsonConvertTest extends ModelTestResources {
 
     @Test
     public void can_convert_vertex_to_and_from() {
-        JSONObject vertexAJson = VertexInSubGraphJson.toJson(
+        JSONObject vertexAJson = VertexJson.toJson(
                 userGraph.aroundVertexUriInShareLevels(vertexA.uri(), ShareLevel.allShareLevelsInt).vertexWithIdentifier(vertexA.uri())
         );
-        VertexInSubGraphPojo vertexA = VertexInSubGraphJson.fromJson(
+        VertexPojo vertexA = VertexJson.fromJson(
                 vertexAJson
         );
         assertThat(
@@ -40,7 +37,7 @@ public class JsonConvertTest extends ModelTestResources {
 
     @Test
     public void converting_edge_to_json_throws_no_error() {
-        Edge edge = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        Edge edge = vertexA.getEdgeToDestinationVertex(vertexB);
         EdgeJson.toJson(
                 userGraph.aroundVertexUriInShareLevels(vertexA.uri(), ShareLevel.allShareLevelsInt).edgeWithIdentifier(edge.uri())
         );
@@ -61,7 +58,7 @@ public class JsonConvertTest extends ModelTestResources {
         );
         assertThat(
                 subGraph.vertices().size(),
-                is(3)
+                is(5)
         );
     }
 
@@ -82,7 +79,7 @@ public class JsonConvertTest extends ModelTestResources {
         JSONObject vertexAJson = vertices.getJSONObject(
                 vertexA.uri().toString()
         );
-        Vertex vertexAFromJson = VertexInSubGraphJson.fromJson(
+        Vertex vertexAFromJson = VertexJson.fromJson(
                 vertexAJson
         );
         assertThat(

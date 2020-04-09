@@ -7,16 +7,13 @@ package guru.bubl.test.module.model.graph.search;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.graph.GraphElement;
 import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.tag.Tag;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.search.Neo4jSearchRelatedTest;
 import org.junit.Test;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -91,7 +88,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
         indexVertex(pineApple);
         List<GraphElementSearchResult> vertices;
         vertices = graphSearchFactory.usingSearchTerm("vert").searchOnlyForOwnVerticesForAutoCompletionByLabel(user);
-        assertThat(vertices.size(), is(3));
+        assertThat(vertices.size(), is(5));
         vertices = graphSearchFactory.usingSearchTerm("Cad").searchOnlyForOwnVerticesForAutoCompletionByLabel(user);
         assertThat(vertices.size(), is(1));
         GraphElement firstVertex = vertices.get(0).getGraphElementSearchResult().getGraphElement();
@@ -213,21 +210,21 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     public void can_search_relations() {
         indexGraph();
         List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm(
-                "between"
+                "edge"
         ).searchRelationsForAutoCompletionByLabel(
                 user
         );
-        assertThat(results.size(), is(2));
+        assertThat(results.size(), is(4));
     }
 
     @Test
     public void relation_source_and_destination_vertex_label_and_uri_are_included_in_result() {
         indexGraph();
         centerGraphElementOperatorFactory.usingFriendlyResource(
-                vertexA.getEdgeThatLinksToDestinationVertex(vertexB)
+                vertexA.getEdgeToDestinationVertex(vertexB)
         ).incrementNumberOfVisits();
         List<GraphElementSearchResult> relations = graphSearchFactory.usingSearchTerm(
-                "between vertex A and B"
+                "edge AB"
         ).searchRelationsForAutoCompletionByLabel(
                 user
         );

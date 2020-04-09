@@ -42,16 +42,18 @@ public class VertexOperatorTest extends ModelTestResources {
     TagFactory tagFactory;
 
     @Test
+
     public void can_update_label() {
         EdgeOperator newEdge = edgeFactory.withUri(
                 vertexA.addVertexAndRelation().uri()
         );
-        VertexOperator vertex = newEdge.destinationVertex();
+        VertexOperator vertex = vertexFactory.withUri(newEdge.destinationUri());
         vertex.label("Ju-Ji-Tsu");
         assertThat(vertex.label(), is("Ju-Ji-Tsu"));
     }
 
     @Test
+
     public void can_update_comment() {
         assertThat(
                 vertexA.comment(),
@@ -67,8 +69,9 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void can_check_if_vertex_has_edge() {
-        EdgeOperator edge = vertexA.getEdgeThatLinksToDestinationVertex(
+        EdgeOperator edge = vertexA.getEdgeToDestinationVertex(
                 vertexB
         );
         assertTrue(
@@ -95,6 +98,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void can_add_vertex_and_relation() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
         Edge edge = vertexA.addVertexAndRelation();
@@ -103,13 +107,14 @@ public class VertexOperatorTest extends ModelTestResources {
         assertThat(newNumberOfEdgesAndVertices, is(numberOfEdgesAndVertices + 2));
         assertTrue(vertexA.hasEdge(edge));
 
-        assertThat(edge.sourceVertex().uri(), is(vertexA.uri()));
+        assertThat(edge.sourceUri(), is(vertexA.uri()));
 
-        Vertex destinationVertex = edge.destinationVertex();
+        Vertex destinationVertex = vertexFactory.withUri(edge.destinationUri());
         assertThat(destinationVertex, is(not(nullValue())));
     }
 
     @Test
+
     public void can_remove_a_vertex() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
 
@@ -124,6 +129,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void can_get_number_of_connected_edges() {
         assertThat(
                 vertexB.getNbNeighbors().getTotal(),
@@ -133,11 +139,12 @@ public class VertexOperatorTest extends ModelTestResources {
 
 
     @Test
+
     public void removing_a_vertex_removes_its_relations() {
-        URI edgeBetweenCAndBUri = vertexB.getEdgeThatLinksToDestinationVertex(
+        URI edgeBetweenCAndBUri = vertexB.getEdgeToDestinationVertex(
                 vertexC
         ).uri();
-        URI edgeBetweenAAndBUri = vertexB.getEdgeThatLinksToDestinationVertex(
+        URI edgeBetweenAAndBUri = vertexB.getEdgeToDestinationVertex(
                 vertexC
         ).uri();
         assertTrue(
@@ -164,6 +171,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void can_get_empty_list_after_removing_last_same_as() {
         Tag timBernersLee = vertexA.addTag(
                 modelTestScenarios.timBernersLee()
@@ -176,6 +184,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void deleting_a_vertex_does_not_delete_its_identifications_in_the_graph() {
         assertTrue(
                 userGraph.haveElementWithId(
@@ -196,6 +205,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void can_assign_the_same_identification_to_2_vertices() {
         Tag timBernersLee = vertexA.addTag(
                 modelTestScenarios.timBernersLee()
@@ -216,11 +226,12 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void can_get_same_as() {
         EdgeOperator newEdge = edgeFactory.withUri(
                 vertexA.addVertexAndRelation().uri()
         );
-        VertexOperator newVertex = newEdge.destinationVertex();
+        VertexOperator newVertex = vertexFactory.withUri(newEdge.destinationUri());
         newVertex.label("Tim Berners Lee");
         assertTrue(newVertex.getTags().isEmpty());
         newVertex.addTag(modelTestScenarios.timBernersLee());
@@ -234,6 +245,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void can_add_generic_identification() {
         assertFalse(vertexA.getTags().containsKey(
                 modelTestScenarios.extraterrestrial().getExternalResourceUri()
@@ -247,6 +259,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void can_test_if_vertex_has_destination_vertex() {
         assertFalse(vertexA.hasDestinationVertex(vertexC));
         vertexA.addRelationToVertex(vertexC);
@@ -254,6 +267,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void source_vertex_is_not_a_destination_vertex() {
         vertexA.addRelationToVertex(vertexC);
         assertTrue(vertexA.hasDestinationVertex(vertexC));
@@ -261,6 +275,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void there_is_a_creation_date() {
         assertThat(
                 vertexA.creationDate(),
@@ -269,6 +284,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void there_is_a_last_modification_date() {
         assertThat(
                 vertexA.lastModificationDate(),
@@ -277,15 +293,17 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void a_vertex_is_private_by_default() {
         VertexOperator newVertex = vertexFactory.withUri(
-                vertexA.addVertexAndRelation().destinationVertex().uri()
+                vertexA.addVertexAndRelation().destinationUri()
         );
         assertFalse(newVertex.isPublic());
     }
 
 
     @Test
+
     public void can_make_private_vertex_with_no_relations() {
         VertexOperator noRelationsVertex = vertexFactory.withUri(
                 userGraph.createVertex().uri()
@@ -297,62 +315,65 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void making_a_vertex_public_makes_all_its_edges_public_where_the_other_end_vertex_is_also_public() {
         vertexA.setShareLevel(ShareLevel.PUBLIC);
         vertexC.setShareLevel(ShareLevel.PRIVATE);
         vertexB.setShareLevel(ShareLevel.PRIVATE);
         assertFalse(
-                vertexB.getEdgeThatLinksToDestinationVertex(
+                vertexB.getEdgeToDestinationVertex(
                         vertexA
                 ).isPublic()
         );
         assertFalse(
-                vertexB.getEdgeThatLinksToDestinationVertex(
+                vertexB.getEdgeToDestinationVertex(
                         vertexC
                 ).isPublic()
         );
         vertexB.makePublic();
         assertTrue(
-                vertexB.getEdgeThatLinksToDestinationVertex(
+                vertexB.getEdgeToDestinationVertex(
                         vertexA
                 ).isPublic()
         );
         assertFalse(
-                vertexB.getEdgeThatLinksToDestinationVertex(
+                vertexB.getEdgeToDestinationVertex(
                         vertexC
                 ).isPublic()
         );
     }
 
     @Test
+
     public void making_a_vertex_private_makes_all_its_edges_private() {
         vertexA.makePublic();
         vertexB.makePublic();
         vertexC.makePrivate();
         assertTrue(
-                vertexB.getEdgeThatLinksToDestinationVertex(
+                vertexB.getEdgeToDestinationVertex(
                         vertexA
                 ).isPublic()
         );
         assertFalse(
-                vertexB.getEdgeThatLinksToDestinationVertex(
+                vertexB.getEdgeToDestinationVertex(
                         vertexC
                 ).isPublic()
         );
         vertexB.makePrivate();
         assertFalse(
-                vertexB.getEdgeThatLinksToDestinationVertex(
+                vertexB.getEdgeToDestinationVertex(
                         vertexA
                 ).isPublic()
         );
         assertFalse(
-                vertexB.getEdgeThatLinksToDestinationVertex(
+                vertexB.getEdgeToDestinationVertex(
                         vertexC
                 ).isPublic()
         );
     }
 
     @Test
+
     public void make_public_changes_nb_neighbors_to_tag() {
         TagPojo tag = vertexA.addTag(
                 modelTestScenarios.person()
@@ -379,8 +400,8 @@ public class VertexOperatorTest extends ModelTestResources {
         );
     }
 
-//    @Test
-//    @Ignore("todo")
+//    @Test 
+//    ("todo")
 //    public void make_changes_to_edge_tags_nb_neighbors_when_changing_share_level() {
 //        vertexA.makePublic();
 //        EdgeOperator betweenAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
@@ -425,7 +446,7 @@ public class VertexOperatorTest extends ModelTestResources {
         UserUris userUris = new UserUris(vertexA.getOwnerUsername());
         URI vertexUri = userUris.vertexUriFromShortId(vertexId.toString());
         assertThat(
-                newEdge.destinationVertex().uri(),
+                newEdge.destinationUri(),
                 is(vertexUri)
         );
         URI edgeUri = userUris.edgeUriFromShortId(edgeId.toString());
@@ -436,12 +457,26 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+    public void add_vertex_and_relation_sets_creation_and_last_modification_date() {
+        EdgeOperator newEdge = edgeFactory.withUri(
+                vertexA.addVertexAndRelation().uri()
+        );
+        VertexOperator newVertex = vertexFactory.withUri(
+                newEdge.destinationUri()
+        );
+        assertThat(
+                newVertex.creationDate(),
+                is(not(nullValue()))
+        );
+    }
+
+    @Test
     public void checks_that_uris_dont_already_exist() {
         UUID vertexId = UUID.fromString(
                 UserUris.graphElementShortId(vertexB.uri())
         );
         UUID edgeId = UUID.fromString(
-                UserUris.graphElementShortId(vertexA.getEdgeThatLinksToDestinationVertex(vertexB).uri())
+                UserUris.graphElementShortId(vertexA.getEdgeToDestinationVertex(vertexB).uri())
         );
         EdgePojo newEdge = vertexA.addVertexAndRelationWithIds(
                 vertexId.toString(),
@@ -450,7 +485,7 @@ public class VertexOperatorTest extends ModelTestResources {
         UserUris userUris = new UserUris(vertexA.getOwnerUsername());
         URI vertexUri = userUris.vertexUriFromShortId(vertexId.toString());
         assertThat(
-                newEdge.destinationVertex().uri(),
+                newEdge.destinationUri(),
                 is(not(vertexUri))
         );
         URI edgeUri = userUris.edgeUriFromShortId(edgeId.toString());
@@ -461,6 +496,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void changing_share_level_from_friend_to_public_decrements_neighbors_number_of_friends() {
         vertexB.setShareLevel(ShareLevel.FRIENDS);
         assertThat(
@@ -475,18 +511,21 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void can_check_equality() {
         assertTrue(vertexA.equals(vertexA));
         assertFalse(vertexA.equals(vertexB));
     }
 
     @Test
+
     public void can_compare_to_friendly_resource() {
         FriendlyResource vertexAAsFriendlyResource = vertexA;
         assertTrue(vertexA.equals(vertexAAsFriendlyResource));
     }
 
     @Test
+
     public void can_remove_a_vertex_having_no_relations() {
         VertexOperator vertexWithNoRelations = vertexFactory.createForOwner(
                 user().username()
@@ -506,6 +545,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void adding_a_relation_to_existing_vertices_increments_number_of_connected_edges() {
         int nbEdgesForVertexA = vertexA.getNbNeighbors().getTotal();
         int nbEdgesForVertexC = vertexC.getNbNeighbors().getTotal();
@@ -730,8 +770,6 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void making_vertex_private_decrements_the_number_of_public_neighbor_vertices_set_to_neighbors() {
         vertexB.makePublic();
         assertThat(
@@ -754,11 +792,9 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void new_child_vertex_nb_public_neighbors_is_set_to_1_when_parent_is_public() {
         VertexOperator newVertex = vertexFactory.withUri(
-                vertexA.addVertexAndRelation().destinationVertex().uri()
+                vertexA.addVertexAndRelation().destinationUri()
         );
         assertThat(
                 newVertex.getNbNeighbors().getPublic(),
@@ -766,7 +802,7 @@ public class VertexOperatorTest extends ModelTestResources {
         );
         vertexA.makePublic();
         VertexOperator anotherNewVertex = vertexFactory.withUri(
-                vertexA.addVertexAndRelation().destinationVertex().uri()
+                vertexA.addVertexAndRelation().destinationUri()
         );
         assertThat(
                 anotherNewVertex.getNbNeighbors().getPublic(),
@@ -776,6 +812,7 @@ public class VertexOperatorTest extends ModelTestResources {
 
 
     @Test
+
     public void mergeTo_removes_vertex() {
         URI farCenterVertexUri = userGraph.createVertex().uri();
         VertexOperator farCenterVertex = vertexFactory.withUri(
@@ -810,33 +847,40 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void mergeTo_preserves_edges_direction() {
-        URI farCenterVertexUri = userGraph.createVertex().uri();
         VertexOperator farCenterVertex = vertexFactory.withUri(
-                farCenterVertexUri
+                userGraph.createVertex().uri()
         );
-        Edge edge1 = farCenterVertex.addVertexAndRelation();
-        Vertex edge1OtherVertex = edge1.destinationVertex();
-        edgeFactory.withUri(edge1.uri()).inverse();
+        Edge edgeOfOfFarVertex = farCenterVertex.addVertexAndRelation();
+        Vertex destinationOfFarVertex = vertexFactory.withUri(edgeOfOfFarVertex.destinationUri());
+        edgeFactory.withUri(edgeOfOfFarVertex.uri()).inverse();
+        assertThat(
+                farCenterVertex.connectedEdges().size(),
+                is(1)
+        );
+        assertThat(
+                vertexC.connectedEdges().size(),
+                is(2)
+        );
         farCenterVertex.mergeTo(vertexC);
-
-        EdgeOperator edge1Operator = vertexC.connectedEdges().get(
-                edge1.uri()
+        assertThat(
+                vertexC.connectedEdges().size(),
+                is(3)
+        );
+        EdgeOperator edgeOfFarVertexOperator = vertexC.connectedEdges().get(
+                edgeOfOfFarVertex.uri()
         );
         assertThat(
-                edge1Operator.sourceVertex(),
-                is(edge1OtherVertex)
+                edgeOfFarVertexOperator.sourceUri(),
+                is(destinationOfFarVertex.uri())
         );
         assertThat(
-                edge1Operator.destinationVertex(),
-                is(vertexC)
+                edgeOfFarVertexOperator.destinationUri(),
+                is(vertexC.uri())
         );
     }
 
     @Test
-
 
     public void mergeTo_keeps_tags() {
         vertexA.addTag(modelTestScenarios.computerScientistType());
@@ -853,6 +897,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void cannot_merge_to_another_vertex_when_being_under_a_pattern() {
         vertexA.makePattern();
@@ -876,6 +921,7 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
 
+
     public void cannot_merge_to_another_vertex_when_being_a_pattern() {
         vertexA.makePattern();
         VertexOperator farVertex = vertexFactory.withUri(
@@ -898,12 +944,13 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
 
+
     public void cannot_merge_to_a_far_vertex_under_a_pattern() {
         VertexOperator farVertex = vertexFactory.withUri(
                 userGraph.createVertex().uri()
         );
         VertexOperator childOfFarVertex = vertexFactory.withUri(
-                farVertex.addVertexAndRelation().destinationVertex().uri()
+                farVertex.addVertexAndRelation().destinationUri()
         );
         farVertex.makePattern();
         assertTrue(childOfFarVertex.isUnderPattern());
@@ -923,12 +970,13 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
 
+
     public void cannot_merge_to_a_far_vertex_that_is_a_pattern() {
         VertexOperator farVertex = vertexFactory.withUri(
                 userGraph.createVertex().uri()
         );
         VertexOperator childOfFarVertex = vertexFactory.withUri(
-                farVertex.addVertexAndRelation().destinationVertex().uri()
+                farVertex.addVertexAndRelation().destinationUri()
         );
         farVertex.makePattern();
         Boolean success = vertexB.mergeTo(farVertex);
@@ -947,6 +995,7 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
 
+
     public void can_set_share_level() {
         assertThat(
                 vertexA.getShareLevel(),
@@ -963,34 +1012,36 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
 
+
     public void setting_share_level_sets_it_for_surrounding_edges() {
         assertThat(
-                vertexB.getEdgeThatLinksToDestinationVertex(vertexC).getShareLevel(),
+                vertexB.getEdgeToDestinationVertex(vertexC).getShareLevel(),
                 is(ShareLevel.PRIVATE)
         );
         vertexB.setShareLevel(
                 ShareLevel.FRIENDS
         );
         assertThat(
-                vertexB.getEdgeThatLinksToDestinationVertex(vertexC).getShareLevel(),
+                vertexB.getEdgeToDestinationVertex(vertexC).getShareLevel(),
                 is(ShareLevel.PRIVATE)
         );
         vertexC.setShareLevel(
                 ShareLevel.FRIENDS
         );
         assertThat(
-                vertexB.getEdgeThatLinksToDestinationVertex(vertexC).getShareLevel(),
+                vertexB.getEdgeToDestinationVertex(vertexC).getShareLevel(),
                 is(ShareLevel.FRIENDS)
         );
         vertexB.setShareLevel(ShareLevel.PUBLIC);
 
         assertThat(
-                vertexB.getEdgeThatLinksToDestinationVertex(vertexC).getShareLevel(),
+                vertexB.getEdgeToDestinationVertex(vertexC).getShareLevel(),
                 is(ShareLevel.FRIENDS)
         );
     }
 
     @Test
+
 
     public void setting_share_level_to_friends_increments_number_of_friend_neighbors_to_neighbors() {
         assertThat(
@@ -1013,6 +1064,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void make_pattern_makes_connected_nodes_public() {
         assertFalse(vertexC.isPublic());
         vertexA.makePattern();
@@ -1020,6 +1072,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void make_pattern_updates_nb_vertices_of_private_nb_to_public() {
         vertexC.setShareLevel(ShareLevel.FRIENDS);
         assertThat(
@@ -1051,6 +1104,7 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
 
+
     public void make_pattern_makes_tags_public() {
         TagPojo tag = vertexB.addTag(
                 modelTestScenarios.location()
@@ -1072,9 +1126,10 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
 
+
     public void make_pattern_makes_tags_of_edges_public() {
         TagPojo tag = edgeFactory.withUri(
-                vertexB.getEdgeThatLinksToDestinationVertex(vertexC).uri()
+                vertexB.getEdgeToDestinationVertex(vertexC).uri()
         ).addTag(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
@@ -1095,8 +1150,9 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
 
+
     public void make_pattern_does_not_make_public_a_vertex_that_shares_a_tag_with_a_connected_vertex() {
-        vertexC.getEdgeThatLinksToDestinationVertex(vertexB).remove();
+        vertexC.getEdgeToDestinationVertex(vertexB).remove();
         vertexC.addTag(modelTestScenarios.computerScientistType());
         vertexB.addTag(modelTestScenarios.computerScientistType());
         assertFalse(vertexC.isPublic());
@@ -1106,21 +1162,23 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
 
+
     public void sets_flag_on_edges_and_vertices_under_a_pattern() {
         assertFalse(vertexA.isUnderPattern());
-        assertFalse(vertexA.getEdgeThatLinksToDestinationVertex(vertexB).isUnderPattern());
+        assertFalse(vertexA.getEdgeToDestinationVertex(vertexB).isUnderPattern());
         assertFalse(vertexB.isUnderPattern());
-        assertFalse(vertexB.getEdgeThatLinksToDestinationVertex(vertexC).isUnderPattern());
+        assertFalse(vertexB.getEdgeToDestinationVertex(vertexC).isUnderPattern());
         assertFalse(vertexC.isUnderPattern());
         vertexA.makePattern();
         assertFalse(vertexA.isUnderPattern());
-        assertTrue(vertexA.getEdgeThatLinksToDestinationVertex(vertexB).isUnderPattern());
+        assertTrue(vertexA.getEdgeToDestinationVertex(vertexB).isUnderPattern());
         assertTrue(vertexB.isUnderPattern());
-        assertTrue(vertexB.getEdgeThatLinksToDestinationVertex(vertexC).isUnderPattern());
+        assertTrue(vertexB.getEdgeToDestinationVertex(vertexC).isUnderPattern());
         assertTrue(vertexC.isUnderPattern());
     }
 
     @Test
+
 
     public void cannot_make_pattern_out_of_a_vertex_under_a_pattern() {
         Boolean success = vertexA.makePattern();
@@ -1137,6 +1195,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void undo_pattern_removes_flag_to_children() {
         vertexB.makePattern();
         vertexB.undoPattern();
@@ -1149,6 +1208,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void create_vertex_and_relation_on_under_pattern_vertex_have_flag_under_pattern() {
         vertexA.makePattern();
         EdgePojo edge = vertexA.addVertexAndRelationWithIds(
@@ -1162,17 +1222,18 @@ public class VertexOperatorTest extends ModelTestResources {
         );
         assertTrue(
                 vertexFactory.withUri(
-                        edge.destinationVertex().uri()
+                        edge.destinationUri()
                 ).isUnderPattern()
         );
         assertTrue(
                 vertexFactory.withUri(
-                        edge.destinationVertex().uri()
+                        edge.destinationUri()
                 ).isPublic()
         );
     }
 
     @Test
+
     public void cannot_add_relation_to_distant_vertex_when_being_a_pattern_or_under_a_pattern() {
         VertexOperator farVertex = vertexFactory.withUri(
                 userGraph.createVertex().uri()
@@ -1187,23 +1248,28 @@ public class VertexOperatorTest extends ModelTestResources {
                 is(2)
         );
         assertThat(
+                vertexC.getNbNeighbors().getTotal(),
+                is(2)
+        );
+        assertThat(
                 vertexC.addRelationToVertex(farVertex),
                 is(nullValue())
         );
         assertThat(
                 vertexC.getNbNeighbors().getTotal(),
-                is(1)
+                is(2)
         );
     }
 
 
     @Test
+
     public void cannot_add_relation_to_distant_vertex_that_is_a_pattern_or_under_a_pattern() {
         VertexOperator farVertex = vertexFactory.withUri(
                 userGraph.createVertex().uri()
         );
         VertexOperator farChildVertex = vertexFactory.withUri(
-                farVertex.addVertexAndRelation().destinationVertex().uri()
+                farVertex.addVertexAndRelation().destinationUri()
         );
         farVertex.makePattern();
         assertThat(
@@ -1225,6 +1291,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void on_pattern_create_nb_pattern_usage_is_zero() {
         vertexA.makePattern();
         assertThat(
@@ -1234,6 +1301,7 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void undo_pattern_and_remake_resets_number_of_pattern_usage() {
         vertexA.makePattern();
         patternUserFactory.forUserAndPatternUri(

@@ -3,11 +3,10 @@ package guru.bubl.test.module.model.graph.pattern;
 import guru.bubl.module.model.graph.GraphElement;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
+import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.vertex.Vertex;
-import guru.bubl.module.model.graph.vertex.VertexInSubGraph;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.test.module.utils.ModelTestResources;
@@ -26,7 +25,7 @@ public class PatternUserTest extends ModelTestResources {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
         SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
                 vertexB.uri(),
-                1,
+                10,
                 ShareLevel.allShareLevelsInt
         );
         vertexB.label("maple syrup");
@@ -114,7 +113,7 @@ public class PatternUserTest extends ModelTestResources {
                 1,
                 ShareLevel.allShareLevelsInt
         );
-        VertexInSubGraph vertexInSubGraph = getVertexWithLabel(subGraph, "vertex B");
+        Vertex vertexInSubGraph = getVertexWithLabel(subGraph, "vertex B");
         assertThat(
                 vertexInSubGraph.getNbNeighbors().getTotal(),
                 is(2)
@@ -261,7 +260,7 @@ public class PatternUserTest extends ModelTestResources {
         vertexB.addTag(modelTestScenarios.computerScientistType());
         vertexC.addTag(modelTestScenarios.computerScientistType());
         vertexB.makePattern();
-        vertexB.getEdgeThatLinksToDestinationVertex(vertexC).remove();
+        vertexB.getEdgeToDestinationVertex(vertexC).remove();
         patternUserFactory.forUserAndPatternUri(
                 anotherUser,
                 vertexB.uri()

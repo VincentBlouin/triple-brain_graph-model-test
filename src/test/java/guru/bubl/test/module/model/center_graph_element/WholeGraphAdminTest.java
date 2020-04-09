@@ -72,8 +72,6 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    
-
     public void reindex_all_sets_private_context() {
         wholeGraphAdmin.reindexAll();
         assertThat(
@@ -86,7 +84,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
         );
         assertThat(
                 vertexC.getPrivateContext(),
-                is("vertex B")
+                is("vertex B{{vertex D{{vertex E")
         );
     }
 
@@ -103,7 +101,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 newVertex.getPrivateContext(),
                 is("vertex B")
         );
-        newVertex.getEdgeThatLinksToDestinationVertex(vertexB).remove();
+        newVertex.getEdgeToDestinationVertex(vertexB).remove();
         wholeGraphAdmin.reindexAll();
         assertThat(
                 newVertex.getPrivateContext(),
@@ -129,7 +127,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
     public void limits_the_context_size_of_vertices() {
         for (int i = 0; i < 10; i++) {
             vertexFactory.withUri(
-                    vertexB.addVertexAndRelation().destinationVertex().uri()
+                    vertexB.addVertexAndRelation().destinationUri()
             ).label("vertex " + i);
         }
         wholeGraphAdmin.reindexAll();
@@ -175,7 +173,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
     public void context_prioritize_vertices_with_most_child() {
         for (int i = 4; i <= 10; i++) {
             VertexOperator destinationVertex = vertexFactory.withUri(
-                    vertexB.addVertexAndRelation().destinationVertex().uri()
+                    vertexB.addVertexAndRelation().destinationUri()
             );
             vertexFactory.withUri(
                     destinationVertex.uri()
@@ -259,7 +257,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
     
 
     public void index_relation_sets_source_and_destination_vertex_as_context() {
-        EdgeOperator edgeAAndB = vertexA.getEdgeThatLinksToDestinationVertex(vertexB);
+        EdgeOperator edgeAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
                 edgeAAndB.getPrivateContext(),
                 is("")
@@ -294,7 +292,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
     
 
     public void meta_related_to_relation_context_includes_label_of_surround_vertices() {
-        EdgeOperator edge = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
+        EdgeOperator edge = vertexB.getEdgeToDestinationVertex(vertexC);
         edge.addTag(
                 modelTestScenarios.toDo()
         ).values().iterator().next();
@@ -375,7 +373,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
 
     public void can_set_nb_neighbors_to_zero() {
-        vertexA.getEdgeThatLinksToDestinationVertex(vertexB).remove();
+        vertexA.getEdgeToDestinationVertex(vertexB).remove();
         vertexA.getNbNeighbors().setPrivate(10);
         wholeGraphAdmin.refreshNbNeighbors();
         assertThat(

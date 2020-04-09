@@ -11,4 +11,4 @@ import com.googlecode.junittoolbox.SuiteClasses;
 
 @RunWith(WildcardPatternSuite.class)
 @SuiteClasses("**/*Test.class")
-public class ModelTests extends ModelTestRunner {}
+public class ModelTests extends  ModelTestRunner {}

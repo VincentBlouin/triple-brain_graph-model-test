@@ -11,10 +11,9 @@ import guru.bubl.module.model.friend.FriendManager;
 import guru.bubl.module.model.friend.FriendManagerFactory;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.tag.TagPojo;
-import guru.bubl.module.model.graph.vertex.NbNeighbors;
+import guru.bubl.module.model.graph.fork.NbNeighbors;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;

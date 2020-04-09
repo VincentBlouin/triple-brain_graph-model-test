@@ -12,7 +12,7 @@ import guru.bubl.module.model.graph.subgraph.SubGraph;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.junit.Test;
-import guru.bubl.module.model.graph.vertex.VertexInSubGraphPojo;
+import guru.bubl.module.model.graph.vertex.VertexPojo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class GsonLearning extends AdaptableGraphComponentTest {
                 3,
                 ShareLevel.allShareLevelsInt
         );
-        VertexInSubGraphPojo vertexBInSubGraphPojo = (VertexInSubGraphPojo) graph.vertexWithIdentifier(
+        VertexPojo vertexBInSubGraphPojo = (VertexPojo) graph.vertexWithIdentifier(
                 vertexB.uri()
         );
         String json = gson.toJson(vertexBInSubGraphPojo);
@@ -42,7 +42,7 @@ public class GsonLearning extends AdaptableGraphComponentTest {
                 json
         );
         JSONObject jsonObject = new JSONObject(json);
-        VertexInSubGraphPojo vertexInSubGraphPojo = gson.fromJson(json, VertexInSubGraphPojo.class);
+        VertexPojo vertexInSubGraphPojo = gson.fromJson(json, VertexPojo.class);
         System.out.println(vertexBInSubGraphPojo);
     }
 

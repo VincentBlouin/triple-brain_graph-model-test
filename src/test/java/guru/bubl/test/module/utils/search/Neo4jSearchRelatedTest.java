@@ -5,13 +5,12 @@
 package guru.bubl.test.module.utils.search;
 
 import guru.bubl.module.model.User;
-import guru.bubl.module.model.admin.WholeGraphAdmin;
 import guru.bubl.module.model.graph.GraphFactory;
 import guru.bubl.module.model.graph.subgraph.UserGraph;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
-import guru.bubl.module.model.test.scenarios.VerticesCalledABAndC;
+import guru.bubl.module.model.test.scenarios.GraphElementsOfTestScenario;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Before;
 
@@ -35,7 +34,7 @@ public class Neo4jSearchRelatedTest extends ModelTestResources {
 
 
     @Before
-    public void beforeSearchRelatedTest() throws Exception {
+    public void beforeSearchRelatedTest() {
         user = User.withEmail(
                 "test@2example.org"
         ).setUsername("test2");
@@ -48,18 +47,18 @@ public class Neo4jSearchRelatedTest extends ModelTestResources {
         pineApple = testScenarios.addPineAppleVertexToVertex(vertexC);
     }
 
-    protected void makeGraphHave3SerialVerticesWithLongLabels() throws Exception {
+    protected void makeGraphHave3SerialVerticesWithLongLabels() {
         UserGraph userGraph = graphMaker.loadForUser(user);
         userGraph.createVertex();
-        VerticesCalledABAndC vertexABAndC = testScenarios.makeGraphHave3SerialVerticesWithLongLabels(
+        GraphElementsOfTestScenario vertexABAndC = testScenarios.changeTestScenarioVerticesToLongLabels(
                 userGraph
         );
-        vertexA = vertexABAndC.vertexA();
-        vertexB = vertexABAndC.vertexB();
-        vertexC = vertexABAndC.vertexC();
+        vertexA = vertexABAndC.getVertexA();
+        vertexB = vertexABAndC.getVertexB();
+        vertexC = vertexABAndC.getVertexC();
     }
 
-    protected void deleteAllDocs() throws Exception {
+    protected void deleteAllDocs() {
     }
 
 

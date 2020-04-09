@@ -91,7 +91,7 @@ public class CenterGraphElementOperatorTest extends ModelTestResources {
 
     @Test
     public void can_get_center_elements_of_type_relation() {
-        Edge edgeBetweenBAndC = vertexB.getEdgeThatLinksToDestinationVertex(vertexC);
+        Edge edgeBetweenBAndC = vertexB.getEdgeToDestinationVertex(vertexC);
         List<CenterGraphElementPojo> centerGraphElements = centerGraphElementsOperatorFactory.usingDefaultLimits().getPublicAndPrivateForOwner(
                 user
         );

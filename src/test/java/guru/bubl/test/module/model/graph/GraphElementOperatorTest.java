@@ -12,10 +12,9 @@ import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.tag.Tag;
 import guru.bubl.module.model.graph.tag.TagPojo;
-import guru.bubl.module.model.graph.vertex.NbNeighbors;
+import guru.bubl.module.model.graph.fork.NbNeighbors;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.parboiled.common.StringUtils;
 
