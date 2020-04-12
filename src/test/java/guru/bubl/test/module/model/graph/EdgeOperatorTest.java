@@ -4,10 +4,10 @@
 
 package guru.bubl.test.module.model.graph;
 
-import guru.bubl.module.model.graph.FriendlyResourcePojo;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.edge.Edge;
 import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.fork.NbNeighbors;
 import guru.bubl.module.model.graph.group_relation.GroupRelationOperator;
 import guru.bubl.module.model.graph.group_relation.GroupRelationPojo;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
@@ -30,7 +30,6 @@ import static org.junit.Assert.assertThat;
 public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
-
     public void can_add_relation() {
         VertexOperator vertexD = vertexFactory.withUri(
                 vertexA.addVertexAndRelation().destinationUri()
@@ -52,7 +51,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void can_update_label() {
         EdgeOperator edge = edgeFactory.withUri(
                 vertexA.addVertexAndRelation().uri()
@@ -62,7 +60,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void there_is_a_creation_date() {
         Edge edge = vertexA.addVertexAndRelation();
         assertThat(
@@ -72,7 +69,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void there_is_a_last_modification_date() {
         Edge edge = vertexA.addVertexAndRelation();
         assertThat(
@@ -95,7 +91,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void can_remove_an_edge() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
         EdgeOperator edge = vertexA.getEdgeToDestinationVertex(vertexB);
@@ -111,7 +106,6 @@ public class EdgeOperatorTest extends ModelTestResources {
 
 
     @Test
-
     public void can_add_tag() {
         EdgeOperator newEdge = edgeFactory.withUri(
                 vertexA.addVertexAndRelation().uri()
@@ -124,7 +118,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void can_check_equality() {
         Edge anEdge = vertexA.addVertexAndRelation();
         assertTrue(anEdge.equals(anEdge));
@@ -133,14 +126,12 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void can_compare_to_friendly_resource() {
         Edge anEdge = vertexA.addVertexAndRelation();
         assertTrue(anEdge.equals(anEdge));
     }
 
     @Test
-
     public void can_inverse() {
         EdgeOperator betweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(betweenAAndB.sourceUri(), is(vertexA.uri()));
@@ -154,7 +145,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void an_edge_is_private_at_creation_if_both_end_vertices_are_private() {
         Edge edge = vertexA.addVertexAndRelation();
         assertFalse(
@@ -163,6 +153,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void an_edge_is_private_at_creation_if_one_of_the_end_vertices_is_private() {
         vertexA.makePublic();
@@ -173,7 +164,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void an_edge_is_public_at_creation_if_both_end_vertices_are_public() {
         vertexA.makePublic();
         vertexC.makePublic();
@@ -212,6 +202,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
+
     public void change_source_can_be_a_group_relation() {
         EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
@@ -255,7 +246,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void kept_vertex_nb_public_neighbors_is_unchanged_when_previous_and_new_end_are_private() {
         EdgeOperator edgeBetweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
@@ -270,7 +260,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void kept_vertex_nb_public_neighbors_is_unchanged_when_previous_and_new_end_are_public() {
         vertexB.makePublic();
         vertexA.makePublic();
@@ -329,7 +318,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void previous_vertex_nb_public_neighbors_decrements_when_kept_vertex_is_public() {
         vertexA.makePublic();
         assertThat(
@@ -345,7 +333,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void new_vertex_nb_public_neighbors_increments_when_kept_vertex_is_public() {
         vertexA.makePublic();
         assertThat(
@@ -366,7 +353,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void can_use_as_tag_even_if_deleted() {
         EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         TagPojo edgeABTag = TestScenarios.tagFromFriendlyResource(
@@ -386,34 +372,41 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void convert_to_group_relation_tags_new_group_relation() {
+    public void convert_to_group_relation_tags_new_group_relation_with_edge_tags() {
         EdgeOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
-        TagPojo tag = new TagPojo(
-                URI.create(
-                        "/" + UUID.randomUUID()
-                ),
-                new FriendlyResourcePojo(
-                        "To do"
-                )
-        );
-        GroupRelationPojo groupRelationPojo = edgeBC.convertToGroupRelation(
-                UUID.randomUUID().toString(),
-                tag,
-                true,
-                edgeBC.getShareLevel()
+        edgeBC.addTag(modelTestScenarios.toDo(), ShareLevel.PRIVATE);
+        GroupRelationOperator groupRelationOperator = groupRelationFactory.withUri(
+                edgeBC.convertToGroupRelation(
+                        UUID.randomUUID().toString(),
+                        edgeBC.getShareLevel(),
+                        ""
+                ).uri()
         );
         assertThat(
-                groupRelationPojo.getTag().getExternalResourceUri(),
-                is(tag.getExternalResourceUri())
+                groupRelationOperator.getTags().values().iterator().next().getExternalResourceUri(),
+                is(modelTestScenarios.toDo().getExternalResourceUri())
         );
-        GroupRelationOperator groupRelationOperator = groupRelationFactory.withUri(groupRelationPojo.uri());
         assertThat(
                 groupRelationOperator.getTags().size(),
                 is(1)
         );
+    }
+
+    @Test
+    public void convert_to_group_relation_tags_all_edge_tags_new_group_relation() {
+        EdgeOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
+        edgeBC.addTag(modelTestScenarios.person(), ShareLevel.PRIVATE);
+        edgeBC.addTag(modelTestScenarios.human(), ShareLevel.PRIVATE);
+        GroupRelationOperator groupRelationOperator = groupRelationFactory.withUri(
+                edgeBC.convertToGroupRelation(
+                        UUID.randomUUID().toString(),
+                        edgeBC.getShareLevel(),
+                        ""
+                ).uri()
+        );
         assertThat(
-                groupRelationOperator.getTag().getExternalResourceUri(),
-                is(tag.getExternalResourceUri())
+                groupRelationOperator.getTags().size(),
+                is(2)
         );
     }
 
@@ -429,13 +422,8 @@ public class EdgeOperatorTest extends ModelTestResources {
         );
         GroupRelationPojo groupRelationPojo = edgeAB.convertToGroupRelation(
                 UUID.randomUUID().toString(),
-                todo,
-                false,
-                edgeAB.getShareLevel()
-        );
-        assertThat(
-                groupRelationPojo.getTag().getExternalResourceUri(),
-                is(todo.getExternalResourceUri())
+                edgeAB.getShareLevel(),
+                ""
         );
         assertFalse(
                 edgeFactory.withUri(edgeAB.uri()).getTags().keySet().contains(todo.getExternalResourceUri())
@@ -449,7 +437,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     @Test
     public void convert_to_group_relation_edge_becomes_child_of_group_relation() {
         EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
-        TagPojo todo = modelTestScenarios.toDo();
         SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
                 vertexA.uri(),
                 ShareLevel.allShareLevelsInt
@@ -459,9 +446,8 @@ public class EdgeOperatorTest extends ModelTestResources {
         );
         GroupRelationPojo groupRelationPojo = edgeAB.convertToGroupRelation(
                 UUID.randomUUID().toString(),
-                todo,
-                true,
-                edgeAB.getShareLevel()
+                edgeAB.getShareLevel(),
+                ""
         );
         subGraph = userGraph.aroundVertexUriInShareLevels(
                 vertexA.uri(),
@@ -480,6 +466,33 @@ public class EdgeOperatorTest extends ModelTestResources {
         );
         assertTrue(
                 subGraph.hasEdgeWithUri(edgeAB.uri())
+        );
+    }
+
+    @Test
+    public void new_group_relation_has_2_neighbors() {
+        EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
+        vertexA.makePublic();
+
+        GroupRelationOperator groupRelationOperator = groupRelationFactory.withUri(
+                edgeAB.convertToGroupRelation(
+                        UUID.randomUUID().toString(),
+                        vertexA.getShareLevel(),
+                        ""
+                ).uri()
+        );
+        NbNeighbors nbNeighbors = groupRelationOperator.getNbNeighbors();
+        assertThat(
+                nbNeighbors.getPublic(),
+                is(2)
+        );
+        assertThat(
+                nbNeighbors.getPrivate(),
+                is(0)
+        );
+        assertThat(
+                nbNeighbors.getFriend(),
+                is(0)
         );
     }
 }

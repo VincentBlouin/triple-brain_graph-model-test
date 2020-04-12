@@ -11,6 +11,7 @@ import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.search.Neo4jSearchRelatedTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -404,7 +405,7 @@ public class GraphSearchTest extends Neo4jSearchRelatedTest {
     }
 
 
-//    @Test 
+    //    @Test
 //    ("getDetails is suspended")
 //    public void can_get_search_details_of_public_resource_as_anonymous_user() {
 ////        vertexB.comment("some comment");

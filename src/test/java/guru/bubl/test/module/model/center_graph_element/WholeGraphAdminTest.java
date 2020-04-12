@@ -289,16 +289,14 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    
-
     public void meta_related_to_relation_context_includes_label_of_surround_vertices() {
         EdgeOperator edge = vertexB.getEdgeToDestinationVertex(vertexC);
         edge.addTag(
-                modelTestScenarios.toDo()
+                modelTestScenarios.person()
         ).values().iterator().next();
         wholeGraphAdmin.reindexAll();
         GraphElementSearchResult graphElementSearchResult = graphSearchFactory.usingSearchTerm(
-                "To do"
+                "Person"
         ).searchRelationsForAutoCompletionByLabel(
                 user
         ).iterator().next();
