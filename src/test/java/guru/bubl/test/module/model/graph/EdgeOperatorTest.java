@@ -397,6 +397,7 @@ public class EdgeOperatorTest extends ModelTestResources {
                 )
         );
         GroupRelationPojo groupRelationPojo = edgeBC.convertToGroupRelation(
+                UUID.randomUUID().toString(),
                 tag,
                 true,
                 edgeBC.getShareLevel()
@@ -426,7 +427,12 @@ public class EdgeOperatorTest extends ModelTestResources {
         assertTrue(
                 edgeFactory.withUri(edgeAB.uri()).getTags().keySet().contains(todo.getExternalResourceUri())
         );
-        GroupRelationPojo groupRelationPojo = edgeAB.convertToGroupRelation(todo, false, edgeAB.getShareLevel());
+        GroupRelationPojo groupRelationPojo = edgeAB.convertToGroupRelation(
+                UUID.randomUUID().toString(),
+                todo,
+                false,
+                edgeAB.getShareLevel()
+        );
         assertThat(
                 groupRelationPojo.getTag().getExternalResourceUri(),
                 is(todo.getExternalResourceUri())
@@ -451,7 +457,12 @@ public class EdgeOperatorTest extends ModelTestResources {
         assertTrue(
                 subGraph.hasEdgeWithUri(edgeAB.uri())
         );
-        GroupRelationPojo groupRelationPojo = edgeAB.convertToGroupRelation(todo, true, edgeAB.getShareLevel());
+        GroupRelationPojo groupRelationPojo = edgeAB.convertToGroupRelation(
+                UUID.randomUUID().toString(),
+                todo,
+                true,
+                edgeAB.getShareLevel()
+        );
         subGraph = userGraph.aroundVertexUriInShareLevels(
                 vertexA.uri(),
                 ShareLevel.allShareLevelsInt

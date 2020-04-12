@@ -1019,7 +1019,11 @@ public class UserGraphTest extends ModelTestResources {
         EdgeOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
         TagPojo todo = modelTestScenarios.toDo();
         GroupRelationOperator groupRelationOperator = groupRelationFactory.withUri(
-                edgeBC.convertToGroupRelation(todo, true, edgeBC.getShareLevel()).uri()
+                edgeBC.convertToGroupRelation(
+                        UUID.randomUUID().toString(),
+                        todo,
+                        true,
+                        edgeBC.getShareLevel()).uri()
         );
         groupRelationOperator.addVertexAndRelation();
         groupRelationOperator.addVertexAndRelation();
