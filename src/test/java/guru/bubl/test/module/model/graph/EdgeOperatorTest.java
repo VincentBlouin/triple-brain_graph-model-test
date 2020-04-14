@@ -15,6 +15,7 @@ import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.URI;
@@ -153,8 +154,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void an_edge_is_private_at_creation_if_one_of_the_end_vertices_is_private() {
         vertexA.makePublic();
         Edge edge = vertexA.addVertexAndRelation();
@@ -202,7 +201,6 @@ public class EdgeOperatorTest extends ModelTestResources {
     }
 
     @Test
-
     public void change_source_can_be_a_group_relation() {
         EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
@@ -493,6 +491,20 @@ public class EdgeOperatorTest extends ModelTestResources {
         assertThat(
                 nbNeighbors.getFriend(),
                 is(0)
+        );
+    }
+
+    @Test
+    public void can_change_destination_to_group_relation(){
+        EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
+        assertThat(
+                edgeAB.sourceUri(),
+                is(vertexA.uri())
+        );
+        edgeAB.changeDestination(groupRelation.uri(), ShareLevel.PRIVATE, ShareLevel.PRIVATE, ShareLevel.PRIVATE);
+        assertThat(
+                edgeAB.destinationUri(),
+                is(groupRelation.uri())
         );
     }
 }

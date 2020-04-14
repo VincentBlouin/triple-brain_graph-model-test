@@ -980,4 +980,25 @@ public class UserGraphTest extends ModelTestResources {
                 is(4)
         );
     }
+
+    @Test
+    public void can_get_destination_when_its_is_group_relation() {
+        EdgeOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
+        edgeBC.changeDestination(
+                groupRelation.uri(),
+                ShareLevel.PRIVATE,
+                ShareLevel.PRIVATE,
+                ShareLevel.PRIVATE
+        );
+        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+                vertexB.uri(),
+                ShareLevel.allShareLevelsInt
+        );
+        assertTrue(subGraph.containsEdge(edgeBC));
+        EdgePojo edgeBCInSubGraph = subGraph.edgeWithIdentifier(edgeBC.uri());
+        assertThat(
+                edgeBCInSubGraph.destinationUri(),
+                is(groupRelation.uri())
+        );
+    }
 }
