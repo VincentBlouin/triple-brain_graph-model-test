@@ -434,7 +434,7 @@ public class RelationOperatorTest extends ModelTestResources {
     @Test
     public void convert_to_group_relation_edge_becomes_child_of_group_relation() {
         RelationOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
-        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexA.uri(),
                 ShareLevel.allShareLevelsInt
         );
@@ -446,14 +446,14 @@ public class RelationOperatorTest extends ModelTestResources {
                 edgeAB.getShareLevel(),
                 ""
         );
-        subGraph = userGraph.aroundVertexUriInShareLevels(
+        subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexA.uri(),
                 ShareLevel.allShareLevelsInt
         );
         assertFalse(
                 subGraph.hasEdgeWithUri(edgeAB.uri())
         );
-        subGraph = userGraph.aroundVertexUriInShareLevels(
+        subGraph = userGraph.aroundForkUriInShareLevels(
                 groupRelationPojo.uri(),
                 ShareLevel.allShareLevelsInt
         );

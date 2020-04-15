@@ -25,7 +25,7 @@ public class JsonConvertTest extends ModelTestResources {
     @Test
     public void can_convert_vertex_to_and_from() {
         JSONObject vertexAJson = VertexJson.toJson(
-                userGraph.aroundVertexUriInShareLevels(vertexA.uri(), ShareLevel.allShareLevelsInt).vertexWithIdentifier(vertexA.uri())
+                userGraph.aroundForkUriInShareLevels(vertexA.uri(), ShareLevel.allShareLevelsInt).vertexWithIdentifier(vertexA.uri())
         );
         VertexPojo vertexA = VertexJson.fromJson(
                 vertexAJson
@@ -39,13 +39,13 @@ public class JsonConvertTest extends ModelTestResources {
     public void converting_edge_to_json_throws_no_error() {
         Relation relation = vertexA.getEdgeToDestinationVertex(vertexB);
         RelationJson.toJson(
-                userGraph.aroundVertexUriInShareLevels(vertexA.uri(), ShareLevel.allShareLevelsInt).edgeWithIdentifier(relation.uri())
+                userGraph.aroundForkUriInShareLevels(vertexA.uri(), ShareLevel.allShareLevelsInt).edgeWithIdentifier(relation.uri())
         );
     }
 
     @Test
     public void can_convert_subgraph_to_and_from() {
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 10,
                 ShareLevel.allShareLevelsInt
@@ -64,7 +64,7 @@ public class JsonConvertTest extends ModelTestResources {
 
     @Test
     public void subgraph_vertices_are_a_json_object_with_uri_as_key() throws Exception {
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 10,
                 ShareLevel.allShareLevelsInt

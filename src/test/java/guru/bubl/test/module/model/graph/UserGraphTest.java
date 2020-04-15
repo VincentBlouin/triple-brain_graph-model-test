@@ -43,7 +43,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void can_get_graph_with_default_center_vertex() {
-        SubGraph graph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraph graph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
                 ShareLevel.allShareLevelsInt
@@ -57,7 +57,7 @@ public class UserGraphTest extends ModelTestResources {
     @Test
 
     public void can_get_graph_with_custom_center_vertex() {
-        SubGraph graph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraph graph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexB.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
                 ShareLevel.allShareLevelsInt
@@ -73,7 +73,7 @@ public class UserGraphTest extends ModelTestResources {
     public void correct_edges_are_in_graph() {
         Relation betweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
         Relation betweenBAndC = vertexB.getEdgeToDestinationVertex(vertexC);
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
                 ShareLevel.allShareLevelsInt
@@ -93,7 +93,7 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void source_and_destination_vertex_are_in_edges() {
         Relation betweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
                 ShareLevel.allShareLevelsInt
@@ -118,7 +118,7 @@ public class UserGraphTest extends ModelTestResources {
         vertexA.addTag(
                 modelTestScenarios.computerScientistType()
         );
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
                 ShareLevel.allShareLevelsInt
@@ -134,7 +134,7 @@ public class UserGraphTest extends ModelTestResources {
         vertexA.addTag(
                 modelTestScenarios.computerScientistType()
         );
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
                 ShareLevel.allShareLevelsInt
@@ -155,7 +155,7 @@ public class UserGraphTest extends ModelTestResources {
         vertexA.addTag(
                 modelTestScenarios.timBernersLee()
         );
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
                 ShareLevel.allShareLevelsInt
@@ -171,7 +171,7 @@ public class UserGraphTest extends ModelTestResources {
         vertexA.addTag(
                 modelTestScenarios.person()
         );
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
                 ShareLevel.allShareLevelsInt
@@ -200,7 +200,7 @@ public class UserGraphTest extends ModelTestResources {
                 image2
         );
         vertexA.addImages(images);
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
                 ShareLevel.allShareLevelsInt
@@ -242,7 +242,7 @@ public class UserGraphTest extends ModelTestResources {
                 identification
         );
 
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
                 ShareLevel.allShareLevelsInt
@@ -267,7 +267,7 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void can_get_circular_graph_with_default_center_vertex() {
         vertexC.addRelationToVertex(vertexA);
-        SubGraph graph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraph graph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
                 ShareLevel.allShareLevelsInt
@@ -287,7 +287,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void can_get_a_limited_graph_with_default_center_vertex() throws Exception {
-        SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraph subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 2,
                 ShareLevel.allShareLevelsInt
@@ -296,7 +296,7 @@ public class UserGraphTest extends ModelTestResources {
         assertThat(subGraph.numberOfVertices(), is(3));
         assertTrue(subGraph.containsVertex(vertexA));
 
-        subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -309,7 +309,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void can_get_a_limited_graph_with_a_custom_center_vertex() {
-        SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraph subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexC.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -323,7 +323,7 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void can_get_sub_graph_of_destination_vertex_of_center_vertex() {
         Relation newRelation = vertexC.addVertexAndRelation();
-        SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraph subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexB.uri(),
                 2,
                 ShareLevel.allShareLevelsInt
@@ -341,7 +341,7 @@ public class UserGraphTest extends ModelTestResources {
     public void can_get_sub_graph_of_source_vertex_of_center_vertex() {
         SubGraph subGraph;
         Relation newRelation = vertexA.addVertexAndRelation();
-        subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexB.uri(),
                 2,
                 ShareLevel.allShareLevelsInt
@@ -360,7 +360,7 @@ public class UserGraphTest extends ModelTestResources {
         vertexC.addRelationToVertex(vertexA);
         Relation relationGoingOutOfC = vertexC.addVertexAndRelation();
 
-        SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraph subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 2,
                 ShareLevel.allShareLevelsInt
@@ -370,7 +370,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void with_a_depth_of_sub_vertices_of_zero_only_central_vertex_is_returned() {
-        SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraph subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 0,
                 ShareLevel.allShareLevelsInt
@@ -379,7 +379,7 @@ public class UserGraphTest extends ModelTestResources {
         assertThat(subGraph.numberOfEdges(), is(0));
         assertTrue(subGraph.containsVertex(vertexA));
 
-        subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexB.uri(),
                 0,
                 ShareLevel.allShareLevelsInt
@@ -399,7 +399,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void vertex_details_are_not_included_in_edge_source_and_destination_vertex() {
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
                 ShareLevel.allShareLevelsInt
@@ -409,7 +409,7 @@ public class UserGraphTest extends ModelTestResources {
                 sourceVertexInEdge.label(),
                 is(CoreMatchers.nullValue())
         );
-        GraphElement destinationVertexInEdge = subGraph.edges().values().iterator().next().destinationFork();
+        GraphElement destinationVertexInEdge = subGraph.edges().values().iterator().next().destination();
         assertThat(
                 destinationVertexInEdge.label(),
                 is(CoreMatchers.nullValue())
@@ -419,7 +419,7 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void changing_edge_source_vertex_reflects_in_getting_subgraph() {
         RelationOperator edge = vertexB.getEdgeToDestinationVertex(vertexC);
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexB.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -431,7 +431,7 @@ public class UserGraphTest extends ModelTestResources {
                 is(vertexB.uri())
         );
         edge.changeSource(vertexA.uri(), ShareLevel.PRIVATE, ShareLevel.PRIVATE, ShareLevel.PRIVATE);
-        subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -447,7 +447,7 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void nb_public_neighbors_is_included() {
         vertexB.makePublic();
-        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexB.uri(),
                 ShareLevel.allShareLevelsInt
         );
@@ -470,7 +470,7 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void nb_friends_is_included() {
         vertexB.setShareLevel(ShareLevel.FRIENDS);
-        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexB.uri(),
                 ShareLevel.allShareLevelsInt
         );
@@ -498,7 +498,7 @@ public class UserGraphTest extends ModelTestResources {
         vertexC.addTag(
                 computerScientist
         );
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 computerScientist.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -513,7 +513,7 @@ public class UserGraphTest extends ModelTestResources {
         TagPojo computerScientist = vertexB.addTag(
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
-        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexB.uri(),
                 ShareLevel.allShareLevelsInt
         );
@@ -527,7 +527,7 @@ public class UserGraphTest extends ModelTestResources {
         tagFactory.withUri(
                 computerScientist.uri()
         ).setShareLevel(ShareLevel.PUBLIC);
-        subGraph = userGraph.aroundVertexUriInShareLevels(
+        subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexB.uri(),
                 ShareLevel.allShareLevelsInt
         );
@@ -546,7 +546,7 @@ public class UserGraphTest extends ModelTestResources {
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         vertexB.makePublic();
-        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexB.uri(),
                 ShareLevel.PUBLIC.getIndex()
         );
@@ -564,7 +564,7 @@ public class UserGraphTest extends ModelTestResources {
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         vertexB.remove();
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 computerScientist.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -585,8 +585,8 @@ public class UserGraphTest extends ModelTestResources {
                 toDo
         );
         RelationPojo newEdge = vertexC.addVertexAndRelation();
-        GraphElement newVertex = newEdge.destinationFork();
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        GraphElement newVertex = newEdge.destination();
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 toDo.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -604,7 +604,7 @@ public class UserGraphTest extends ModelTestResources {
         TagPojo human = vertexB.addTag(
                 modelTestScenarios.human()
         ).values().iterator().next();
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 human.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -622,7 +622,7 @@ public class UserGraphTest extends ModelTestResources {
         TagPojo human = vertexB.addTag(
                 modelTestScenarios.human()
         ).values().iterator().next();
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 human.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -641,7 +641,7 @@ public class UserGraphTest extends ModelTestResources {
         vertexB.addTag(
                 tagPojo
         ).values().iterator().next();
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexB.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -654,7 +654,7 @@ public class UserGraphTest extends ModelTestResources {
         vertexB.setChildrenIndex(
                 "test children indexes"
         );
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexB.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -677,7 +677,7 @@ public class UserGraphTest extends ModelTestResources {
         tagFactory.withUri(
                 computerScientist.uri()
         ).setChildrenIndex("test children indexes");
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 computerScientist.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -696,7 +696,7 @@ public class UserGraphTest extends ModelTestResources {
         vertexB.removeTag(
                 computerScientist
         );
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 computerScientist.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -713,7 +713,7 @@ public class UserGraphTest extends ModelTestResources {
                 modelTestScenarios.computerScientistType()
         ).values().iterator().next();
         vertexB.addTag(modelTestScenarios.person());
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 tag.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -739,7 +739,7 @@ public class UserGraphTest extends ModelTestResources {
         tagFactory.withUri(
                 tag.uri()
         ).setShareLevel(ShareLevel.PUBLIC);
-        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 tag.uri(),
                 ShareLevel.PUBLIC.getIndex(),
                 ShareLevel.PUBLIC_WITH_LINK.getIndex()
@@ -773,7 +773,7 @@ public class UserGraphTest extends ModelTestResources {
         tagFactory.withUri(
                 tag.uri()
         ).setShareLevel(ShareLevel.PUBLIC);
-        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 tag.uri(),
                 ShareLevel.PUBLIC.getIndex(),
                 ShareLevel.PUBLIC_WITH_LINK.getIndex()
@@ -810,7 +810,7 @@ public class UserGraphTest extends ModelTestResources {
         tagFactory.withUri(
                 tag.uri()
         ).setShareLevel(ShareLevel.PUBLIC);
-        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 tag.uri(),
                 ShareLevel.PUBLIC.getIndex(),
                 ShareLevel.PUBLIC_WITH_LINK.getIndex()
@@ -832,7 +832,7 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void include_colors() {
         vertexB.setColors("blue");
-        SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexB.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -845,7 +845,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void can_exclude_graph_elements_that_are_not_in_share_levels() {
-        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexB.uri(),
                 ShareLevel.PRIVATE.getIndex()
         );
@@ -857,7 +857,7 @@ public class UserGraphTest extends ModelTestResources {
                 subGraph.edges().size(),
                 is(2)
         );
-        subGraph = userGraph.aroundVertexUriInShareLevels(
+        subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexB.uri(),
                 ShareLevel.PUBLIC.getIndex()
         );
@@ -871,7 +871,7 @@ public class UserGraphTest extends ModelTestResources {
         );
         vertexB.setShareLevel(ShareLevel.FRIENDS);
         vertexC.setShareLevel(ShareLevel.FRIENDS);
-        subGraph = userGraph.aroundVertexUriInShareLevels(
+        subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexB.uri(),
                 ShareLevel.FRIENDS.getIndex(),
                 ShareLevel.PUBLIC.getIndex(),
@@ -887,7 +887,7 @@ public class UserGraphTest extends ModelTestResources {
         );
         vertexB.setShareLevel(ShareLevel.PRIVATE);
         vertexC.setShareLevel(ShareLevel.PRIVATE);
-        subGraph = userGraph.aroundVertexUriInShareLevels(
+        subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexB.uri(),
                 ShareLevel.FRIENDS.getIndex(),
                 ShareLevel.PUBLIC.getIndex(),
@@ -903,7 +903,7 @@ public class UserGraphTest extends ModelTestResources {
         );
         vertexB.setShareLevel(ShareLevel.PUBLIC);
         vertexC.setShareLevel(ShareLevel.PUBLIC);
-        subGraph = userGraph.aroundVertexUriInShareLevels(
+        subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexB.uri(),
                 ShareLevel.PUBLIC.getIndex()
         );
@@ -919,7 +919,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void returns_is_a_pattern_or_not() {
-        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexB.uri(),
                 ShareLevel.allShareLevelsInt
         );
@@ -928,7 +928,7 @@ public class UserGraphTest extends ModelTestResources {
                 vertexBInSubGraph.isPattern()
         );
         vertexB.makePattern();
-        subGraph = userGraph.aroundVertexUriInShareLevels(
+        subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexB.uri(),
                 ShareLevel.allShareLevelsInt
         );
@@ -945,7 +945,7 @@ public class UserGraphTest extends ModelTestResources {
                 user,
                 vertexB.uri()
         ).use();
-        Vertex newCenter = userGraph.aroundVertexUriInShareLevels(
+        Vertex newCenter = userGraph.aroundForkUriInShareLevels(
                 newUri,
                 ShareLevel.allShareLevelsInt
         ).vertexWithIdentifier(newUri);
@@ -970,7 +970,7 @@ public class UserGraphTest extends ModelTestResources {
         groupRelationOperator.addVertexAndRelation();
         groupRelationOperator.addVertexAndRelation();
         groupRelationOperator.addVertexAndRelation();
-        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 groupRelationOperator.uri(),
                 ShareLevel.allShareLevelsInt
         );
@@ -989,7 +989,7 @@ public class UserGraphTest extends ModelTestResources {
                 ShareLevel.PRIVATE,
                 ShareLevel.PRIVATE
         );
-        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexB.uri(),
                 ShareLevel.allShareLevelsInt
         );

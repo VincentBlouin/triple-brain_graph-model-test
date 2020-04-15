@@ -29,7 +29,7 @@ public class GsonLearning extends AdaptableGraphComponentTest {
         vertexB.addTag(
                 timBernersLeePojo
         );
-        SubGraph graph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraph graph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexB.uri(),
                 3,
                 ShareLevel.allShareLevelsInt

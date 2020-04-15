@@ -107,7 +107,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
         Tag createdIdentification = vertexC.addTag(
                 vertexBAsIdentification
         ).values().iterator().next();
-        SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 createdIdentification.uri(),
                 ShareLevel.allShareLevelsInt
         );

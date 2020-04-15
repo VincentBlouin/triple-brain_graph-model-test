@@ -23,7 +23,7 @@ public class PatternUserTest extends ModelTestResources {
     @Test
     public void can_clone() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
-        SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraph subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexB.uri(),
                 10,
                 ShareLevel.allShareLevelsInt
@@ -82,7 +82,7 @@ public class PatternUserTest extends ModelTestResources {
         ).use();
         List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm("maple syrup").searchOnlyForOwnVerticesForAutoCompletionByLabel(anotherUser);
         URI clonedUri = results.iterator().next().getGraphElement().uri();
-        SubGraphPojo subGraph = anotherUserGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = anotherUserGraph.aroundForkUriWithDepthInShareLevels(
                 clonedUri,
                 1,
                 ShareLevel.allShareLevelsInt
@@ -108,7 +108,7 @@ public class PatternUserTest extends ModelTestResources {
                 anotherUser,
                 vertexA.uri()
         ).use();
-        SubGraphPojo subGraph = anotherUserGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraphPojo subGraph = anotherUserGraph.aroundForkUriWithDepthInShareLevels(
                 cloneUri,
                 1,
                 ShareLevel.allShareLevelsInt
@@ -118,7 +118,7 @@ public class PatternUserTest extends ModelTestResources {
                 vertexInSubGraph.getNbNeighbors().getTotal(),
                 is(2)
         );
-        subGraph = anotherUserGraph.aroundVertexUriWithDepthInShareLevels(
+        subGraph = anotherUserGraph.aroundForkUriWithDepthInShareLevels(
                 vertexInSubGraph.uri(),
                 1,
                 ShareLevel.allShareLevelsInt
@@ -292,7 +292,7 @@ public class PatternUserTest extends ModelTestResources {
                 anotherUser,
                 vertexB.uri()
         ).use();
-        SubGraph subGraph = anotherUserGraph.aroundVertexUriWithDepthInShareLevels(
+        SubGraph subGraph = anotherUserGraph.aroundForkUriWithDepthInShareLevels(
                 centerUri,
                 1,
                 ShareLevel.allShareLevelsInt
@@ -326,7 +326,7 @@ public class PatternUserTest extends ModelTestResources {
                 anotherUser,
                 vertexB.uri()
         ).use();
-        SubGraph subGraph = userGraph.aroundVertexUriInShareLevels(
+        SubGraph subGraph = userGraph.aroundForkUriInShareLevels(
                 centerUri,
                 ShareLevel.allShareLevelsInt
         );
