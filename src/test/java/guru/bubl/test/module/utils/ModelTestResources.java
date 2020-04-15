@@ -11,7 +11,7 @@ import guru.bubl.module.model.center_graph_element.CenterGraphElementOperatorFac
 import guru.bubl.module.model.center_graph_element.CenterGraphElementsOperatorFactory;
 import guru.bubl.module.model.graph.GraphFactory;
 import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.edge.EdgeFactory;
+import guru.bubl.module.model.graph.relation.RelationFactory;
 import guru.bubl.module.model.graph.group_relation.GroupRelationFactory;
 import guru.bubl.module.model.graph.group_relation.GroupRelationOperator;
 import guru.bubl.module.model.graph.pattern.PatternUserFactory;
@@ -65,7 +65,7 @@ public class ModelTestResources {
     public WholeGraphNeo4j wholeGraph;
 
     @Inject
-    protected EdgeFactory edgeFactory;
+    protected RelationFactory relationFactory;
 
     @Inject
     protected VertexFactoryNeo4j vertexFactory;

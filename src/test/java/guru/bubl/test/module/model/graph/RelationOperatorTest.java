@@ -5,8 +5,8 @@
 package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.relation.Relation;
+import guru.bubl.module.model.graph.relation.RelationOperator;
 import guru.bubl.module.model.graph.fork.NbNeighbors;
 import guru.bubl.module.model.graph.group_relation.GroupRelationOperator;
 import guru.bubl.module.model.graph.group_relation.GroupRelationPojo;
@@ -15,7 +15,6 @@ import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.URI;
@@ -28,7 +27,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
-public class EdgeOperatorTest extends ModelTestResources {
+public class RelationOperatorTest extends ModelTestResources {
 
     @Test
     public void can_add_relation() {
@@ -39,7 +38,7 @@ public class EdgeOperatorTest extends ModelTestResources {
                 vertexD.addVertexAndRelation().destinationUri()
         );
         Integer numberOfEdgesAndVertices = wholeGraphAroundDefaultCenterVertex().numberOfEdgesAndVertices();
-        EdgeOperator newEdge = vertexE.addRelationToVertex(vertexA);
+        RelationOperator newEdge = vertexE.addRelationToVertex(vertexA);
 
         assertThat(newEdge.sourceUri(), is(vertexE.uri()));
         assertThat(newEdge.destinationUri(), is(vertexA.uri()));
@@ -53,7 +52,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void can_update_label() {
-        EdgeOperator edge = edgeFactory.withUri(
+        RelationOperator edge = relationFactory.withUri(
                 vertexA.addVertexAndRelation().uri()
         );
         edge.label("likes");
@@ -62,18 +61,18 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void there_is_a_creation_date() {
-        Edge edge = vertexA.addVertexAndRelation();
+        Relation relation = vertexA.addVertexAndRelation();
         assertThat(
-                edge.creationDate(),
+                relation.creationDate(),
                 is(not(nullValue()))
         );
     }
 
     @Test
     public void there_is_a_last_modification_date() {
-        Edge edge = vertexA.addVertexAndRelation();
+        Relation relation = vertexA.addVertexAndRelation();
         assertThat(
-                edge.lastModificationDate(),
+                relation.lastModificationDate(),
                 is(not(nullValue()))
         );
     }
@@ -94,7 +93,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     @Test
     public void can_remove_an_edge() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
-        EdgeOperator edge = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edge = vertexA.getEdgeToDestinationVertex(vertexB);
         URI edgeId = edge.uri();
         assertTrue(userGraph.haveElementWithId(edgeId));
         edge.remove();
@@ -108,7 +107,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void can_add_tag() {
-        EdgeOperator newEdge = edgeFactory.withUri(
+        RelationOperator newEdge = relationFactory.withUri(
                 vertexA.addVertexAndRelation().uri()
         );
         assertTrue(newEdge.getTags().isEmpty());
@@ -120,21 +119,21 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void can_check_equality() {
-        Edge anEdge = vertexA.addVertexAndRelation();
-        assertTrue(anEdge.equals(anEdge));
-        Edge anotherEdge = vertexA.addVertexAndRelation();
-        assertFalse(anEdge.equals(anotherEdge));
+        Relation anRelation = vertexA.addVertexAndRelation();
+        assertTrue(anRelation.equals(anRelation));
+        Relation anotherRelation = vertexA.addVertexAndRelation();
+        assertFalse(anRelation.equals(anotherRelation));
     }
 
     @Test
     public void can_compare_to_friendly_resource() {
-        Edge anEdge = vertexA.addVertexAndRelation();
-        assertTrue(anEdge.equals(anEdge));
+        Relation anRelation = vertexA.addVertexAndRelation();
+        assertTrue(anRelation.equals(anRelation));
     }
 
     @Test
     public void can_inverse() {
-        EdgeOperator betweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator betweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(betweenAAndB.sourceUri(), is(vertexA.uri()));
         assertThat(betweenAAndB.destinationUri(), is(vertexB.uri()));
         betweenAAndB.inverse();
@@ -147,18 +146,18 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void an_edge_is_private_at_creation_if_both_end_vertices_are_private() {
-        Edge edge = vertexA.addVertexAndRelation();
+        Relation relation = vertexA.addVertexAndRelation();
         assertFalse(
-                edgeFactory.withUri(edge.uri()).isPublic()
+                relationFactory.withUri(relation.uri()).isPublic()
         );
     }
 
     @Test
     public void an_edge_is_private_at_creation_if_one_of_the_end_vertices_is_private() {
         vertexA.makePublic();
-        Edge edge = vertexA.addVertexAndRelation();
+        Relation relation = vertexA.addVertexAndRelation();
         assertFalse(
-                edgeFactory.withUri(edge.uri()).isPublic()
+                relationFactory.withUri(relation.uri()).isPublic()
         );
     }
 
@@ -166,7 +165,7 @@ public class EdgeOperatorTest extends ModelTestResources {
     public void an_edge_is_public_at_creation_if_both_end_vertices_are_public() {
         vertexA.makePublic();
         vertexC.makePublic();
-        EdgeOperator edge = vertexA.addRelationToVertex(vertexC);
+        RelationOperator edge = vertexA.addRelationToVertex(vertexC);
         assertTrue(
                 edge.isPublic()
         );
@@ -174,7 +173,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void can_change_source_vertex() {
-        EdgeOperator edge = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edge = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
                 edge.sourceUri(),
                 is(vertexA.uri())
@@ -188,7 +187,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void changing_source_vertex_increments_number_of_connected_vertices_for_new_source_vertex() {
-        EdgeOperator edge = vertexB.getEdgeToDestinationVertex(vertexC);
+        RelationOperator edge = vertexB.getEdgeToDestinationVertex(vertexC);
         assertThat(
                 vertexA.getNbNeighbors().getTotal(),
                 is(1)
@@ -202,7 +201,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void change_source_can_be_a_group_relation() {
-        EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
                 edgeAB.sourceUri(),
                 is(vertexA.uri())
@@ -216,7 +215,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void changing_source_vertex_decrements_number_of_connected_vertices_for_previous_source_vertex() {
-        EdgeOperator edge = vertexB.getEdgeToDestinationVertex(vertexC);
+        RelationOperator edge = vertexB.getEdgeToDestinationVertex(vertexC);
         assertThat(
                 vertexB.getNbNeighbors().getTotal(),
                 is(2)
@@ -231,7 +230,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void can_change_destination_vertex() {
-        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeBetweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
                 edgeBetweenAAndB.destinationUri(),
                 is(vertexB.uri())
@@ -245,7 +244,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void kept_vertex_nb_public_neighbors_is_unchanged_when_previous_and_new_end_are_private() {
-        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeBetweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
                 vertexA.getNbNeighbors().getPublic(),
                 is(0)
@@ -262,7 +261,7 @@ public class EdgeOperatorTest extends ModelTestResources {
         vertexB.makePublic();
         vertexA.makePublic();
         vertexC.makePublic();
-        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeBetweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
                 vertexA.getNbNeighbors().getPublic(),
                 is(1)
@@ -277,7 +276,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void kept_vertex_nb_public_neighbors_increments_when_previous_end_is_private_and_new_is_public() {
-        EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
                 vertexA.getNbNeighbors().getPublic(),
                 is(0)
@@ -302,7 +301,7 @@ public class EdgeOperatorTest extends ModelTestResources {
                 is(1)
         );
         vertexC.makePrivate();
-        EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         edgeAB.changeDestination(
                 vertexC.uri(),
                 ShareLevel.PUBLIC,
@@ -322,7 +321,7 @@ public class EdgeOperatorTest extends ModelTestResources {
                 vertexB.getNbNeighbors().getPublic(),
                 is(1)
         );
-        EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         edgeAB.changeDestination(vertexC.uri(), ShareLevel.PRIVATE, ShareLevel.PUBLIC, ShareLevel.PRIVATE);
         assertThat(
                 vertexB.getNbNeighbors().getPublic(),
@@ -337,7 +336,7 @@ public class EdgeOperatorTest extends ModelTestResources {
                 vertexC.getNbNeighbors().getPublic(),
                 is(0)
         );
-        EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         edgeAB.changeDestination(
                 vertexC.uri(),
                 ShareLevel.PRIVATE,
@@ -352,12 +351,12 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void can_use_as_tag_even_if_deleted() {
-        EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         TagPojo edgeABTag = TestScenarios.tagFromFriendlyResource(
                 edgeAB
         );
         edgeAB.remove();
-        EdgeOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
+        RelationOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
         assertThat(
                 edgeBC.getTags().size(),
                 is(0)
@@ -371,7 +370,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void convert_to_group_relation_tags_new_group_relation_with_edge_tags() {
-        EdgeOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
+        RelationOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
         edgeBC.addTag(modelTestScenarios.toDo(), ShareLevel.PRIVATE);
         GroupRelationOperator groupRelationOperator = groupRelationFactory.withUri(
                 edgeBC.convertToGroupRelation(
@@ -392,7 +391,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void convert_to_group_relation_tags_all_edge_tags_new_group_relation() {
-        EdgeOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
+        RelationOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
         edgeBC.addTag(modelTestScenarios.person(), ShareLevel.PRIVATE);
         edgeBC.addTag(modelTestScenarios.human(), ShareLevel.PRIVATE);
         GroupRelationOperator groupRelationOperator = groupRelationFactory.withUri(
@@ -410,13 +409,13 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void convert_to_group_relation_untags_edge_and_tags_the_group_relation() {
-        EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         TagPojo todo = modelTestScenarios.toDo();
-        todo = edgeFactory.withUri(
+        todo = relationFactory.withUri(
                 edgeAB.uri()
         ).addTag(todo).values().iterator().next();
         assertTrue(
-                edgeFactory.withUri(edgeAB.uri()).getTags().keySet().contains(todo.getExternalResourceUri())
+                relationFactory.withUri(edgeAB.uri()).getTags().keySet().contains(todo.getExternalResourceUri())
         );
         GroupRelationPojo groupRelationPojo = edgeAB.convertToGroupRelation(
                 UUID.randomUUID().toString(),
@@ -424,7 +423,7 @@ public class EdgeOperatorTest extends ModelTestResources {
                 ""
         );
         assertFalse(
-                edgeFactory.withUri(edgeAB.uri()).getTags().keySet().contains(todo.getExternalResourceUri())
+                relationFactory.withUri(edgeAB.uri()).getTags().keySet().contains(todo.getExternalResourceUri())
         );
         GroupRelationOperator groupRelationOperator = groupRelationFactory.withUri(groupRelationPojo.uri());
         assertTrue(
@@ -434,7 +433,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void convert_to_group_relation_edge_becomes_child_of_group_relation() {
-        EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         SubGraphPojo subGraph = userGraph.aroundVertexUriInShareLevels(
                 vertexA.uri(),
                 ShareLevel.allShareLevelsInt
@@ -469,7 +468,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void new_group_relation_has_2_neighbors() {
-        EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         vertexA.makePublic();
 
         GroupRelationOperator groupRelationOperator = groupRelationFactory.withUri(
@@ -496,7 +495,7 @@ public class EdgeOperatorTest extends ModelTestResources {
 
     @Test
     public void can_change_destination_to_group_relation(){
-        EdgeOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
                 edgeAB.sourceUri(),
                 is(vertexA.uri())

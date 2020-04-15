@@ -9,9 +9,9 @@ import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.Image;
 import guru.bubl.module.model.graph.GraphElement;
 import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.edge.EdgeOperator;
-import guru.bubl.module.model.graph.edge.EdgePojo;
+import guru.bubl.module.model.graph.relation.Relation;
+import guru.bubl.module.model.graph.relation.RelationOperator;
+import guru.bubl.module.model.graph.relation.RelationPojo;
 import guru.bubl.module.model.graph.group_relation.GroupRelationOperator;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
@@ -23,7 +23,6 @@ import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.CoreMatchers;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -72,8 +71,8 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void correct_edges_are_in_graph() {
-        Edge betweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
-        Edge betweenBAndC = vertexB.getEdgeToDestinationVertex(vertexC);
+        Relation betweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
+        Relation betweenBAndC = vertexB.getEdgeToDestinationVertex(vertexC);
         SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
@@ -93,13 +92,13 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void source_and_destination_vertex_are_in_edges() {
-        Edge betweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
+        Relation betweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
         SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
                 ShareLevel.allShareLevelsInt
         );
-        Edge betweenAAndBFromSubGraph = subGraph.edgeWithIdentifier(
+        Relation betweenAAndBFromSubGraph = subGraph.edgeWithIdentifier(
                 betweenAAndB.uri()
         );
         assertTrue(
@@ -323,7 +322,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void can_get_sub_graph_of_destination_vertex_of_center_vertex() {
-        Edge newEdge = vertexC.addVertexAndRelation();
+        Relation newRelation = vertexC.addVertexAndRelation();
         SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
                 vertexB.uri(),
                 2,
@@ -335,13 +334,13 @@ public class UserGraphTest extends ModelTestResources {
         assertTrue(subGraph.containsVertex(vertexA));
         assertTrue(subGraph.containsVertex(vertexB));
         assertTrue(subGraph.containsVertex(vertexC));
-        assertTrue(subGraph.vertices().containsKey(newEdge.destinationUri()));
+        assertTrue(subGraph.vertices().containsKey(newRelation.destinationUri()));
     }
 
     @Test
     public void can_get_sub_graph_of_source_vertex_of_center_vertex() {
         SubGraph subGraph;
-        Edge newEdge = vertexA.addVertexAndRelation();
+        Relation newRelation = vertexA.addVertexAndRelation();
         subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
                 vertexB.uri(),
                 2,
@@ -350,7 +349,7 @@ public class UserGraphTest extends ModelTestResources {
         assertThat(subGraph.numberOfVertices(), is(4));
         assertThat(subGraph.numberOfEdges(), is(3));
 
-        assertTrue(subGraph.vertices().containsKey(newEdge.destinationUri()));
+        assertTrue(subGraph.vertices().containsKey(newRelation.destinationUri()));
         assertTrue(subGraph.containsVertex(vertexA));
         assertTrue(subGraph.containsVertex(vertexB));
         assertTrue(subGraph.containsVertex(vertexC));
@@ -359,14 +358,14 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void can_get_sub_graph_of_source_vertex_of_center_vertex_having_also_a_circular_relation() {
         vertexC.addRelationToVertex(vertexA);
-        Edge edgeGoingOutOfC = vertexC.addVertexAndRelation();
+        Relation relationGoingOutOfC = vertexC.addVertexAndRelation();
 
         SubGraph subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
                 vertexA.uri(),
                 2,
                 ShareLevel.allShareLevelsInt
         );
-        assertTrue(subGraph.vertices().containsKey(edgeGoingOutOfC.destinationUri()));
+        assertTrue(subGraph.vertices().containsKey(relationGoingOutOfC.destinationUri()));
     }
 
     @Test
@@ -419,7 +418,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void changing_edge_source_vertex_reflects_in_getting_subgraph() {
-        EdgeOperator edge = vertexB.getEdgeToDestinationVertex(vertexC);
+        RelationOperator edge = vertexB.getEdgeToDestinationVertex(vertexC);
         SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
                 vertexB.uri(),
                 1,
@@ -577,15 +576,15 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void sub_graph_around_an_identifier_related_to_relations_include_vertices_and_relations() {
-        EdgeOperator edgeBetweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeBetweenAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
         TagPojo toDo = edgeBetweenAAndB.addTag(
                 modelTestScenarios.toDo()
         ).values().iterator().next();
-        EdgeOperator edgeBetweenBAndC = vertexB.getEdgeToDestinationVertex(vertexC);
+        RelationOperator edgeBetweenBAndC = vertexB.getEdgeToDestinationVertex(vertexC);
         edgeBetweenBAndC.addTag(
                 toDo
         );
-        EdgePojo newEdge = vertexC.addVertexAndRelation();
+        RelationPojo newEdge = vertexC.addVertexAndRelation();
         GraphElement newVertex = newEdge.destinationFork();
         SubGraphPojo subGraph = userGraph.aroundVertexUriWithDepthInShareLevels(
                 toDo.uri(),
@@ -727,11 +726,11 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void excludes_edges_around_tag_when_destination_or_source_vertex_is_private() {
-        EdgeOperator bToCEdge = vertexB.getEdgeToDestinationVertex(vertexC);
+        RelationOperator bToCEdge = vertexB.getEdgeToDestinationVertex(vertexC);
         TagPojo tag = bToCEdge.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
-        edgeFactory.withUri(
+        relationFactory.withUri(
                 vertexB.addVertexAndRelation().uri()
         ).addTag(
                 tag
@@ -760,11 +759,11 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void include_edges_around_tag_when_destination_and_source_vertex_are_public() {
-        EdgeOperator bToCEdge = vertexB.getEdgeToDestinationVertex(vertexC);
+        RelationOperator bToCEdge = vertexB.getEdgeToDestinationVertex(vertexC);
         TagPojo tag = bToCEdge.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
-        edgeFactory.withUri(
+        relationFactory.withUri(
                 vertexB.addVertexAndRelation().uri()
         ).addTag(
                 tag
@@ -796,8 +795,8 @@ public class UserGraphTest extends ModelTestResources {
     @Test
     public void include_edges_around_tag_when_destination_and_source_vertex_are_all_public() {
         vertexA.remove();
-        EdgeOperator bToCEdge = vertexB.getEdgeToDestinationVertex(vertexC);
-        EdgeOperator newEdge = edgeFactory.withUri(
+        RelationOperator bToCEdge = vertexB.getEdgeToDestinationVertex(vertexC);
+        RelationOperator newEdge = relationFactory.withUri(
                 vertexB.addVertexAndRelation().uri()
         );
         TagPojo tag = newEdge.addTag(
@@ -958,7 +957,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void returns_multiple_children_of_group_relation() {
-        EdgeOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
+        RelationOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
         TagPojo todo = modelTestScenarios.toDo();
         edgeBC.addTag(todo, ShareLevel.PRIVATE);
         GroupRelationOperator groupRelationOperator = groupRelationFactory.withUri(
@@ -983,7 +982,7 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void can_get_destination_when_its_is_group_relation() {
-        EdgeOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
+        RelationOperator edgeBC = vertexB.getEdgeToDestinationVertex(vertexC);
         edgeBC.changeDestination(
                 groupRelation.uri(),
                 ShareLevel.PRIVATE,
@@ -995,7 +994,7 @@ public class UserGraphTest extends ModelTestResources {
                 ShareLevel.allShareLevelsInt
         );
         assertTrue(subGraph.containsEdge(edgeBC));
-        EdgePojo edgeBCInSubGraph = subGraph.edgeWithIdentifier(edgeBC.uri());
+        RelationPojo edgeBCInSubGraph = subGraph.edgeWithIdentifier(edgeBC.uri());
         assertThat(
                 edgeBCInSubGraph.destinationUri(),
                 is(groupRelation.uri())

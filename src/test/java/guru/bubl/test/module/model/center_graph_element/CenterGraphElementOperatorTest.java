@@ -7,7 +7,7 @@ package guru.bubl.test.module.model.center_graph_element;
 import guru.bubl.module.model.center_graph_element.CenterGraphElement;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
-import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.relation.Relation;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.core.Is;
@@ -91,13 +91,13 @@ public class CenterGraphElementOperatorTest extends ModelTestResources {
 
     @Test
     public void can_get_center_elements_of_type_relation() {
-        Edge edgeBetweenBAndC = vertexB.getEdgeToDestinationVertex(vertexC);
+        Relation relationBetweenBAndC = vertexB.getEdgeToDestinationVertex(vertexC);
         List<CenterGraphElementPojo> centerGraphElements = centerGraphElementsOperatorFactory.usingDefaultLimits().getPublicAndPrivateForOwner(
                 user
         );
         Integer nbCenterGraphElements = centerGraphElements.size();
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
-                edgeBetweenBAndC
+                relationBetweenBAndC
         );
         centerGraphElementOperator.updateLastCenterDate();
         centerGraphElements = centerGraphElementsOperatorFactory.usingDefaultLimits().getPublicAndPrivateForOwner(user);

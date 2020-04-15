@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 import guru.bubl.module.model.admin.WholeGraphAdmin;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
-import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.relation.RelationOperator;
 import guru.bubl.module.model.graph.tag.TagOperator;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
@@ -257,7 +257,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
     
 
     public void index_relation_sets_source_and_destination_vertex_as_context() {
-        EdgeOperator edgeAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationOperator edgeAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
                 edgeAAndB.getPrivateContext(),
                 is("")
@@ -290,7 +290,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
     @Test
     public void meta_related_to_relation_context_includes_label_of_surround_vertices() {
-        EdgeOperator edge = vertexB.getEdgeToDestinationVertex(vertexC);
+        RelationOperator edge = vertexB.getEdgeToDestinationVertex(vertexC);
         edge.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();

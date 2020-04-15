@@ -4,14 +4,13 @@
 
 package guru.bubl.test.module.model.graph;
 
-import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.relation.Relation;
+import guru.bubl.module.model.graph.relation.RelationOperator;
 import guru.bubl.module.model.graph.tag.TagOperator;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.test.module.utils.ModelTestResources;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -74,20 +73,20 @@ public class WholeGraphTest extends ModelTestResources {
         VertexOperator anotherUserVertex = vertexFactory.withUri(
                 neo4jUserGraphFactory.withUser(anotherUser).createVertex().uri()
         );
-        Edge anotherUserEdge = anotherUserVertex.addVertexAndRelation();
+        Relation anotherUserRelation = anotherUserVertex.addVertexAndRelation();
         VertexOperator newUserVertex = vertexFactory.withUri(
                 neo4jUserGraphFactory.withUser(user).createVertex().uri()
         );
-        Edge newUserEdge = newUserVertex.addVertexAndRelation();
-        Set<EdgeOperator> allUserEdges = wholeGraph.getAllEdgesOfUser(user);
+        Relation newUserRelation = newUserVertex.addVertexAndRelation();
+        Set<RelationOperator> allUserEdges = wholeGraph.getAllEdgesOfUser(user);
         assertTrue(
                 allUserEdges.contains(
-                        newUserEdge
+                        newUserRelation
                 )
         );
         assertFalse(
                 allUserEdges.contains(
-                        anotherUserEdge
+                        anotherUserRelation
                 )
         );
     }

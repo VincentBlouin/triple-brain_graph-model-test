@@ -6,8 +6,8 @@ package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.SubGraphJson;
-import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.edge.EdgeJson;
+import guru.bubl.module.model.graph.relation.Relation;
+import guru.bubl.module.model.graph.relation.RelationJson;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexJson;
@@ -37,9 +37,9 @@ public class JsonConvertTest extends ModelTestResources {
 
     @Test
     public void converting_edge_to_json_throws_no_error() {
-        Edge edge = vertexA.getEdgeToDestinationVertex(vertexB);
-        EdgeJson.toJson(
-                userGraph.aroundVertexUriInShareLevels(vertexA.uri(), ShareLevel.allShareLevelsInt).edgeWithIdentifier(edge.uri())
+        Relation relation = vertexA.getEdgeToDestinationVertex(vertexB);
+        RelationJson.toJson(
+                userGraph.aroundVertexUriInShareLevels(vertexA.uri(), ShareLevel.allShareLevelsInt).edgeWithIdentifier(relation.uri())
         );
     }
 

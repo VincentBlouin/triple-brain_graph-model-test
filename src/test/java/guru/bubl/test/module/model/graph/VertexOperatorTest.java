@@ -7,9 +7,9 @@ package guru.bubl.test.module.model.graph;
 import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.UserUris;
 import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.edge.EdgeOperator;
-import guru.bubl.module.model.graph.edge.EdgePojo;
+import guru.bubl.module.model.graph.relation.Relation;
+import guru.bubl.module.model.graph.relation.RelationOperator;
+import guru.bubl.module.model.graph.relation.RelationPojo;
 import guru.bubl.module.model.graph.tag.Tag;
 import guru.bubl.module.model.graph.tag.TagFactory;
 import guru.bubl.module.model.graph.tag.TagPojo;
@@ -18,7 +18,6 @@ import guru.bubl.module.model.graph.vertex.VertexFactory;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -44,7 +43,7 @@ public class VertexOperatorTest extends ModelTestResources {
     @Test
 
     public void can_update_label() {
-        EdgeOperator newEdge = edgeFactory.withUri(
+        RelationOperator newEdge = relationFactory.withUri(
                 vertexA.addVertexAndRelation().uri()
         );
         VertexOperator vertex = vertexFactory.withUri(newEdge.destinationUri());
@@ -71,7 +70,7 @@ public class VertexOperatorTest extends ModelTestResources {
     @Test
 
     public void can_check_if_vertex_has_edge() {
-        EdgeOperator edge = vertexA.getEdgeToDestinationVertex(
+        RelationOperator edge = vertexA.getEdgeToDestinationVertex(
                 vertexB
         );
         assertTrue(
@@ -101,15 +100,15 @@ public class VertexOperatorTest extends ModelTestResources {
 
     public void can_add_vertex_and_relation() {
         Integer numberOfEdgesAndVertices = numberOfEdgesAndVertices();
-        Edge edge = vertexA.addVertexAndRelation();
-        assertThat(edge, is(not(nullValue())));
+        Relation relation = vertexA.addVertexAndRelation();
+        assertThat(relation, is(not(nullValue())));
         Integer newNumberOfEdgesAndVertices = numberOfEdgesAndVertices();
         assertThat(newNumberOfEdgesAndVertices, is(numberOfEdgesAndVertices + 2));
-        assertTrue(vertexA.hasEdge(edge));
+        assertTrue(vertexA.hasEdge(relation));
 
-        assertThat(edge.sourceUri(), is(vertexA.uri()));
+        assertThat(relation.sourceUri(), is(vertexA.uri()));
 
-        Vertex destinationVertex = vertexFactory.withUri(edge.destinationUri());
+        Vertex destinationVertex = vertexFactory.withUri(relation.destinationUri());
         assertThat(destinationVertex, is(not(nullValue())));
     }
 
@@ -228,7 +227,7 @@ public class VertexOperatorTest extends ModelTestResources {
     @Test
 
     public void can_get_same_as() {
-        EdgeOperator newEdge = edgeFactory.withUri(
+        RelationOperator newEdge = relationFactory.withUri(
                 vertexA.addVertexAndRelation().uri()
         );
         VertexOperator newVertex = vertexFactory.withUri(newEdge.destinationUri());
@@ -439,7 +438,7 @@ public class VertexOperatorTest extends ModelTestResources {
     public void can_add_vertex_and_relation_using_edge_and_vertex_uris() {
         UUID vertexId = UUID.randomUUID();
         UUID edgeId = UUID.randomUUID();
-        EdgePojo newEdge = vertexA.addVertexAndRelationWithIds(
+        RelationPojo newEdge = vertexA.addVertexAndRelationWithIds(
                 vertexId.toString(),
                 edgeId.toString()
         );
@@ -458,7 +457,7 @@ public class VertexOperatorTest extends ModelTestResources {
 
     @Test
     public void add_vertex_and_relation_sets_creation_and_last_modification_date() {
-        EdgeOperator newEdge = edgeFactory.withUri(
+        RelationOperator newEdge = relationFactory.withUri(
                 vertexA.addVertexAndRelation().uri()
         );
         VertexOperator newVertex = vertexFactory.withUri(
@@ -478,7 +477,7 @@ public class VertexOperatorTest extends ModelTestResources {
         UUID edgeId = UUID.fromString(
                 UserUris.graphElementShortId(vertexA.getEdgeToDestinationVertex(vertexB).uri())
         );
-        EdgePojo newEdge = vertexA.addVertexAndRelationWithIds(
+        RelationPojo newEdge = vertexA.addVertexAndRelationWithIds(
                 vertexId.toString(),
                 edgeId.toString()
         );
@@ -829,20 +828,20 @@ public class VertexOperatorTest extends ModelTestResources {
         VertexOperator farCenterVertex = vertexFactory.withUri(
                 farCenterVertexUri
         );
-        Edge edge1 = farCenterVertex.addVertexAndRelation();
-        Edge edge2 = farCenterVertex.addVertexAndRelation();
+        Relation relation1 = farCenterVertex.addVertexAndRelation();
+        Relation relation2 = farCenterVertex.addVertexAndRelation();
         assertFalse(
-                vertexC.hasEdge(edge1)
+                vertexC.hasEdge(relation1)
         );
         assertFalse(
-                vertexC.hasEdge(edge2)
+                vertexC.hasEdge(relation2)
         );
         farCenterVertex.mergeTo(vertexC);
         assertTrue(
-                vertexC.hasEdge(edge1)
+                vertexC.hasEdge(relation1)
         );
         assertTrue(
-                vertexC.hasEdge(edge2)
+                vertexC.hasEdge(relation2)
         );
     }
 
@@ -851,9 +850,9 @@ public class VertexOperatorTest extends ModelTestResources {
         VertexOperator farCenterVertex = vertexFactory.withUri(
                 userGraph.createVertex().uri()
         );
-        Edge edgeOfOfFarVertex = farCenterVertex.addVertexAndRelation();
-        Vertex destinationOfFarVertex = vertexFactory.withUri(edgeOfOfFarVertex.destinationUri());
-        edgeFactory.withUri(edgeOfOfFarVertex.uri()).inverse();
+        Relation relationOfOfFarVertex = farCenterVertex.addVertexAndRelation();
+        Vertex destinationOfFarVertex = vertexFactory.withUri(relationOfOfFarVertex.destinationUri());
+        relationFactory.withUri(relationOfOfFarVertex.uri()).inverse();
         assertThat(
                 farCenterVertex.connectedEdges().size(),
                 is(1)
@@ -867,8 +866,8 @@ public class VertexOperatorTest extends ModelTestResources {
                 vertexC.connectedEdges().size(),
                 is(3)
         );
-        EdgeOperator edgeOfFarVertexOperator = vertexC.connectedEdges().get(
-                edgeOfOfFarVertex.uri()
+        RelationOperator edgeOfFarVertexOperator = vertexC.connectedEdges().get(
+                relationOfOfFarVertex.uri()
         );
         assertThat(
                 edgeOfFarVertexOperator.sourceUri(),
@@ -1128,7 +1127,7 @@ public class VertexOperatorTest extends ModelTestResources {
 
 
     public void make_pattern_makes_tags_of_edges_public() {
-        TagPojo tag = edgeFactory.withUri(
+        TagPojo tag = relationFactory.withUri(
                 vertexB.getEdgeToDestinationVertex(vertexC).uri()
         ).addTag(
                 modelTestScenarios.possessionIdentification()
@@ -1211,12 +1210,12 @@ public class VertexOperatorTest extends ModelTestResources {
 
     public void create_vertex_and_relation_on_under_pattern_vertex_have_flag_under_pattern() {
         vertexA.makePattern();
-        EdgePojo edge = vertexA.addVertexAndRelationWithIds(
+        RelationPojo edge = vertexA.addVertexAndRelationWithIds(
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString()
         );
         assertTrue(
-                edgeFactory.withUri(
+                relationFactory.withUri(
                         edge.uri()
                 ).isUnderPattern()
         );

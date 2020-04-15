@@ -2,7 +2,7 @@ package guru.bubl.test.module.model.graph.pattern;
 
 import guru.bubl.module.model.graph.GraphElement;
 import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.relation.Relation;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.module.model.graph.tag.TagPojo;
@@ -92,9 +92,9 @@ public class PatternUserTest extends ModelTestResources {
                 vertexBCloned.getOwnerUsername(),
                 is(anotherUser.username())
         );
-        Edge edgeCloned = subGraph.edges().values().iterator().next();
+        Relation relationCloned = subGraph.edges().values().iterator().next();
         assertThat(
-                edgeCloned.getOwnerUsername(),
+                relationCloned.getOwnerUsername(),
                 is(anotherUser.username())
         );
     }
