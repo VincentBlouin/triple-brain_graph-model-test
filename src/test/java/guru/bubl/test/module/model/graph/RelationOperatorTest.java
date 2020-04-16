@@ -15,6 +15,7 @@ import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.URI;
@@ -38,7 +39,7 @@ public class RelationOperatorTest extends ModelTestResources {
                 vertexD.addVertexAndRelation().destinationUri()
         );
         Integer numberOfEdgesAndVertices = wholeGraphAroundDefaultCenterVertex().numberOfEdgesAndVertices();
-        RelationOperator newEdge = vertexE.addRelationToVertex(vertexA);
+        RelationOperator newEdge = vertexE.addRelationToFork(vertexA);
 
         assertThat(newEdge.sourceUri(), is(vertexE.uri()));
         assertThat(newEdge.destinationUri(), is(vertexA.uri()));
@@ -83,7 +84,7 @@ public class RelationOperatorTest extends ModelTestResources {
                 vertexB.hasDestinationVertex(vertexC)
         );
         assertThat(vertexC.connectedEdges().size(), is(2));
-        vertexB.addRelationToVertex(vertexC);
+        vertexB.addRelationToFork(vertexC);
         /*  don't test with getNumberOfConnectedEdges
             because we want to test the actual value and not the cached one
          */
@@ -165,7 +166,7 @@ public class RelationOperatorTest extends ModelTestResources {
     public void an_edge_is_public_at_creation_if_both_end_vertices_are_public() {
         vertexA.makePublic();
         vertexC.makePublic();
-        RelationOperator edge = vertexA.addRelationToVertex(vertexC);
+        RelationOperator edge = vertexA.addRelationToFork(vertexC);
         assertTrue(
                 edge.isPublic()
         );

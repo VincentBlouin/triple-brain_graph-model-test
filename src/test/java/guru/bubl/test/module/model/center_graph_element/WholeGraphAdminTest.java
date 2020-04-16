@@ -95,7 +95,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
         VertexOperator newVertex = vertexFactory.withUri(
                 userGraph.createVertex().uri()
         );
-        newVertex.addRelationToVertex(vertexB);
+        newVertex.addRelationToFork(vertexB);
         wholeGraphAdmin.reindexAll();
         assertThat(
                 newVertex.getPrivateContext(),

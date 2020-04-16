@@ -12,6 +12,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        GroupRelationOperatorTest.class
+        RelationOperatorTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}
