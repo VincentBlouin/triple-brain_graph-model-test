@@ -5,8 +5,8 @@ import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.*;
 
 public class GroupRelationOperatorTest extends ModelTestResources {
 
@@ -35,6 +35,10 @@ public class GroupRelationOperatorTest extends ModelTestResources {
                 ShareLevel.PRIVATE,
                 ShareLevel.PRIVATE,
                 ShareLevel.PRIVATE
+        );
+        assertThat(
+                groupRelation.sourceUri(),
+                is(vertexA.uri())
         );
         aroundA = userGraph.aroundForkUriInShareLevels(
                 vertexA.uri(),

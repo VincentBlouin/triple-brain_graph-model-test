@@ -448,13 +448,6 @@ public class RelationOperatorTest extends ModelTestResources {
                 ""
         );
         subGraph = userGraph.aroundForkUriInShareLevels(
-                vertexA.uri(),
-                ShareLevel.allShareLevelsInt
-        );
-        assertFalse(
-                subGraph.hasEdgeWithUri(edgeAB.uri())
-        );
-        subGraph = userGraph.aroundForkUriInShareLevels(
                 groupRelationPojo.uri(),
                 ShareLevel.allShareLevelsInt
         );
