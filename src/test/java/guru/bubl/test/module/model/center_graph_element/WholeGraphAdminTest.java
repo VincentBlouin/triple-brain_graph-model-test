@@ -8,12 +8,14 @@ import com.google.inject.Inject;
 import guru.bubl.module.model.admin.WholeGraphAdmin;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
+import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.relation.RelationOperator;
 import guru.bubl.module.model.graph.tag.TagOperator;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -75,22 +77,24 @@ public class WholeGraphAdminTest extends ModelTestResources {
     public void reindex_all_sets_private_context() {
         wholeGraphAdmin.reindexAll();
         assertThat(
-                vertexB.getPrivateContext(),
-                is("vertex C{{vertex A")
+                vertexC.getPrivateContext(),
+                is("to do{{vertex B")
         );
         assertThat(
                 vertexA.getPrivateContext(),
                 is("vertex B")
         );
         assertThat(
-                vertexC.getPrivateContext(),
-                is("vertex B{{vertex D{{vertex E")
+                vertexB.getPrivateContext(),
+                is("vertex C{{vertex A")
+        );
+        assertThat(
+                groupRelation.getPrivateContext(),
+                is("vertex C{{vertex E{{vertex D")
         );
     }
 
     @Test
-    
-
     public void reindex_all_sets_context_even_if_no_connected_edges() {
         VertexOperator newVertex = vertexFactory.withUri(
                 userGraph.createVertex().uri()
@@ -110,7 +114,6 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    
     public void index_vertex_sets_its_private_surround_graph() {
         assertThat(
                 vertexB.getPrivateContext(),
@@ -138,7 +141,6 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    
     public void filters_empty_label_from_context() {
         for (int i = 0; i < 5; i++) {
             vertexB.addVertexAndRelation();
@@ -151,8 +153,6 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    
-
     public void context_can_have_quotes() {
         vertexA.label("\"some\" label");
         wholeGraphAdmin.reindexAll();
@@ -168,8 +168,6 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    
-
     public void context_prioritize_vertices_with_most_child() {
         for (int i = 4; i <= 10; i++) {
             VertexOperator destinationVertex = vertexFactory.withUri(
@@ -199,8 +197,6 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    
-
     public void surround_graph_does_not_include_all_vertices() {
         wholeGraphAdmin.reindexAll();
         GraphElementSearchResult vertexSearchResult = graphSearchFactory.usingSearchTerm(
@@ -215,8 +211,6 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    
-
     public void index_vertex_sets_its_public_surround_graph() {
         vertexB.makePublic();
         vertexA.makePublic();
@@ -241,8 +235,6 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    
-
     public void context_does_not_include_self_vertex() {
         wholeGraphAdmin.reindexAll();
         assertFalse(
@@ -254,8 +246,6 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
 
     @Test
-    
-
     public void index_relation_sets_source_and_destination_vertex_as_context() {
         RelationOperator edgeAAndB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
@@ -271,7 +261,6 @@ public class WholeGraphAdminTest extends ModelTestResources {
 
 
     @Test
-    
     public void meta_context_includes_label_of_surround_vertices() {
         vertexA.addTag(
                 modelTestScenarios.person()
@@ -326,9 +315,18 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    
+    public void tags_context_includes_group_relations() {
+        TagOperator todo = tagFactory.withUri(
+                vertexA.addTag(modelTestScenarios.toDo(), ShareLevel.PRIVATE).values().iterator().next().uri()
+        );
+        wholeGraphAdmin.reindexAll();
+        assertThat(
+                todo.getPrivateContext(),
+                is("to do{{vertex A")
+        );
+    }
 
-
+    @Test
     public void can_refresh_number_of_connected_edges() {
 
         vertexB.getNbNeighbors().setPrivate(8);
@@ -348,9 +346,6 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    
-
-
     public void can_refresh_number_of_public_connected_edges() {
         vertexB.makePublic();
         vertexC.makePublic();
@@ -367,9 +362,6 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    
-
-
     public void can_set_nb_neighbors_to_zero() {
         vertexA.getEdgeToDestinationVertex(vertexB).remove();
         vertexA.getNbNeighbors().setPrivate(10);
