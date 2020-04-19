@@ -5,13 +5,12 @@
 package guru.bubl.test.module.model.graph.search;
 
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
-import guru.bubl.module.model.graph.GraphElement;
+import guru.bubl.module.model.graph.graph_element.GraphElement;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.search.Neo4jSearchRelatedTest;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;

@@ -4,18 +4,8 @@
 
 package guru.bubl.test.module.model.graph.subgraph;
 
-import guru.bubl.module.model.graph.GraphElementType;
-import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.tag.TagPojo;
-import guru.bubl.module.model.graph.subgraph.SubGraph;
-import guru.bubl.module.model.graph.vertex.*;
-import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Ignore;
-import org.junit.Test;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.Is.is;

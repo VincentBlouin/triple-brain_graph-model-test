@@ -5,7 +5,7 @@
 package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.ShareLevel;
-import guru.bubl.module.model.graph.SubGraphJson;
+import guru.bubl.module.model.graph.subgraph.SubGraphJson;
 import guru.bubl.module.model.graph.relation.Relation;
 import guru.bubl.module.model.graph.relation.RelationJson;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;

@@ -1,6 +1,9 @@
 package guru.bubl.test.module.model.graph;
 
 import guru.bubl.module.model.graph.ShareLevel;
+import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.relation.Relation;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
@@ -57,6 +60,15 @@ public class GroupRelationOperatorTest extends ModelTestResources {
                 aroundC.containsGraphElement(
                         groupRelation
                 )
+        );
+    }
+
+    @Test
+    public void remove_group_relation_removes_surround_edges() {
+        Relation edgeD = vertexD.connectedEdges().values().iterator().next();
+        groupRelation.remove();
+        assertFalse(
+                userGraph.haveElementWithId(edgeD.uri())
         );
     }
 }

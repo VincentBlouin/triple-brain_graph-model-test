@@ -44,7 +44,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
                 ).getNbNeighbors().getPrivate(),
                 is(5)
         );
-        wholeGraphAdmin.refreshNbNeighborsToAllTags();
+        wholeGraphAdmin.refreshNbNeighborsOfTags();
         assertThat(
                 tagFactory.withUri(
                         identificationPojo.uri()
@@ -54,11 +54,39 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
+    public void group_relations_nb_neighbors_are_refreshed() {
+        groupRelation.getNbNeighbors().setPrivate(0);
+        assertThat(
+                groupRelation.getNbNeighbors().getTotal(),
+                is(0)
+        );
+        wholeGraphAdmin.refreshNbNeighbors();
+        assertThat(
+                groupRelation.getNbNeighbors().getTotal(),
+                is(3)
+        );
+    }
+
+    @Test
+    public void surround_group_relations_included_in_nb_neighbors() {
+        vertexC.getNbNeighbors().setPrivate(0);
+        assertThat(
+                vertexC.getNbNeighbors().getTotal(),
+                is(0)
+        );
+        wholeGraphAdmin.refreshNbNeighbors();
+        assertThat(
+                vertexC.getNbNeighbors().getTotal(),
+                is(2)
+        );
+    }
+
+    @Test
     public void sets_number_of_reference_to_zero_for_tag_having_zero_references() {
         TagPojo meta = vertexB.addTag(
                 modelTestScenarios.possessionIdentification()
         ).values().iterator().next();
-        wholeGraphAdmin.refreshNbNeighborsToAllTags();
+        wholeGraphAdmin.refreshNbNeighborsOfTags();
         TagOperator metaOperator = tagFactory.withUri(meta.uri());
         assertThat(
                 metaOperator.getNbNeighbors().getPrivate(),
@@ -66,7 +94,7 @@ public class WholeGraphAdminTest extends ModelTestResources {
         );
         vertexB.removeTag(meta);
         metaOperator.getNbNeighbors().setPrivate(1);
-        wholeGraphAdmin.refreshNbNeighborsToAllTags();
+        wholeGraphAdmin.refreshNbNeighborsOfTags();
         assertThat(
                 metaOperator.getNbNeighbors().getPrivate(),
                 is(0)

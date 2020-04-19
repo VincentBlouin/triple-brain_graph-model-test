@@ -94,6 +94,8 @@ public class ModelTestResources {
     protected VertexOperator vertexA;
     protected VertexOperator vertexB;
     protected VertexOperator vertexC;
+    protected VertexOperator vertexD;
+    protected VertexOperator vertexE;
     protected GroupRelationOperator groupRelation;
 
     protected static User user;
@@ -127,6 +129,8 @@ public class ModelTestResources {
         vertexB = graphElementsOfTestScenario.getVertexB();
         vertexC = graphElementsOfTestScenario.getVertexC();
         groupRelation = graphElementsOfTestScenario.getGroupRelation();
+        vertexD = graphElementsOfTestScenario.getVertexD();
+        vertexE = graphElementsOfTestScenario.getVertexE();
         anotherUserGraph = neo4jUserGraphFactory.withUser(anotherUser);
         vertexOfAnotherUser = vertexFactory.withUri(
                 anotherUserGraph.createVertex().uri()

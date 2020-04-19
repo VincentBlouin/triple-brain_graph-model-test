@@ -164,6 +164,12 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+    public void remove_vertex_prevents_remove_surround_group_relations() {
+        vertexC.remove();
+        assertTrue(userGraph.haveElementWithId(groupRelation.uri()));
+    }
+
+    @Test
     public void can_get_empty_list_after_removing_last_same_as() {
         Tag timBernersLee = vertexA.addTag(
                 modelTestScenarios.timBernersLee()
@@ -643,7 +649,6 @@ public class VertexOperatorTest extends ModelTestResources {
                 is(1)
         );
     }
-
 
 
     @Test
