@@ -255,13 +255,21 @@ public class VertexOperatorTest extends ModelTestResources {
     @Test
     public void can_test_if_vertex_has_destination_vertex() {
         assertFalse(vertexA.hasDestinationVertex(vertexC));
-        vertexA.addRelationToFork(vertexC);
+        vertexA.addRelationToFork(
+                vertexC.uri(),
+                vertexA.getShareLevel(),
+                vertexC.getShareLevel()
+        );
         assertTrue(vertexA.hasDestinationVertex(vertexC));
     }
 
     @Test
     public void source_vertex_is_not_a_destination_vertex() {
-        vertexA.addRelationToFork(vertexC);
+        vertexA.addRelationToFork(
+                vertexC.uri(),
+                vertexA.getShareLevel(),
+                vertexC.getShareLevel()
+        );
         assertTrue(vertexA.hasDestinationVertex(vertexC));
         assertFalse(vertexC.hasDestinationVertex(vertexA));
     }
@@ -525,131 +533,6 @@ public class VertexOperatorTest extends ModelTestResources {
                 )
         );
     }
-
-    @Test
-    public void adding_a_relation_to_existing_vertices_increments_number_of_connected_edges() {
-        int nbEdgesForVertexA = vertexA.getNbNeighbors().getTotal();
-        int nbEdgesForVertexC = vertexC.getNbNeighbors().getTotal();
-        vertexC.addRelationToFork(vertexA);
-        assertThat(
-                vertexA.getNbNeighbors().getTotal(),
-                is(nbEdgesForVertexA + 1)
-        );
-        assertThat(
-                vertexC.getNbNeighbors().getTotal(),
-                is(nbEdgesForVertexC + 1)
-        );
-    }
-
-    @Test
-    public void adding_a_relation_to_existing_vertices_does_not_increment_nb_public_neighbors_if_both_are_private() {
-        assertThat(
-                vertexC.getNbNeighbors().getPublic(),
-                is(0)
-        );
-        assertThat(
-                vertexA.getNbNeighbors().getPublic(),
-                is(0)
-        );
-        vertexC.addRelationToFork(vertexA);
-        assertThat(
-                vertexC.getNbNeighbors().getPublic(),
-                is(0)
-        );
-        assertThat(
-                vertexA.getNbNeighbors().getPublic(),
-                is(0)
-        );
-    }
-
-    @Test
-    public void adding_a_relation_to_existing_vertices_increments_nb_public_neighbors_to_source_if_destination_is_public() {
-        vertexA.makePublic();
-        assertThat(
-                vertexC.getNbNeighbors().getPublic(),
-                is(0)
-        );
-        assertThat(
-                vertexA.getNbNeighbors().getPublic(),
-                is(0)
-        );
-        vertexC.addRelationToFork(vertexA);
-        assertThat(
-                vertexC.getNbNeighbors().getPublic(),
-                is(1)
-        );
-        assertThat(
-                vertexA.getNbNeighbors().getPublic(),
-                is(0)
-        );
-    }
-
-    @Test
-    public void adding_a_relation_to_existing_vertices_increments_nb_public_neighbors_to_destination_if_source_is_public() {
-        vertexC.makePublic();
-        assertThat(
-                vertexC.getNbNeighbors().getPublic(),
-                is(0)
-        );
-        assertThat(
-                vertexA.getNbNeighbors().getPublic(),
-                is(0)
-        );
-        vertexC.addRelationToFork(vertexA);
-        assertThat(
-                vertexC.getNbNeighbors().getPublic(),
-                is(0)
-        );
-        assertThat(
-                vertexA.getNbNeighbors().getPublic(),
-                is(1)
-        );
-    }
-
-    @Test
-    public void adding_a_relation_to_existing_vertices_increments_nb_friend_neighbors_to_source_if_destination_is_friend() {
-        vertexA.setShareLevel(ShareLevel.FRIENDS);
-        assertThat(
-                vertexC.getNbNeighbors().getFriend(),
-                is(0)
-        );
-        assertThat(
-                vertexA.getNbNeighbors().getFriend(),
-                is(0)
-        );
-        vertexC.addRelationToFork(vertexA);
-        assertThat(
-                vertexC.getNbNeighbors().getFriend(),
-                is(1)
-        );
-        assertThat(
-                vertexA.getNbNeighbors().getFriend(),
-                is(0)
-        );
-    }
-
-    @Test
-    public void adding_a_relation_to_existing_vertices_increments_nb_friend_neighbors_to_destination_if_source_is_friend() {
-        vertexC.setShareLevel(ShareLevel.FRIENDS);
-        assertThat(
-                vertexC.getNbNeighbors().getFriend(),
-                is(0)
-        );
-        assertThat(
-                vertexA.getNbNeighbors().getFriend(),
-                is(0)
-        );
-        vertexC.addRelationToFork(vertexA);
-        assertThat(
-                vertexC.getNbNeighbors().getFriend(),
-                is(0)
-        );
-        assertThat(
-                vertexA.getNbNeighbors().getFriend(),
-                is(1)
-        );
-    }
-
 
     @Test
     public void making_vertex_public_increments_the_number_of_public_neighbor_vertices_set_to_neighbors() {
@@ -1112,7 +995,11 @@ public class VertexOperatorTest extends ModelTestResources {
         );
         vertexB.makePattern();
         assertThat(
-                vertexB.addRelationToFork(farVertex),
+                vertexB.addRelationToFork(
+                        farVertex.uri(),
+                        vertexB.getShareLevel(),
+                        farVertex.getShareLevel()
+                ),
                 is(nullValue())
         );
         assertThat(
@@ -1124,7 +1011,11 @@ public class VertexOperatorTest extends ModelTestResources {
                 is(2)
         );
         assertThat(
-                vertexC.addRelationToFork(farVertex),
+                vertexC.addRelationToFork(
+                        farVertex.uri(),
+                        vertexC.getShareLevel(),
+                        farVertex.getShareLevel()
+                ),
                 is(nullValue())
         );
         assertThat(
@@ -1144,7 +1035,11 @@ public class VertexOperatorTest extends ModelTestResources {
         );
         farVertex.makePattern();
         assertThat(
-                vertexB.addRelationToFork(farChildVertex),
+                vertexB.addRelationToFork(
+                        farChildVertex.uri(),
+                        vertexB.getShareLevel(),
+                        farChildVertex.getShareLevel()
+                ),
                 is(nullValue())
         );
         assertThat(
@@ -1152,7 +1047,11 @@ public class VertexOperatorTest extends ModelTestResources {
                 is(2)
         );
         assertThat(
-                vertexB.addRelationToFork(farVertex),
+                vertexB.addRelationToFork(
+                        farVertex.uri(),
+                        vertexB.getShareLevel(),
+                        farVertex.getShareLevel()
+                ),
                 is(nullValue())
         );
         assertThat(

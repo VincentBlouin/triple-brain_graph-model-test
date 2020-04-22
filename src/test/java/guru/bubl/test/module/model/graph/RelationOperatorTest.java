@@ -39,7 +39,11 @@ public class RelationOperatorTest extends ModelTestResources {
                 vertexD.addVertexAndRelation().destinationUri()
         );
         Integer numberOfEdgesAndVertices = wholeGraphAroundDefaultCenterVertex().numberOfEdgesAndVertices();
-        RelationOperator newEdge = vertexE.addRelationToFork(vertexA);
+        RelationOperator newEdge = vertexE.addRelationToFork(
+                vertexA.uri(),
+                vertexE.getShareLevel(),
+                vertexA.getShareLevel()
+        );
 
         assertThat(newEdge.sourceUri(), is(vertexE.uri()));
         assertThat(newEdge.destinationUri(), is(vertexA.uri()));
@@ -84,7 +88,11 @@ public class RelationOperatorTest extends ModelTestResources {
                 vertexB.hasDestinationVertex(vertexC)
         );
         assertThat(vertexC.connectedEdges().size(), is(2));
-        vertexB.addRelationToFork(vertexC);
+        vertexB.addRelationToFork(
+                vertexC.uri(),
+                vertexB.getShareLevel(),
+                vertexC.getShareLevel()
+        );
         /*  don't test with getNumberOfConnectedEdges
             because we want to test the actual value and not the cached one
          */
@@ -166,7 +174,11 @@ public class RelationOperatorTest extends ModelTestResources {
     public void an_edge_is_public_at_creation_if_both_end_vertices_are_public() {
         vertexA.makePublic();
         vertexC.makePublic();
-        RelationOperator edge = vertexA.addRelationToFork(vertexC);
+        RelationOperator edge = vertexA.addRelationToFork(
+                vertexC.uri(),
+                vertexA.getShareLevel(),
+                vertexC.getShareLevel()
+        );
         assertTrue(
                 edge.isPublic()
         );
@@ -377,6 +389,7 @@ public class RelationOperatorTest extends ModelTestResources {
                 edgeBC.convertToGroupRelation(
                         UUID.randomUUID().toString(),
                         edgeBC.getShareLevel(),
+                        "",
                         ""
                 ).uri()
         );
@@ -399,6 +412,7 @@ public class RelationOperatorTest extends ModelTestResources {
                 edgeBC.convertToGroupRelation(
                         UUID.randomUUID().toString(),
                         edgeBC.getShareLevel(),
+                        "",
                         ""
                 ).uri()
         );
@@ -421,6 +435,7 @@ public class RelationOperatorTest extends ModelTestResources {
         GroupRelationPojo groupRelationPojo = edgeAB.convertToGroupRelation(
                 UUID.randomUUID().toString(),
                 edgeAB.getShareLevel(),
+                "",
                 ""
         );
         assertFalse(
@@ -445,6 +460,7 @@ public class RelationOperatorTest extends ModelTestResources {
         GroupRelationPojo groupRelationPojo = edgeAB.convertToGroupRelation(
                 UUID.randomUUID().toString(),
                 edgeAB.getShareLevel(),
+                "",
                 ""
         );
         subGraph = userGraph.aroundForkUriInShareLevels(
@@ -469,6 +485,7 @@ public class RelationOperatorTest extends ModelTestResources {
                 edgeAB.convertToGroupRelation(
                         UUID.randomUUID().toString(),
                         vertexA.getShareLevel(),
+                        "",
                         ""
                 ).uri()
         );
@@ -488,7 +505,7 @@ public class RelationOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void can_change_destination_to_group_relation(){
+    public void can_change_destination_to_group_relation() {
         RelationOperator edgeAB = vertexA.getEdgeToDestinationVertex(vertexB);
         assertThat(
                 edgeAB.sourceUri(),

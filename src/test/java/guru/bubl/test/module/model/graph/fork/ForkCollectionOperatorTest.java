@@ -1,4 +1,4 @@
-package guru.bubl.test.module.model.graph;
+package guru.bubl.test.module.model.graph.fork;
 
 import guru.bubl.module.model.graph.graph_element.ForkCollectionOperator;
 import guru.bubl.module.model.graph.graph_element.ForkCollectionOperatorFactory;

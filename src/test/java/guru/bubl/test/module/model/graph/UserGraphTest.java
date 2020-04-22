@@ -266,7 +266,11 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void can_get_circular_graph_with_default_center_vertex() {
-        vertexC.addRelationToFork(vertexA);
+        vertexC.addRelationToFork(
+                vertexA.uri(),
+                vertexC.getShareLevel(),
+                vertexA.getShareLevel()
+        );
         SubGraph graph = userGraph.aroundForkUriWithDepthInShareLevels(
                 vertexA.uri(),
                 DEPTH_OF_SUB_VERTICES_COVERING_ALL_GRAPH_VERTICES,
@@ -339,7 +343,11 @@ public class UserGraphTest extends ModelTestResources {
 
     @Test
     public void can_get_sub_graph_of_source_vertex_of_center_vertex_having_also_a_circular_relation() {
-        vertexC.addRelationToFork(vertexA);
+        vertexC.addRelationToFork(
+                vertexA.uri(),
+                vertexC.getShareLevel(),
+                vertexA.getShareLevel()
+        );
         Relation relationGoingOutOfC = vertexC.addVertexAndRelation();
 
         SubGraph subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
@@ -946,7 +954,8 @@ public class UserGraphTest extends ModelTestResources {
                 edgeBC.convertToGroupRelation(
                         UUID.randomUUID().toString(),
                         edgeBC.getShareLevel(),
-                        "to do"
+                        "to do",
+                        ""
                 ).uri()
         );
         groupRelationOperator.addVertexAndRelation();
