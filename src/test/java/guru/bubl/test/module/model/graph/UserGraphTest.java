@@ -7,6 +7,8 @@ package guru.bubl.test.module.model.graph;
 import com.google.common.collect.ImmutableSet;
 import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.Image;
+import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.graph_element.GraphElement;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.group_relation.GroupRelationPojo;
@@ -24,6 +26,7 @@ import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.CoreMatchers;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -738,12 +741,16 @@ public class UserGraphTest extends ModelTestResources {
                 subGraph.getCenterMeta().label(),
                 is("Person")
         );
-        assertTrue(
-                subGraph.edges().isEmpty()
+        assertThat(
+                subGraph.edges().size(),
+                is(0)
         );
         assertThat(
                 subGraph.vertices().size(),
                 is(1)
+        );
+        assertTrue(
+                subGraph.vertices().containsKey(vertexC.uri())
         );
     }
 
@@ -753,8 +760,9 @@ public class UserGraphTest extends ModelTestResources {
         TagPojo tag = bToCEdge.addTag(
                 modelTestScenarios.person()
         ).values().iterator().next();
+        Relation newRelation = vertexB.addVertexAndRelation();
         relationFactory.withUri(
-                vertexB.addVertexAndRelation().uri()
+                newRelation.uri()
         ).addTag(
                 tag
         );
@@ -779,6 +787,9 @@ public class UserGraphTest extends ModelTestResources {
         assertThat(
                 subGraph.vertices().size(),
                 is(2)
+        );
+        assertTrue(
+                subGraph.vertices().containsKey(vertexB.uri())
         );
     }
 
@@ -810,12 +821,15 @@ public class UserGraphTest extends ModelTestResources {
                 is("edge BC")
         );
         assertThat(
+                subGraph.edges().size(),
+                is(2)
+        );
+        assertThat(
                 subGraph.vertices().size(),
                 is(3)
         );
-        assertThat(
-                subGraph.edges().size(),
-                is(2)
+        assertTrue(
+                subGraph.vertices().containsKey(vertexB.uri())
         );
     }
 
@@ -967,7 +981,7 @@ public class UserGraphTest extends ModelTestResources {
         );
         assertThat(
                 subGraph.edges().size(),
-                is(5)
+                is(4)
         );
     }
 
