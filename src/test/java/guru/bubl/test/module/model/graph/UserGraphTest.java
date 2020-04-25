@@ -986,6 +986,22 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+    public void center_tag_has_external_resource_uri() {
+        TagPojo todo = vertexA.addTag(
+                modelTestScenarios.toDo(),
+                ShareLevel.PRIVATE
+        ).values().iterator().next();
+        SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
+                todo.uri(),
+                ShareLevel.allShareLevelsInt
+        );
+        assertThat(
+                subGraph.getCenterMeta().getExternalResourceUri().toString(),
+                is("/to-do")
+        );
+    }
+    
+    @Test
     public void group_relations_have_their_source_fork_uri_set() {
         SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
                 vertexC.uri(),
