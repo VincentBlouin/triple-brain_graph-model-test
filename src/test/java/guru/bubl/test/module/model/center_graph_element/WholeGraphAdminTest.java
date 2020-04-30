@@ -9,6 +9,8 @@ import guru.bubl.module.model.admin.WholeGraphAdmin;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
 import guru.bubl.module.model.graph.ShareLevel;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.relation.Relation;
 import guru.bubl.module.model.graph.relation.RelationOperator;
 import guru.bubl.module.model.graph.tag.TagOperator;
 import guru.bubl.module.model.graph.tag.TagPojo;
@@ -405,12 +407,17 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
     @Test
-    public void nb_neighbors_is_right_when_only_only_child() {
+    public void nb_neighbors_is_right_when_only_one_inverse_child() {
         vertexB.makePublic();
         vertexA.makePublic();
+        RelationOperator relation = relationFactory.withUri(
+                vertexA.addVertexAndRelation().uri()
+        );
         vertexFactory.withUri(
-                vertexA.addVertexAndRelation().destinationUri()
+                relation.destinationUri()
         ).makePublic();
+        relation.inverse();
+        vertexA.getEdgeToDestinationVertex(vertexB).inverse();
         vertexA.getNbNeighbors().setPublic(0);
         assertThat(
                 vertexA.getNbNeighbors().getPublic(),
@@ -424,4 +431,12 @@ public class WholeGraphAdminTest extends ModelTestResources {
     }
 
 
+    @Test
+    public void includes_edges_related_to_group_relations() {
+        wholeGraphAdmin.refreshNbNeighbors();
+        assertThat(
+                vertexD.getNbNeighbors().getTotal(),
+                is(1)
+        );
+    }
 }
