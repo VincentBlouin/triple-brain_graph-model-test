@@ -404,5 +404,24 @@ public class WholeGraphAdminTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void nb_neighbors_is_right_when_only_only_child() {
+        vertexB.makePublic();
+        vertexA.makePublic();
+        vertexFactory.withUri(
+                vertexA.addVertexAndRelation().destinationUri()
+        ).makePublic();
+        vertexA.getNbNeighbors().setPublic(0);
+        assertThat(
+                vertexA.getNbNeighbors().getPublic(),
+                is(0)
+        );
+        wholeGraphAdmin.refreshNbNeighbors();
+        assertThat(
+                vertexA.getNbNeighbors().getPublic(),
+                is(2)
+        );
+    }
+
 
 }
