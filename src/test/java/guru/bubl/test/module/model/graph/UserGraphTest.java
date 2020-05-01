@@ -660,6 +660,23 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
+    public void includes_children_indexes_when_center_is_group_relation() {
+        groupRelation.setChildrenIndex(
+                "test children indexes"
+        );
+        SubGraphPojo subGraph = userGraph.aroundForkUriWithDepthInShareLevels(
+                groupRelation.uri(),
+                1,
+                ShareLevel.allShareLevelsInt
+        );
+        assertTrue(
+                subGraph.getGroupRelations().get(
+                        groupRelation.uri()
+                ).getChildrenIndex().contains("test children indexes")
+        );
+    }
+
+    @Test
     public void includes_children_indexes_for_tags() {
         TagPojo computerScientist = vertexB.addTag(
                 modelTestScenarios.computerScientistType()
@@ -1000,7 +1017,7 @@ public class UserGraphTest extends ModelTestResources {
                 is("/to-do")
         );
     }
-    
+
     @Test
     public void group_relations_have_their_source_fork_uri_set() {
         SubGraphPojo subGraph = userGraph.aroundForkUriInShareLevels(
