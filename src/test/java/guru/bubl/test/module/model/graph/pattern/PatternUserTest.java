@@ -1,5 +1,6 @@
 package guru.bubl.test.module.model.graph.pattern;
 
+import guru.bubl.module.model.UserUris;
 import guru.bubl.module.model.graph.graph_element.GraphElement;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.group_relation.GroupRelationPojo;
@@ -349,7 +350,7 @@ public class PatternUserTest extends ModelTestResources {
     }
 
     @Test
-    public void group_relations_are_cloned() {
+    public void cloned_group_relations_have_a_group_relation_uri() {
         vertexC.makePattern();
         URI centerUri = patternUserFactory.forUserAndPatternUri(
                 anotherUser,
@@ -368,5 +369,7 @@ public class PatternUserTest extends ModelTestResources {
                 groupRelation.label(),
                 is("to do")
         );
+        System.out.println(groupRelation.uri());
+        assertTrue(UserUris.isUriOfAGroupRelation(groupRelation.uri()));
     }
 }
