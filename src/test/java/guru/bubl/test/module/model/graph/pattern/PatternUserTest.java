@@ -2,6 +2,7 @@ package guru.bubl.test.module.model.graph.pattern;
 
 import guru.bubl.module.model.graph.graph_element.GraphElement;
 import guru.bubl.module.model.graph.ShareLevel;
+import guru.bubl.module.model.graph.group_relation.GroupRelationPojo;
 import guru.bubl.module.model.graph.relation.Relation;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
 import guru.bubl.module.model.graph.subgraph.SubGraphPojo;
@@ -10,6 +11,7 @@ import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.URI;
@@ -343,6 +345,28 @@ public class PatternUserTest extends ModelTestResources {
         assertThat(
                 patternTag.comment(),
                 is("vertex b comment")
+        );
+    }
+
+    @Test
+    public void group_relations_are_cloned() {
+        vertexC.makePattern();
+        URI centerUri = patternUserFactory.forUserAndPatternUri(
+                anotherUser,
+                vertexC.uri()
+        ).use();
+        SubGraph subGraph = userGraph.aroundForkUriInShareLevels(
+                centerUri,
+                ShareLevel.allShareLevelsInt
+        );
+        assertThat(
+                subGraph.getGroupRelations().size(),
+                is(1)
+        );
+        GroupRelationPojo groupRelation = subGraph.getGroupRelations().values().iterator().next();
+        assertThat(
+                groupRelation.label(),
+                is("to do")
         );
     }
 }
