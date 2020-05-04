@@ -15,6 +15,7 @@ import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.fork.NbNeighbors;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.parboiled.common.StringUtils;
 
@@ -58,7 +59,7 @@ public class GraphElementOperatorTest extends ModelTestResources {
     }
 
     @Test
-    public void graph_element_becomes_identified_to_itself_if_used_as_identifier() {
+    public void graph_element_becomes_tagged_to_itself_if_used_as_a_tag() {
         TagPojo identification = vertexA.addTag(
                 TestScenarios.tagFromFriendlyResource(
                         vertexB
@@ -72,6 +73,29 @@ public class GraphElementOperatorTest extends ModelTestResources {
         assertTrue(
                 vertexB.getTags().containsKey(
                         identification.getExternalResourceUri()
+                )
+        );
+    }
+
+    @Test
+    public void graph_element_is_tagged_to_itself_when_used_as_a_tag_even_if_tag_has_a_uri() {
+        TagPojo tag = TestScenarios.tagFromFriendlyResource(
+                vertexB
+        );
+        tag.setUri(
+                vertexB.uri()
+        );
+        tag = vertexA.addTag(
+                tag
+        ).values().iterator().next();
+        assertTrue(
+                vertexA.getTags().containsKey(
+                        tag.getExternalResourceUri()
+                )
+        );
+        assertTrue(
+                vertexB.getTags().containsKey(
+                        tag.getExternalResourceUri()
                 )
         );
     }
