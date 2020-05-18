@@ -681,6 +681,20 @@ public class VertexOperatorTest extends ModelTestResources {
     }
 
     @Test
+    public void mergeTo_prevents_duplication_of_relation_to_relative_when_two_vertices_share_a_common_relative() {
+        assertThat(
+                vertexC.getNbNeighbors().getTotal(),
+                is(2)
+        );
+        vertexA.mergeTo(vertexC);
+        wholeGraphAdmin.refreshNbNeighbors();
+        assertThat(
+                vertexC.getNbNeighbors().getTotal(),
+                is(2)
+        );
+    }
+
+    @Test
     public void cannot_merge_to_another_vertex_when_being_under_a_pattern() {
         vertexA.makePattern();
         VertexOperator farVertex = vertexFactory.withUri(
