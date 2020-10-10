@@ -27,7 +27,7 @@ import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.UserGraphFactoryNeo4j;
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.extractor.subgraph.SubGraphExtractorFactoryNeo4j;
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.vertex.VertexFactoryNeo4j;
-import guru.bubl.module.neo4j_graph_manipulator.graph.test.WholeGraphNeo4j;
+import guru.bubl.module.neo4j_graph_manipulator.graph.embedded.admin.WholeGraphNeo4j;
 import guru.bubl.module.repository.user.UserRepository;
 import org.junit.Before;
 import org.neo4j.driver.Driver;

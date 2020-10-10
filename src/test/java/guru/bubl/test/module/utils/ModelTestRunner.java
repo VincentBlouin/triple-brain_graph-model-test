@@ -11,6 +11,7 @@ import guru.bubl.module.model.ModelModule;
 import guru.bubl.module.model.ModelTestModule;
 import guru.bubl.module.model.test.GraphComponentTest;
 import guru.bubl.module.neo4j_graph_manipulator.graph.Neo4jModule;
+import guru.bubl.module.neo4j_graph_manipulator.graph.embedded.admin.Neo4jModuleForTests;
 import guru.bubl.module.neo4j_user_repository.Neo4jUserRepositoryModule;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -25,6 +26,7 @@ public class ModelTestRunner {
         injector = Guice.createInjector(
                 Neo4jModule.forTestingUsingEmbedded(),
                 ModelModule.forTesting(),
+                new Neo4jModuleForTests(),
                 new ModelTestModule(),
                 new Neo4jUserRepositoryModule(),
                 new AbstractModule() {
@@ -40,6 +42,6 @@ public class ModelTestRunner {
 
     @AfterClass
     public static void realAfterClass(){
-        Neo4jModule.clearDb();
+        Neo4jModuleForTests.clearDb();
     }
 }
