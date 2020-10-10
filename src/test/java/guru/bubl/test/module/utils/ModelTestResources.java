@@ -30,8 +30,8 @@ import guru.bubl.module.neo4j_graph_manipulator.graph.graph.vertex.VertexFactory
 import guru.bubl.module.neo4j_graph_manipulator.graph.test.WholeGraphNeo4j;
 import guru.bubl.module.repository.user.UserRepository;
 import org.junit.Before;
-import org.neo4j.driver.v1.Driver;
-import org.neo4j.driver.v1.Session;
+import org.neo4j.driver.Driver;
+import org.neo4j.driver.Session;
 
 import javax.inject.Inject;
 
