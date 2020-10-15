@@ -2,7 +2,7 @@
  * Copyright Vincent Blouin under the GPL License version 3
  */
 
-package guru.bubl.test.module.utils;
+package js_test_data;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
@@ -13,22 +13,17 @@ import guru.bubl.module.model.ModelTestScenarios;
 import guru.bubl.module.model.test.GraphComponentTest;
 import guru.bubl.module.neo4j_graph_manipulator.graph.Neo4jModule;
 import guru.bubl.module.neo4j_graph_manipulator.graph.embedded.admin.Neo4jModuleForTests;
-import guru.bubl.module.neo4j_user_repository.Neo4jUserRepositoryModule;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 
-public class ModelTestRunner {
-    public static Injector injector;
+public class JsTestScenariosStarter {
 
+    protected static Injector injector;
 
-    @BeforeClass
-    public static void realBeforeClass() {
+    public static void main(String[] args) throws Exception {
         injector = Guice.createInjector(
                 Neo4jModuleForTests.usingEmbedded(),
                 Neo4jModule.usingEmbedded(),
                 ModelModule.forTesting(),
                 new ModelTestModule(),
-                new Neo4jUserRepositoryModule(),
                 new AbstractModule() {
                     @Override
                     protected void configure() {
@@ -36,12 +31,12 @@ public class ModelTestRunner {
                     }
                 }
         );
-        injector.getInstance(GraphComponentTest.class)
-                .beforeClass();
+        injector.injectMembers(JsTestScenariosBuilder.class);
+        JsTestScenariosBuilder jsTestScenariosBuilder = injector.getInstance(
+                JsTestScenariosBuilder.class
+        );
+        jsTestScenariosBuilder.build(injector);
+        System.exit(0);
     }
 
-    @AfterClass
-    public static void realAfterClass() {
-        Neo4jModuleForTests.clearDb();
-    }
 }

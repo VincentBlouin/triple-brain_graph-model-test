@@ -17,6 +17,7 @@ import guru.bubl.module.model.test.GraphComponentTest;
 import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.module.neo4j_graph_manipulator.graph.Neo4jModule;
+import guru.bubl.module.neo4j_graph_manipulator.graph.embedded.admin.Neo4jModuleForTests;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -60,7 +61,8 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
     @BeforeClass
     public static void realBeforeClass() {
         injector = Guice.createInjector(
-                Neo4jModule.forTestingUsingEmbedded(),
+                Neo4jModule.usingEmbedded(),
+                Neo4jModuleForTests.usingEmbedded(),
                 ModelModule.forTesting(),
                 new ModelTestModule(),
                 new AbstractModule() {
@@ -153,13 +155,13 @@ public class AdaptableGraphComponentTest implements GraphComponentTest {
 
 
     @Override
-    public SubGraphOperator wholeGraph() {
-        return graphComponentTest.wholeGraph();
+    public void removeGraphElements() {
+        graphComponentTest.removeGraphElements();
     }
 
     @Override
-    public void removeWholeGraph() {
-        graphComponentTest.removeWholeGraph();
+    public void removeUsers() {
+        graphComponentTest.removeUsers();
     }
 
 }
