@@ -37,8 +37,8 @@ public class WholeGraphTest extends ModelTestResources {
 
     @Test
     public void can_get_all_vertices_of_single_user() {
-        Vertex anotherUserVertex = neo4jUserGraphFactory.withUser(anotherUser).createVertex();
-        Vertex newUserVertex = neo4jUserGraphFactory.withUser(user).createVertex();
+        Vertex anotherUserVertex = userGraphFactory.withUser(anotherUser).createVertex();
+        Vertex newUserVertex = userGraphFactory.withUser(user).createVertex();
         Set<VertexOperator> allUserVertices = wholeGraph.getAllVerticesOfUser(user);
         assertTrue(
                 allUserVertices.contains(
@@ -71,11 +71,11 @@ public class WholeGraphTest extends ModelTestResources {
     @Test
     public void can_get_all_edges_of_single_user() {
         VertexOperator anotherUserVertex = vertexFactory.withUri(
-                neo4jUserGraphFactory.withUser(anotherUser).createVertex().uri()
+                userGraphFactory.withUser(anotherUser).createVertex().uri()
         );
         Relation anotherUserRelation = anotherUserVertex.addVertexAndRelation();
         VertexOperator newUserVertex = vertexFactory.withUri(
-                neo4jUserGraphFactory.withUser(user).createVertex().uri()
+                userGraphFactory.withUser(user).createVertex().uri()
         );
         Relation newUserRelation = newUserVertex.addVertexAndRelation();
         Set<RelationOperator> allUserEdges = wholeGraph.getAllEdgesOfUser(user);
@@ -123,13 +123,13 @@ public class WholeGraphTest extends ModelTestResources {
     @Test
     public void can_get_all_tags_of_single_user() {
         VertexOperator anotherUserVertex = vertexFactory.withUri(
-                neo4jUserGraphFactory.withUser(anotherUser).createVertex().uri()
+                userGraphFactory.withUser(anotherUser).createVertex().uri()
         );
         TagPojo anotherUserTag = anotherUserVertex.addTag(
                 modelTestScenarios.book()
         ).values().iterator().next();
         VertexOperator newUserVertex = vertexFactory.withUri(
-                neo4jUserGraphFactory.withUser(user).createVertex().uri()
+                userGraphFactory.withUser(user).createVertex().uri()
         );
         TagPojo newUserTag = newUserVertex.addTag(
                 modelTestScenarios.person()

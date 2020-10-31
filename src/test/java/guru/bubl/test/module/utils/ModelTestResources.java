@@ -72,7 +72,7 @@ public class ModelTestResources {
     protected VertexFactoryNeo4j vertexFactory;
 
     @Inject
-    protected UserGraphFactoryNeo4j neo4jUserGraphFactory;
+    protected UserGraphFactoryNeo4j userGraphFactory;
 
     @Inject
     protected GraphFactory graphFactory;
@@ -110,6 +110,8 @@ public class ModelTestResources {
     protected User thirdUser;
     protected VertexOperator thirdUserVertex;
 
+    protected GraphElementsOfTestScenario graphElementsOfTestScenario;
+
     @Before
     public void before() {
         ModelTestRunner.injector.injectMembers(this);
@@ -122,8 +124,8 @@ public class ModelTestResources {
                 "colette.armande@example.org"
         ).setUsername("colette_armande").setPreferredLocales("[fr]").password("12345678");
         userRepository.createUser(anotherUser);
-        userGraph = neo4jUserGraphFactory.withUser(user);
-        GraphElementsOfTestScenario graphElementsOfTestScenario = testScenarios.buildTestScenario(
+        userGraph = userGraphFactory.withUser(user);
+        graphElementsOfTestScenario = testScenarios.buildTestScenario(
                 userGraph
         );
         vertexA = graphElementsOfTestScenario.getVertexA();
@@ -132,7 +134,7 @@ public class ModelTestResources {
         groupRelation = graphElementsOfTestScenario.getGroupRelation();
         vertexD = graphElementsOfTestScenario.getVertexD();
         vertexE = graphElementsOfTestScenario.getVertexE();
-        anotherUserGraph = neo4jUserGraphFactory.withUser(anotherUser);
+        anotherUserGraph = userGraphFactory.withUser(anotherUser);
         vertexOfAnotherUser = vertexFactory.withUri(
                 anotherUserGraph.createVertex().uri()
         );
@@ -196,7 +198,7 @@ public class ModelTestResources {
         ).setUsername("tres").setPreferredLocales("[es]").password("12345678");
         thirdUser = userRepository.createUser(thirdUser);
         thirdUserVertex = vertexFactory.withUri(
-                neo4jUserGraphFactory.withUser(thirdUser).createVertex().uri()
+                userGraphFactory.withUser(thirdUser).createVertex().uri()
         );
         thirdUserVertex.label("vértice");
     }
