@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static guru.bubl.module.model.test.scenarios.TestScenarios.tagFromFriendlyResource;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -46,9 +47,10 @@ public class TreeCopierTest extends ModelTestResources {
                 wholeGraph.getAllVertices().size(),
                 is(6)
         );
-        Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUri(
+        Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUriAndTag(
                 graphElementsOfTestScenario.allGraphElementsToUris(),
-                vertexA.uri()
+                vertexA.uri(),
+                tagFromFriendlyResource(vertexA)
         );
         treeCopier.ofAnotherUser(copiedTree, user);
         assertThat(
@@ -65,9 +67,10 @@ public class TreeCopierTest extends ModelTestResources {
     @Test
     public void returns_cloned_root_uri() {
         TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
-        Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUri(
+        Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUriAndTag(
                 graphElementsOfTestScenario.allGraphElementsToUris(),
-                vertexA.uri()
+                vertexA.uri(),
+                tagFromFriendlyResource(vertexA)
         );
         URI newCenterUri = treeCopier.ofAnotherUser(copiedTree, user);
         assertNotEquals(
@@ -91,7 +94,6 @@ public class TreeCopierTest extends ModelTestResources {
 
 
     @Test
-    @Ignore
     public void copies_tags() {
         TagPojo tag = new TagPojo(
                 URI.create("/some-external-uri")
@@ -107,15 +109,16 @@ public class TreeCopierTest extends ModelTestResources {
         vertexE.addTag(tag, ShareLevel.PRIVATE);
         URI copyUri = treeCopierFactory.forCopier(
                 anotherUser
-        ).ofAnotherUser(Tree.withUrisOfGraphElementsAndRootUri(
+        ).ofAnotherUser(Tree.withUrisOfGraphElementsAndRootUriAndTag(
                 graphElementsOfTestScenario.allGraphElementsToUris(),
-                vertexE.uri()
+                vertexE.uri(),
+                tagFromFriendlyResource(vertexE)
         ), user);
         SubGraph subGraph = userGraphFactory.withUser(anotherUser).aroundForkUriInShareLevels(
                 copyUri,
                 ShareLevel.allShareLevelsInt
         );
-        Tag copiedTag = subGraph.vertexWithIdentifier(copyUri).getTags().values().iterator().next();
+        Tag copiedTag = subGraph.vertexWithIdentifier(copyUri).getTags().get(URI.create("/some-external-uri"));
         assertNotEquals(
                 tag.uri(),
                 copiedTag.uri()
@@ -167,16 +170,17 @@ public class TreeCopierTest extends ModelTestResources {
         vertexE.addTag(tag2, ShareLevel.PRIVATE);
         URI copyUri = treeCopierFactory.forCopier(
                 anotherUser
-        ).ofAnotherUser(Tree.withUrisOfGraphElementsAndRootUri(
+        ).ofAnotherUser(Tree.withUrisOfGraphElementsAndRootUriAndTag(
                 graphElementsOfTestScenario.allGraphElementsToUris(),
-                vertexE.uri()
+                vertexE.uri(),
+                tagFromFriendlyResource(vertexE)
         ), user);
         SubGraph subGraph = userGraphFactory.withUser(anotherUser).aroundForkUriInShareLevels(
                 copyUri,
                 ShareLevel.allShareLevelsInt
         );
         Collection<TagPojo> tags = subGraph.vertexWithIdentifier(copyUri).getTags().values();
-        assertThat(tags.size(), is(2));
+        assertThat(tags.size(), is(3));
     }
 
     @Test
@@ -198,9 +202,10 @@ public class TreeCopierTest extends ModelTestResources {
         urisToCopy.remove(graphElementsOfTestScenario.getEdgeAB().uri());
         treeCopierFactory.forCopier(
                 anotherUser
-        ).ofAnotherUser(Tree.withUrisOfGraphElementsAndRootUri(
+        ).ofAnotherUser(Tree.withUrisOfGraphElementsAndRootUriAndTag(
                 urisToCopy,
-                vertexB.uri()
+                vertexB.uri(),
+                tagFromFriendlyResource(vertexB)
         ), user);
         assertThat(
                 tagFactory.withUri(integratedTag.uri()).getNbNeighbors().getTotal(),
@@ -209,6 +214,23 @@ public class TreeCopierTest extends ModelTestResources {
         assertThat(
                 tagFactory.withUri(integratedTag.uri()).getNbNeighbors().getTotal(),
                 Matchers.is(2)
+        );
+    }
+
+    @Test
+    public void adds_root_as_tag_to_copied_root() {
+        Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                graphElementsOfTestScenario.allGraphElementsToUris(),
+                vertexA.uri(),
+                tagFromFriendlyResource(vertexA)
+        );
+        TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
+        URI copiedCenterUri = treeCopier.ofAnotherUser(copiedTree, user);
+        System.out.println(graphElementOperatorFactory.withUri(copiedCenterUri).getTags().keySet());
+        assertTrue(
+                graphElementOperatorFactory.withUri(copiedCenterUri).getTags().containsKey(
+                        vertexA.uri()
+                )
         );
     }
 

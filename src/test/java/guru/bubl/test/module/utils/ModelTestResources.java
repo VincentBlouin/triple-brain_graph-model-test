@@ -12,6 +12,7 @@ import guru.bubl.module.model.center_graph_element.CenterGraphElementOperatorFac
 import guru.bubl.module.model.center_graph_element.CenterGraphElementsOperatorFactory;
 import guru.bubl.module.model.graph.GraphFactory;
 import guru.bubl.module.model.graph.ShareLevel;
+import guru.bubl.module.model.graph.graph_element.GraphElementOperatorFactory;
 import guru.bubl.module.model.graph.group_relation.GroupRelationFactory;
 import guru.bubl.module.model.graph.group_relation.GroupRelationOperator;
 import guru.bubl.module.model.graph.pattern.PatternUserFactory;
@@ -49,6 +50,9 @@ public class ModelTestResources {
 
     @Inject
     protected FriendlyResourceFactory friendlyResourceFactory;
+
+    @Inject
+    protected GraphElementOperatorFactory graphElementOperatorFactory;
 
     @Inject
     protected Driver driver;
