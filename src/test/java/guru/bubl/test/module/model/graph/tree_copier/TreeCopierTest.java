@@ -1,6 +1,7 @@
 package guru.bubl.test.module.model.graph.tree_copier;
 
 import guru.bubl.module.model.Image;
+import guru.bubl.module.model.User;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.Tree;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
@@ -12,7 +13,6 @@ import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -34,6 +34,7 @@ public class TreeCopierTest extends ModelTestResources {
 
     @Test
     public void can_copy() {
+        makeAllPublic();
         vertexB.label("balboa");
         TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
         List<GraphElementSearchResult> searchResults = graphSearchFactory.usingSearchTerm(
@@ -66,6 +67,7 @@ public class TreeCopierTest extends ModelTestResources {
 
     @Test
     public void returns_cloned_root_uri() {
+        makeAllPublic();
         TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
         Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUriAndTag(
                 graphElementsOfTestScenario.allGraphElementsToUris(),
@@ -95,6 +97,7 @@ public class TreeCopierTest extends ModelTestResources {
 
     @Test
     public void copies_tags() {
+        makeAllPublic();
         TagPojo tag = new TagPojo(
                 URI.create("/some-external-uri")
         );
@@ -144,6 +147,7 @@ public class TreeCopierTest extends ModelTestResources {
 
     @Test
     public void can_copy_multiple_tags() {
+        makeAllPublic();
         TagPojo tag = new TagPojo(
                 URI.create("/some-external-uri")
         );
@@ -185,6 +189,7 @@ public class TreeCopierTest extends ModelTestResources {
 
     @Test
     public void integrates_tags_into_user_own_tags() {
+        makeAllPublic();
         TagPojo tag = new TagPojo(
                 URI.create("/some-external-uri")
         );
@@ -219,6 +224,7 @@ public class TreeCopierTest extends ModelTestResources {
 
     @Test
     public void adds_root_as_tag_to_copied_root() {
+        makeAllPublic();
         Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUriAndTag(
                 graphElementsOfTestScenario.allGraphElementsToUris(),
                 vertexA.uri(),
@@ -232,6 +238,185 @@ public class TreeCopierTest extends ModelTestResources {
                         vertexA.uri()
                 )
         );
+    }
+
+    @Test
+    public void cannot_copy_private_vertices() {
+        TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
+        List<GraphElementSearchResult> searchResults = graphSearchFactory.usingSearchTerm(
+                "balboa"
+        ).searchForAllOwnResources(anotherUser);
+        assertThat(
+                searchResults.size(),
+                is(0)
+        );
+        assertThat(
+                wholeGraph.getAllVertices().size(),
+                is(6)
+        );
+        Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                graphElementsOfTestScenario.allGraphElementsToUris(),
+                vertexA.uri(),
+                tagFromFriendlyResource(vertexA)
+        );
+        treeCopier.ofAnotherUser(copiedTree, user);
+        assertThat(
+                wholeGraph.getAllVertices().size(),
+                is(6)
+        );
+        searchResults = graphSearchFactory.usingSearchTerm("balboa").searchForAllOwnResources(anotherUser);
+        assertThat(
+                searchResults.size(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void copies_nothing_if_some_graph_elements_are_not_allowed_to_be_copied() {
+        vertexA.makePublic();
+        vertexB.makePublic();
+        TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
+        List<GraphElementSearchResult> searchResults = graphSearchFactory.usingSearchTerm(
+                "balboa"
+        ).searchForAllOwnResources(anotherUser);
+        assertThat(
+                searchResults.size(),
+                is(0)
+        );
+        assertThat(
+                wholeGraph.getAllVertices().size(),
+                is(6)
+        );
+        Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                graphElementsOfTestScenario.allGraphElementsToUris(),
+                vertexA.uri(),
+                tagFromFriendlyResource(vertexA)
+        );
+        treeCopier.ofAnotherUser(copiedTree, user);
+        assertThat(
+                wholeGraph.getAllVertices().size(),
+                is(6)
+        );
+        searchResults = graphSearchFactory.usingSearchTerm("balboa").searchForAllOwnResources(anotherUser);
+        assertThat(
+                searchResults.size(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void cannot_copy_friend_bubbles_if_not_friend() {
+        makeAllPublic();
+        vertexA.setShareLevel(ShareLevel.FRIENDS);
+        vertexB.setShareLevel(ShareLevel.FRIENDS);
+        TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
+        List<GraphElementSearchResult> searchResults = graphSearchFactory.usingSearchTerm(
+                "balboa"
+        ).searchForAllOwnResources(anotherUser);
+        assertThat(
+                searchResults.size(),
+                is(0)
+        );
+        assertThat(
+                wholeGraph.getAllVertices().size(),
+                is(6)
+        );
+        Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                graphElementsOfTestScenario.allGraphElementsToUris(),
+                vertexA.uri(),
+                tagFromFriendlyResource(vertexA)
+        );
+        treeCopier.ofAnotherUser(copiedTree, user);
+        assertThat(
+                wholeGraph.getAllVertices().size(),
+                is(6)
+        );
+        searchResults = graphSearchFactory.usingSearchTerm("balboa").searchForAllOwnResources(anotherUser);
+        assertThat(
+                searchResults.size(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void can_copy_friend_bubbles_with_friend() {
+        makeAllPublic();
+        vertexA.setShareLevel(ShareLevel.FRIENDS);
+        vertexB.setShareLevel(ShareLevel.FRIENDS);
+        vertexB.label("balboa");
+        friendManagerFactory.forUser(user).add(anotherUser);
+        friendManagerFactory.forUser(anotherUser).confirm(user);
+        TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
+        List<GraphElementSearchResult> searchResults = graphSearchFactory.usingSearchTerm(
+                "balboa"
+        ).searchForAllOwnResources(anotherUser);
+        assertThat(
+                searchResults.size(),
+                is(0)
+        );
+        assertThat(
+                wholeGraph.getAllVertices().size(),
+                is(6)
+        );
+        Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                graphElementsOfTestScenario.allGraphElementsToUris(),
+                vertexA.uri(),
+                tagFromFriendlyResource(vertexA)
+        );
+        URI copiedUri = treeCopier.ofAnotherUser(copiedTree, user);
+        assertNotNull(copiedUri);
+        assertThat(
+                wholeGraph.getAllVertices().size(),
+                is(11)
+        );
+        searchResults = graphSearchFactory.usingSearchTerm("balboa").searchForAllOwnResources(anotherUser);
+        assertThat(
+                searchResults.size(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void tests_ownership_of_copied_graph_elements(){
+        makeAllPublic();
+        User user3 = User.withEmailAndUsername("gigi@popo.com", "gigi");
+        userRepository.createUser(user3);
+        TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
+        List<GraphElementSearchResult> searchResults = graphSearchFactory.usingSearchTerm(
+                "balboa"
+        ).searchForAllOwnResources(anotherUser);
+        assertThat(
+                searchResults.size(),
+                is(0)
+        );
+        assertThat(
+                wholeGraph.getAllVertices().size(),
+                is(6)
+        );
+        Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                graphElementsOfTestScenario.allGraphElementsToUris(),
+                vertexA.uri(),
+                tagFromFriendlyResource(vertexA)
+        );
+        treeCopier.ofAnotherUser(copiedTree, user3);
+        assertThat(
+                wholeGraph.getAllVertices().size(),
+                is(6)
+        );
+        searchResults = graphSearchFactory.usingSearchTerm("balboa").searchForAllOwnResources(anotherUser);
+        assertThat(
+                searchResults.size(),
+                is(0)
+        );
+    }
+
+    private void makeAllPublic() {
+        vertexA.makePublic();
+        vertexB.makePublic();
+        vertexC.makePublic();
+        vertexD.makePublic();
+        vertexE.makePublic();
+        groupRelation.makePublic();
     }
 
 }
