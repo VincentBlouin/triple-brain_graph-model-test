@@ -7,8 +7,6 @@ package guru.bubl.test.module.model.graph;
 import com.google.common.collect.ImmutableSet;
 import guru.bubl.module.model.FriendlyResource;
 import guru.bubl.module.model.Image;
-import guru.bubl.module.model.graph.edge.Edge;
-import guru.bubl.module.model.graph.edge.EdgeOperator;
 import guru.bubl.module.model.graph.graph_element.GraphElement;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.group_relation.GroupRelationPojo;
@@ -26,7 +24,6 @@ import guru.bubl.module.model.test.SubGraphOperator;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.CoreMatchers;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -960,7 +957,7 @@ public class UserGraphTest extends ModelTestResources {
     }
 
     @Test
-    public void returns_pattern_uri() {
+    public void returns_copied_from_uri() {
         vertexB.makePattern();
         URI newUri = patternUserFactory.forUserAndPatternUri(
                 user,
@@ -971,7 +968,7 @@ public class UserGraphTest extends ModelTestResources {
                 ShareLevel.allShareLevelsInt
         ).vertexWithIdentifier(newUri);
         assertEquals(
-                newCenter.getPatternUri(),
+                newCenter.getCopiedFromUri(),
                 vertexB.uri()
         );
     }
