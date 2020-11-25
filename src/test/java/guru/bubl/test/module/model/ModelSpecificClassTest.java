@@ -18,6 +18,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TreeCopierTest.class
+        PatternUserTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}

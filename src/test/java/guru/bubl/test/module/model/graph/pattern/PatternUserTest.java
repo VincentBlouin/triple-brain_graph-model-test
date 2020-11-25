@@ -372,4 +372,32 @@ public class PatternUserTest extends ModelTestResources {
         System.out.println(groupRelation.uri());
         assertTrue(UserUris.isUriOfAGroupRelation(groupRelation.uri()));
     }
+
+    @Test
+    public void sets_nb_neighbors_to_private() {
+        vertexB.label("maple syrup");
+        vertexB.makePattern();
+        List<GraphElementSearchResult> results = graphSearchFactory.usingSearchTerm("maple syrup").searchForAllOwnResources(user);
+        assertThat(
+                results.size(),
+                is(1)
+        );
+        URI newUri = patternUserFactory.forUserAndPatternUri(
+                user,
+                vertexB.uri()
+        ).use();
+        VertexOperator copiedB = vertexFactory.withUri(newUri);
+        assertThat(
+                copiedB.getNbNeighbors().getPrivate(),
+                is(2)
+        );
+        assertThat(
+                copiedB.getNbNeighbors().getPublic(),
+                is(0)
+        );
+        assertThat(
+                copiedB.getNbNeighbors().getFriend(),
+                is(0)
+        );
+    }
 }

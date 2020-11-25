@@ -11,6 +11,7 @@ import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.tree_copier.TreeCopier;
 import guru.bubl.module.model.graph.tree_copier.TreeCopierFactory;
 import guru.bubl.module.model.graph.vertex.Vertex;
+import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
@@ -36,6 +37,8 @@ public class TreeCopierTest extends ModelTestResources {
     TreeCopierFactory treeCopierFactory;
 
     @Test
+
+
     public void can_copy() {
         makeAllPublic();
         vertexB.label("balboa");
@@ -69,6 +72,8 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
+
+
     public void copied_graph_elements_have_relationships() {
         makeAllPublic();
         assertTrue(
@@ -119,6 +124,8 @@ public class TreeCopierTest extends ModelTestResources {
 
 
     @Test
+
+
     public void copies_tags() {
         makeAllPublic();
         TagPojo tag = new TagPojo(
@@ -169,6 +176,8 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
+
+
     public void can_copy_multiple_tags() {
         makeAllPublic();
         TagPojo tag = new TagPojo(
@@ -211,6 +220,8 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
+
+
     public void integrates_tags_into_user_own_tags() {
         makeAllPublic();
         TagPojo tag = new TagPojo(
@@ -246,6 +257,8 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
+
+
     public void adds_root_as_tag_to_copied_root() {
         makeAllPublic();
         Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUriAndTag(
@@ -264,6 +277,8 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
+
+
     public void cannot_copy_private_vertices() {
         TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
         List<GraphElementSearchResult> searchResults = graphSearchFactory.usingSearchTerm(
@@ -295,6 +310,8 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
+
+
     public void copies_nothing_if_some_graph_elements_are_not_allowed_to_be_copied() {
         vertexA.makePublic();
         vertexB.makePublic();
@@ -328,6 +345,8 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
+
+
     public void cannot_copy_friend_bubbles_if_not_friend() {
         makeAllPublic();
         vertexA.setShareLevel(ShareLevel.FRIENDS);
@@ -362,6 +381,8 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
+
+
     public void can_copy_friend_bubbles_with_friend() {
         makeAllPublic();
         vertexA.setShareLevel(ShareLevel.FRIENDS);
@@ -400,6 +421,8 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
+
+
     public void tests_ownership_of_copied_graph_elements() {
         makeAllPublic();
         User user3 = User.withEmailAndUsername("gigi@popo.com", "gigi");
@@ -434,6 +457,8 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
+
+
     public void user_can_copy_his_own_private_graph_elements() {
         TreeCopier treeCopier = treeCopierFactory.forCopier(user);
         assertThat(
@@ -451,6 +476,122 @@ public class TreeCopierTest extends ModelTestResources {
         assertThat(
                 wholeGraph.getAllVertices().size(),
                 is(11)
+        );
+    }
+
+    @Test
+
+    public void root_can_be_a_group_relation() {
+        Vertex newVertex = userGraphFactory.withUser(user).createVertex();
+        TreeCopier treeCopier = treeCopierFactory.forCopier(user);
+        assertThat(
+                wholeGraph.getAllVertices().size(),
+                is(7)
+        );
+        treeCopier.copyTreeOfUserWithNewParentUri(
+                Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                        graphElementsOfTestScenario.allGraphElementsToUris(),
+                        groupRelation.uri(),
+                        tagFromFriendlyResource(groupRelation)
+                ),
+                user,
+                newVertex.uri()
+        );
+        assertThat(
+                wholeGraph.getAllVertices().size(),
+                is(12)
+        );
+    }
+
+    @Test
+
+    public void when_root_is_a_group_relation_its_linked_to_new_parent_uri() {
+        Vertex newVertex = userGraphFactory.withUser(user).createVertex();
+        TreeCopier treeCopier = treeCopierFactory.forCopier(user);
+        assertThat(
+                userGraph.aroundForkUriInShareLevels(
+                        newVertex.uri(),
+                        ShareLevel.allShareLevelsInt
+                ).getGroupRelations().size(),
+                is(0)
+        );
+        assertThat(
+                userGraph.aroundForkUriInShareLevels(
+                        groupRelation.uri(),
+                        ShareLevel.allShareLevelsInt
+                ).vertices().size(),
+                is(3)
+        );
+        URI newGroupRelationUri = treeCopier.copyTreeOfUserWithNewParentUri(
+                Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                        graphElementsOfTestScenario.allGraphElementsToUris(),
+                        groupRelation.uri(),
+                        tagFromFriendlyResource(groupRelation)
+                ),
+                user,
+                newVertex.uri()
+        ).get(groupRelation.uri());
+        assertThat(
+                userGraph.aroundForkUriInShareLevels(
+                        newVertex.uri(),
+                        ShareLevel.allShareLevelsInt
+                ).getGroupRelations().size(),
+                is(1)
+        );
+        assertThat(
+                userGraph.aroundForkUriInShareLevels(
+                        newGroupRelationUri,
+                        ShareLevel.allShareLevelsInt
+                ).vertices().size(),
+                is(3)
+        );
+    }
+
+    @Test
+
+    public void has_to_be_owner_of_new_parent() {
+        Vertex newVertex = userGraphFactory.withUser(anotherUser).createVertex();
+        TreeCopier treeCopier = treeCopierFactory.forCopier(user);
+        treeCopier.copyTreeOfUserWithNewParentUri(
+                Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                        graphElementsOfTestScenario.allGraphElementsToUris(),
+                        groupRelation.uri(),
+                        tagFromFriendlyResource(groupRelation)
+                ),
+                user,
+                newVertex.uri()
+        );
+        assertThat(
+                userGraph.aroundForkUriInShareLevels(
+                        newVertex.uri(),
+                        ShareLevel.allShareLevelsInt
+                ).getGroupRelations().size(),
+                is(0)
+        );
+    }
+
+    @Test
+    public void parent_nb_neighbors_increments() {
+        VertexOperator newVertex = vertexFactory.withUri(
+                userGraphFactory.withUser(user).createVertex().uri()
+        );
+        TreeCopier treeCopier = treeCopierFactory.forCopier(user);
+        assertThat(
+                newVertex.getNbNeighbors().getTotal(),
+                is(0)
+        );
+        treeCopier.copyTreeOfUserWithNewParentUri(
+                Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                        graphElementsOfTestScenario.allGraphElementsToUris(),
+                        groupRelation.uri(),
+                        tagFromFriendlyResource(groupRelation)
+                ),
+                user,
+                newVertex.uri()
+        );
+        assertThat(
+                newVertex.getNbNeighbors().getTotal(),
+                is(1)
         );
     }
 
