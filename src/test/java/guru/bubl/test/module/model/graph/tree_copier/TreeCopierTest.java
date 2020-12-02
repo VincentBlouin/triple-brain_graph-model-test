@@ -2,6 +2,7 @@ package guru.bubl.test.module.model.graph.tree_copier;
 
 import guru.bubl.module.model.Image;
 import guru.bubl.module.model.User;
+import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.Tree;
 import guru.bubl.module.model.graph.subgraph.SubGraph;
@@ -14,6 +15,7 @@ import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static guru.bubl.module.model.test.scenarios.TestScenarios.tagFromFriendlyResource;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
@@ -475,6 +478,7 @@ public class TreeCopierTest extends ModelTestResources {
 
     @Test
 
+
     public void root_can_be_a_group_relation() {
         Vertex newVertex = userGraphFactory.withUser(user).createVertex();
         TreeCopier treeCopier = treeCopierFactory.forCopier(user);
@@ -498,6 +502,7 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
+
 
     public void when_root_is_a_group_relation_its_linked_to_new_parent_uri() {
         Vertex newVertex = userGraphFactory.withUser(user).createVertex();
@@ -543,6 +548,7 @@ public class TreeCopierTest extends ModelTestResources {
 
     @Test
 
+
     public void has_to_be_owner_of_new_parent() {
         Vertex newVertex = userGraphFactory.withUser(anotherUser).createVertex();
         TreeCopier treeCopier = treeCopierFactory.forCopier(user);
@@ -565,6 +571,7 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
+
     public void parent_nb_neighbors_increments() {
         VertexOperator newVertex = vertexFactory.withUri(
                 userGraphFactory.withUser(user).createVertex().uri()
@@ -590,6 +597,7 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
+
     public void share_level_of_copy_doesnt_change_when_owner() {
         vertexB.setShareLevel(ShareLevel.PUBLIC);
         vertexA.setShareLevel(ShareLevel.FRIENDS);
@@ -636,11 +644,47 @@ public class TreeCopierTest extends ModelTestResources {
                 user,
                 ShareLevel.FRIENDS
         ).get(vertexB.uri());
+        VertexOperator newVertexB = vertexFactory.withUri(newVertexBUri);
         assertThat(
-                vertexFactory.withUri(newVertexBUri).getShareLevel(),
+                newVertexB.getShareLevel(),
                 is(ShareLevel.FRIENDS)
         );
+        assertThat(
+                newVertexB.getNbNeighbors().getFriend(),
+                is(2)
+        );
+    }
 
+    @Test
+    public void resets_center_nv_visits_and_last_center_date() {
+        makeAllPublic();
+        TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
+        CenterGraphElementOperator vertexBAsCenter = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        );
+        vertexBAsCenter.incrementNumberOfVisits();
+        vertexBAsCenter.updateLastCenterDate();
+        URI newVertexBUri = treeCopier.copyTreeOfUserInShareLevel(
+                Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                        graphElementsOfTestScenario.allGraphElementsToUris(),
+                        vertexB.uri(),
+                        tagFromFriendlyResource(groupRelation)
+                ),
+                user,
+                ShareLevel.FRIENDS
+        ).get(vertexB.uri());
+        VertexOperator newVertexB = vertexFactory.withUri(newVertexBUri);
+        CenterGraphElementOperator newVertexBAsCenter = centerGraphElementOperatorFactory.usingFriendlyResource(
+                newVertexB
+        );
+        assertThat(
+                newVertexBAsCenter.getNumberOfVisits(),
+                is(0)
+        );
+        assertThat(
+                newVertexBAsCenter.getLastCenterDate(),
+                is(nullValue())
+        );
     }
 
     private void makeAllPublic() {
