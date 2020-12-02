@@ -1,7 +1,6 @@
 package guru.bubl.test.module.model.graph.tree_copier;
 
 import guru.bubl.module.model.Image;
-import guru.bubl.module.model.ModelTestScenarios;
 import guru.bubl.module.model.User;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.Tree;
@@ -13,18 +12,13 @@ import guru.bubl.module.model.graph.tree_copier.TreeCopierFactory;
 import guru.bubl.module.model.graph.vertex.Vertex;
 import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.module.model.search.GraphElementSearchResult;
-import guru.bubl.module.model.test.scenarios.TestScenarios;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
 import java.net.URI;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -593,6 +587,60 @@ public class TreeCopierTest extends ModelTestResources {
                 newVertex.getNbNeighbors().getTotal(),
                 is(1)
         );
+    }
+
+    @Test
+    public void share_level_of_copy_doesnt_change_when_owner() {
+        vertexB.setShareLevel(ShareLevel.PUBLIC);
+        vertexA.setShareLevel(ShareLevel.FRIENDS);
+        vertexC.setShareLevel(ShareLevel.PRIVATE);
+        Map<URI, URI> newUris = treeCopierFactory.forCopier(user).copyTreeOfUserWithNewParentUri(
+                Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                        graphElementsOfTestScenario.allGraphElementsToUris(),
+                        groupRelation.uri(),
+                        tagFromFriendlyResource(groupRelation)
+                ),
+                user,
+                vertexB.uri()
+        );
+        assertThat(
+                vertexFactory.withUri(
+                        newUris.get(vertexB.uri())
+                ).getShareLevel(),
+                is(ShareLevel.PUBLIC)
+        );
+        assertThat(
+                vertexFactory.withUri(
+                        newUris.get(vertexA.uri())
+                ).getShareLevel(),
+                is(ShareLevel.FRIENDS)
+        );
+        assertThat(
+                vertexFactory.withUri(
+                        newUris.get(vertexC.uri())
+                ).getShareLevel(),
+                is(ShareLevel.PRIVATE)
+        );
+    }
+
+    @Test
+    public void can_copy_in_share_level() {
+        makeAllPublic();
+        TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
+        URI newVertexBUri = treeCopier.copyTreeOfUserInShareLevel(
+                Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                        graphElementsOfTestScenario.allGraphElementsToUris(),
+                        vertexB.uri(),
+                        tagFromFriendlyResource(groupRelation)
+                ),
+                user,
+                ShareLevel.FRIENDS
+        ).get(vertexB.uri());
+        assertThat(
+                vertexFactory.withUri(newVertexBUri).getShareLevel(),
+                is(ShareLevel.FRIENDS)
+        );
+
     }
 
     private void makeAllPublic() {
