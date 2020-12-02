@@ -173,8 +173,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void can_copy_multiple_tags() {
         makeAllPublic();
         TagPojo tag = new TagPojo(
@@ -217,8 +215,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void integrates_tags_into_user_own_tags() {
         makeAllPublic();
         TagPojo tag = new TagPojo(
@@ -254,8 +250,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void adds_root_as_tag_to_copied_root() {
         makeAllPublic();
         Tree copiedTree = Tree.withUrisOfGraphElementsAndRootUriAndTag(
@@ -274,8 +268,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void cannot_copy_private_vertices() {
         TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
         List<GraphElementSearchResult> searchResults = graphSearchFactory.usingSearchTerm(
@@ -307,8 +299,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void copies_nothing_if_some_graph_elements_are_not_allowed_to_be_copied() {
         vertexA.makePublic();
         vertexB.makePublic();
@@ -342,8 +332,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void cannot_copy_friend_bubbles_if_not_friend() {
         makeAllPublic();
         vertexA.setShareLevel(ShareLevel.FRIENDS);
@@ -378,8 +366,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void can_copy_friend_bubbles_with_friend() {
         makeAllPublic();
         vertexA.setShareLevel(ShareLevel.FRIENDS);
@@ -418,8 +404,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void tests_ownership_of_copied_graph_elements() {
         makeAllPublic();
         User user3 = User.withEmailAndUsername("gigi@popo.com", "gigi");
@@ -454,8 +438,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void user_can_copy_his_own_private_graph_elements() {
         TreeCopier treeCopier = treeCopierFactory.forCopier(user);
         assertThat(
@@ -477,8 +459,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void root_can_be_a_group_relation() {
         Vertex newVertex = userGraphFactory.withUser(user).createVertex();
         TreeCopier treeCopier = treeCopierFactory.forCopier(user);
@@ -502,8 +482,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void when_root_is_a_group_relation_its_linked_to_new_parent_uri() {
         Vertex newVertex = userGraphFactory.withUser(user).createVertex();
         TreeCopier treeCopier = treeCopierFactory.forCopier(user);
@@ -547,8 +525,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
-
     public void has_to_be_owner_of_new_parent() {
         Vertex newVertex = userGraphFactory.withUser(anotherUser).createVertex();
         TreeCopier treeCopier = treeCopierFactory.forCopier(user);
@@ -571,7 +547,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
     public void parent_nb_neighbors_increments() {
         VertexOperator newVertex = vertexFactory.withUri(
                 userGraphFactory.withUser(user).createVertex().uri()
@@ -597,7 +572,6 @@ public class TreeCopierTest extends ModelTestResources {
     }
 
     @Test
-
     public void share_level_of_copy_doesnt_change_when_owner() {
         vertexB.setShareLevel(ShareLevel.PUBLIC);
         vertexA.setShareLevel(ShareLevel.FRIENDS);
@@ -651,6 +625,10 @@ public class TreeCopierTest extends ModelTestResources {
         );
         assertThat(
                 newVertexB.getNbNeighbors().getFriend(),
+                is(2)
+        );
+        assertThat(
+                newVertexB.getNbNeighbors().getTotal(),
                 is(2)
         );
     }
