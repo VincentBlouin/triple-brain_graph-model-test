@@ -30,12 +30,11 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 public class TreeCopierTest extends ModelTestResources {
+
     @Inject
     TreeCopierFactory treeCopierFactory;
 
     @Test
-
-
     public void can_copy() {
         makeAllPublic();
         vertexB.label("balboa");
@@ -663,15 +662,6 @@ public class TreeCopierTest extends ModelTestResources {
                 newVertexBAsCenter.getLastCenterDate(),
                 is(nullValue())
         );
-    }
-
-    private void makeAllPublic() {
-        vertexA.makePublic();
-        vertexB.makePublic();
-        vertexC.makePublic();
-        vertexD.makePublic();
-        vertexE.makePublic();
-        groupRelation.makePublic();
     }
 
 }

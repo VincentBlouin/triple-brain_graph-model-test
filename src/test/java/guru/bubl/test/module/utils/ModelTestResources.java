@@ -211,4 +211,13 @@ public class ModelTestResources {
         );
         thirdUserVertex.label("vértice");
     }
+
+    protected void makeAllPublic() {
+        vertexA.makePublic();
+        vertexB.makePublic();
+        vertexC.makePublic();
+        vertexD.makePublic();
+        vertexE.makePublic();
+        groupRelation.makePublic();
+    }
 }
