@@ -13,6 +13,7 @@ import guru.bubl.module.model.center_graph_element.CenterGraphElementsOperatorFa
 import guru.bubl.module.model.friend.FriendManagerFactory;
 import guru.bubl.module.model.graph.GraphFactory;
 import guru.bubl.module.model.graph.ShareLevel;
+import guru.bubl.module.model.graph.graph_element.GraphElement;
 import guru.bubl.module.model.graph.graph_element.GraphElementOperatorFactory;
 import guru.bubl.module.model.graph.group_relation.GroupRelationFactory;
 import guru.bubl.module.model.graph.group_relation.GroupRelationOperator;
@@ -33,11 +34,17 @@ import guru.bubl.module.neo4j_graph_manipulator.graph.graph.extractor.subgraph.S
 import guru.bubl.module.neo4j_graph_manipulator.graph.graph.vertex.VertexFactoryNeo4j;
 import guru.bubl.module.repository.user.UserRepository;
 import guru.bubl.test.module.model.user.FriendManagerTest;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.Session;
 
 import javax.inject.Inject;
+
+import java.net.URI;
+import java.util.Date;
+
+import static org.neo4j.driver.Values.parameters;
 
 public class ModelTestResources {
 
@@ -99,7 +106,7 @@ public class ModelTestResources {
     protected UserRepository userRepository;
 
     @Inject
-    protected  FriendManagerFactory friendManagerFactory;
+    protected FriendManagerFactory friendManagerFactory;
 
     protected VertexOperator vertexA;
     protected VertexOperator vertexB;
@@ -198,6 +205,9 @@ public class ModelTestResources {
             session.run(
                     "MATCH (n:Resource) DETACH DELETE n"
             );
+            session.run(
+                    "MATCH (n:Notification) DETACH DELETE n"
+            );
         }
     }
 
@@ -219,5 +229,17 @@ public class ModelTestResources {
         vertexD.makePublic();
         vertexE.makePublic();
         groupRelation.makePublic();
+    }
+
+    protected void setLastModificationDate(URI uri, Date date) {
+        try (Session session = driver.session()) {
+            session.run(
+                    "MATCH (n:Resource{uri:$uri}) set n.last_modification_date=$lastModificationDate",
+                    parameters(
+                            "uri", uri.toString(),
+                            "lastModificationDate", date.getTime()
+                    )
+            );
+        }
     }
 }
