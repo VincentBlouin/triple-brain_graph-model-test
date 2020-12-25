@@ -16,8 +16,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static guru.bubl.module.model.test.scenarios.TestScenarios.tagFromFriendlyResource;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.neo4j.driver.Values.parameters;
 
@@ -295,6 +294,27 @@ public class NotificationOperatorTest extends ModelTestResources {
         assertThat(
                 notification.getWatchLabel(),
                 is("vertex B")
+        );
+    }
+
+    @Test
+    public void includes_uri() {
+        makeAllPublic();
+        setLastModificationDateToMoreThanADayBefore();
+        TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
+        treeCopier.copyTreeOfUser(
+                Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                        graphElementsOfTestScenario.allGraphElementsToUris(),
+                        vertexA.uri(),
+                        tagFromFriendlyResource(vertexA)
+                ), user
+        );
+        vertexB.addVertexAndRelation();
+        Notification notification = notificationOperator.listForUserAndNbSkip(anotherUser, 0).get(0);
+//        System.out.println(notification.getUri());
+        assertThat(
+                notification.getUri(),
+                is(not(nullValue()))
         );
     }
 
