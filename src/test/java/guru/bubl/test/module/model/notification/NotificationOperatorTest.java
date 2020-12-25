@@ -279,6 +279,26 @@ public class NotificationOperatorTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void includes_watch_label() {
+        makeAllPublic();
+        setLastModificationDateToMoreThanADayBefore();
+        TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
+        treeCopier.copyTreeOfUser(
+                Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                        graphElementsOfTestScenario.allGraphElementsToUris(),
+                        vertexA.uri(),
+                        tagFromFriendlyResource(vertexA)
+                ), user
+        );
+        vertexB.addVertexAndRelation();
+        Notification notification = notificationOperator.listForUser(anotherUser).get(0);
+        assertThat(
+                notification.getWatchLabel(),
+                is("vertex B")
+        );
+    }
+
     private User createAnotherUser2() {
         User anotherUser2 = User.withEmail(
                 "colette2.armande@example.org"
