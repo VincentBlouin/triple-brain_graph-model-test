@@ -9,7 +9,6 @@ import guru.bubl.module.model.notification.NotificationOperator;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.joda.time.DateTime;
 import org.junit.Test;
-import org.neo4j.driver.Record;
 import org.neo4j.driver.Session;
 
 import javax.inject.Inject;
@@ -43,11 +42,11 @@ public class NotificationOperatorTest extends ModelTestResources {
                 ), user
         );
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(0)
         );
         vertexA.label("pear");
-        List<Notification> notificationList = notificationOperator.listForUser(anotherUser);
+        List<Notification> notificationList = notificationOperator.listForUserAndNbSkip(anotherUser, 0);
         assertThat(
                 notificationList.size(),
                 is(1)
@@ -73,12 +72,12 @@ public class NotificationOperatorTest extends ModelTestResources {
                 ), user
         );
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(0)
         );
         vertexA.label("pear");
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(0)
         );
     }
@@ -105,20 +104,20 @@ public class NotificationOperatorTest extends ModelTestResources {
                 ), user
         );
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(0)
         );
         assertThat(
-                notificationOperator.listForUser(anotherUser2).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser2, 0).size(),
                 is(0)
         );
         vertexA.label("pear");
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(1)
         );
         assertThat(
-                notificationOperator.listForUser(anotherUser2).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser2, 0).size(),
                 is(1)
         );
     }
@@ -136,12 +135,12 @@ public class NotificationOperatorTest extends ModelTestResources {
                 ), user
         );
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(0)
         );
         vertexB.label("pear");
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(1)
         );
     }
@@ -160,12 +159,12 @@ public class NotificationOperatorTest extends ModelTestResources {
                 ), user
         );
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(0)
         );
         vertexC.label("pear");
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(0)
         );
     }
@@ -183,11 +182,11 @@ public class NotificationOperatorTest extends ModelTestResources {
                 ), user
         );
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(0)
         );
         vertexC.comment("a comment");
-        List<Notification> notificationList = notificationOperator.listForUser(anotherUser);
+        List<Notification> notificationList = notificationOperator.listForUserAndNbSkip(anotherUser, 0);
         assertThat(
                 notificationList.size(),
                 is(1)
@@ -212,12 +211,12 @@ public class NotificationOperatorTest extends ModelTestResources {
                 ), user
         );
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(0)
         );
         vertexC.addVertexAndRelation();
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(1)
         );
     }
@@ -235,7 +234,7 @@ public class NotificationOperatorTest extends ModelTestResources {
                 ), user
         );
         vertexC.addVertexAndRelation();
-        Notification notification = notificationOperator.listForUser(anotherUser).iterator().next();
+        Notification notification = notificationOperator.listForUserAndNbSkip(anotherUser, 0).iterator().next();
         assertThat(
                 notification.getWatchUri(),
                 is(vertexC.uri())
@@ -260,12 +259,12 @@ public class NotificationOperatorTest extends ModelTestResources {
         );
         vertexC.addVertexAndRelation();
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(1)
         );
         vertexC.addVertexAndRelation();
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(1)
         );
         setLastModificationDate(
@@ -274,7 +273,7 @@ public class NotificationOperatorTest extends ModelTestResources {
         );
         vertexC.addVertexAndRelation();
         assertThat(
-                notificationOperator.listForUser(anotherUser).size(),
+                notificationOperator.listForUserAndNbSkip(anotherUser, 0).size(),
                 is(2)
         );
     }
@@ -292,7 +291,7 @@ public class NotificationOperatorTest extends ModelTestResources {
                 ), user
         );
         vertexB.addVertexAndRelation();
-        Notification notification = notificationOperator.listForUser(anotherUser).get(0);
+        Notification notification = notificationOperator.listForUserAndNbSkip(anotherUser, 0).get(0);
         assertThat(
                 notification.getWatchLabel(),
                 is("vertex B")
