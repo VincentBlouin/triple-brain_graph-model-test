@@ -318,6 +318,52 @@ public class NotificationOperatorTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void it_orders_by_creation_date_descending() {
+        makeAllPublic();
+        setLastModificationDateToMoreThanADayBefore();
+        TreeCopier treeCopier = treeCopierFactory.forCopier(anotherUser);
+        treeCopier.copyTreeOfUser(
+                Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                        graphElementsOfTestScenario.allGraphElementsToUris(),
+                        vertexA.uri(),
+                        tagFromFriendlyResource(vertexA)
+                ), user
+        );
+        vertexC.addVertexAndRelation();
+        Notification firstNotification = notificationOperator.listForUserAndNbSkip(anotherUser, 0).get(0);
+        vertexC.addVertexAndRelation();
+        setLastModificationDate(
+                vertexC.uri(),
+                new DateTime().minusDays(1).toDate()
+        );
+        vertexC.addVertexAndRelation();
+        List<Notification> notifications = notificationOperator.listForUserAndNbSkip(anotherUser, 0);
+        assertThat(
+                notifications.get(1).getUri(),
+                is(firstNotification.getUri())
+        );
+    }
+
+    @Test
+    public void it_prevents_notification_if_creator_is_owner() {
+        makeAllPublic();
+        setLastModificationDateToMoreThanADayBefore();
+        TreeCopier treeCopier = treeCopierFactory.forCopier(user);
+        treeCopier.copyTreeOfUser(
+                Tree.withUrisOfGraphElementsAndRootUriAndTag(
+                        graphElementsOfTestScenario.allGraphElementsToUris(),
+                        vertexA.uri(),
+                        tagFromFriendlyResource(vertexA)
+                ), user
+        );
+        vertexC.addVertexAndRelation();
+        assertThat(
+                notificationOperator.listForUserAndNbSkip(user, 0).size(),
+                is(0)
+        );
+    }
+
     private User createAnotherUser2() {
         User anotherUser2 = User.withEmail(
                 "colette2.armande@example.org"
