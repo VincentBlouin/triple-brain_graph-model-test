@@ -12,6 +12,7 @@ import guru.bubl.test.module.model.graph.pattern.PatternUserTest;
 import guru.bubl.test.module.model.graph.tree_copier.TreeCopierTest;
 import guru.bubl.test.module.model.notification.NotificationOperatorTest;
 import guru.bubl.test.module.model.user.FriendManagerTest;
+import guru.bubl.test.module.model.user.UserRepositoryTest;
 import guru.bubl.test.module.utils.ModelTestRunner;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -19,6 +20,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        NotificationOperatorTest.class
+        UserRepositoryTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}

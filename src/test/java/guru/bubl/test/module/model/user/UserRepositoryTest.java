@@ -285,6 +285,15 @@ public class UserRepositoryTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void can_set_consult_notifications_date() {
+        User updatedUser = userRepository.findByUsername(user.username());
+        assertNull(updatedUser.getConsultNotificationDate());
+        userRepository.updateConsultNotificationDate(user);
+        updatedUser = userRepository.findByUsername(user.username());
+        assertNotNull(updatedUser.getConsultNotificationDate());
+    }
+
     private String randomEmail() {
         return UUID.randomUUID().toString() + "@me.com";
     }
