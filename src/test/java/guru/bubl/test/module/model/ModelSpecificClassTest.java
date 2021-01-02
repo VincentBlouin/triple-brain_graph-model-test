@@ -20,6 +20,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        UserRepositoryTest.class
+        NotificationOperatorTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}
