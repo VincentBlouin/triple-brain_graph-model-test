@@ -19,10 +19,13 @@ import javax.inject.Inject;
 
 public class DeepGraphScenario implements JsTestScenario {
     /*
-     b1-r1->b2
-     b2-r2->b3
-     b2<-r3-b4
-     b1<-r4-b5
+     b1{
+        r1->b2{
+            r2->b3
+            r3-b4
+        }
+        r4-b5
+     }
      */
 
     @Inject
