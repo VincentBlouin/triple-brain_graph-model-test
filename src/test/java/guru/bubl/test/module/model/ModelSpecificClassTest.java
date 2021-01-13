@@ -4,6 +4,7 @@
 
 package guru.bubl.test.module.model;
 
+import guru.bubl.test.module.model.center_graph_element.CenterGraphElementsOperatorTest;
 import guru.bubl.test.module.model.center_graph_element.WholeGraphAdminTest;
 import guru.bubl.test.module.model.graph.*;
 import guru.bubl.test.module.model.graph.fork.ForkOperatorTest;
@@ -20,6 +21,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        NotificationOperatorTest.class
+        CenterGraphElementsOperatorTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}

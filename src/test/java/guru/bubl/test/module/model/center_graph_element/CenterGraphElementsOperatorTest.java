@@ -10,10 +10,16 @@ import guru.bubl.module.model.center_graph_element.CenterGraphElementPojo;
 import guru.bubl.module.model.friend.FriendManager;
 import guru.bubl.module.model.friend.FriendManagerFactory;
 import guru.bubl.module.model.graph.ShareLevel;
+import guru.bubl.module.model.graph.edge.Edge;
+import guru.bubl.module.model.graph.edge.EdgeOperator;
+import guru.bubl.module.model.graph.relation.RelationPojo;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.model.graph.fork.NbNeighbors;
+import guru.bubl.module.model.graph.vertex.Vertex;
+import guru.bubl.module.model.graph.vertex.VertexOperator;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -32,7 +38,6 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     FriendManagerFactory friendManagerFactory;
 
     @Test
-    
     public void does_not_return_center_elements_of_another_user() {
         Integer defaultUserNbCenters = centerGraphElementsOperatorFactory.usingDefaultLimits().getPublicAndPrivateForOwner(
                 user
@@ -64,7 +69,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
 
 
     @Test
-    
+
     public void can_get_only_public_bubbles() {
         centerGraphElementOperatorFactory.usingFriendlyResource(vertexA).updateLastCenterDate();
         Integer nbPublicCenters = centerGraphElementsOperatorFactory.usingDefaultLimits().getAllPublic().size();
@@ -78,7 +83,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
 
     public void does_not_return_public_bubble_if_not_a_center_bubble() {
         assertThat(
@@ -97,7 +102,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
     public void includes_context() {
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
@@ -115,7 +120,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
 
 
     @Test
-    
+
     public void includes_public_context_only_if_fetching_all_public_only_centers() {
         vertexA.makePublic();
         vertexB.makePublic();
@@ -185,7 +190,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
     public void get_public_and_private_returns_nb_public_and_friends_neighbors_too() {
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexB
@@ -212,7 +217,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
     public void can_limit() {
         CenterGraphElementOperator centerA = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
@@ -243,7 +248,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
 
     public void can_paginate() {
         CenterGraphElementOperator centerA = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -275,7 +280,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
 
     public void includes_tags() {
         CenterGraphElementOperator centerA = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -296,7 +301,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
 
     public void getting_all_public_does_not_return_private() {
         vertexA.makePublic();
@@ -322,7 +327,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
 
     public void can_get_patterns() {
         vertexA.makePublic();
@@ -351,7 +356,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
 
     public void can_get_patterns_even_if_non_center() {
         List centers = centerGraphElementsOperatorFactory.usingDefaultLimits().getAllPatterns();
@@ -368,7 +373,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
 
     public void can_get_for_friends() {
         vertexOfAnotherUser.setShareLevel(ShareLevel.FRIENDS);
@@ -399,7 +404,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
 
     public void cant_get_for_friends_if_friendship_is_not_confirmed() {
         vertexOfAnotherUser.setShareLevel(ShareLevel.FRIENDS);
@@ -427,7 +432,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
 
     public void cant_get_friends_private_centers() {
         vertexOfAnotherUser.setShareLevel(ShareLevel.PRIVATE);
@@ -456,7 +461,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
 
     public void can_get_for_a_specific_friend() {
         vertexOfAnotherUser.setShareLevel(ShareLevel.FRIENDS);
@@ -493,7 +498,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
 
     public void cant_get_private_for_a_specific_friend() {
         vertexOfAnotherUser.setShareLevel(ShareLevel.PRIVATE);
@@ -511,7 +516,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
 
 
     @Test
-    
+
 
     public void can_get_public_for_a_specific_user() {
         vertexOfAnotherUser.setShareLevel(ShareLevel.PUBLIC);
@@ -548,7 +553,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
     public void cant_get_private_for_a_specific_user() {
         vertexOfAnotherUser.setShareLevel(ShareLevel.PRIVATE);
         CenterGraphElementOperator centerOfAnotherUser = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -564,7 +569,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
     public void returns_number_of_connected_edges() {
         CenterGraphElementOperator vertexBCenter = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexB
@@ -581,7 +586,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
     public void does_not_return_number_of_private_edges_for_not_owned_vertices() {
         vertexB.makePublic();
         CenterGraphElementOperator vertexBCenter = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -599,7 +604,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
     public void returns_number_of_public() {
         vertexB.makePublic();
         vertexC.makePublic();
@@ -623,7 +628,7 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
+
     public void returns_number_of_public_and_friends() {
         FriendManager friendManager = friendManagerFactory.forUser(user);
         friendManager.add(anotherUser);
@@ -656,7 +661,6 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
     public void private_tags_are_excluded_when_not_owned_centers() {
         vertexA.makePublic();
         CenterGraphElementOperator vertexACenter = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -676,7 +680,6 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
     public void includes_last_visit_date_when_owner() {
         CenterGraphElementOperator vertexACenter = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
@@ -693,7 +696,6 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
     }
 
     @Test
-    
     public void excludes_last_visit_date_when_not_owner() {
         vertexA.makePublic();
         CenterGraphElementOperator vertexACenter = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -707,6 +709,33 @@ public class CenterGraphElementsOperatorTest extends ModelTestResources {
         assertThat(
                 center.getLastCenterDate(),
                 is(nullValue())
+        );
+    }
+
+    @Test
+    public void get_all_public_sorts_by_creation_date() {
+        vertexA.makePublic();
+        RelationPojo edge = vertexA.addVertexAndRelation();
+        VertexOperator newVertex = vertexFactory.withUri(
+                edge.getDestinationVertex().uri()
+        );
+        newVertex.label("new vertex");
+        newVertex.makePublic();
+        CenterGraphElementOperator newVertexCenter = centerGraphElementOperatorFactory.usingFriendlyResource(
+                newVertex
+        );
+        newVertexCenter.updateLastCenterDate();
+        newVertexCenter.incrementNumberOfVisits();
+        vertexA.label("update label");
+        CenterGraphElementOperator vertexACenter = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        vertexACenter.updateLastCenterDate();
+        vertexACenter.incrementNumberOfVisits();
+        CenterGraphElementPojo firstCenter = centerGraphElementsOperatorFactory.usingDefaultLimits().getAllPublic().iterator().next();
+        assertThat(
+                firstCenter.getGraphElement().label(),
+                is("new vertex")
         );
     }
 }
