@@ -4,9 +4,14 @@ import com.google.inject.Inject;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.neo4j_graph_manipulator.graph.export.ExportToMarkdown;
 import guru.bubl.module.neo4j_graph_manipulator.graph.export.ExportToMarkdownFactory;
+import guru.bubl.module.neo4j_graph_manipulator.graph.export.MdFile;
 import guru.bubl.test.module.utils.ModelTestResources;
 import org.junit.Test;
 
+import java.net.URI;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -24,7 +29,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
     @Test
     public void returns_a_string_for_every_center() {
         ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
-        List<String> pages = exportToMarkdown.exportStrings();
+        LinkedHashMap<URI, MdFile> pages = exportToMarkdown.exportStrings();
         assertThat(
                 pages.size(),
                 is(0)
@@ -45,8 +50,9 @@ public class ExportToMarkdownTest extends ModelTestResources {
         centerGraphElementOperator.updateLastCenterDate();
         centerGraphElementOperator.incrementNumberOfVisits();
         pages = exportToMarkdown.exportStrings();
-        System.out.println("center 1\n" + pages.get(0));
-        System.out.println("center 2\n" + pages.get(1));
+        Iterator<MdFile> iterator = pages.values().iterator();
+        System.out.println("center 1\n" + iterator.next().getContent());
+        System.out.println("center 2\n" + iterator.next().getContent());
         assertThat(
                 pages.size(),
                 is(2)
@@ -63,7 +69,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         centerGraphElementOperator.updateLastCenterDate();
         centerGraphElementOperator.incrementNumberOfVisits();
         ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
-        String page = exportToMarkdown.exportStrings().get(0);
+        String page = exportToMarkdown.exportStrings().values().iterator().next().getContent();
         System.out.println(page);
         Parser parser = Parser.builder().build();
         Node node = parser.parse(page);
@@ -91,7 +97,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         centerGraphElementOperator.incrementNumberOfVisits();
         ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
         Parser parser = Parser.builder().build();
-        String page = exportToMarkdown.exportStrings().get(0);
+        String page = exportToMarkdown.exportStrings().values().iterator().next().getContent();
         Node node = parser.parse(page);
         testQuantity = 0;
         AbstractVisitor visitor = new AbstractVisitor() {
@@ -108,22 +114,6 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-
-
-    class WordCountVisitor extends AbstractVisitor {
-        int wordCount = 0;
-
-        @Override
-        public void visit(Text text) {
-            // This is called for all Text nodes. Override other visit methods for other node types.
-
-            // Count words (this is just an example, don't actually do it this way for various reasons).
-            wordCount += text.getLiteral().split("\\W+").length;
-
-            // Descend into children (could be omitted in this case because Text nodes don't have children).
-            visitChildren(text);
-        }
-    }
 
 //    @Test
 //    public void is_in_hierarchical(){
