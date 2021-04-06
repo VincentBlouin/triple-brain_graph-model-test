@@ -1,0 +1,153 @@
+package guru.bubl.test.module.model.export;
+
+import com.google.inject.Inject;
+import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
+import guru.bubl.module.neo4j_graph_manipulator.graph.export.ExportToMarkdown;
+import guru.bubl.module.neo4j_graph_manipulator.graph.export.ExportToMarkdownFactory;
+import guru.bubl.test.module.utils.ModelTestResources;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+import org.commonmark.node.*;
+import org.commonmark.parser.Parser;
+import org.neo4j.cypher.internal.expressions.In;
+
+public class ExportToMarkdownTest extends ModelTestResources {
+
+    @Inject
+    ExportToMarkdownFactory exportToMarkdownFactory;
+
+    @Test
+    public void returns_a_string_for_every_center() {
+        ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
+        List<String> pages = exportToMarkdown.exportStrings();
+        assertThat(
+                pages.size(),
+                is(0)
+        );
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+//        pages = exportToMarkdown.exportStrings();
+//        assertThat(
+//                pages.size(),
+//                is(1)
+//        );
+        centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        pages = exportToMarkdown.exportStrings();
+        System.out.println("center 1\n" + pages.get(0));
+        System.out.println("center 2\n" + pages.get(1));
+        assertThat(
+                pages.size(),
+                is(2)
+        );
+    }
+
+    private static Integer testQuantity = 0;
+
+    @Test
+    public void center_is_a_header() {
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
+        String page = exportToMarkdown.exportStrings().get(0);
+        System.out.println(page);
+        Parser parser = Parser.builder().build();
+        Node node = parser.parse(page);
+        testQuantity = 0;
+        AbstractVisitor visitor = new AbstractVisitor() {
+            @Override
+            public void visit(Heading heading) {
+                super.visit(heading);
+                testQuantity++;
+            }
+        };
+        node.accept(visitor);
+        assertThat(
+                testQuantity,
+                is(1)
+        );
+    }
+
+    @Test
+    public void has_a_line_for_every_children() {
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
+        Parser parser = Parser.builder().build();
+        String page = exportToMarkdown.exportStrings().get(0);
+        Node node = parser.parse(page);
+        testQuantity = 0;
+        AbstractVisitor visitor = new AbstractVisitor() {
+            @Override
+            public void visit(ListItem listItem) {
+                super.visit(listItem);
+                testQuantity++;
+            }
+        };
+        node.accept(visitor);
+        assertThat(
+                testQuantity,
+                is(5)
+        );
+    }
+
+
+
+    class WordCountVisitor extends AbstractVisitor {
+        int wordCount = 0;
+
+        @Override
+        public void visit(Text text) {
+            // This is called for all Text nodes. Override other visit methods for other node types.
+
+            // Count words (this is just an example, don't actually do it this way for various reasons).
+            wordCount += text.getLiteral().split("\\W+").length;
+
+            // Descend into children (could be omitted in this case because Text nodes don't have children).
+            visitChildren(text);
+        }
+    }
+
+//    @Test
+//    public void is_in_hierarchical(){
+//        Parser parser = Parser.builder().build();
+//        Node node = parser.parse("Example\n=======\n\nSome more text");
+//        WordCountVisitor visitor = new WordCountVisitor();
+//        node.accept(visitor);
+//        visitor.wordCount;  // 4
+//
+//        class WordCountVisitor extends AbstractVisitor {
+//            int wordCount = 0;
+//
+//            @Override
+//            public void visit(Text text) {
+//                // This is called for all Text nodes. Override other visit methods for other node types.
+//
+//                // Count words (this is just an example, don't actually do it this way for various reasons).
+//                wordCount += text.getLiteral().split("\\W+").length;
+//
+//                // Descend into children (could be omitted in this case because Text nodes don't have children).
+//                visitChildren(text);
+//            }
+//        }
+//    }
+
+
+}

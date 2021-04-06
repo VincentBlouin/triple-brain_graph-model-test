@@ -6,6 +6,7 @@ package guru.bubl.test.module.model;
 
 import guru.bubl.test.module.model.center_graph_element.CenterGraphElementsOperatorTest;
 import guru.bubl.test.module.model.center_graph_element.WholeGraphAdminTest;
+import guru.bubl.test.module.model.export.ExportToMarkdownTest;
 import guru.bubl.test.module.model.graph.*;
 import guru.bubl.test.module.model.graph.fork.ForkOperatorTest;
 import guru.bubl.test.module.model.graph.meta.TagOperatorTest;
@@ -21,6 +22,6 @@ import org.junit.runners.Suite;
 @Ignore
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        CenterGraphElementsOperatorTest.class
+        ExportToMarkdownTest.class
 })
 public class ModelSpecificClassTest extends ModelTestRunner {}
