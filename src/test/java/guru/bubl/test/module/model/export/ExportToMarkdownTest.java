@@ -53,6 +53,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         Iterator<MdFile> iterator = pages.values().iterator();
         System.out.println("center 1\n" + iterator.next().getContent());
         System.out.println("center 2\n" + iterator.next().getContent());
+        exportToMarkdown.export();
         assertThat(
                 pages.size(),
                 is(2)
