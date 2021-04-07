@@ -3,6 +3,7 @@ package guru.bubl.test.module.model.export;
 import com.google.inject.Inject;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
 import guru.bubl.module.model.graph.ShareLevel;
+import guru.bubl.module.model.graph.relation.Relation;
 import guru.bubl.module.model.graph.tag.TagPojo;
 import guru.bubl.module.neo4j_graph_manipulator.graph.export.ExportToMarkdown;
 import guru.bubl.module.neo4j_graph_manipulator.graph.export.ExportToMarkdownFactory;
@@ -124,6 +125,25 @@ public class ExportToMarkdownTest extends ModelTestResources {
         ).values().iterator().next();
         centerGraphElementOperatorFactory.usingFriendlyResource(
                 meta
+        ).updateLastCenterDate();
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
+        LinkedHashMap<URI, MdFile> pages = exportToMarkdown.exportStrings();
+        assertThat(
+                pages.size(),
+                is(1)
+        );
+    }
+
+    @Test
+    public void ignores_center_relations() {
+        Relation relation = vertexB.getEdgeToDestinationVertex(vertexC);
+        centerGraphElementOperatorFactory.usingFriendlyResource(
+                relation
         ).updateLastCenterDate();
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
