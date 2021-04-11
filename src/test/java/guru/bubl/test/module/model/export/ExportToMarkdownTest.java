@@ -9,6 +9,7 @@ import guru.bubl.module.neo4j_graph_manipulator.graph.export.ExportToMarkdown;
 import guru.bubl.module.neo4j_graph_manipulator.graph.export.ExportToMarkdownFactory;
 import guru.bubl.module.neo4j_graph_manipulator.graph.export.MdFile;
 import guru.bubl.test.module.utils.ModelTestResources;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.URI;
@@ -29,7 +30,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
     @Inject
     ExportToMarkdownFactory exportToMarkdownFactory;
 
-    @Test
+    @Test 
     public void returns_a_string_for_every_center() {
         ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
         LinkedHashMap<URI, MdFile> pages = exportToMarkdown.exportStrings();
@@ -65,7 +66,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
 
     private static Integer testQuantity = 0;
 
-    @Test
+    @Test 
     public void center_is_a_header() {
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
@@ -92,7 +93,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test
+    @Test 
     public void has_a_line_for_every_children() {
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
@@ -118,7 +119,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test
+    @Test 
     public void ignores_center_tags() {
         TagPojo meta = vertexA.addTag(
                 modelTestScenarios.person()
@@ -139,7 +140,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test
+    @Test 
     public void ignores_center_relations() {
         Relation relation = vertexB.getEdgeToDestinationVertex(vertexC);
         centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -157,8 +158,8 @@ public class ExportToMarkdownTest extends ModelTestResources {
                 is(1)
         );
     }
-
-    @Test
+    
+    @Test 
     public void can_handle_circular_graphs() {
         vertexB.addRelationToFork(vertexE.uri(), ShareLevel.PRIVATE, ShareLevel.PRIVATE);
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -174,7 +175,25 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-//    @Test
+
+    @Test
+    public void can_have_french_accents_in_file_name() {
+        vertexA.label("églantier");
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
+        MdFile file = exportToMarkdown.exportStrings().values().iterator().next();
+        assertThat(
+                file.getName(),
+                is("églantier")
+        );
+    }
+
+
+//    @Test 
 //    public void is_in_hierarchical(){
 //        Parser parser = Parser.builder().build();
 //        Node node = parser.parse("Example\n=======\n\nSome more text");
