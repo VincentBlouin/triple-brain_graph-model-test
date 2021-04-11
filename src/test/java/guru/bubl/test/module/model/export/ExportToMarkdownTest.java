@@ -190,6 +190,22 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void file_names_can_have_spaces() {
+        vertexA.label("vertex A");
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
+        MdFile file = exportToMarkdown.exportStrings().values().iterator().next();
+        assertThat(
+                file.getName(),
+                is("vertex A")
+        );
+    }
+
 
 //    @Test
 //    public void is_in_hierarchical(){
