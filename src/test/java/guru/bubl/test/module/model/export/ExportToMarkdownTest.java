@@ -9,28 +9,26 @@ import guru.bubl.module.neo4j_graph_manipulator.graph.export.ExportToMarkdown;
 import guru.bubl.module.neo4j_graph_manipulator.graph.export.ExportToMarkdownFactory;
 import guru.bubl.module.neo4j_graph_manipulator.graph.export.MdFile;
 import guru.bubl.test.module.utils.ModelTestResources;
-import org.junit.Ignore;
+import org.commonmark.node.AbstractVisitor;
+import org.commonmark.node.Heading;
+import org.commonmark.node.ListItem;
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
 import org.junit.Test;
 
 import java.net.URI;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-
-import org.commonmark.node.*;
-import org.commonmark.parser.Parser;
-import org.neo4j.cypher.internal.expressions.In;
 
 public class ExportToMarkdownTest extends ModelTestResources {
 
     @Inject
     ExportToMarkdownFactory exportToMarkdownFactory;
 
-    @Test 
+    @Test
     public void returns_a_string_for_every_center() {
         ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
         LinkedHashMap<URI, MdFile> pages = exportToMarkdown.exportStrings();
@@ -66,7 +64,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
 
     private static Integer testQuantity = 0;
 
-    @Test 
+    @Test
     public void center_is_a_header() {
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
@@ -93,7 +91,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test 
+    @Test
     public void has_a_line_for_every_children() {
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
@@ -119,7 +117,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test 
+    @Test
     public void ignores_center_tags() {
         TagPojo meta = vertexA.addTag(
                 modelTestScenarios.person()
@@ -140,7 +138,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test 
+    @Test
     public void ignores_center_relations() {
         Relation relation = vertexB.getEdgeToDestinationVertex(vertexC);
         centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -159,7 +157,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
     
-    @Test 
+    @Test
     public void can_handle_circular_graphs() {
         vertexB.addRelationToFork(vertexE.uri(), ShareLevel.PRIVATE, ShareLevel.PRIVATE);
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -193,7 +191,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
     }
 
 
-//    @Test 
+//    @Test
 //    public void is_in_hierarchical(){
 //        Parser parser = Parser.builder().build();
 //        Node node = parser.parse("Example\n=======\n\nSome more text");
