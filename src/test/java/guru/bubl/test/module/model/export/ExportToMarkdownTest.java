@@ -16,8 +16,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -29,6 +31,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
 
     @Test
     
+
     public void returns_a_string_for_every_center() {
         ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
         LinkedHashMap<URI, MdFile> pages = exportToMarkdown.exportStrings();
@@ -66,6 +69,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
 
     @Test
     
+
     public void center_is_a_header() {
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
@@ -94,6 +98,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
 
     @Test
     
+
     public void has_a_line_for_every_children() {
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
@@ -121,6 +126,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
 
     @Test
     
+
     public void ignores_center_tags() {
         TagPojo meta = vertexA.addTag(
                 modelTestScenarios.person()
@@ -143,6 +149,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
 
     @Test
     
+
     public void ignores_center_relations() {
         Relation relation = vertexB.getEdgeToDestinationVertex(vertexC);
         centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -163,6 +170,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
 
     @Test
     
+
     public void can_handle_circular_graphs() {
         vertexB.addRelationToFork(vertexE.uri(), ShareLevel.PRIVATE, ShareLevel.PRIVATE);
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -181,6 +189,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
 
     @Test
     
+
     public void can_have_french_accents_in_file_name() {
         vertexA.label("églantier");
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -198,6 +207,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
 
     @Test
     
+
     public void file_names_can_have_spaces() {
         vertexA.label("vertex A");
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -214,6 +224,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
     }
 
     @Test
+    
     public void sorts_children() throws Exception {
         JSONObject childrenIndexes = new JSONObject().put(
                 vertexC.uri().toString(),
@@ -236,13 +247,13 @@ public class ExportToMarkdownTest extends ModelTestResources {
         centerGraphElementOperator.incrementNumberOfVisits();
         ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
         MdFile file = exportToMarkdown.exportStrings().values().iterator().next();
-        System.out.println(file.getContent());
+//        System.out.println(file.getContent());
         Parser parser = Parser.builder().build();
         Node node = parser.parse(file.getContent());
         SortTestMdVisitor sortTestMdVisitor = new SortTestMdVisitor();
         node.accept(sortTestMdVisitor);
-        System.out.println("vertex A index " + sortTestMdVisitor.getVertexAIndex());
-        System.out.println("vertex C index " + sortTestMdVisitor.getVertexCIndex());
+//        System.out.println("vertex A index " + sortTestMdVisitor.getVertexAIndex());
+//        System.out.println("vertex C index " + sortTestMdVisitor.getVertexCIndex());
         assertThat(
                 sortTestMdVisitor.getVertexCIndex(),
                 is(1)
@@ -253,33 +264,121 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void sorts_children_group_relations() throws Exception {
+        JSONObject childrenIndexes = new JSONObject().put(
+                groupRelation.uri().toString(),
+                new JSONObject().put(
+                        "index",
+                        0
+                )
+        ).put(
+                vertexB.uri().toString(),
+                new JSONObject().put(
+                        "index",
+                        1
+                )
+        );
+        vertexC.setChildrenIndex(childrenIndexes.toString());
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexC
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
+        MdFile file = exportToMarkdown.exportStrings().values().iterator().next();
+        Parser parser = Parser.builder().build();
+        Node node = parser.parse(file.getContent());
+        SortTestMdVisitor sortTestMdVisitor = new SortTestMdVisitor();
+        node.accept(sortTestMdVisitor);
+//        System.out.println("vertex A index " + sortTestMdVisitor.getVertexAIndex());
+//        System.out.println("vertex B index " + sortTestMdVisitor.getVertexBIndex());
+        assertThat(
+                sortTestMdVisitor.getGroupRelationIndex(),
+                is(1)
+        );
+        assertThat(
+                sortTestMdVisitor.getVertexBIndex(),
+                is(4)
+        );
+    }
+
+    @Test
+    public void sorts_children_of_group_relation() throws Exception {
+        JSONObject childrenIndexes = new JSONObject().put(
+                vertexE.uri().toString(),
+                new JSONObject().put(
+                        "index",
+                        0
+                )
+        ).put(
+                vertexD.uri().toString(),
+                new JSONObject().put(
+                        "index",
+                        1
+                )
+        );
+        groupRelation.setChildrenIndex(childrenIndexes.toString());
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexC
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
+        MdFile file = exportToMarkdown.exportStrings().values().iterator().next();
+//        System.out.println(file.getContent());
+        Parser parser = Parser.builder().build();
+        Node node = parser.parse(file.getContent());
+        SortTestMdVisitor sortTestMdVisitor = new SortTestMdVisitor();
+        node.accept(sortTestMdVisitor);
+//        System.out.println("vertex A index " + sortTestMdVisitor.getVertexAIndex());
+//        System.out.println("vertex B index " + sortTestMdVisitor.getVertexBIndex());
+        assertThat(
+                sortTestMdVisitor.getVertexEIndex(),
+                is(4)
+        );
+        assertThat(
+                sortTestMdVisitor.getVertexDIndex(),
+                is(5)
+        );
+    }
+
 
     private class SortTestMdVisitor extends AbstractVisitor {
         private Integer index = 0;
-        private Integer vertexAIndex = 0;
-        private Integer vertexCIndex = 0;
+        Map<String, Integer> indexes = new HashMap<>();
 
         @Override
         public void visit(Text text) {
-            if (text.getLiteral().equals("(edge AB) vertex A")) {
-                vertexAIndex = index;
-            }
-            if (text.getLiteral().equals("(edge BC) vertex C")) {
-                vertexCIndex = index;
-            }
+            indexes.put(text.getLiteral(), index);
             index++;
         }
 
         public Integer getVertexAIndex() {
-            return vertexAIndex;
+            return indexes.get("(edge AB) vertex A");
+        }
+
+        public Integer getVertexBIndex() {
+            return indexes.get("(edge BC) vertex B");
         }
 
         public Integer getVertexCIndex() {
-            return vertexCIndex;
+            return indexes.get("(edge BC) vertex C");
+        }
+
+        public Integer getGroupRelationIndex() {
+            return indexes.get("(to do)");
+        }
+
+        public Integer getVertexDIndex() {
+            return indexes.get("(edge CD) vertex D");
+        }
+        public Integer getVertexEIndex() {
+            return indexes.get("(edge CE) vertex E");
         }
     }
 
-//    @Test 
+//    @Test  
 //    public void is_in_hierarchical(){
 //        Parser parser = Parser.builder().build();
 //        Node node = parser.parse("Example\n=======\n\nSome more text");
