@@ -363,6 +363,22 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
+    @Test
+    public void html_notes_are_rendered_as_markdown() {
+        vertexA.comment("<span>a note</span> with <strong>bold</strong>");
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
+        MdFile file = exportToMarkdown.exportStrings().values().iterator().next();
+        System.out.println(file.getContent());
+        assertTrue(
+                file.getContent().endsWith("[^1]: a note with **bold**\n")
+        );
+    }
+
 
     private class SortTestMdVisitor extends AbstractVisitor {
         private Integer index = 0;
