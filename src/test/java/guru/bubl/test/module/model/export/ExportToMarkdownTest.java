@@ -31,7 +31,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
     @Inject
     ExportToMarkdownFactory exportToMarkdownFactory;
 
-    @Test @Ignore
+    @Test
     public void returns_a_string_for_every_center() {
         ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
         LinkedHashMap<URI, MdFile> pages = exportToMarkdown.exportStrings();
@@ -67,7 +67,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
 
     private static Integer testQuantity = 0;
 
-    @Test @Ignore
+    @Test
     public void center_is_a_header() {
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
@@ -94,7 +94,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test @Ignore
+    @Test
     public void has_a_line_for_every_children() {
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
@@ -120,7 +120,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test @Ignore
+    @Test
     public void ignores_center_tags() {
         TagPojo meta = vertexA.addTag(
                 modelTestScenarios.person()
@@ -141,7 +141,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test @Ignore
+    @Test
     public void ignores_center_relations() {
         Relation relation = vertexB.getEdgeToDestinationVertex(vertexC);
         centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -160,7 +160,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test @Ignore
+    @Test
     public void can_handle_circular_graphs() {
         vertexB.addRelationToFork(vertexE.uri(), ShareLevel.PRIVATE, ShareLevel.PRIVATE);
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -177,7 +177,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
     }
 
 
-    @Test @Ignore
+    @Test
     public void can_have_french_accents_in_file_name() {
         vertexA.label("églantier");
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -193,7 +193,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test @Ignore
+    @Test
     public void file_names_can_have_spaces() {
         vertexA.label("vertex A");
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -209,7 +209,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test @Ignore
+    @Test
     public void sorts_children() throws Exception {
         JSONObject childrenIndexes = new JSONObject().put(
                 vertexC.uri().toString(),
@@ -249,7 +249,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test @Ignore
+    @Test
     public void sorts_children_group_relations() throws Exception {
         JSONObject childrenIndexes = new JSONObject().put(
                 groupRelation.uri().toString(),
@@ -288,7 +288,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test @Ignore
+    @Test
     public void sorts_children_of_group_relation() throws Exception {
         JSONObject childrenIndexes = new JSONObject().put(
                 vertexE.uri().toString(),
@@ -328,7 +328,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test @Ignore
+    @Test
     public void includes_tags() {
         vertexA.addTag(modelTestScenarios.book(), ShareLevel.PRIVATE);
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -359,7 +359,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
                 file.getContent().contains("# vertex A [^1]")
         );
         assertTrue(
-                file.getContent().endsWith("[^1]: a note")
+                file.getContent().endsWith("[^1]: a note\n")
         );
     }
 
@@ -387,7 +387,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         }
 
         public Integer getGroupRelationIndex() {
-            return indexes.get("(to do)");
+            return indexes.get("(to do) #To-do");
         }
 
         public Integer getVertexDIndex() {
@@ -399,7 +399,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         }
     }
 
-//    @Test @Ignore  
+//    @Test  
 //    public void is_in_hierarchical(){
 //        Parser parser = Parser.builder().build();
 //        Node node = parser.parse("Example\n=======\n\nSome more text");
