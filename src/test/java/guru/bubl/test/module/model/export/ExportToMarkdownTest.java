@@ -328,7 +328,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-    @Test
+    @Test @Ignore
     public void includes_tags() {
         vertexA.addTag(modelTestScenarios.book(), ShareLevel.PRIVATE);
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
@@ -344,21 +344,24 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
-//    @Test
-//    public void includes_notes_as_footnote() {
-//        vertexA.comment("a note");
-//        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
-//                vertexA
-//        );
-//        centerGraphElementOperator.updateLastCenterDate();
-//        centerGraphElementOperator.incrementNumberOfVisits();
-//        ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
-//        MdFile file = exportToMarkdown.exportStrings().values().iterator().next();
-//        System.out.println(file.getContent());
-//        assertTrue(
-//                file.getContent().contains("# vertex A [\\u00B2 1]")
-//        );
-//    }
+    @Test
+    public void includes_note_as_footnote() {
+        vertexA.comment("a note");
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
+        MdFile file = exportToMarkdown.exportStrings().values().iterator().next();
+        System.out.println(file.getContent());
+        assertTrue(
+                file.getContent().contains("# vertex A [^1]")
+        );
+        assertTrue(
+                file.getContent().endsWith("[^1]: a note")
+        );
+    }
 
 
     private class SortTestMdVisitor extends AbstractVisitor {
