@@ -68,7 +68,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
     private static Integer testQuantity = 0;
 
     @Test
-    public void center_is_a_header() {
+    public void center_label_is_not_in_content() {
         CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
                 vertexA
         );
@@ -90,7 +90,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         node.accept(visitor);
         assertThat(
                 testQuantity,
-                is(1)
+                is(0)
         );
     }
 
@@ -105,6 +105,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         Parser parser = Parser.builder().build();
         String page = exportToMarkdown.exportStrings().values().iterator().next().getContent();
         Node node = parser.parse(page);
+        System.out.println(page);
         testQuantity = 0;
         AbstractVisitor visitor = new AbstractVisitor() {
             @Override
@@ -241,11 +242,11 @@ public class ExportToMarkdownTest extends ModelTestResources {
 //        System.out.println("vertex C index " + sortTestMdVisitor.getVertexCIndex());
         assertThat(
                 sortTestMdVisitor.getVertexCIndex(),
-                is(1)
+                is(0)
         );
         assertThat(
                 sortTestMdVisitor.getVertexAIndex(),
-                is(5)
+                is(4)
         );
     }
 
@@ -280,11 +281,11 @@ public class ExportToMarkdownTest extends ModelTestResources {
 //        System.out.println("vertex B index " + sortTestMdVisitor.getVertexBIndex());
         assertThat(
                 sortTestMdVisitor.getGroupRelationIndex(),
-                is(1)
+                is(0)
         );
         assertThat(
                 sortTestMdVisitor.getVertexBIndex(),
-                is(4)
+                is(3)
         );
     }
 
@@ -320,11 +321,11 @@ public class ExportToMarkdownTest extends ModelTestResources {
 //        System.out.println("vertex B index " + sortTestMdVisitor.getVertexBIndex());
         assertThat(
                 sortTestMdVisitor.getVertexEIndex(),
-                is(4)
+                is(3)
         );
         assertThat(
                 sortTestMdVisitor.getVertexDIndex(),
-                is(5)
+                is(4)
         );
     }
 
@@ -340,7 +341,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         MdFile file = exportToMarkdown.exportStrings().values().iterator().next();
         System.out.println(file.getContent());
         assertTrue(
-                file.getContent().contains("# vertex A #Book")
+                file.getContent().contains("#Book")
         );
     }
 
@@ -356,7 +357,7 @@ public class ExportToMarkdownTest extends ModelTestResources {
         MdFile file = exportToMarkdown.exportStrings().values().iterator().next();
         System.out.println(file.getContent());
         assertTrue(
-                file.getContent().contains("# vertex A [^1]")
+                file.getContent().contains("[^1]")
         );
         assertTrue(
                 file.getContent().endsWith("[^1]: a note\n")
