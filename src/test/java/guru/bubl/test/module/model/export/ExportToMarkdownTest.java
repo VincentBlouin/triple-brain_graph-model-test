@@ -3,6 +3,7 @@ package guru.bubl.test.module.model.export;
 import com.google.inject.Inject;
 import guru.bubl.module.model.ModelTestScenarios;
 import guru.bubl.module.model.center_graph_element.CenterGraphElementOperator;
+import guru.bubl.module.model.center_graph_element.CenteredGraphElementsOperator;
 import guru.bubl.module.model.graph.ShareLevel;
 import guru.bubl.module.model.graph.relation.Relation;
 import guru.bubl.module.model.graph.tag.TagPojo;
@@ -380,6 +381,69 @@ public class ExportToMarkdownTest extends ModelTestResources {
         );
     }
 
+//    @Test
+//    public void contains_graph_behind_an_inverse_group_relation() {
+//        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+//                vertexE
+//        );
+//        centerGraphElementOperator.updateLastCenterDate();
+//        centerGraphElementOperator.incrementNumberOfVisits();
+//        ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
+//        LinkedHashMap<URI, MdFile> files = exportToMarkdown.exportStrings();
+//        System.out.println(files.get(vertexE.uri()).getContent());
+//        assertTrue(
+//                files.get(vertexE.uri()).getContent().contains(
+//                        "vertex C"
+//                )
+//        );
+//    }
+
+    @Test
+    public void renames_label_when_two_centers_with_the_same_label() {
+        CenterGraphElementOperator centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexA
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        vertexB.label("same label");
+        centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexB
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        vertexE.label("same label");
+        centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexE
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        centerGraphElementOperator = centerGraphElementOperatorFactory.usingFriendlyResource(
+                vertexC
+        );
+        centerGraphElementOperator.updateLastCenterDate();
+        centerGraphElementOperator.incrementNumberOfVisits();
+        ExportToMarkdown exportToMarkdown = exportToMarkdownFactory.withUsername("roger_lamothe");
+        wholeGraphAdmin.reindexAll();
+        LinkedHashMap<URI, MdFile> files = exportToMarkdown.exportStrings();
+        assertThat(
+                files.values().size(),
+                is(4)
+        );
+        assertThat(
+                files.get(vertexB.uri()).getName(),
+                is("same label vertex C")
+        );
+        assertThat(
+                files.get(vertexE.uri()).getName(),
+                is("same label")
+        );
+        System.out.println(files.get(vertexA.uri()).getContent());
+        assertTrue(
+                files.get(vertexA.uri()).getContent().contains(
+                        "same label vertex C"
+                )
+        );
+    }
 
     private class SortTestMdVisitor extends AbstractVisitor {
         private Integer index = 0;
