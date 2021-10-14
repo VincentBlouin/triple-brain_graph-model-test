@@ -40,7 +40,7 @@ public class ForgotPasswordEmailTest extends ModelTestResources {
         );
         assertThat(
                 msg.from.getEmail(),
-                is("mindrespect.com <no-reply@mindrespect.com>")
+                is("mindrespect.com <vincent.blouin@gmail.com>")
         );
     }
 
